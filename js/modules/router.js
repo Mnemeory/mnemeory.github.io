@@ -4,6 +4,7 @@
  */
 
 import { ROUTES, getSelector } from "../config.js";
+import { EventUtils } from "./shared-utilities.js";
 
 export class Router {
   constructor(state, viewManager) {
@@ -62,7 +63,7 @@ export class Router {
     document.addEventListener("keydown", (event) => {
       if (
         event.target.matches(".flow-return") &&
-        (event.key === "Enter" || event.key === " ")
+        EventUtils.isActivationKey(event)
       ) {
         event.preventDefault();
         const returnTo = event.target.dataset.returnTo;
@@ -77,7 +78,7 @@ export class Router {
     document.addEventListener("keydown", (event) => {
       if (
         event.target.matches(getSelector("protocolHomeButton")) &&
-        (event.key === "Enter" || event.key === " ")
+        EventUtils.isActivationKey(event)
       ) {
         event.preventDefault();
         this.navigate("#/");

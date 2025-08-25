@@ -570,7 +570,7 @@ export class StarfieldScene {
             if (oldMaterial && oldMaterial !== newMaterial) {
               oldMaterial.dispose();
             }
-          }, 100);
+          }, CONSTANTS.SHORT_DELAY);
         }
       } catch (error) {
         console.warn(`Failed to load SVG for ${name}:`, error);

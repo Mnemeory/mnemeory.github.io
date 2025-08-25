@@ -30,6 +30,7 @@ export const CONSTANTS = {
   TOAST_DURATION: 3000,
   WARNING_TOAST_DURATION: 5000,
   TENDRIL_ANIMATION_DURATION: 1200,
+  SHORT_DELAY: 100,
 
   // Canvas/3D
   CAMERA_FOV: 75,
@@ -41,6 +42,14 @@ export const CONSTANTS = {
   SCI_PRIMARY_THRESHOLD: 7,
   SCI_SECONDARY_THRESHOLD: 4,
   RECENT_LOGS_LIMIT: 5,
+};
+
+// Keyboard key constants
+export const KEYS = {
+  ENTER: "Enter",
+  SPACE: " ",
+  ESCAPE: "Escape",
+  TAB: "Tab",
 };
 
 // Application routes and views
@@ -166,6 +175,9 @@ export const CONSTELLATIONS = {
   },
 };
 
+export const DEFAULT_CONSTELLATION_COLOR = CONSTELLATIONS["gnarled-tree"].color;
+const hexToInt = (hex) => parseInt(hex.replace("#", ""), 16);
+
 // Clearance level configuration
 export const CLEARANCE_LEVELS = {
   open: {
@@ -244,68 +256,62 @@ export const SEARCH_CONFIG = {
 };
 
 // Starfield visual configuration (using centralized constants)
-export const STARFIELD_CONFIG = {
+const STARFIELD_BASE = {
   sceneWidth: 800,
   sceneHeight: 600,
   cameraFov: CONSTANTS.CAMERA_FOV,
   cameraNear: CONSTANTS.CAMERA_NEAR,
   cameraFar: CONSTANTS.CAMERA_FAR,
   particleCount: CONSTANTS.PARTICLE_COUNT,
-  clusterSize: 40,
   clusterParticles: CONSTANTS.CLUSTER_PARTICLES,
-  animationSpeed: 0.5,
-  tendrilSegments: 50,
   hoverDistance: CONSTANTS.HOVER_DISTANCE,
   maxFps: CONSTANTS.MAX_FPS,
+};
+
+export const STARFIELD_CONFIG = {
+  ...STARFIELD_BASE,
+  clusterSize: 40,
+  animationSpeed: 0.5,
+  tendrilSegments: 50,
   // performanceModeThreshold: CONSTANTS.PERFORMANCE_MODE_THRESHOLD, // Disabled to ensure full star visibility
 };
 
 // Enhanced starfield configuration for Three.js (using centralized constants)
+const CONSTELLATION_POSITIONS = {
+  "gnarled-tree": { x: -280, y: 140, z: -30 },
+  "qu-poxii": { x: 220, y: 180, z: -60 },
+  "star-chanter": { x: 30, y: -120, z: -150 },
+  "hatching-egg": { x: -200, y: -80, z: 40 },
+  void: { x: 300, y: -140, z: -100 },
+};
+
+const ENHANCED_CONSTELLATIONS = Object.fromEntries(
+  Object.entries(CONSTELLATION_POSITIONS).map(([name, pos]) => [
+    name,
+    {
+      ...pos,
+      color: hexToInt(CONSTELLATIONS[name].color),
+      warm: hexToInt(CONSTELLATIONS[name].warmColor),
+    },
+  ])
+);
+
 export const ENHANCED_STARFIELD_CONFIG = {
-  // Scene dimensions
-  SCENE_WIDTH: 800,
-  SCENE_HEIGHT: 600,
-  CAMERA_FOV: CONSTANTS.CAMERA_FOV,
-  CAMERA_NEAR: CONSTANTS.CAMERA_NEAR,
-  CAMERA_FAR: CONSTANTS.CAMERA_FAR,
-
-  // Constellation positions (relative to center) with colors from centralized config
-  // Made more spread out and random for better visibility
-  CONSTELLATIONS: {
-    "gnarled-tree": {
-      x: -280,
-      y: 140,
-      z: -30,
-      color: 0x5ce7e7,
-      warm: 0x7fffff,
-    },
-    "qu-poxii": { x: 220, y: 180, z: -60, color: 0x1b5e55, warm: 0x2a8a7f },
-    "star-chanter": {
-      x: 30,
-      y: -120,
-      z: -150,
-      color: 0x3e2e5c,
-      warm: 0x6a4a9a,
-    },
-    "hatching-egg": { x: -200, y: -80, z: 40, color: 0xe5c76b, warm: 0xffe195 },
-    void: { x: 300, y: -140, z: -100, color: 0x0e3757, warm: 0x2a5a8a },
-  },
-
-  // Visual settings from centralized config
-  PARTICLE_COUNT: CONSTANTS.PARTICLE_COUNT,
+  SCENE_WIDTH: STARFIELD_BASE.sceneWidth,
+  SCENE_HEIGHT: STARFIELD_BASE.sceneHeight,
+  CAMERA_FOV: STARFIELD_BASE.cameraFov,
+  CAMERA_NEAR: STARFIELD_BASE.cameraNear,
+  CAMERA_FAR: STARFIELD_BASE.cameraFar,
+  CONSTELLATIONS: ENHANCED_CONSTELLATIONS,
+  PARTICLE_COUNT: STARFIELD_BASE.particleCount,
   CLUSTER_SIZE: 60, // Increased from 40 for better visibility
-  CLUSTER_PARTICLES: CONSTANTS.CLUSTER_PARTICLES,
-  ANIMATION_SPEED: 0.5,
-  TENDRIL_SEGMENTS: 50,
-
-  // Interaction
-  HOVER_DISTANCE: CONSTANTS.HOVER_DISTANCE,
+  CLUSTER_PARTICLES: STARFIELD_BASE.clusterParticles,
+  ANIMATION_SPEED: STARFIELD_CONFIG.animationSpeed,
+  TENDRIL_SEGMENTS: STARFIELD_CONFIG.tendrilSegments,
+  HOVER_DISTANCE: STARFIELD_BASE.hoverDistance,
   WARM_TRANSITION_TIME: CONSTANTS.ANIMATION_SLOWER,
   TENDRIL_ANIMATION_TIME: CONSTANTS.TENDRIL_ANIMATION_DURATION,
-
-  // Performance
-  MAX_FPS: CONSTANTS.MAX_FPS,
-  // PERFORMANCE_MODE_THRESHOLD: CONSTANTS.PERFORMANCE_MODE_THRESHOLD, // Disabled to ensure full star visibility
+  MAX_FPS: STARFIELD_BASE.maxFps,
 };
 
 // Common utility functions following JS-04 (small, single-purpose, pure functions)
@@ -314,7 +320,7 @@ export function getConstellationName(cluster) {
 }
 
 export function getConstellationColor(cluster) {
-  return CONSTELLATIONS[cluster]?.color || "#5CE7E7";
+  return CONSTELLATIONS[cluster]?.color || DEFAULT_CONSTELLATION_COLOR;
 }
 
 export function getConstellationDescription(cluster, type = "detailed") {
