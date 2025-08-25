@@ -5,7 +5,7 @@
 
 import { PencodeCompat } from "./pencode-compat.js";
 import { ToastManager } from "./modules/shared-utilities.js";
-import { SITE_CONFIG, getSelector } from "./config.js";
+import { SITE_CONFIG, getSelector, CONSTANTS, KEYS } from "./config.js";
 
 /**
  * Pencode Renderer - wrapper around compatibility mapper
@@ -337,12 +337,12 @@ export class PaperDocumentEditor {
   }
 
   handlePaperKeydown(doc, event) {
-    if (event.key === "Tab") {
+    if (event.key === KEYS.TAB) {
       event.preventDefault();
       document.execCommand("insertText", false, "  ");
     }
 
-    if (event.key === "Enter") {
+    if (event.key === KEYS.ENTER) {
       event.preventDefault();
       document.execCommand("insertHTML", false, "<BR>");
     }
@@ -428,7 +428,7 @@ export class PaperDocumentEditor {
 
         setTimeout(() => {
           this.renderContent(doc, doc.isEditMode);
-        }, 100);
+        }, CONSTANTS.SHORT_DELAY);
       }
     }
   }

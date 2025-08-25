@@ -8,6 +8,7 @@ import {
   CONSTELLATIONS,
   ENHANCED_STARFIELD_CONFIG,
   CONSTANTS,
+  KEYS,
 } from "../config.js";
 import { TooltipManager } from "./shared-utilities.js";
 
@@ -197,8 +198,8 @@ export class StarfieldInteractions {
         this.setKeyboardFocus(clusters[currentIndex]);
         break;
 
-      case "Enter":
-      case " ":
+      case KEYS.ENTER:
+      case KEYS.SPACE:
         event.preventDefault();
         if (
           this.isActivating ||

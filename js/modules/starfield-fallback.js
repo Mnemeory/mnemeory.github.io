@@ -3,8 +3,8 @@
  * Provides a 2D alternative when WebGL is not available
  */
 
-import { CONSTELLATIONS } from "../config.js";
-import { TooltipManager } from "./shared-utilities.js";
+import { CONSTELLATIONS, CONSTANTS } from "../config.js";
+import { TooltipManager, EventUtils } from "./shared-utilities.js";
 
 export class StarfieldFallback {
   constructor(fallback2D) {
@@ -67,7 +67,7 @@ export class StarfieldFallback {
           setTimeout(() => {
             this.onClusterActivate(clusterName);
             this.isActivating = false;
-          }, 100);
+          }, CONSTANTS.SHORT_DELAY);
         } else {
           this.isActivating = false;
         }
@@ -75,7 +75,7 @@ export class StarfieldFallback {
 
       node.addEventListener("click", activateCluster);
       node.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
+        if (EventUtils.isActivationKey(e)) {
           e.preventDefault();
           activateCluster();
         }
