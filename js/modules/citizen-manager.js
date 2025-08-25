@@ -262,9 +262,9 @@ export class CitizenManager {
   }
 
   /**
-   * Export session as text file
+   * Export session to GitHub repository instead of local download
    */
-  exportSession() {
+  async exportSession() {
     const content = this.generateSessionReport();
     const timestamp = new Date()
       .toISOString()
@@ -272,16 +272,59 @@ export class CitizenManager {
       .substr(0, 19);
     const filename = `citizen-session-${
       this.currentSession.roundNumber || "unknown"
-    }-${timestamp}${SITE_CONFIG.fileSystem.defaultExtension}`;
+    }-${timestamp}.txt`;
 
-    FileUtils.downloadFile(content, filename);
+    try {
+      // Get GitHub API URL
+      const apiUrl = `https://api.github.com/repos/Mnemeory/mnemeory.github.io/contents/citizen/${filename}`;
+      
+      // Get token from sessionStorage or prompt
+      let token = sessionStorage.getItem('github_token');
+      if (!token) {
+        token = prompt('Enter your GitHub Personal Access Token (with repo write access):');
+        if (token) {
+          sessionStorage.setItem('github_token', token);
+        } else {
+          // Fall back to local download if no token
+          FileUtils.downloadFile(content, filename);
+          ToastManager.show('No GitHub token provided - downloaded locally', 'warning');
+          return;
+        }
+      }
 
-    ToastManager.show(
-      getSuccessMessage("sessionExported", { filename }),
-      "success"
-    );
+      // Create the file on GitHub
+      const response = await fetch(apiUrl, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/vnd.github.v3+json',
+          'Authorization': `token ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: `Add citizen session for round ${this.currentSession.roundNumber || 'unknown'}`,
+          content: btoa(unescape(encodeURIComponent(content))),
+          branch: 'main'
+        })
+      });
 
-    this.addLogEntry(`Diplomatic session report transmitted as ${filename}`);
+      if (response.ok) {
+        ToastManager.show(
+          `Session saved to GitHub: citizen/${filename}`,
+          "success"
+        );
+        this.addLogEntry(`Session exported to GitHub repository: citizen/${filename}`);
+      } else {
+        throw new Error(`GitHub API error: ${response.status}`);
+      }
+    } catch (error) {
+      console.error('Failed to save to GitHub:', error);
+      // Fall back to local download
+      FileUtils.downloadFile(content, filename);
+      ToastManager.show(
+        'GitHub save failed - downloaded locally instead',
+        'warning'
+      );
+    }
   }
 
   /**

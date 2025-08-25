@@ -81,7 +81,7 @@ export class NodeManager {
   }
 
   /**
-   * Populate constellation with data nodes
+   * Populate constellation with data nodes - FIXED to use filtered nodes
    */
   populateConstellation(constellation, nodes) {
     const container = document.getElementById(`${constellation}-nodes`);
@@ -113,11 +113,7 @@ export class NodeManager {
       }, 100);
 
       // Also show citizen files as thought bubble documents below the management interface
-      const filteredNodes = nodes.filter(
-        (node) => node.constellation === constellation
-      );
-
-      if (filteredNodes.length > 0) {
+      if (nodes.length > 0) {
         const citizenFilesContainer = document.createElement("div");
         citizenFilesContainer.className = "citizen-files-section";
         citizenFilesContainer.innerHTML = `
@@ -136,11 +132,11 @@ export class NodeManager {
         thoughtBubbleContainer.setAttribute("role", "region");
         thoughtBubbleContainer.setAttribute(
           "aria-label",
-          `${constellationData?.name || constellation} citizen files collection`
+          `${CONSTELLATIONS[constellation]?.name || constellation} citizen files collection`
         );
 
         // Create thought bubble documents for citizen files
-        filteredNodes.forEach((node, index) => {
+        nodes.forEach((node, index) => {
           const thoughtBubble = this.createThoughtBubbleDocument(
             node,
             constellation
@@ -207,11 +203,8 @@ export class NodeManager {
       return;
     }
 
-    const filteredNodes = nodes.filter(
-      (node) => node.constellation === constellation
-    );
-
-    if (filteredNodes.length === 0) {
+    // For other constellations, show the actual nodes
+    if (nodes.length === 0) {
       container.innerHTML = `
         <div class="empty-constellation">
           <p>No psionic data streams available in this constellation.</p>
@@ -232,7 +225,7 @@ export class NodeManager {
     );
 
     // Create thought bubble documents
-    filteredNodes.forEach((node, index) => {
+    nodes.forEach((node, index) => {
       const thoughtBubble = this.createThoughtBubbleDocument(
         node,
         constellation

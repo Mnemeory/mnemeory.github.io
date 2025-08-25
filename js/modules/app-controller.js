@@ -244,12 +244,11 @@ export class NlomInterface {
         );
       }
 
-      // Define the directories to scan based on the user's naming conventions
-      // Map folder paths to constellation IDs and seals
+      // FIXED: Proper directory to constellation mapping
       const scanPaths = [
-        { path: "filed", constellation: "gnarled-tree", seal: "filed" },
-        { path: "templates", constellation: "hatching-egg", seal: "open" },
-        { path: "citizen", constellation: "qu-poxii", seal: "open" },
+        { path: "filed", constellation: "gnarled-tree", seal: "filed" },      // Filed docs go to Gnarled Tree
+        { path: "templates", constellation: "hatching-egg", seal: "open" },  // Templates go to Hatching Egg  
+        { path: "citizen", constellation: "qu-poxii", seal: "open" },        // Citizen docs go to Qu'Poxii
       ];
 
       const allNodes = [];
@@ -257,7 +256,7 @@ export class NlomInterface {
       // Scan each directory for files
       for (const pathConfig of scanPaths) {
         try {
-          console.log(`\n--- Scanning ${pathConfig.path} directory ---`);
+          console.log(`\n--- Scanning ${pathConfig.path} directory for ${pathConfig.constellation} ---`);
           const nodes = await scanner.scanDirectory(
             pathConfig.path,
             pathConfig.constellation,
@@ -265,7 +264,7 @@ export class NlomInterface {
           );
           allNodes.push(...nodes);
           console.log(
-            `✅ Scanned ${pathConfig.path}: found ${nodes.length} files`
+            `✅ Scanned ${pathConfig.path}: found ${nodes.length} files for ${pathConfig.constellation}`
           );
         } catch (error) {
           console.warn(
@@ -280,31 +279,25 @@ export class NlomInterface {
       const sortedNodes = scanner.sortNodes(allNodes);
       this.state.set("nodes", sortedNodes);
 
-      // Populate constellations with data
+      // Populate each constellation with its specific data
       Object.keys(CONSTELLATIONS).forEach((constellation) => {
-        this.nodeManager.populateConstellation(constellation, sortedNodes);
+        // Get only the nodes for this specific constellation
+        const constellationNodes = sortedNodes.filter(
+          node => node.constellation === constellation
+        );
+        
+        console.log(`Populating ${constellation} with ${constellationNodes.length} nodes`);
+        this.nodeManager.populateConstellation(constellation, constellationNodes);
       });
 
-      // Pass citizen files to the citizen manager if available
+      // Pass citizen files specifically to the citizen manager
       const citizenNodes = sortedNodes.filter(
         (node) => node.constellation === "qu-poxii"
       );
       if (citizenNodes.length > 0) {
         console.log(
-          `Found ${citizenNodes.length} citizen files from file system`
+          `Found ${citizenNodes.length} citizen files for Qu'Poxii constellation`
         );
-        console.log(
-          "Citizen nodes:",
-          citizenNodes.map((node) => ({
-            id: node.id,
-            name: node.name,
-            constellation: node.constellation,
-            seal: node.seal,
-            metadata: node.metadata,
-          }))
-        );
-        // The citizen manager will be initialized when the constellation is populated
-        // We'll store this information for later use
         this.state.set("citizenFiles", citizenNodes);
       } else {
         console.log("No citizen files found in the repository");
@@ -313,14 +306,13 @@ export class NlomInterface {
       console.log(
         `\n🎉 Successfully loaded ${sortedNodes.length} nodes from GitHub repository`
       );
-      console.log(
-        "Node summary:",
-        sortedNodes.map((node) => ({
-          name: node.name,
-          constellation: node.constellation,
-          seal: node.seal,
-        }))
-      );
+      
+      // Log distribution
+      const distribution = {};
+      sortedNodes.forEach(node => {
+        distribution[node.constellation] = (distribution[node.constellation] || 0) + 1;
+      });
+      console.log("Node distribution by constellation:", distribution);
     } catch (error) {
       console.error("❌ Data loading failed:", error);
       const standardError = createStandardError(
