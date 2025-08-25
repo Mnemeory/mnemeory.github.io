@@ -556,9 +556,9 @@ export class FormUtils {
 
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
-    
+
     // Convert numeric values
-    Object.keys(data).forEach(key => {
+    Object.keys(data).forEach((key) => {
       if (data[key] && !isNaN(data[key]) && data[key].trim() !== "") {
         data[key] = parseFloat(data[key]);
       }
@@ -573,7 +573,7 @@ export class FormUtils {
   static validateFormData(data, rules = {}) {
     const errors = {};
 
-    Object.keys(rules).forEach(field => {
+    Object.keys(rules).forEach((field) => {
       const rule = rules[field];
       const value = data[field];
 
@@ -592,15 +592,17 @@ export class FormUtils {
           errors[field] = rule.typeMessage || `${field} must be a valid number`;
           return;
         }
-        
+
         // Range validation for numbers
         if (rule.min !== undefined && value < rule.min) {
-          errors[field] = rule.minMessage || `${field} must be at least ${rule.min}`;
+          errors[field] =
+            rule.minMessage || `${field} must be at least ${rule.min}`;
           return;
         }
-        
+
         if (rule.max !== undefined && value > rule.max) {
-          errors[field] = rule.maxMessage || `${field} must be at most ${rule.max}`;
+          errors[field] =
+            rule.maxMessage || `${field} must be at most ${rule.max}`;
           return;
         }
       }
@@ -608,12 +610,16 @@ export class FormUtils {
       // Length validation for strings
       if (rule.type === "string" || typeof value === "string") {
         if (rule.minLength && value.length < rule.minLength) {
-          errors[field] = rule.minLengthMessage || `${field} must be at least ${rule.minLength} characters`;
+          errors[field] =
+            rule.minLengthMessage ||
+            `${field} must be at least ${rule.minLength} characters`;
           return;
         }
-        
+
         if (rule.maxLength && value.length > rule.maxLength) {
-          errors[field] = rule.maxLengthMessage || `${field} must be at most ${rule.maxLength} characters`;
+          errors[field] =
+            rule.maxLengthMessage ||
+            `${field} must be at most ${rule.maxLength} characters`;
           return;
         }
       }
@@ -634,7 +640,7 @@ export class FormUtils {
 
     return {
       isValid: Object.keys(errors).length === 0,
-      errors
+      errors,
     };
   }
 
@@ -643,22 +649,24 @@ export class FormUtils {
    */
   static displayFormErrors(form, errors) {
     // Clear existing errors
-    form.querySelectorAll(".field-error").forEach(error => error.remove());
-    form.querySelectorAll(".error").forEach(field => field.classList.remove("error"));
+    form.querySelectorAll(".field-error").forEach((error) => error.remove());
+    form
+      .querySelectorAll(".error")
+      .forEach((field) => field.classList.remove("error"));
 
     // Display new errors
-    Object.keys(errors).forEach(field => {
+    Object.keys(errors).forEach((field) => {
       const fieldElement = form.querySelector(`[name="${field}"]`);
       if (fieldElement) {
         fieldElement.classList.add("error");
-        
+
         const errorElement = document.createElement("div");
         errorElement.className = "field-error";
         errorElement.textContent = errors[field];
         errorElement.style.color = "var(--color-error)";
         errorElement.style.fontSize = "0.8rem";
         errorElement.style.marginTop = "0.25rem";
-        
+
         fieldElement.parentNode.appendChild(errorElement);
       }
     });
@@ -683,7 +691,6 @@ export class FormUtils {
       // Call submit handler
       const result = await onSubmit(data);
       return { success: true, data, result };
-
     } catch (error) {
       console.error("Form submission error:", error);
       return { success: false, error: error.message };
@@ -709,7 +716,7 @@ export class TemplateUtils {
    */
   static render(template, data = {}) {
     if (!template) return "";
-    
+
     return template.replace(/\{\{(\w+)\}\}/g, (match, key) => {
       return data[key] !== undefined ? data[key] : match;
     });
@@ -720,7 +727,7 @@ export class TemplateUtils {
    */
   static renderNested(template, data = {}) {
     if (!template) return "";
-    
+
     return template.replace(/\{\{([\w.]+)\}\}/g, (match, keyPath) => {
       const value = TemplateUtils.getNestedValue(data, keyPath);
       return value !== undefined ? value : match;
@@ -731,7 +738,7 @@ export class TemplateUtils {
    * Get nested value from object using dot notation
    */
   static getNestedValue(obj, path) {
-    return path.split('.').reduce((current, key) => {
+    return path.split(".").reduce((current, key) => {
       return current && current[key] !== undefined ? current[key] : undefined;
     }, obj);
   }
@@ -741,17 +748,23 @@ export class TemplateUtils {
    */
   static renderConditional(template, data = {}) {
     if (!template) return "";
-    
+
     // Handle {{#if condition}} blocks
-    template = template.replace(/\{\{#if\s+(\w+)\}\}(.*?)\{\{\/if\}\}/gs, (match, condition, content) => {
-      return data[condition] ? content : "";
-    });
-    
+    template = template.replace(
+      /\{\{#if\s+(\w+)\}\}(.*?)\{\{\/if\}\}/gs,
+      (match, condition, content) => {
+        return data[condition] ? content : "";
+      }
+    );
+
     // Handle {{#unless condition}} blocks
-    template = template.replace(/\{\{#unless\s+(\w+)\}\}(.*?)\{\{\/unless\}\}/gs, (match, condition, content) => {
-      return !data[condition] ? content : "";
-    });
-    
+    template = template.replace(
+      /\{\{#unless\s+(\w+)\}\}(.*?)\{\{\/unless\}\}/gs,
+      (match, condition, content) => {
+        return !data[condition] ? content : "";
+      }
+    );
+
     // Handle regular variables
     return TemplateUtils.renderNested(template, data);
   }
@@ -761,24 +774,29 @@ export class TemplateUtils {
    */
   static renderWithLoops(template, data = {}) {
     if (!template) return "";
-    
+
     // Handle {{#each array}} blocks
-    template = template.replace(/\{\{#each\s+(\w+)\}\}(.*?)\{\{\/each\}\}/gs, (match, arrayName, content) => {
-      const array = data[arrayName];
-      if (!Array.isArray(array)) return "";
-      
-      return array.map((item, index) => {
-        const itemData = { 
-          ...data, 
-          this: item, 
-          "@index": index, 
-          "@first": index === 0, 
-          "@last": index === array.length - 1 
-        };
-        return TemplateUtils.renderConditional(content, itemData);
-      }).join("");
-    });
-    
+    template = template.replace(
+      /\{\{#each\s+(\w+)\}\}(.*?)\{\{\/each\}\}/gs,
+      (match, arrayName, content) => {
+        const array = data[arrayName];
+        if (!Array.isArray(array)) return "";
+
+        return array
+          .map((item, index) => {
+            const itemData = {
+              ...data,
+              this: item,
+              "@index": index,
+              "@first": index === 0,
+              "@last": index === array.length - 1,
+            };
+            return TemplateUtils.renderConditional(content, itemData);
+          })
+          .join("");
+      }
+    );
+
     return TemplateUtils.renderConditional(template, data);
   }
 
@@ -794,7 +812,7 @@ export class TemplateUtils {
    */
   static createCache() {
     const cache = new Map();
-    
+
     return {
       get(key, template) {
         if (!cache.has(key)) {
@@ -802,15 +820,15 @@ export class TemplateUtils {
         }
         return cache.get(key);
       },
-      
+
       render(key, template, data) {
         const compiled = this.get(key, template);
         return compiled(data);
       },
-      
+
       clear() {
         cache.clear();
-      }
+      },
     };
   }
 }

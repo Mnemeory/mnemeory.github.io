@@ -6,7 +6,8 @@
 .fluid-consciousness {
   position: relative;
   background: 
-    /* Primary fluid streams */ radial-gradient(
+    /* Primary fluid streams */
+    radial-gradient(
       ellipse 1800px 1200px at 20% 30%,
       var(--color-russian-violet) 0%,
       transparent 80%
@@ -66,29 +67,79 @@
     ),
     /* Deep fluid foundation */ var(--color-midnight-indigo);
   background-attachment: fixed;
-  background-size: 3600px 2400px, 2800px 1800px, 3200px 2200px, 1600px 1200px,
-    1800px 1400px, 1200px 1200px, 1000px 1000px, 800px 800px, 600px 600px,
-    500px 500px, 700px 700px, 100% 100%;
+  background-size:
+    3600px 2400px,
+    2800px 1800px,
+    3200px 2200px,
+    1600px 1200px,
+    1800px 1400px,
+    1200px 1200px,
+    1000px 1000px,
+    800px 800px,
+    600px 600px,
+    500px 500px,
+    700px 700px,
+    100% 100%;
   animation: fluid-consciousness-flow var(--duration-flow) ease-in-out infinite;
 }
 
 @keyframes fluid-consciousness-flow {
   0%,
   100% {
-    background-position: 0% 0%, 100% 100%, 50% 0%, 0% 100%, 100% 0%, 0% 50%,
-      50% 50%, 100% 50%, 25% 25%, 75% 75%, 50% 100%;
+    background-position:
+      0% 0%,
+      100% 100%,
+      50% 0%,
+      0% 100%,
+      100% 0%,
+      0% 50%,
+      50% 50%,
+      100% 50%,
+      25% 25%,
+      75% 75%,
+      50% 100%;
   }
   25% {
-    background-position: 25% 25%, 75% 75%, 25% 25%, 25% 75%, 75% 25%, 25% 25%,
-      75% 25%, 25% 75%, 50% 0%, 50% 100%, 75% 75%;
+    background-position:
+      25% 25%,
+      75% 75%,
+      25% 25%,
+      25% 75%,
+      75% 25%,
+      25% 25%,
+      75% 25%,
+      25% 75%,
+      50% 0%,
+      50% 100%,
+      75% 75%;
   }
   50% {
-    background-position: 50% 50%, 50% 50%, 0% 50%, 50% 50%, 50% 50%, 50% 0%,
-      0% 75%, 50% 25%, 75% 25%, 25% 75%, 0% 50%;
+    background-position:
+      50% 50%,
+      50% 50%,
+      0% 50%,
+      50% 50%,
+      50% 50%,
+      50% 0%,
+      0% 75%,
+      50% 25%,
+      75% 25%,
+      25% 75%,
+      0% 50%;
   }
   75% {
-    background-position: 75% 75%, 25% 25%, 75% 75%, 75% 25%, 25% 75%, 75% 75%,
-      25% 75%, 75% 25%, 100% 50%, 0% 50%, 25% 25%;
+    background-position:
+      75% 75%,
+      25% 25%,
+      75% 75%,
+      75% 25%,
+      25% 75%,
+      75% 75%,
+      25% 75%,
+      75% 25%,
+      100% 50%,
+      0% 50%,
+      25% 25%;
   }
 }
 
@@ -98,7 +149,8 @@
   position: fixed;
   inset: 0;
   background: 
-    /* Organic flow streams */ radial-gradient(
+    /* Organic flow streams */
+    radial-gradient(
       ellipse 800px 600px at var(--flow-x, 20%) var(--flow-y, 30%),
       var(--glow-cyan-whisper) 0%,
       transparent 70%
@@ -114,7 +166,8 @@
         var(--glow-purple-whisper) 0%,
         transparent 80%
       );
-  animation: consciousness-flow-patterns var(--duration-flow-extended) ease-in-out infinite;
+  animation: consciousness-flow-patterns var(--duration-flow-extended)
+    ease-in-out infinite;
   pointer-events: none;
   z-index: -1;
 }

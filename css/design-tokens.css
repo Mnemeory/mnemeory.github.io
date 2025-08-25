@@ -55,8 +55,8 @@
   /* Typography Scale */
   --font-primary: "Exo 2", system-ui, sans-serif;
   --font-ui: "Noto Sans", system-ui, sans-serif;
-  --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas,
-    monospace;
+  --font-mono:
+    "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace;
 
   /* Font Sizes - Fluid Typography */
   --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
@@ -81,11 +81,11 @@
   --space-20: 5rem; /* 80px */
 
   /* Responsive Breakpoints - Mobile-first approach */
-  --breakpoint-xs: 480px;   /* Extra small devices */
-  --breakpoint-sm: 640px;   /* Small devices */
-  --breakpoint-md: 768px;   /* Medium devices (tablets) */
-  --breakpoint-lg: 1024px;  /* Large devices (desktops) */
-  --breakpoint-xl: 1200px;  /* Extra large devices */
+  --breakpoint-xs: 480px; /* Extra small devices */
+  --breakpoint-sm: 640px; /* Small devices */
+  --breakpoint-md: 768px; /* Medium devices (tablets) */
+  --breakpoint-lg: 1024px; /* Large devices (desktops) */
+  --breakpoint-xl: 1200px; /* Extra large devices */
   --breakpoint-2xl: 1536px; /* 2X large devices */
 
   /* Border Radius - Organic Curves */
@@ -144,7 +144,7 @@
   --glass-bg-starfield-void: rgba(14, 55, 87, 0.3);
   --glass-bg-starfield-accent: rgba(62, 46, 92, 0.2);
   --glass-starfield-shadow: rgba(92, 231, 231, 0.05);
-  
+
   /* Cultural Interface Variants */
   --glass-cultural-border: rgba(175, 238, 238, 0.2);
   --glass-cultural-shadow: rgba(35, 60, 103, 0.3);
@@ -152,7 +152,7 @@
   --glass-cultural-gradient-start: rgba(175, 238, 238, 0.03);
   --glass-cultural-gradient-mid: rgba(254, 221, 216, 0.02);
   --glass-cultural-warm-glow: rgba(175, 238, 238, 0.1);
-  
+
   /* Enhanced Glow Effects */
   --glow-enhanced-primary: rgba(175, 238, 238, 0.5);
   --glow-enhanced-secondary: rgba(175, 238, 238, 0.2);
@@ -197,7 +197,7 @@
   --constellation-void-glow: rgba(147, 112, 219, 0.25);
 
   /* Gradient Definitions - Centralized gradients used across components */
-  
+
   /* Primary neural gradients */
   --gradient-neural-primary: radial-gradient(
     ellipse at center,
@@ -205,38 +205,40 @@
     rgba(175, 238, 238, 0.08) 40%,
     transparent 70%
   );
-  
+
   --gradient-neural-secondary: linear-gradient(
     135deg,
     rgba(35, 60, 103, 0.15) 0%,
     rgba(46, 27, 73, 0.1) 100%
   );
-  
+
   --gradient-consciousness-flow: radial-gradient(
     ellipse at top left,
     rgba(175, 238, 238, 0.12) 0%,
     rgba(254, 221, 216, 0.06) 40%,
     transparent 70%
   );
-  
+
   /* Modal and interface gradients */
-  --gradient-modal-backdrop: radial-gradient(
-    ellipse 1200px 800px at 30% 70%,
-    rgba(35, 60, 103, 0.4) 0%,
-    transparent 60%
-  ), radial-gradient(
-    ellipse 800px 600px at 70% 30%,
-    rgba(46, 27, 73, 0.3) 0%,
-    transparent 50%
-  );
-  
+  --gradient-modal-backdrop:
+    radial-gradient(
+      ellipse 1200px 800px at 30% 70%,
+      rgba(35, 60, 103, 0.4) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 800px 600px at 70% 30%,
+      rgba(46, 27, 73, 0.3) 0%,
+      transparent 50%
+    );
+
   --gradient-bubble-base: radial-gradient(
     ellipse at 30% 30%,
     rgba(175, 238, 238, 0.2) 0%,
     rgba(175, 238, 238, 0.1) 40%,
     transparent 70%
   );
-  
+
   /* Energy flow gradients */
   --gradient-energy-horizontal: linear-gradient(
     90deg,
@@ -245,7 +247,7 @@
     rgba(254, 221, 216, 0.4) 70%,
     transparent 100%
   );
-  
+
   --gradient-energy-conic: conic-gradient(
     transparent 0deg,
     rgba(175, 238, 238, 0.1) 90deg,
@@ -253,7 +255,7 @@
     rgba(254, 221, 216, 0.08) 270deg,
     transparent 360deg
   );
-  
+
   /* Authority gradients */
   --gradient-authority: linear-gradient(
     45deg,
@@ -280,7 +282,7 @@
     var(--glow-cyan-gentle),
     transparent
   );
-  
+
   /* Constellation-specific gradients */
   --gradient-constellation-header: radial-gradient(
     ellipse 500px 200px at center,
@@ -288,7 +290,7 @@
     rgba(254, 221, 216, 0.05) 40%,
     transparent 70%
   );
-  
+
   /* Border radius variations - Common morphing shapes */
   --radius-morph-1: 60% 40% 30% 70% / 60% 30% 70% 40%;
   --radius-morph-2: 30% 70% 60% 40% / 40% 60% 30% 70%;
@@ -297,13 +299,13 @@
   --radius-organic-1: 50px 20px 50px 20px;
   --radius-organic-2: 20px 50px 20px 50px;
   --radius-organic-3: 30px 30px 30px 30px;
-  
+
   /* Animation timing functions - Expanded beyond basic easing */
   --ease-neural: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-organic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
   --ease-consciousness: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --ease-psionic: cubic-bezier(0.23, 1, 0.32, 1);
-  
+
   /* Animation durations - Semantic naming */
   --duration-instant: 50ms;
   --duration-micro: 100ms;
@@ -335,7 +337,7 @@
   --duration-thermal-comfort: 400ms;
   --duration-cultural-hover: 300ms;
   --duration-cosmic-aurora: 12s;
-  
+
   /* Additional shadow variants */
   --shadow-neural-sm: 0 2px 8px rgba(175, 238, 238, 0.15);
   --shadow-neural-md: 0 4px 16px rgba(175, 238, 238, 0.2);
@@ -346,7 +348,7 @@
   --shadow-consciousness: 0 0 60px rgba(175, 238, 238, 0.1);
   --shadow-inset-neural: inset 0 0 20px rgba(175, 238, 238, 0.1);
   --shadow-inset-glow: inset 0 0 40px rgba(175, 238, 238, 0.05);
-  
+
   /* Extended glow variants for fluid consciousness */
   --glow-cyan-ultra: rgba(175, 238, 238, 0.03);
   --glow-cyan-whisper: rgba(175, 238, 238, 0.02);
@@ -357,7 +359,7 @@
   --glow-purple-soft: rgba(46, 27, 73, 0.1);
   --glow-purple-whisper: rgba(46, 27, 73, 0.01);
   --glow-gold-soft: rgba(229, 199, 107, 0.4);
-  
+
   /* Navigation-specific glow variants */
   --glow-cyan-gentle: rgba(92, 231, 231, 0.1);
   --glow-cyan-medium: rgba(92, 231, 231, 0.4);
@@ -367,7 +369,7 @@
   --glow-cyan-intense: rgba(175, 238, 238, 0.8);
   --glow-cyan-faint: rgba(175, 238, 238, 0.05);
   --glow-cyan-border: rgba(175, 238, 238, 0.3);
-  
+
   /* Notification-specific glow variants */
   --glow-toast-base: rgba(175, 238, 238, 0.15);
   --glow-toast-inner: rgba(175, 238, 238, 0.05);
@@ -378,7 +380,7 @@
   --glow-gold-error-bg-inner: rgba(229, 199, 107, 0.1);
   --glow-gold-error-border: rgba(229, 199, 107, 0.4);
   --glow-gold-error-text: rgba(229, 199, 107, 0.4);
-  
+
   /* Paper editor specific variants */
   --bg-paper-container: rgba(7, 20, 34, 0.4);
   --bg-paper-toolbar: rgba(14, 55, 87, 0.3);
@@ -402,7 +404,7 @@
   --text-shadow-cyan-medium: rgba(92, 231, 231, 0.5);
   --text-shadow-gold-weak: rgba(229, 199, 107, 0.3);
   --outline-gold-weak: rgba(229, 199, 107, 0.3);
-  
+
   /* Skrell cultural specific variants */
   --glass-cultural-border: rgba(175, 238, 238, 0.2);
   --glass-cultural-shadow: rgba(175, 238, 238, 0.15);
@@ -410,13 +412,13 @@
   --glass-cultural-gradient-start: rgba(175, 238, 238, 0.1);
   --glass-cultural-gradient-mid: rgba(175, 238, 238, 0.15);
   --glass-cultural-warm-glow: rgba(254, 221, 216, 0.12);
-  
+
   /* Starfield specific variants */
   --glass-bg-starfield-light: rgba(175, 238, 238, 0.08);
   --glass-bg-starfield-void: rgba(46, 27, 73, 0.15);
   --glass-bg-starfield-accent: rgba(92, 231, 231, 0.12);
   --glass-starfield-shadow: rgba(0, 0, 0, 0.4);
-  
+
   /* Background overlays - Reusable backdrop patterns */
   --bg-overlay-neural: rgba(7, 20, 34, 0.8);
   --bg-overlay-void: rgba(7, 20, 34, 0.9);

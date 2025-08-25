@@ -50,10 +50,10 @@ export class StarfieldScene {
     // Create scene
     this.scene = new THREE.Scene();
     this.scene.fog = new THREE.Fog(0x071422, 400, 1200); // Reduced fog to make stars more visible
-    
+
     console.log("Scene created with fog:", {
       fog: this.scene.fog,
-      children: this.scene.children.length
+      children: this.scene.children.length,
     });
 
     // Get container dimensions
@@ -70,14 +70,14 @@ export class StarfieldScene {
       LOCAL_CONFIG.CAMERA_FAR
     );
     this.camera.position.set(0, 0, 300);
-    
+
     console.log("Camera created:", {
       fov: LOCAL_CONFIG.CAMERA_FOV,
       aspect,
       near: LOCAL_CONFIG.CAMERA_NEAR,
       far: LOCAL_CONFIG.CAMERA_FAR,
       position: this.camera.position,
-      aspect: this.camera.aspect
+      aspect: this.camera.aspect,
     });
 
     // Create renderer
@@ -88,22 +88,22 @@ export class StarfieldScene {
         alpha: true,
         powerPreference: "high-performance",
       });
-      
+
       if (!this.renderer) {
         throw new Error("Failed to create WebGL renderer");
       }
-      
+
       this.renderer.setSize(width, height);
       this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       this.renderer.setClearColor(0x0a1f2a, 0.9); // Slightly lighter background for better star visibility
       this.renderer.sortObjects = true; // Enable render order sorting
-      
+
       console.log("WebGL renderer created successfully:", {
         canvas: this.canvas,
         width,
         height,
         pixelRatio: this.renderer.getPixelRatio(),
-        context: this.renderer.getContext()
+        context: this.renderer.getContext(),
       });
     } catch (error) {
       console.error("Failed to create WebGL renderer:", error);
@@ -142,7 +142,7 @@ export class StarfieldScene {
       const colorChoice = Math.random();
       const brightness = starConfig.brightness;
       const variance = starConfig.colorVariance;
-      
+
       if (colorChoice < 0.6) {
         // Cyan stars
         colors[i3] = 0.36 * (brightness + (Math.random() - 0.5) * variance);
@@ -156,7 +156,8 @@ export class StarfieldScene {
       } else {
         // Dim white stars
         const baseBrightness = brightness * 0.4;
-        const brightVariance = baseBrightness + Math.random() * (brightness * 0.5);
+        const brightVariance =
+          baseBrightness + Math.random() * (brightness * 0.5);
         colors[i3] = brightVariance;
         colors[i3 + 1] = brightVariance;
         colors[i3 + 2] = brightVariance;
@@ -212,25 +213,58 @@ export class StarfieldScene {
 
     this.backgroundStars = new THREE.Points(geometry, material);
     this.scene.add(this.backgroundStars);
-    
+
     console.log("Background stars added to scene:", {
       stars: this.backgroundStars,
       geometry: this.backgroundStars.geometry,
       material: this.backgroundStars.material,
       sceneChildren: this.scene.children.length,
-      starCount: LOCAL_CONFIG.PARTICLE_COUNT
+      starCount: LOCAL_CONFIG.PARTICLE_COUNT,
     });
-    
+
     // Debug: Log star creation
-    console.log(`Created ${LOCAL_CONFIG.PARTICLE_COUNT} background stars at positions:`, {
-      minX: Math.min(...Array.from({length: LOCAL_CONFIG.PARTICLE_COUNT}, (_, i) => positions[i * 3])),
-      maxX: Math.max(...Array.from({length: LOCAL_CONFIG.PARTICLE_COUNT}, (_, i) => positions[i * 3])),
-      minY: Math.min(...Array.from({length: LOCAL_CONFIG.PARTICLE_COUNT}, (_, i) => positions[i * 3 + 1])),
-      maxY: Math.max(...Array.from({length: LOCAL_CONFIG.PARTICLE_COUNT}, (_, i) => positions[i * 3 + 1])),
-      minZ: Math.min(...Array.from({length: LOCAL_CONFIG.PARTICLE_COUNT}, (_, i) => positions[i * 3 + 2])),
-      maxZ: Math.max(...Array.from({length: LOCAL_CONFIG.PARTICLE_COUNT}, (_, i) => positions[i * 3 + 2])),
-      cameraZ: this.camera.position.z
-    });
+    console.log(
+      `Created ${LOCAL_CONFIG.PARTICLE_COUNT} background stars at positions:`,
+      {
+        minX: Math.min(
+          ...Array.from(
+            { length: LOCAL_CONFIG.PARTICLE_COUNT },
+            (_, i) => positions[i * 3]
+          )
+        ),
+        maxX: Math.max(
+          ...Array.from(
+            { length: LOCAL_CONFIG.PARTICLE_COUNT },
+            (_, i) => positions[i * 3]
+          )
+        ),
+        minY: Math.min(
+          ...Array.from(
+            { length: LOCAL_CONFIG.PARTICLE_COUNT },
+            (_, i) => positions[i * 3 + 1]
+          )
+        ),
+        maxY: Math.max(
+          ...Array.from(
+            { length: LOCAL_CONFIG.PARTICLE_COUNT },
+            (_, i) => positions[i * 3 + 1]
+          )
+        ),
+        minZ: Math.min(
+          ...Array.from(
+            { length: LOCAL_CONFIG.PARTICLE_COUNT },
+            (_, i) => positions[i * 3 + 2]
+          )
+        ),
+        maxZ: Math.max(
+          ...Array.from(
+            { length: LOCAL_CONFIG.PARTICLE_COUNT },
+            (_, i) => positions[i * 3 + 2]
+          )
+        ),
+        cameraZ: this.camera.position.z,
+      }
+    );
   }
 
   /**
@@ -269,7 +303,8 @@ export class StarfieldScene {
       const phi = Math.acos(2 * Math.random() - 1);
       const starConfig = getStarGenerationParams();
       const radiusPower = 0.7; // Concentration factor for cluster distribution
-      const radius = Math.pow(Math.random(), radiusPower) * LOCAL_CONFIG.CLUSTER_SIZE;
+      const radius =
+        Math.pow(Math.random(), radiusPower) * LOCAL_CONFIG.CLUSTER_SIZE;
 
       positions[i3] = radius * Math.sin(phi) * Math.cos(theta);
       positions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
@@ -283,7 +318,9 @@ export class StarfieldScene {
       // Size with variation - using config size range
       const [minSize, maxSize] = starConfig.sizeRange;
       const constellationSizeMultiplier = 3; // Constellation stars are larger than background
-      sizes[i] = (minSize + Math.random() * (maxSize - minSize)) * constellationSizeMultiplier;
+      sizes[i] =
+        (minSize + Math.random() * (maxSize - minSize)) *
+        constellationSizeMultiplier;
     }
 
     this.setAttributes(geometry, positions, colors, sizes);
@@ -763,14 +800,14 @@ export class StarfieldScene {
   render() {
     if (this.renderer && this.scene && this.camera) {
       this.renderer.render(this.scene, this.camera);
-      
+
       // Debug: Log render info
       if (this.backgroundStars) {
-        console.log('Rendering scene with background stars:', {
+        console.log("Rendering scene with background stars:", {
           visible: this.backgroundStars.visible,
           count: this.backgroundStars.geometry.attributes.position.count,
           position: this.backgroundStars.position,
-          material: this.backgroundStars.material
+          material: this.backgroundStars.material,
         });
       }
     }

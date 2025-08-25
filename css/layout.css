@@ -99,7 +99,8 @@
   padding: 0 var(--space-6);
 }
 
-@media (max-width: 1024px) { /* --breakpoint-lg */
+@media (max-width: 1024px) {
+  /* --breakpoint-lg */
   .neural-flow-grid {
     grid-template-columns: 1fr;
     gap: var(--space-4);
@@ -147,7 +148,8 @@
   background: var(--glass-bg-medium);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-full);
-  box-shadow: 0 4px 16px rgba(175, 238, 238, 0.15),
+  box-shadow:
+    0 4px 16px rgba(175, 238, 238, 0.15),
     inset 0 0 10px rgba(175, 238, 238, 0.1);
   position: relative;
   overflow: hidden;
@@ -188,7 +190,8 @@
   border-radius: var(--radius-full);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(175, 238, 238, 0.15),
+  box-shadow:
+    0 8px 32px rgba(175, 238, 238, 0.15),
     inset 0 0 20px rgba(175, 238, 238, 0.1);
 }
 
@@ -370,7 +373,8 @@
 }
 
 /* Responsive Layout Adjustments */
-@media (max-width: 768px) { /* --breakpoint-md */
+@media (max-width: 768px) {
+  /* --breakpoint-md */
   .neural-command-interface {
     padding: var(--space-3) var(--space-4);
   }

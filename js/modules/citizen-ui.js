@@ -24,8 +24,8 @@ export class CitizenUI {
               ? "selected"
               : ""
             : status.default
-            ? "selected"
-            : ""
+              ? "selected"
+              : ""
         }>${status.label}</option>`
     ).join("");
   }
@@ -42,9 +42,9 @@ export class CitizenUI {
 
     this.render();
     this.setupEventListeners();
-    
+
     // Log initialization
-    console.log('Citizen UI initialized for Qu\'Poxii constellation');
+    console.log("Citizen UI initialized for Qu'Poxii constellation");
   }
 
   /**
@@ -178,17 +178,20 @@ export class CitizenUI {
           <div class="files-list">
             ${
               this.citizenManager.hasCitizenFiles()
-                ? this.citizenManager.getCitizenFiles()
-                    .map((file) => `
+                ? this.citizenManager
+                    .getCitizenFiles()
+                    .map(
+                      (file) => `
                       <div class="file-item">
                         <span class="file-name">${file.name}</span>
-                        <span class="file-type">${file.metadata?.category || 'CITIZEN'}</span>
+                        <span class="file-type">${file.metadata?.category || "CITIZEN"}</span>
                         <button type="button" class="corp-btn corp-btn--small corp-btn--secondary view-file-btn" 
                                 data-file-id="${file.id}">View</button>
                         <button type="button" class="corp-btn corp-btn--small corp-btn--primary import-file-btn" 
                                 data-file-id="${file.id}">Import</button>
                       </div>
-                    `)
+                    `
+                    )
                     .join("")
                 : `<p class=\"empty-state\">No citizen files available from repository</p>`
             }
@@ -206,8 +209,8 @@ export class CitizenUI {
       citizen.sciScore >= CONSTANTS.SCI_PRIMARY_THRESHOLD
         ? "primary"
         : citizen.sciScore >= CONSTANTS.SCI_SECONDARY_THRESHOLD
-        ? "secondary"
-        : "tertiary";
+          ? "secondary"
+          : "tertiary";
     const behavioralTags = citizen.behavioralTags || [];
 
     return `
@@ -478,8 +481,8 @@ export class CitizenUI {
                 citizen.sciScore >= 7
                   ? "primary"
                   : citizen.sciScore >= 4
-                  ? "secondary"
-                  : "tertiary"
+                    ? "secondary"
+                    : "tertiary"
               }">${citizen.sciScore}/10.00</span>
             </div>
             <div class="detail-item">
@@ -531,8 +534,8 @@ export class CitizenUI {
                         availableTags[tag] || ""
                       }</span>
                       <button type="button" class="remove-tag-btn" data-tag="${tag}" data-citizen-id="${
-                            citizen.id
-                          }">×</button>
+                        citizen.id
+                      }">×</button>
                     </div>
                   `
                         )
@@ -878,7 +881,7 @@ export class CitizenUI {
   importCitizenFile(fileId) {
     try {
       const citizen = this.citizenManager.importCitizenFromFile(fileId);
-      
+
       if (citizen) {
         ToastManager.show(
           `Successfully imported citizen: ${this.citizenManager.getFullName(citizen)}`,
@@ -898,25 +901,25 @@ export class CitizenUI {
    */
   viewCitizenFile(fileId) {
     const citizenFiles = this.citizenManager.getCitizenFiles();
-    const file = citizenFiles.find(f => f.id === fileId);
-    
+    const file = citizenFiles.find((f) => f.id === fileId);
+
     if (!file) {
       ToastManager.show("Citizen file not found", "error");
       return;
     }
 
     // Open the file in the paper editor modal
-    if (window.nlomInterface && window.nlomInterface.getSubsystem('paper')) {
-      const paperEditor = window.nlomInterface.getSubsystem('paper');
+    if (window.nlomInterface && window.nlomInterface.getSubsystem("paper")) {
+      const paperEditor = window.nlomInterface.getSubsystem("paper");
       paperEditor.loadDocument("modal", file.content, file.name);
-      
+
       // Show the modal
       const modal = document.querySelector('[data-modal="nodeModal"]');
       if (modal) {
         modal.setAttribute("aria-hidden", "false");
         modal.classList.remove("hidden");
       }
-      
+
       ToastManager.show(`Opened citizen file: ${file.name}`, "success");
     } else {
       // Fallback: show content in alert

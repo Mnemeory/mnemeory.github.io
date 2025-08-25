@@ -39,8 +39,8 @@ export class Router {
     // Handle protocol emblem click for home navigation
     document.addEventListener("click", (event) => {
       if (
-        event.target.matches(getSelector('protocolHomeButton')) ||
-        event.target.closest(getSelector('protocolHomeButton'))
+        event.target.matches(getSelector("protocolHomeButton")) ||
+        event.target.closest(getSelector("protocolHomeButton"))
       ) {
         this.navigate("#/");
       }
@@ -76,7 +76,7 @@ export class Router {
     // Handle keyboard navigation for protocol home button
     document.addEventListener("keydown", (event) => {
       if (
-        event.target.matches(getSelector('protocolHomeButton')) &&
+        event.target.matches(getSelector("protocolHomeButton")) &&
         (event.key === "Enter" || event.key === " ")
       ) {
         event.preventDefault();

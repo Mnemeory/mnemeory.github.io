@@ -100,17 +100,20 @@ export class ClearanceManager {
    */
   showNeuralLinkStatus(status = "active") {
     const statusMessages = {
-      active: "Diplomatic psionic link to Grand Council active • Nlom resonance stable",
-      unstable: "Diplomatic psionic link fluctuating • Nlom interference detected",
-      disconnected: "Diplomatic psionic link severed • Operating in autonomous mode",
+      active:
+        "Diplomatic psionic link to Grand Council active • Nlom resonance stable",
+      unstable:
+        "Diplomatic psionic link fluctuating • Nlom interference detected",
+      disconnected:
+        "Diplomatic psionic link severed • Operating in autonomous mode",
     };
 
     const toastType =
       status === "active"
         ? "success"
         : status === "unstable"
-        ? "warning"
-        : "error";
+          ? "warning"
+          : "error";
 
     const message = `
       <strong>NEURAL LINK STATUS</strong><br>

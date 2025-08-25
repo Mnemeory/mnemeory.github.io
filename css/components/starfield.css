@@ -50,7 +50,8 @@
   width: 100%;
   flex: 1;
   overflow: hidden;
-  background: radial-gradient(
+  background:
+    radial-gradient(
       ellipse at center,
       var(--glass-bg-starfield-light) 0%,
       transparent 50%
