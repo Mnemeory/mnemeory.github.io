@@ -55,8 +55,10 @@
   font-size: clamp(2rem, 6vw, 4rem);
   font-weight: 200;
   color: var(--color-pale-turquoise);
-  text-shadow: 0 0 15px var(--color-pale-turquoise),
-    0 0 30px var(--glow-enhanced-secondary), 0 0 60px var(--glow-medium);
+  text-shadow:
+    0 0 15px var(--color-pale-turquoise),
+    0 0 30px var(--glow-enhanced-secondary),
+    0 0 60px var(--glow-medium);
   /* Uses .base-float utility class for consistent floating effect */
   position: relative;
   cursor: pointer;
@@ -85,8 +87,10 @@
 
 .bubble-word:hover {
   transform: scale(1.15);
-  text-shadow: 0 0 20px var(--color-pale-turquoise),
-    0 0 40px var(--glow-intense-secondary), 0 0 80px var(--glow-enhanced-primary);
+  text-shadow:
+    0 0 20px var(--color-pale-turquoise),
+    0 0 40px var(--glow-intense-secondary),
+    0 0 80px var(--glow-enhanced-primary);
 }
 
 /* bubble-float removed - using base-floating from utilities.css */
@@ -140,8 +144,8 @@
 .liquid-space {
   position: absolute;
   inset: 0;
-  background: var(--gradient-neural-primary),
-    var(--gradient-neural-secondary),
+  background:
+    var(--gradient-neural-primary), var(--gradient-neural-secondary),
     var(--gradient-consciousness-flow);
   overflow: hidden;
 }
@@ -254,7 +258,8 @@
 .liquid-node:hover .node-bubble {
   transform: scale(1.1);
   border-radius: 40% 60% 50% 30% / 30% 50% 60% 40%;
-  box-shadow: 0 0 30px var(--glow-enhanced-secondary),
+  box-shadow:
+    0 0 30px var(--glow-enhanced-secondary),
     inset 0 0 30px var(--glow-subtle);
 }
 
@@ -264,7 +269,8 @@
 
 .liquid-node:hover .flowing-label {
   transform: translateY(-5px);
-  text-shadow: 0 0 12px var(--glow-intense-secondary),
+  text-shadow:
+    0 0 12px var(--glow-intense-secondary),
     0 0 24px var(--glow-enhanced-secondary);
 }
 

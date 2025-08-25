@@ -183,7 +183,8 @@
   height: fit-content;
 }
 
-@media (max-width: 1200px) { /* --breakpoint-xl */
+@media (max-width: 1200px) {
+  /* --breakpoint-xl */
   .overview-grid {
     grid-template-columns: 1fr;
     gap: var(--space-4);
@@ -404,7 +405,8 @@
   margin-bottom: var(--space-6);
 }
 
-@media (max-width: 768px) { /* --breakpoint-md */
+@media (max-width: 768px) {
+  /* --breakpoint-md */
   .form-grid {
     grid-template-columns: 1fr;
   }

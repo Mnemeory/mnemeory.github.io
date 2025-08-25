@@ -18,7 +18,8 @@
   padding: var(--space-5) var(--space-6);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  box-shadow: 0 10px 25px var(--glow-toast-base),
+  box-shadow:
+    0 10px 25px var(--glow-toast-base),
     inset 0 0 25px var(--glow-toast-inner);
   transform: translateX(100%);
   opacity: 0;
@@ -33,7 +34,8 @@
 
 .toast.success {
   border-color: var(--glow-toast-success-border);
-  box-shadow: 0 10px 25px var(--glow-toast-success-outer),
+  box-shadow:
+    0 10px 25px var(--glow-toast-success-outer),
     0 0 30px var(--glow-toast-success-inner);
 }
 
@@ -115,7 +117,8 @@
     var(--glow-cyan-gentle) 40%,
     transparent 70%
   );
-  animation: nlom-neural-outer var(--duration-neural-outer) ease-in-out infinite reverse;
+  animation: nlom-neural-outer var(--duration-neural-outer) ease-in-out infinite
+    reverse;
 }
 
 .nlom-pulse::after {

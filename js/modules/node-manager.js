@@ -36,7 +36,7 @@ export class NodeManager {
    * Setup modal system
    */
   setupModal() {
-    this.modal = document.querySelector(getSelector('nodeModal'));
+    this.modal = document.querySelector(getSelector("nodeModal"));
     if (!this.modal) return;
 
     // Initialize paper editor for modal
@@ -46,7 +46,7 @@ export class NodeManager {
     });
 
     // Close button
-    const closeBtn = document.querySelector(getSelector('modalClose'));
+    const closeBtn = document.querySelector(getSelector("modalClose"));
     if (closeBtn) {
       closeBtn.addEventListener("click", () => this.closeModal());
     }
@@ -68,8 +68,8 @@ export class NodeManager {
     });
 
     // Export buttons
-    const inscribeBtn = document.querySelector(getSelector('modalInscribe'));
-    const transmitBtn = document.querySelector(getSelector('modalTransmit'));
+    const inscribeBtn = document.querySelector(getSelector("modalInscribe"));
+    const transmitBtn = document.querySelector(getSelector("modalTransmit"));
 
     if (inscribeBtn) {
       inscribeBtn.addEventListener("click", () => this.exportNode("md"));
@@ -101,20 +101,22 @@ export class NodeManager {
       // Initialize citizen UI
       setTimeout(() => {
         this.citizenUI.init(`#${citizenInterfaceId}`);
-        
+
         // Pass citizen files to the citizen manager if available
-        const citizenFiles = this.state.get('citizenFiles');
+        const citizenFiles = this.state.get("citizenFiles");
         if (citizenFiles && citizenFiles.length > 0) {
           this.citizenUI.citizenManager.setCitizenFiles(citizenFiles);
-          console.log(`Node Manager: Passed ${citizenFiles.length} citizen files to Citizen Manager`);
+          console.log(
+            `Node Manager: Passed ${citizenFiles.length} citizen files to Citizen Manager`
+          );
         }
       }, 100);
-      
+
       // Also show citizen files as thought bubble documents below the management interface
       const filteredNodes = nodes.filter(
         (node) => node.constellation === constellation
       );
-      
+
       if (filteredNodes.length > 0) {
         const citizenFilesContainer = document.createElement("div");
         citizenFilesContainer.className = "citizen-files-section";
@@ -124,16 +126,25 @@ export class NodeManager {
             <p>Available citizen data files from the repository</p>
           </div>
         `;
-        
+
         const thoughtBubbleContainer = document.createElement("div");
         thoughtBubbleContainer.className = "thought-bubble-documents";
-        thoughtBubbleContainer.setAttribute("data-constellation", constellation);
+        thoughtBubbleContainer.setAttribute(
+          "data-constellation",
+          constellation
+        );
         thoughtBubbleContainer.setAttribute("role", "region");
-        thoughtBubbleContainer.setAttribute("aria-label", `${constellationData?.name || constellation} citizen files collection`);
+        thoughtBubbleContainer.setAttribute(
+          "aria-label",
+          `${constellationData?.name || constellation} citizen files collection`
+        );
 
         // Create thought bubble documents for citizen files
         filteredNodes.forEach((node, index) => {
-          const thoughtBubble = this.createThoughtBubbleDocument(node, constellation);
+          const thoughtBubble = this.createThoughtBubbleDocument(
+            node,
+            constellation
+          );
 
           // Stagger animations
           thoughtBubble.style.opacity = "0";
@@ -151,11 +162,11 @@ export class NodeManager {
 
           thoughtBubbleContainer.appendChild(thoughtBubble);
         });
-        
+
         citizenFilesContainer.appendChild(thoughtBubbleContainer);
         container.appendChild(citizenFilesContainer);
       }
-      
+
       return;
     }
 
@@ -175,16 +186,20 @@ export class NodeManager {
             <div class="shell-features">
               <h4>Planned Features:</h4>
               <ul>
-                ${shell.features.map(feature => `<li>${feature}</li>`).join('')}
+                ${shell.features.map((feature) => `<li>${feature}</li>`).join("")}
               </ul>
             </div>
-            ${shell.securityNotice ? `
+            ${
+              shell.securityNotice
+                ? `
               <div class="security-notice">
                 <p><strong>${shell.securityNotice}</strong></p>
               </div>
-            ` : ''}
+            `
+                : ""
+            }
             <div class="shell-status">
-              <span class="status-indicator ${shell.statusClass || ''}">${shell.status}</span>
+              <span class="status-indicator ${shell.statusClass || ""}">${shell.status}</span>
             </div>
           </div>
         </div>
@@ -211,11 +226,17 @@ export class NodeManager {
     thoughtBubbleContainer.className = "thought-bubble-documents";
     thoughtBubbleContainer.setAttribute("data-constellation", constellation);
     thoughtBubbleContainer.setAttribute("role", "region");
-    thoughtBubbleContainer.setAttribute("aria-label", `${constellationData?.name || constellation} document collection`);
+    thoughtBubbleContainer.setAttribute(
+      "aria-label",
+      `${constellationData?.name || constellation} document collection`
+    );
 
     // Create thought bubble documents
     filteredNodes.forEach((node, index) => {
-      const thoughtBubble = this.createThoughtBubbleDocument(node, constellation);
+      const thoughtBubble = this.createThoughtBubbleDocument(
+        node,
+        constellation
+      );
 
       // Stagger animations
       thoughtBubble.style.opacity = "0";
@@ -255,7 +276,9 @@ export class NodeManager {
 
     // Get constellation icon for the document
     const constellationData = CONSTELLATIONS[constellation];
-    const iconPath = constellationData?.icon ? `assets/images/${constellationData.icon}.svg` : "assets/images/tree.svg";
+    const iconPath = constellationData?.icon
+      ? `assets/images/${constellationData.icon}.svg`
+      : "assets/images/tree.svg";
 
     bubble.innerHTML = `
       <div class="document-bubble">
@@ -310,12 +333,11 @@ export class NodeManager {
       </div>
       <h3 class="node-title">${node.name}</h3>
       <p class="node-description">${
-        node.metadata?.description || "Psionic data stream available for diplomatic access."
+        node.metadata?.description ||
+        "Psionic data stream available for diplomatic access."
       }</p>
       <div class="node-tags">
-        ${tags
-          .map((tag) => `<span class="node-tag">${tag}</span>`)
-          .join("")}
+        ${tags.map((tag) => `<span class="node-tag">${tag}</span>`).join("")}
       </div>
     `;
 
@@ -406,10 +428,11 @@ export class NodeManager {
    */
   generateDocumentTemplate(node) {
     const cluster = node.constellation;
-    
+
     // Get template from config - try cluster-specific first, then fallback to generic
-    const template = getDocumentTemplate(cluster) || getDocumentTemplate("generic");
-    
+    const template =
+      getDocumentTemplate(cluster) || getDocumentTemplate("generic");
+
     // Generate tags from metadata if available
     const tags = node.tags || [];
     if (node.metadata && node.metadata.type) {
@@ -418,18 +441,18 @@ export class NodeManager {
     if (node.metadata && node.metadata.category) {
       tags.push(node.metadata.category);
     }
-    
+
     // Prepare data for template rendering
     const templateData = {
       // Common data for all templates
       documentId: node.id.toUpperCase(),
-      date: new Date().toISOString().split('T')[0], // YYYY-MM-DD format
-      
+      date: new Date().toISOString().split("T")[0], // YYYY-MM-DD format
+
       // Cluster-specific data
       clearanceLevel: formatClearanceLevel(node.seal, cluster),
-      templateId: `DIPL-${IDUtils.generateId("DIPL").split('-')[1]}`, // For hatching-egg
+      templateId: `DIPL-${IDUtils.generateId("DIPL").split("-")[1]}`, // For hatching-egg
       reportPeriod: "2465.140 - 2465.147", // For star-chanter
-      
+
       // Generic fallback data
       title: node.name,
       constellationName: CONSTELLATIONS[cluster]?.name || "Unknown",
@@ -437,9 +460,9 @@ export class NodeManager {
       id: node.id,
       cluster: cluster,
       seal: node.seal,
-      tags: tags.join(", ")
+      tags: tags.join(", "),
     };
-    
+
     return renderTemplate(template, templateData);
   }
 
@@ -474,7 +497,10 @@ export class NodeManager {
       content = JSON.stringify(node, null, 2);
       filename = `${node.id}.json`;
       mimeType = "application/json";
-      this.showToast("Data stream encoded for Psionic Wake transmission (.json)", "success");
+      this.showToast(
+        "Data stream encoded for Psionic Wake transmission (.json)",
+        "success"
+      );
     }
 
     FileUtils.downloadFile(content, filename, mimeType);

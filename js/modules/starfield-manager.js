@@ -46,18 +46,18 @@ export class StarfieldManager {
     this.is3DEnabled = StarfieldFallback.checkWebGLSupport();
     console.log("WebGL support check:", {
       is3DEnabled: this.is3DEnabled,
-      webglSupported: StarfieldFallback.checkWebGLSupport()
+      webglSupported: StarfieldFallback.checkWebGLSupport(),
     });
   }
 
   /**
    * Initialize the starfield system
    */
-  async init(containerSelector = getSelector('starfieldContainer')) {
+  async init(containerSelector = getSelector("starfieldContainer")) {
     try {
       this.container = document.querySelector(containerSelector);
-      this.canvas = document.querySelector(getSelector('starfieldCanvas'));
-      this.fallback2D = document.querySelector(getSelector('starfield2D'));
+      this.canvas = document.querySelector(getSelector("starfieldCanvas"));
+      this.fallback2D = document.querySelector(getSelector("starfield2D"));
 
       if (!this.container) {
         console.warn("Starfield container not found");
@@ -96,7 +96,7 @@ export class StarfieldManager {
       if (!sceneInitialized) {
         throw new Error("Scene initialization failed");
       }
-      
+
       console.log("Scene initialized successfully");
 
       // Create and initialize interactions
@@ -121,7 +121,7 @@ export class StarfieldManager {
         is3DEnabled: this.is3DEnabled,
         scene: !!this.scene,
         interactions: !!this.interactions,
-        animationId: this.animationId
+        animationId: this.animationId,
       });
       return true;
     } catch (error) {

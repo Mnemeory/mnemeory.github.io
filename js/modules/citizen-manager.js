@@ -11,7 +11,7 @@ import {
   getSuccessMessage,
   getInfoMessage,
   renderTemplate,
-  SITE_CONFIG
+  SITE_CONFIG,
 } from "../config.js";
 
 export class CitizenManager {
@@ -216,14 +216,16 @@ export class CitizenManager {
     let citizenSummary = "";
     if (this.citizens.size > 0) {
       citizenSummary = "[h2]Citizen Records Summary[/h2]\n\n";
-      
+
       for (const citizen of this.citizens.values()) {
         citizenSummary += `[b]${this.getFullName(citizen)}[/b]\n`;
         citizenSummary += `• ID: ${citizen.id}\n`;
         citizenSummary += `• SCI Rating: ${citizen.sciScore}/10.00\n`;
         citizenSummary += `• Status: ${citizen.citizenStatus}\n`;
-        if (citizen.location) citizenSummary += `• Location: ${citizen.location}\n`;
-        if (citizen.occupation) citizenSummary += `• Occupation: ${citizen.occupation}\n`;
+        if (citizen.location)
+          citizenSummary += `• Location: ${citizen.location}\n`;
+        if (citizen.occupation)
+          citizenSummary += `• Occupation: ${citizen.occupation}\n`;
         if (citizen.quya) citizenSummary += `• Quya: ${citizen.quya}\n`;
         if (citizen.behavioralTags && citizen.behavioralTags.length > 0) {
           citizenSummary += `• Behavioral Profile: ${citizen.behavioralTags.join(", ")}\n`;
@@ -237,7 +239,9 @@ export class CitizenManager {
     let activityLog = "";
     if (this.currentSession.logEntries.length > 0) {
       activityLog = "[h2]Session Activity Log[/h2]\n\n";
-      activityLog += this.formatLogEntries(this.currentSession.logEntries).join("\n");
+      activityLog += this.formatLogEntries(this.currentSession.logEntries).join(
+        "\n"
+      );
       activityLog += "\n";
     }
 
@@ -253,7 +257,7 @@ export class CitizenManager {
       logCount: this.currentSession.logEntries.length,
       citizenSummary,
       activityLog,
-      motto: "Every citizen is a star in our constellation"
+      motto: "Every citizen is a star in our constellation",
     });
   }
 
@@ -272,7 +276,10 @@ export class CitizenManager {
 
     FileUtils.downloadFile(content, filename);
 
-    ToastManager.show(getSuccessMessage("sessionExported", { filename }), "success");
+    ToastManager.show(
+      getSuccessMessage("sessionExported", { filename }),
+      "success"
+    );
 
     this.addLogEntry(`Diplomatic session report transmitted as ${filename}`);
   }
@@ -296,7 +303,10 @@ export class CitizenManager {
 
     FileUtils.downloadFile(content, filename);
 
-    ToastManager.show(getSuccessMessage("citizenAdded", { filename }), "success");
+    ToastManager.show(
+      getSuccessMessage("citizenAdded", { filename }),
+      "success"
+    );
 
     this.addLogEntry(
       `Citizen record transmitted for ${this.getFullName(citizen)}`,
@@ -310,8 +320,10 @@ export class CitizenManager {
   generateCitizenReport(citizen) {
     // Prepare additional info
     let additionalInfo = "";
-    if (citizen.location) additionalInfo += `[b]Current Location:[/b] ${citizen.location}\n`;
-    if (citizen.occupation) additionalInfo += `[b]Occupation:[/b] ${citizen.occupation}\n`;
+    if (citizen.location)
+      additionalInfo += `[b]Current Location:[/b] ${citizen.location}\n`;
+    if (citizen.occupation)
+      additionalInfo += `[b]Occupation:[/b] ${citizen.occupation}\n`;
     if (citizen.quya) additionalInfo += `[b]Quya Unit:[/b] ${citizen.quya}\n`;
     additionalInfo += `[b]Record Created:[/b] ${citizen.createdAt.toISOString()}\n`;
     additionalInfo += `[b]Last Modified:[/b] ${citizen.lastModified.toISOString()}\n`;
@@ -338,7 +350,8 @@ export class CitizenManager {
     let activityLog = "";
     if (citizen.logEntries.length > 0) {
       activityLog = "[h2]Citizen Activity Log[/h2]\n";
-      activityLog += this.formatLogEntries(citizen.logEntries).join("\n") + "\n\n";
+      activityLog +=
+        this.formatLogEntries(citizen.logEntries).join("\n") + "\n\n";
     }
 
     // Use template from config
@@ -353,7 +366,7 @@ export class CitizenManager {
       behavioralProfile,
       notes,
       activityLog,
-      motto: "The welfare of each star strengthens the constellation"
+      motto: "The welfare of each star strengthens the constellation",
     });
   }
 
@@ -436,11 +449,15 @@ export class CitizenManager {
    */
   setCitizenFiles(files) {
     this.citizenFiles = files;
-    console.log(`Citizen Manager: Loaded ${files.length} citizen files from file system`);
-    
+    console.log(
+      `Citizen Manager: Loaded ${files.length} citizen files from file system`
+    );
+
     // Log the available files
-    files.forEach(file => {
-      console.log(`Citizen file available: ${file.name} (${file.metadata?.category || 'CITIZEN'})`);
+    files.forEach((file) => {
+      console.log(
+        `Citizen file available: ${file.name} (${file.metadata?.category || "CITIZEN"})`
+      );
     });
   }
 
@@ -449,8 +466,8 @@ export class CitizenManager {
    */
   importCitizenFromFile(fileId) {
     if (!this.citizenFiles) return null;
-    
-    const file = this.citizenFiles.find(f => f.id === fileId);
+
+    const file = this.citizenFiles.find((f) => f.id === fileId);
     if (!file) return null;
 
     // Parse the file content to extract citizen information
@@ -460,7 +477,7 @@ export class CitizenManager {
       this.addLogEntry(`Imported citizen from file: ${file.name}`, citizen.id);
       return citizen;
     }
-    
+
     return null;
   }
 
@@ -469,53 +486,57 @@ export class CitizenManager {
    */
   parseCitizenFileContent(content) {
     try {
-      const lines = content.split('\n').map(line => line.trim()).filter(line => line);
-      
+      const lines = content
+        .split("\n")
+        .map((line) => line.trim())
+        .filter((line) => line);
+
       const citizenData = {};
-      
-      lines.forEach(line => {
-        if (line.includes(':')) {
-          const [key, value] = line.split(':').map(part => part.trim());
-          
+
+      lines.forEach((line) => {
+        if (line.includes(":")) {
+          const [key, value] = line.split(":").map((part) => part.trim());
+
           switch (key.toLowerCase()) {
-            case 'name':
+            case "name":
               citizenData.primaryName = value;
               break;
-            case 'status':
+            case "status":
               citizenData.citizenStatus = value;
               break;
-            case 'notes':
+            case "notes":
               citizenData.notes = value;
               break;
-            case 'sci':
-            case 'sci score':
-            case 'social compatibility index':
+            case "sci":
+            case "sci score":
+            case "social compatibility index":
               const sciScore = parseFloat(value);
               if (!isNaN(sciScore)) {
                 citizenData.sciScore = sciScore;
               }
               break;
-            case 'location':
+            case "location":
               citizenData.location = value;
               break;
-            case 'occupation':
+            case "occupation":
               citizenData.occupation = value;
               break;
-            case 'quya':
+            case "quya":
               citizenData.quya = value;
               break;
           }
         }
       });
-      
+
       // Set defaults if not provided
       if (!citizenData.primaryName) return null;
-      if (!citizenData.citizenStatus) citizenData.citizenStatus = DEFAULT_CITIZEN_STATUS;
+      if (!citizenData.citizenStatus)
+        citizenData.citizenStatus = DEFAULT_CITIZEN_STATUS;
       if (!citizenData.sciScore) citizenData.sciScore = 5.0;
-      
+
       return citizenData;
     } catch (error) {
-      console.warn('Failed to parse citizen file content:', error);
+      console.warn("Failed to parse citizen file content:", error);
       return null;
     }
   }

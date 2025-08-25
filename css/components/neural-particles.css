@@ -74,7 +74,8 @@
   font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 300;
   color: var(--color-pale-turquoise);
-  text-shadow: 0 0 10px var(--color-pale-turquoise),
+  text-shadow:
+    0 0 10px var(--color-pale-turquoise),
     0 0 20px var(--glow-cyan-placeholder);
   animation: word-flow var(--duration-word-flow) ease-in-out infinite;
   position: relative;
@@ -94,8 +95,10 @@
 
 .flowing-word:hover {
   transform: scale(1.1);
-  text-shadow: 0 0 15px var(--color-pale-turquoise),
-    0 0 30px var(--glow-cyan-intense), var(--shimmer-subtle);
+  text-shadow:
+    0 0 15px var(--color-pale-turquoise),
+    0 0 30px var(--glow-cyan-intense),
+    var(--shimmer-subtle);
 }
 
 .status-mist {
@@ -121,8 +124,7 @@
 .liquid-input {
   width: 100%;
   padding: 15px 20px;
-  background: var(--gradient-neural-primary),
-    var(--gradient-neural-secondary);
+  background: var(--gradient-neural-primary), var(--gradient-neural-secondary);
   border: 1px solid var(--glow-cyan-border);
   border-radius: 50px 20px 50px 20px;
   color: var(--color-pale-turquoise);
@@ -141,7 +143,8 @@
 
 .liquid-input:focus {
   border-color: var(--color-pale-turquoise);
-  box-shadow: 0 0 20px var(--glow-cyan-strong),
+  box-shadow:
+    0 0 20px var(--glow-cyan-strong),
     inset 0 0 20px var(--glow-subtle);
   border-radius: 30px 30px 30px 30px;
 }
@@ -224,7 +227,8 @@
 
 .query-stellar-matter.is-active {
   opacity: 1;
-  animation: base-rotation-centered var(--duration-stellar-rotation) linear infinite;
+  animation: base-rotation-centered var(--duration-stellar-rotation) linear
+    infinite;
 }
 
 @keyframes aurora-pulse {

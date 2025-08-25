@@ -37,7 +37,9 @@
   background: var(--glass-bg-heavy);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl), 0 0 100px var(--glow-enhanced-secondary);
+  box-shadow:
+    var(--shadow-xl),
+    0 0 100px var(--glow-enhanced-secondary);
   backdrop-filter: blur(20px);
   overflow: hidden;
   transform: scale(0.9);
@@ -202,8 +204,7 @@
 .bubble-ocean {
   position: absolute;
   inset: 0;
-  background: var(--gradient-modal-backdrop),
-    var(--bg-overlay-void);
+  background: var(--gradient-modal-backdrop), var(--bg-overlay-void);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   cursor: pointer;
@@ -213,10 +214,14 @@
 @keyframes ocean-flow {
   0%,
   100% {
-    background-position: 0% 0%, 100% 100%;
+    background-position:
+      0% 0%,
+      100% 100%;
   }
   50% {
-    background-position: 100% 50%, 0% 50%;
+    background-position:
+      100% 50%,
+      0% 50%;
   }
 }
 
@@ -225,14 +230,12 @@
   width: 100%;
   max-width: 920px;
   max-height: 88vh;
-  background: var(--gradient-neural-primary),
-    var(--gradient-neural-secondary);
+  background: var(--gradient-neural-primary), var(--gradient-neural-secondary);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-2xl);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
-  box-shadow: var(--shadow-neural-xl),
-    var(--shadow-inset-glow);
+  box-shadow: var(--shadow-neural-xl), var(--shadow-inset-glow);
   overflow: hidden;
   transform: scale(0.95);
   transition: all var(--duration-slower) var(--ease-neural);
@@ -303,7 +306,8 @@
   background: var(--gradient-bubble-base);
   border-radius: 50% 50% 50% 50%;
   transform: scale(1.1);
-  box-shadow: 0 0 20px var(--glow-enhanced-secondary),
+  box-shadow:
+    0 0 20px var(--glow-enhanced-secondary),
     var(--shadow-inset-neural);
 }
 

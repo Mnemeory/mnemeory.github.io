@@ -59,10 +59,13 @@ export const CONSTELLATIONS = {
     name: "The Gnarled Tree",
     meaning: "Age • Wisdom • Tradition",
     descriptions: {
-      detailed: "Repository for Federation diplomatic legal codex, Grand Council directives, and interstellar protocols. Essential reference materials for diplomatic mission operations aboard non-Federation vessels.",
-      accessibility: "Age, wisdom, tradition. Federation diplomatic legal codex and Grand Council directives for diplomatic mission operations.",
-      stream: "Repository for filed Federation documents, legal codes, and archived protocols. These data streams form the immutable backbone of diplomatic authority and historical record.",
-      shell: null // No shell needed - has actual content
+      detailed:
+        "Repository for Federation diplomatic legal codex, Grand Council directives, and interstellar protocols. Essential reference materials for diplomatic mission operations aboard non-Federation vessels.",
+      accessibility:
+        "Age, wisdom, tradition. Federation diplomatic legal codex and Grand Council directives for diplomatic mission operations.",
+      stream:
+        "Repository for filed Federation documents, legal codes, and archived protocols. These data streams form the immutable backbone of diplomatic authority and historical record.",
+      shell: null, // No shell needed - has actual content
     },
     icon: "tree",
     color: "#5CE7E7",
@@ -72,10 +75,13 @@ export const CONSTELLATIONS = {
     name: "The Qu'Poxii",
     meaning: "Love • Friendship • Support",
     descriptions: {
-      detailed: "Diplomatic citizen oversight system for Social Compatibility Index management and diaspora welfare coordination. Essential services for Federation citizens operating in corporate space.",
-      accessibility: "Love, friendship, support. Diplomatic citizen oversight for Social Compatibility Index management aboard corporate vessels.",
-      stream: "Diplomatic citizen management system for tracking Federation Skrell abroad. Monitor Social Compatibility Index ratings, citizenship status, and maintain welfare logs for diaspora operations.",
-      shell: null // Uses citizen management interface
+      detailed:
+        "Diplomatic citizen oversight system for Social Compatibility Index management and diaspora welfare coordination. Essential services for Federation citizens operating in corporate space.",
+      accessibility:
+        "Love, friendship, support. Diplomatic citizen oversight for Social Compatibility Index management aboard corporate vessels.",
+      stream:
+        "Diplomatic citizen management system for tracking Federation Skrell abroad. Monitor Social Compatibility Index ratings, citizenship status, and maintain welfare logs for diaspora operations.",
+      shell: null, // Uses citizen management interface
     },
     icon: "bond",
     color: "#1B5E55",
@@ -85,22 +91,26 @@ export const CONSTELLATIONS = {
     name: "The Star Chanter",
     meaning: "Wisdom • Science • Connection",
     descriptions: {
-      detailed: "Psionic-integrated analytical matrix for Inductive & Deductive behavioral assessment. Neural algorithms process Nlom consciousness patterns to maintain societal harmony and detect psychological anomalies.",
-      accessibility: "Wisdom, science, connection. Psionic-integrated behavioral analysis for maintaining societal harmony and detecting anomalies.",
-      stream: "Analytical engine for Inductive & Deductive Actions Reports. Real-time data streams cascade here like pure information, providing insights into Federation citizen behavior patterns.",
+      detailed:
+        "Psionic-integrated analytical matrix for Inductive & Deductive behavioral assessment. Neural algorithms process Nlom consciousness patterns to maintain societal harmony and detect psychological anomalies.",
+      accessibility:
+        "Wisdom, science, connection. Psionic-integrated behavioral analysis for maintaining societal harmony and detecting anomalies.",
+      stream:
+        "Analytical engine for Inductive & Deductive Actions Reports. Real-time data streams cascade here like pure information, providing insights into Federation citizen behavior patterns.",
       shell: {
-        description: "This constellation is reserved for future Qeblak spiritual and analytical functionality. The Star Chanter will eventually provide insights into psionic patterns, Nlom fluctuations, and sacred astronomical data for deep-space Skrell spiritual practices.",
+        description:
+          "This constellation is reserved for future Qeblak spiritual and analytical functionality. The Star Chanter will eventually provide insights into psionic patterns, Nlom fluctuations, and sacred astronomical data for deep-space Skrell spiritual practices.",
         subtitle: "Qeblak Spiritual Analytics • Future Implementation",
         icon: "🌟",
         features: [
           "Qeblak ritual calendar integration",
-          "Psionic resonance monitoring", 
+          "Psionic resonance monitoring",
           "Astronomical event tracking",
           "Spiritual guidance algorithms",
-          "Sacred site coordination"
+          "Sacred site coordination",
         ],
-        status: "Status: Awaiting Sacred Development"
-      }
+        status: "Status: Awaiting Sacred Development",
+      },
     },
     icon: "chant",
     color: "#3E2E5C",
@@ -110,10 +120,13 @@ export const CONSTELLATIONS = {
     name: "The Hatching Egg",
     meaning: "New Beginnings • Progress",
     descriptions: {
-      detailed: "Diplomatic transmission protocols for interspecies communication. Grand Council-approved message templates ensuring Federation values are properly conveyed to non-Skrellian entities.",
-      accessibility: "New beginnings, progress. Diplomatic transmission protocols for mission communications with corporate and alien entities.",
-      stream: "Form template repository for diplomatic communications. Pre-approved document templates for interactions with other stellar entities, citizen services, and corporate partnerships.",
-      shell: null // No shell needed - has actual content
+      detailed:
+        "Diplomatic transmission protocols for interspecies communication. Grand Council-approved message templates ensuring Federation values are properly conveyed to non-Skrellian entities.",
+      accessibility:
+        "New beginnings, progress. Diplomatic transmission protocols for mission communications with corporate and alien entities.",
+      stream:
+        "Form template repository for diplomatic communications. Pre-approved document templates for interactions with other stellar entities, citizen services, and corporate partnerships.",
+      shell: null, // No shell needed - has actual content
     },
     icon: "egg",
     color: "#E5C76B",
@@ -123,11 +136,15 @@ export const CONSTELLATIONS = {
     name: "The Void",
     meaning: "Death • Mystery • The Unknown",
     descriptions: {
-      detailed: "Classified Kala intelligence archives. Deep-encrypted data streams containing post-Glorsh threat assessments, synthetic monitoring protocols, and materials requiring maximum psionic security clearance.",
-      accessibility: "Mystery, restriction. Classified Kala intelligence requiring maximum psionic security protocols.",
-      stream: "Classified Federation intelligence repository. Consular Officer and Diplomatic Aide clearance provides access to sensitive data streams requiring maximum security protocols.",
+      detailed:
+        "Classified Kala intelligence archives. Deep-encrypted data streams containing post-Glorsh threat assessments, synthetic monitoring protocols, and materials requiring maximum psionic security clearance.",
+      accessibility:
+        "Mystery, restriction. Classified Kala intelligence requiring maximum psionic security protocols.",
+      stream:
+        "Classified Federation intelligence repository. Consular Officer and Diplomatic Aide clearance provides access to sensitive data streams requiring maximum security protocols.",
       shell: {
-        description: "This constellation is reserved for highly classified and dangerous information. Access to The Void requires special authorization beyond standard Aide clearance. Future implementation will handle deep intelligence, threat assessments, and sensitive data requiring the highest levels of security.",
+        description:
+          "This constellation is reserved for highly classified and dangerous information. Access to The Void requires special authorization beyond standard Aide clearance. Future implementation will handle deep intelligence, threat assessments, and sensitive data requiring the highest levels of security.",
         subtitle: "Classified Operations • Maximum Security",
         icon: "🔒",
         features: [
@@ -135,12 +152,13 @@ export const CONSTELLATIONS = {
           "Threat assessment protocols",
           "Synthetic intelligence monitoring",
           "Black site coordination",
-          "Emergency response systems"
+          "Emergency response systems",
         ],
         status: "Status: Secured & Dormant",
         statusClass: "classified",
-        securityNotice: "⚠️ Security Notice: This area contains no active data streams. Any unauthorized access attempts are logged and reported to Federation Security."
-      }
+        securityNotice:
+          "⚠️ Security Notice: This area contains no active data streams. Any unauthorized access attempts are logged and reported to Federation Security.",
+      },
     },
     icon: "void",
     color: "#0E3757",
@@ -377,11 +395,13 @@ export const SITE_CONFIG = {
   // Meta Information
   meta: {
     siteName: "Nlom Neural Interface - Nralakk Federation Diplomatic Mission",
-    description: "Nralakk Federation Diplomatic Mission Interface - Primary Numerical Psionic Data Stream Access Portal for SCCV Horizon Operations",
+    description:
+      "Nralakk Federation Diplomatic Mission Interface - Primary Numerical Psionic Data Stream Access Portal for SCCV Horizon Operations",
     author: "Nralakk Federation",
     canonicalUrl: "https://mnemeory.github.io/",
     ogTitle: "Nlom Neural Interface - Nralakk Federation Diplomatic Mission",
-    ogDescription: "Primary Numerical Psionic Data Stream Portal - SCCV Horizon Diplomatic Mission Access",
+    ogDescription:
+      "Primary Numerical Psionic Data Stream Portal - SCCV Horizon Diplomatic Mission Access",
     ogType: "website",
   },
 
@@ -391,7 +411,7 @@ export const SITE_CONFIG = {
     emblem: "assets/images/tree.svg",
     images: {
       tree: "assets/images/tree.svg",
-      bond: "assets/images/bond.svg", 
+      bond: "assets/images/bond.svg",
       chant: "assets/images/chant.svg",
       egg: "assets/images/egg.svg",
       void: "assets/images/void.svg",
@@ -402,7 +422,7 @@ export const SITE_CONFIG = {
       filed: "filed/",
       citizen: "citizen/",
       data: "assets/data/",
-    }
+    },
   },
 
   // CDN Configuration
@@ -410,13 +430,14 @@ export const SITE_CONFIG = {
     threejs: {
       version: "0.150.1",
       baseUrl: "https://cdn.skypack.dev/three@0.150.1",
-      addonsPath: "https://cdn.skypack.dev/three@0.150.1/examples/jsm/"
+      addonsPath: "https://cdn.skypack.dev/three@0.150.1/examples/jsm/",
     },
     fonts: {
       google: "https://fonts.googleapis.com",
       googleStatic: "https://fonts.gstatic.com",
-      fontFamilies: "Exo+2:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
-    }
+      fontFamilies:
+        "Exo+2:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap",
+    },
   },
 
   // Interface Text and Messages
@@ -429,26 +450,30 @@ export const SITE_CONFIG = {
       skipLink: "Skip to main content",
       protocolLabel: "Diplomatic Protocol",
       statusPulse: "Neural Link Stable",
-      homeButtonLabel: "Return to diplomatic mission data constellation overview",
+      homeButtonLabel:
+        "Return to diplomatic mission data constellation overview",
       emblemAlt: "Nralakk Federation Emblem",
       starfieldLabel: "Interactive Psionic Wake Data Constellations",
-      constellationMapLabel: "Diplomatic Mission Psionic Wake Constellation Map",
+      constellationMapLabel:
+        "Diplomatic Mission Psionic Wake Constellation Map",
     },
     modal: {
       closeLabel: "Close dialog",
       documentViewer: "Document Viewer",
       pilcrowTitle: "Toggle psionic script encoding view",
-      pilcrowLabel: "Toggle between Psionic Wake rendering and neural script encoding modes",
+      pilcrowLabel:
+        "Toggle between Psionic Wake rendering and neural script encoding modes",
       extractTitle: "Extract psionic script",
       extractLabel: "Extract raw psionic script to Nlom buffer",
-      downloadTitle: "Download psionic data stream", 
+      downloadTitle: "Download psionic data stream",
       downloadLabel: "Download document as psionic text stream file",
       inscribeAction: "Inscribe Psionic Memory (.md)",
       transmitAction: "Encode for Psionic Wake Transmission (.json)",
     },
     footer: {
-      navigationEssence: "Navigate through diplomatic mission Psionic Wake data constellations"
-    }
+      navigationEssence:
+        "Navigate through diplomatic mission Psionic Wake data constellations",
+    },
   },
 
   // DOM Selectors - Centralized to avoid hardcoding throughout modules
@@ -458,33 +483,33 @@ export const SITE_CONFIG = {
     mainContent: "#main-content",
     loadingVeil: "#loading-veil",
     loadingClearance: "#loading-clearance",
-    
+
     // Header elements
     protocolHomeButton: "#protocol-home-button",
     clearanceMatrix: "#clearance-matrix",
-    
+
     // Starfield
     starfieldView: "#starfield-view",
-    starfieldContainer: "#starfield-container", 
+    starfieldContainer: "#starfield-container",
     starfieldCanvas: "#starfield-canvas",
     starfield2D: "#starfield-2d",
     constellationTooltip: "#constellation-tooltip",
     constellationTooltip2D: "#constellation-tooltip-2d",
-    
+
     // Views
     gnarledTreeView: "#gnarled-tree-view",
-    quPoxiiView: "#qu-poxii-view", 
+    quPoxiiView: "#qu-poxii-view",
     starChanterView: "#star-chanter-view",
     hatchingEggView: "#hatching-egg-view",
     voidView: "#void-view",
-    
+
     // Node containers
     gnarledTreeNodes: "#gnarled-tree-nodes",
     quPoxiiNodes: "#qu-poxii-nodes",
-    starChanterNodes: "#star-chanter-nodes", 
+    starChanterNodes: "#star-chanter-nodes",
     hatchingEggNodes: "#hatching-egg-nodes",
     voidNodes: "#void-nodes",
-    
+
     // Modal
     nodeModal: "#node-modal",
     modalTitle: "#modal-title",
@@ -497,10 +522,10 @@ export const SITE_CONFIG = {
     modalPaper: "#modal-paper",
     modalInscribe: "#modal-inscribe",
     modalTransmit: "#modal-transmit",
-    
+
     // Notifications
     toastContainer: "#toast-container",
-    
+
     // Citizen Management
     citizenInterface: "#citizen-interface",
   },
@@ -513,15 +538,15 @@ export const SITE_CONFIG = {
         constellation: "hatching-egg",
         seal: "open",
       },
-      { 
+      {
         path: "filed/",
-        constellation: "gnarled-tree", 
-        seal: "filed" 
+        constellation: "gnarled-tree",
+        seal: "filed",
       },
-      { 
+      {
         path: "citizen/",
-        constellation: "qu-poxii", 
-        seal: "open" 
+        constellation: "qu-poxii",
+        seal: "open",
       },
     ],
     supportedExtensions: [".txt", ".md", ".json"],
@@ -537,8 +562,8 @@ export const SITE_CONFIG = {
     animationQuality: {
       high: 1.0,
       medium: 0.7,
-      low: 0.4
-    }
+      low: 0.4,
+    },
   },
 
   // Animation Configuration - Centralized timing values
@@ -554,20 +579,20 @@ export const SITE_CONFIG = {
       float: 16000,
       morph: 8000,
       pulse: 3000,
-      ripple: 8000
+      ripple: 8000,
     },
     // Easing functions
     easing: {
       organic: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
       inOut: "cubic-bezier(0.4, 0, 0.2, 1)",
-      bounce: "cubic-bezier(0.68, -0.55, 0.265, 1.55)"
+      bounce: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
     },
     // Delay values
     delays: {
       stagger: 100,
       debounce: 300,
-      tooltip: 150
-    }
+      tooltip: 150,
+    },
   },
 
   // Starfield Configuration - Star generation and positioning
@@ -578,7 +603,7 @@ export const SITE_CONFIG = {
       spread: 100,
       brightness: 0.8,
       sizeRange: [0.5, 2.0],
-      colorVariance: 0.3
+      colorVariance: 0.3,
     },
     // Constellation positioning (3D coordinates)
     constellationPositions: {
@@ -586,14 +611,14 @@ export const SITE_CONFIG = {
       "qu-poxii": { x: 0.5, y: -0.4, z: 0.1 },
       "star-chanter": { x: 0.0, y: 0.6, z: -0.3 },
       "hatching-egg": { x: -0.3, y: -0.5, z: 0.2 },
-      "void": { x: 0.7, y: 0.2, z: -0.4 }
+      void: { x: 0.7, y: 0.2, z: -0.4 },
     },
     // Interaction settings
     interaction: {
       hoverDistance: 60,
       activationRadius: 30,
-      tooltipOffset: { x: 10, y: -30 }
-    }
+      tooltipOffset: { x: 10, y: -30 },
+    },
   },
 
   // Templates - Centralized HTML and text templates
@@ -615,9 +640,9 @@ export const SITE_CONFIG = {
           <p>{{resource}} requires {{level}} authorization.</p>
           <p>Current clearance: {{currentLevel}}</p>
         </div>
-      `
+      `,
     },
-    
+
     // Document templates
     document: {
       federation: `[center][flag_nralakk_small]
@@ -817,7 +842,7 @@ SCCV Horizon, Stellar Corporate Conglomerate
 [*] Include traditional Skrellian closing phrases
 [/list]`,
 
-      "void": `[center][flag_nralakk_small]
+      void: `[center][flag_nralakk_small]
 [h1]CLASSIFIED INTELLIGENCE REPORT[/h1][/center]
 
 [b]Clearance Level:[/b] CLASSIFIED • AIDE ACCESS GRANTED
@@ -855,7 +880,7 @@ In a full implementation, this would contain the actual document content loaded 
 [b]ID:[/b] {{id}}
 [b]Cluster:[/b] {{cluster}}
 [b]Seal Level:[/b] {{seal}}
-[b]Tags:[/b] {{tags}}`
+[b]Tags:[/b] {{tags}}`,
     },
 
     // Form templates
@@ -870,47 +895,57 @@ In a full implementation, this would contain the actual document content loaded 
             {{formActions}}
           </div>
         </form>
-      `
-    }
+      `,
+    },
   },
 
   // Interface Text - Expanded to include all hardcoded strings
   interfaceText: {
     // Error messages
     errors: {
-      psionicFailure: "Diplomatic psionic matrix resonance failure. Nlom connection to interface compromised. Please refresh to re-establish connection.",
-      accessDenied: "Access denied. Insufficient clearance level for requested resource.",
-      dataLoadError: "Unable to access constellation data matrix. Diplomatic psionic pathways to data streams compromised.",
-      fileLoadError: "Could not load file {{filename}}. Data stream connection interrupted.",
-      invalidInput: "Invalid input provided. Please check your data and try again.",
-      networkError: "Network connection lost. Please check your connection and try again.",
-      sessionExpired: "Diplomatic session expired. Please refresh to establish new connection."
+      psionicFailure:
+        "Diplomatic psionic matrix resonance failure. Nlom connection to interface compromised. Please refresh to re-establish connection.",
+      accessDenied:
+        "Access denied. Insufficient clearance level for requested resource.",
+      dataLoadError:
+        "Unable to access constellation data matrix. Diplomatic psionic pathways to data streams compromised.",
+      fileLoadError:
+        "Could not load file {{filename}}. Data stream connection interrupted.",
+      invalidInput:
+        "Invalid input provided. Please check your data and try again.",
+      networkError:
+        "Network connection lost. Please check your connection and try again.",
+      sessionExpired:
+        "Diplomatic session expired. Please refresh to establish new connection.",
     },
-    
+
     // Success messages
     success: {
       documentSaved: "Document successfully transmitted to diplomatic archive",
       citizenAdded: "Citizen record successfully created and archived",
       sessionExported: "Diplomatic session report transmitted successfully",
-      dataLoaded: "Constellation data streams successfully synchronized"
+      dataLoaded: "Constellation data streams successfully synchronized",
     },
-    
+
     // Warning messages
     warnings: {
-      classifiedAccess: "Accessing classified data streams. Ensure proper clearance authorization.",
+      classifiedAccess:
+        "Accessing classified data streams. Ensure proper clearance authorization.",
       sessionClear: "This will clear all current session data. Continue?",
       unsavedChanges: "You have unsaved changes. Discard changes?",
-      lowClearance: "Your current clearance level may restrict access to some features."
+      lowClearance:
+        "Your current clearance level may restrict access to some features.",
     },
-    
+
     // Info messages
     info: {
       sessionInitialized: "New diplomatic session initialized",
       searchInProgress: "Searching constellation data streams...",
       loadingData: "Loading diplomatic mission data...",
-      connecting: "Establishing psionic resonance with Federation Nlom network..."
+      connecting:
+        "Establishing psionic resonance with Federation Nlom network...",
     },
-    
+
     // Form labels and placeholders
     forms: {
       labels: {
@@ -919,12 +954,12 @@ In a full implementation, this would contain the actual document content loaded 
         nameExtensions: "Name Extensions",
         sciScore: "Social Compatibility Index",
         citizenStatus: "Citizenship Status",
-        location: "Current Location", 
+        location: "Current Location",
         occupation: "Occupation",
         quya: "Quya Unit",
         notes: "Administrative Notes",
         roundNumber: "Round Number",
-        logEntry: "Log Entry"
+        logEntry: "Log Entry",
       },
       placeholders: {
         primaryName: "Enter primary Skrell name",
@@ -937,17 +972,17 @@ In a full implementation, this would contain the actual document content loaded 
         notes: "Additional administrative notes",
         search: "Search diplomatic data streams...",
         roundNumber: "Enter current round number",
-        logEntry: "Enter activity log entry"
+        logEntry: "Enter activity log entry",
       },
       validation: {
         required: "{{field}} is required",
         invalidSci: "SCI score must be between 0.00 and 10.00",
         invalidFormat: "Invalid format for {{field}}",
         tooLong: "{{field}} exceeds maximum length",
-        tooShort: "{{field}} is too short"
-      }
+        tooShort: "{{field}} is too short",
+      },
     },
-    
+
     // UI element text
     ui: {
       buttons: {
@@ -962,7 +997,7 @@ In a full implementation, this would contain the actual document content loaded 
         clear: "Clear Session",
         back: "Return",
         next: "Proceed",
-        confirm: "Confirm Action"
+        confirm: "Confirm Action",
       },
       headings: {
         overview: "Diplomatic Mission Overview",
@@ -970,7 +1005,7 @@ In a full implementation, this would contain the actual document content loaded 
         documents: "Document Archive",
         session: "Current Session",
         statistics: "Mission Statistics",
-        activity: "Activity Log"
+        activity: "Activity Log",
       },
       status: {
         loading: "Processing...",
@@ -978,10 +1013,10 @@ In a full implementation, this would contain the actual document content loaded 
         connected: "Connection Established",
         disconnected: "Connection Lost",
         error: "System Error",
-        success: "Operation Successful"
-      }
+        success: "Operation Successful",
+      },
     },
-    
+
     // Accessibility labels
     accessibility: {
       skipToContent: "Skip to main content",
@@ -992,7 +1027,7 @@ In a full implementation, this would contain the actual document content loaded 
       documentViewer: "Document content viewer",
       formField: "{{label}} input field",
       required: "Required field",
-      optional: "Optional field"
+      optional: "Optional field",
     },
 
     // Citizen management interface strings
@@ -1001,24 +1036,24 @@ In a full implementation, this would contain the actual document content loaded 
         session: "Current Session:",
         stats: "Session Statistics",
         citizens: "Citizen Records",
-        activity: "Recent Activity"
+        activity: "Recent Activity",
       },
       buttons: {
         setRound: "Set Round Number",
         exportSession: "Export Session",
-        newSession: "New Session"
+        newSession: "New Session",
       },
       navigation: {
         overview: "Overview",
-        addCitizen: "Add Citizen"
+        addCitizen: "Add Citizen",
       },
       placeholders: {
-        searchCitizens: "Search citizens by name..."
+        searchCitizens: "Search citizens by name...",
       },
       messages: {
         noCitizens: "No citizens registered this session.",
-        noActivity: "No activity logged."
-      }
+        noActivity: "No activity logged.",
+      },
     },
 
     // Paper editor interface strings
@@ -1027,16 +1062,16 @@ In a full implementation, this would contain the actual document content loaded 
         templates:
           "[h1]NRALAKK FEDERATION DOCUMENT[/h1]\n\n[center]Document Template[/center]\n\nThis is a Federation document template. Click the ¶ button to toggle pencode view and edit the content directly.\n\n[field] Enter text here [/field]\n\n[hr]\n\n[list]\n[*] First item\n[*] Second item\n[*] Third item\n[/list]\n\n[small]Additional notes can go here[/small]",
         completed: "Select a filed document to view it here.",
-        default: "Document content will appear here."
+        default: "Document content will appear here.",
       },
       pilcrow: {
         showPreview: "Show preview only",
         previewMode: "Switch to preview only mode",
         showTags: "Show pencode tags",
-        tagView: "Switch to pencode tag view mode"
-      }
-    }
-  }
+        tagView: "Switch to pencode tag view mode",
+      },
+    },
+  },
 };
 
 // Helper functions for site configuration
@@ -1083,7 +1118,7 @@ export function getTemplate(category, name) {
 
 export function renderTemplate(template, data = {}) {
   if (!template) return "";
-  
+
   return template.replace(/\{\{(\w+)\}\}/g, (match, key) => {
     return data[key] !== undefined ? data[key] : match;
   });
@@ -1152,11 +1187,16 @@ export function getAccessibilityLabel(key, data = {}) {
 
 // Animation utility functions
 export function getAnimationDuration(key) {
-  return SITE_CONFIG.animations.durations[key] || SITE_CONFIG.animations.durations.base;
+  return (
+    SITE_CONFIG.animations.durations[key] ||
+    SITE_CONFIG.animations.durations.base
+  );
 }
 
 export function getAnimationEasing(key) {
-  return SITE_CONFIG.animations.easing[key] || SITE_CONFIG.animations.easing.inOut;
+  return (
+    SITE_CONFIG.animations.easing[key] || SITE_CONFIG.animations.easing.inOut
+  );
 }
 
 export function getAnimationDelay(key) {
@@ -1183,7 +1223,13 @@ export function getStarfieldConfig(key) {
 }
 
 export function getConstellationPosition(constellationId) {
-  return SITE_CONFIG.starfield.constellationPositions[constellationId] || { x: 0, y: 0, z: 0 };
+  return (
+    SITE_CONFIG.starfield.constellationPositions[constellationId] || {
+      x: 0,
+      y: 0,
+      z: 0,
+    }
+  );
 }
 
 export function getStarGenerationParams() {

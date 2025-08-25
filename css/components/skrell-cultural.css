@@ -5,7 +5,8 @@
 
 /* Mathematical Precision Patterns - Reflecting Skrell Mathematical Reverence */
 .mathematical-pattern {
-  background-image: radial-gradient(
+  background-image:
+    radial-gradient(
       circle at 25% 25%,
       var(--color-mathematical-precision) 1px,
       transparent 1px
@@ -16,7 +17,9 @@
       transparent 1px
     );
   background-size: 40px 40px;
-  background-position: 0 0, 20px 20px;
+  background-position:
+    0 0,
+    20px 20px;
   opacity: 0.1;
 }
 
@@ -52,7 +55,8 @@
     opacity: 0.8;
   }
   50% {
-    box-shadow: 0 0 20px var(--color-nlom-resonance),
+    box-shadow:
+      0 0 20px var(--color-nlom-resonance),
       0 0 30px var(--color-nlom-resonance);
     opacity: 1;
   }
@@ -71,7 +75,8 @@
     var(--color-post-glorsh) 0%,
     var(--color-federation-unity) 100%
   );
-  transition: border-radius var(--duration-organic-transition) var(--ease-neural);
+  transition: border-radius var(--duration-organic-transition)
+    var(--ease-neural);
 }
 
 .organic-flow-element:hover {
@@ -105,7 +110,8 @@
 
 /* Astronomical Reverence Patterns */
 .star-pattern {
-  background-image: radial-gradient(
+  background-image:
+    radial-gradient(
       circle at 20% 80%,
       var(--color-star-worship) 2px,
       transparent 2px
@@ -120,8 +126,14 @@
       var(--color-star-worship) 1px,
       transparent 1px
     );
-  background-size: 60px 60px, 80px 80px, 120px 120px;
-  background-position: 0 0, 40px 40px, 20px 20px;
+  background-size:
+    60px 60px,
+    80px 80px,
+    120px 120px;
+  background-position:
+    0 0,
+    40px 40px,
+    20px 20px;
   opacity: 0.08;
 }
 
@@ -184,7 +196,8 @@
   position: sticky;
   top: 0;
   z-index: var(--z-overlay);
-  background: radial-gradient(
+  background:
+    radial-gradient(
       ellipse at top,
       var(--color-russian-violet) 0%,
       transparent 60%
@@ -198,7 +211,8 @@
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   border-bottom: 1px solid var(--glass-cultural-border);
-  box-shadow: 0 8px 32px var(--glass-cultural-shadow),
+  box-shadow:
+    0 8px 32px var(--glass-cultural-shadow),
     inset 0 0 60px var(--glass-cultural-inner-glow);
   overflow: hidden;
   position: relative;
@@ -242,8 +256,10 @@
 .cosmic-letter {
   display: inline-block;
   color: var(--color-pale-turquoise);
-  text-shadow: 0 0 5px var(--color-pale-turquoise),
-    0 0 15px var(--glow-enhanced-primary), 0 0 25px var(--glow-enhanced-secondary);
+  text-shadow:
+    0 0 5px var(--color-pale-turquoise),
+    0 0 15px var(--glow-enhanced-primary),
+    0 0 25px var(--glow-enhanced-secondary);
   /* Uses base-float utility class for consistent floating effect */
   position: relative;
   transition: all var(--duration-cultural-hover) ease;
@@ -276,8 +292,10 @@
 
 .cosmic-letter:hover {
   transform: scale(1.1);
-  text-shadow: 0 0 8px var(--color-pale-turquoise),
-    0 0 20px var(--glow-intense-primary), 0 0 35px var(--glow-intense-secondary);
+  text-shadow:
+    0 0 8px var(--color-pale-turquoise),
+    0 0 20px var(--glow-intense-primary),
+    0 0 35px var(--glow-intense-secondary);
 }
 
 .cosmic-letter:hover::before {

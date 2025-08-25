@@ -106,55 +106,60 @@ export class NlomInterface {
   populateHTMLConfiguration() {
     try {
       const { meta, assets, cdn } = SITE_CONFIG;
-      
+
       // Meta information
-      const pageTitle = document.getElementById('page-title');
-      const metaDescription = document.getElementById('meta-description');
-      const metaAuthor = document.getElementById('meta-author');
-      const canonicalLink = document.getElementById('canonical-link');
-      
+      const pageTitle = document.getElementById("page-title");
+      const metaDescription = document.getElementById("meta-description");
+      const metaAuthor = document.getElementById("meta-author");
+      const canonicalLink = document.getElementById("canonical-link");
+
       if (pageTitle) pageTitle.textContent = meta.siteName;
-      if (metaDescription) metaDescription.setAttribute('content', meta.description);
-      if (metaAuthor) metaAuthor.setAttribute('content', meta.author);
-      if (canonicalLink) canonicalLink.setAttribute('href', meta.canonicalUrl);
-      
+      if (metaDescription)
+        metaDescription.setAttribute("content", meta.description);
+      if (metaAuthor) metaAuthor.setAttribute("content", meta.author);
+      if (canonicalLink) canonicalLink.setAttribute("href", meta.canonicalUrl);
+
       // Open Graph
-      const ogTitle = document.getElementById('og-title');
-      const ogDescription = document.getElementById('og-description');
-      const ogUrl = document.getElementById('og-url');
-      
-      if (ogTitle) ogTitle.setAttribute('content', meta.ogTitle);
-      if (ogDescription) ogDescription.setAttribute('content', meta.ogDescription);
-      if (ogUrl) ogUrl.setAttribute('content', meta.canonicalUrl);
-      
+      const ogTitle = document.getElementById("og-title");
+      const ogDescription = document.getElementById("og-description");
+      const ogUrl = document.getElementById("og-url");
+
+      if (ogTitle) ogTitle.setAttribute("content", meta.ogTitle);
+      if (ogDescription)
+        ogDescription.setAttribute("content", meta.ogDescription);
+      if (ogUrl) ogUrl.setAttribute("content", meta.canonicalUrl);
+
       // Assets
-      const faviconLink = document.getElementById('favicon-link');
-      if (faviconLink) faviconLink.setAttribute('href', assets.favicon);
-      
+      const faviconLink = document.getElementById("favicon-link");
+      if (faviconLink) faviconLink.setAttribute("href", assets.favicon);
+
       // Fonts
-      const fontPreconnect1 = document.getElementById('font-preconnect-1');
-      const fontPreconnect2 = document.getElementById('font-preconnect-2');
-      const fontStylesheet = document.getElementById('font-stylesheet');
-      
-      if (fontPreconnect1) fontPreconnect1.setAttribute('href', cdn.fonts.google);
-      if (fontPreconnect2) fontPreconnect2.setAttribute('href', cdn.fonts.googleStatic);
+      const fontPreconnect1 = document.getElementById("font-preconnect-1");
+      const fontPreconnect2 = document.getElementById("font-preconnect-2");
+      const fontStylesheet = document.getElementById("font-stylesheet");
+
+      if (fontPreconnect1)
+        fontPreconnect1.setAttribute("href", cdn.fonts.google);
+      if (fontPreconnect2)
+        fontPreconnect2.setAttribute("href", cdn.fonts.googleStatic);
       if (fontStylesheet) {
-        fontStylesheet.setAttribute('href', 
-          `${cdn.fonts.google}/css2?family=${cdn.fonts.fontFamilies}`);
+        fontStylesheet.setAttribute(
+          "href",
+          `${cdn.fonts.google}/css2?family=${cdn.fonts.fontFamilies}`
+        );
       }
-      
+
       // Import map for Three.js
-      const importMapScript = document.getElementById('importmap-script');
+      const importMapScript = document.getElementById("importmap-script");
       if (importMapScript) {
         const importMap = getThreeJSImportMap();
         importMapScript.textContent = JSON.stringify(importMap, null, 2);
       }
-      
+
       // Populate constellation descriptions
       this.populateConstellationDescriptions();
-      
     } catch (error) {
-      console.warn('Failed to populate HTML configuration:', error);
+      console.warn("Failed to populate HTML configuration:", error);
     }
   }
 
@@ -165,39 +170,44 @@ export class NlomInterface {
     try {
       // Map constellation IDs to their accessibility description element IDs
       const accessibilityIdMap = {
-        'gnarled-tree': 'tree-desc',
-        'qu-poxii': 'bond-desc',
-        'star-chanter': 'chant-desc',
-        'hatching-egg': 'egg-desc',
-        'void': 'void-desc'
+        "gnarled-tree": "tree-desc",
+        "qu-poxii": "bond-desc",
+        "star-chanter": "chant-desc",
+        "hatching-egg": "egg-desc",
+        void: "void-desc",
       };
 
-      Object.keys(CONSTELLATIONS).forEach(constellationId => {
+      Object.keys(CONSTELLATIONS).forEach((constellationId) => {
         const constellation = CONSTELLATIONS[constellationId];
-        
+
         // Populate accessibility descriptions
         const accessibilityId = accessibilityIdMap[constellationId];
         if (accessibilityId) {
           const accessibilityDesc = document.getElementById(accessibilityId);
           if (accessibilityDesc) {
-            accessibilityDesc.textContent = constellation.descriptions.accessibility;
+            accessibilityDesc.textContent =
+              constellation.descriptions.accessibility;
           }
         }
-        
+
         // Populate stream views
         const streamView = document.getElementById(`${constellationId}-view`);
         if (streamView) {
-          const titleElement = streamView.querySelector('.stream-title');
-          const meaningElement = streamView.querySelector('.essence-meaning');
-          const descriptionElement = streamView.querySelector('.stream-description');
-          
+          const titleElement = streamView.querySelector(".stream-title");
+          const meaningElement = streamView.querySelector(".essence-meaning");
+          const descriptionElement = streamView.querySelector(
+            ".stream-description"
+          );
+
           if (titleElement) titleElement.textContent = constellation.name;
-          if (meaningElement) meaningElement.textContent = constellation.meaning;
-          if (descriptionElement) descriptionElement.textContent = constellation.descriptions.stream;
+          if (meaningElement)
+            meaningElement.textContent = constellation.meaning;
+          if (descriptionElement)
+            descriptionElement.textContent = constellation.descriptions.stream;
         }
       });
     } catch (error) {
-      console.warn('Failed to populate constellation descriptions:', error);
+      console.warn("Failed to populate constellation descriptions:", error);
     }
   }
 
@@ -219,25 +229,27 @@ export class NlomInterface {
 
       // Configure GitHub repository settings
       // These should match your actual GitHub repository
-      scanner.setGitHubConfig('Mnemeory', 'mnemeory.github.io');
-      
+      scanner.setGitHubConfig("Mnemeory", "mnemeory.github.io");
+
       // Log repository configuration
       const repoInfo = scanner.getRepositoryInfo();
-      console.log('GitHub repository configuration:', repoInfo);
+      console.log("GitHub repository configuration:", repoInfo);
 
       // Test GitHub API connection first
-      console.log('Testing GitHub API connection...');
+      console.log("Testing GitHub API connection...");
       const connectionTest = await scanner.testGitHubConnection();
       if (!connectionTest) {
-        throw new Error('Failed to connect to GitHub API. Please check your repository configuration and internet connection.');
+        throw new Error(
+          "Failed to connect to GitHub API. Please check your repository configuration and internet connection."
+        );
       }
 
       // Define the directories to scan based on the user's naming conventions
       // Map folder paths to constellation IDs and seals
       const scanPaths = [
-        { path: 'filed', constellation: 'gnarled-tree', seal: 'filed' },
-        { path: 'templates', constellation: 'hatching-egg', seal: 'open' },
-        { path: 'citizen', constellation: 'qu-poxii', seal: 'open' }
+        { path: "filed", constellation: "gnarled-tree", seal: "filed" },
+        { path: "templates", constellation: "hatching-egg", seal: "open" },
+        { path: "citizen", constellation: "qu-poxii", seal: "open" },
       ];
 
       const allNodes = [];
@@ -252,9 +264,14 @@ export class NlomInterface {
             pathConfig.seal
           );
           allNodes.push(...nodes);
-          console.log(`✅ Scanned ${pathConfig.path}: found ${nodes.length} files`);
+          console.log(
+            `✅ Scanned ${pathConfig.path}: found ${nodes.length} files`
+          );
         } catch (error) {
-          console.warn(`❌ Could not scan directory ${pathConfig.path}:`, error);
+          console.warn(
+            `❌ Could not scan directory ${pathConfig.path}:`,
+            error
+          );
           // Continue with other directories even if one fails
         }
       }
@@ -269,32 +286,43 @@ export class NlomInterface {
       });
 
       // Pass citizen files to the citizen manager if available
-      const citizenNodes = sortedNodes.filter(node => node.constellation === 'qu-poxii');
+      const citizenNodes = sortedNodes.filter(
+        (node) => node.constellation === "qu-poxii"
+      );
       if (citizenNodes.length > 0) {
-        console.log(`Found ${citizenNodes.length} citizen files from file system`);
-        console.log('Citizen nodes:', citizenNodes.map(node => ({
-          id: node.id,
+        console.log(
+          `Found ${citizenNodes.length} citizen files from file system`
+        );
+        console.log(
+          "Citizen nodes:",
+          citizenNodes.map((node) => ({
+            id: node.id,
+            name: node.name,
+            constellation: node.constellation,
+            seal: node.seal,
+            metadata: node.metadata,
+          }))
+        );
+        // The citizen manager will be initialized when the constellation is populated
+        // We'll store this information for later use
+        this.state.set("citizenFiles", citizenNodes);
+      } else {
+        console.log("No citizen files found in the repository");
+      }
+
+      console.log(
+        `\n🎉 Successfully loaded ${sortedNodes.length} nodes from GitHub repository`
+      );
+      console.log(
+        "Node summary:",
+        sortedNodes.map((node) => ({
           name: node.name,
           constellation: node.constellation,
           seal: node.seal,
-          metadata: node.metadata
-        })));
-        // The citizen manager will be initialized when the constellation is populated
-        // We'll store this information for later use
-        this.state.set('citizenFiles', citizenNodes);
-      } else {
-        console.log('No citizen files found in the repository');
-      }
-
-      console.log(`\n🎉 Successfully loaded ${sortedNodes.length} nodes from GitHub repository`);
-      console.log('Node summary:', sortedNodes.map(node => ({
-        name: node.name,
-        constellation: node.constellation,
-        seal: node.seal
-      })));
-      
+        }))
+      );
     } catch (error) {
-      console.error('❌ Data loading failed:', error);
+      console.error("❌ Data loading failed:", error);
       const standardError = createStandardError(
         getErrorMessage("dataLoadError"),
         error,
@@ -352,7 +380,9 @@ export class NlomInterface {
     // Replace loading content with error
     const loadingContent = document.querySelector(".loading-content");
     if (loadingContent) {
-      loadingContent.innerHTML = getErrorTemplate("psionicFailure", { message });
+      loadingContent.innerHTML = getErrorTemplate("psionicFailure", {
+        message,
+      });
     }
   }
 

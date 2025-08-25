@@ -84,7 +84,7 @@ export class StampManager {
     try {
       const ext = SITE_CONFIG.fileSystem.defaultExtension;
       const name = filename.replace(
-        new RegExp(`${ext.replace('.', '\\.')}$`, "i"),
+        new RegExp(`${ext.replace(".", "\\.")}$`, "i"),
         ""
       );
       const parts = name.split("-");
@@ -154,7 +154,8 @@ export class PaperDocumentEditor {
       key,
       isReadOnly: options.readOnly || false,
       currentName:
-        options.defaultName || `document${SITE_CONFIG.fileSystem.defaultExtension}`,
+        options.defaultName ||
+        `document${SITE_CONFIG.fileSystem.defaultExtension}`,
       elements: this.getElements(key),
       currentContent: "",
       isEditMode: false,
@@ -284,7 +285,8 @@ export class PaperDocumentEditor {
 
       this.renderContent(doc, true);
 
-      elements.pilcrow.title = SITE_CONFIG.interfaceText.paperEditor.pilcrow.showPreview;
+      elements.pilcrow.title =
+        SITE_CONFIG.interfaceText.paperEditor.pilcrow.showPreview;
       elements.pilcrow.setAttribute(
         "aria-label",
         SITE_CONFIG.interfaceText.paperEditor.pilcrow.previewMode
@@ -296,7 +298,8 @@ export class PaperDocumentEditor {
 
       this.renderContent(doc, false);
 
-      elements.pilcrow.title = SITE_CONFIG.interfaceText.paperEditor.pilcrow.showTags;
+      elements.pilcrow.title =
+        SITE_CONFIG.interfaceText.paperEditor.pilcrow.showTags;
       elements.pilcrow.setAttribute(
         "aria-label",
         SITE_CONFIG.interfaceText.paperEditor.pilcrow.tagView
