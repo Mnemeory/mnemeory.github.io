@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content=""
+      id="meta-description"
+    />
+    <meta name="author" content="" id="meta-author" />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="" id="canonical-link" />
+
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="" id="og-title" />
+    <meta
+      property="og:description"
+      content=""
+      id="og-description"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="" id="og-url" />
+
+    <title id="page-title"></title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/images/tree.svg" id="favicon-link" />
+
+    <!-- Typography - Google Fonts -->
+    <link rel="preconnect" href="" id="font-preconnect-1" />
+    <link rel="preconnect" href="" crossorigin id="font-preconnect-2" />
+    <link
+      href=""
+      rel="stylesheet"
+      id="font-stylesheet"
+    />
+
+    <!-- Main Stylesheet -->
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+
+  <body class="nlom-interface">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Loading Screen -->
+    <div id="loading-veil" class="loading-veil" aria-hidden="true">
+      <div class="loading-content">
+        <div class="nlom-pulse"></div>
+        <p>Establishing psionic resonance with Federation Nlom network via SCCV Horizon...</p>
+        <p class="loading-subtitle" id="loading-clearance"></p>
+      </div>
+    </div>
+
+    <!-- Fluid Consciousness Stream -->
+    <div id="app" class="fluid-consciousness">
+      <!-- Neural Interface Header -->
+      <header class="neural-command-interface" role="banner">
+        <div class="neural-flow-grid">
+          <!-- Protocol Status with Home Navigation (Far Left) -->
+          <div class="protocol-status-left" data-flow="primary">
+            <div class="protocol-home-stack">
+              <button
+                type="button"
+                class="protocol-home-button base-hover-scale"
+                id="protocol-home-button"
+                aria-label="Return to diplomatic mission data constellation overview"
+              >
+                <div class="protocol-emblem">
+                  <img
+                    src="assets/images/tree.svg"
+                    alt="Nralakk Federation Emblem"
+                    class="protocol-emblem-icon"
+                  />
+                </div>
+              </button>
+              <div class="protocol-text">
+                <span class="protocol-label">Diplomatic Protocol</span>
+                <span class="status-pulse">Neural Link Stable</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Neural Interface Title (Centered) -->
+          <div class="interface-identity-center" data-flow="secondary">
+            <div class="interface-title-display">
+              <div class="liquid-text">
+                <span class="flowing-word" data-word="nlom">Nlom</span>
+                <span class="flowing-word" data-word="neural">Neural</span>
+                <span class="flowing-word" data-word="interface"
+                  >Interface</span
+                >
+              </div>
+            </div>
+            <div class="clearance-matrix" id="clearance-matrix"></div>
+          </div>
+
+          <!-- Right Spacer for Balance -->
+          <div class="header-balance-spacer"></div>
+        </div>
+      </header>
+
+      <!-- Fluid Consciousness Field -->
+      <main id="main-content" class="consciousness-ocean" role="main">
+        <!-- Central Flow States -->
+        <div id="starfield-view" class="flow-state active" aria-hidden="false">
+          <!-- Fluid Starfield -->
+          <div
+            id="starfield-container"
+            class="liquid-space"
+            role="application"
+            aria-label="Interactive Psionic Wake Data Constellations"
+          >
+            <canvas id="starfield-canvas" class="consciousness-canvas"></canvas>
+
+            <!-- 3D Tooltip -->
+            <div
+              id="constellation-tooltip"
+              class="constellation-tooltip constellation-tooltip--3d"
+              aria-hidden="true"
+            >
+              <div class="tooltip-content">
+                <span class="tooltip-text"></span>
+              </div>
+            </div>
+
+            <!-- Flowing Clusters -->
+            <div
+              id="starfield-2d"
+              class="liquid-clusters hidden"
+              role="img"
+              aria-label="Diplomatic Mission Psionic Wake Constellation Map"
+            >
+              <div class="floating-nodes">
+                <button
+                  type="button"
+                  class="liquid-node"
+                  data-cluster="gnarled-tree"
+                  aria-describedby="tree-desc"
+                >
+                  <div class="node-bubble">
+                    <img
+                      src="assets/images/tree.svg"
+                      alt=""
+                      aria-hidden="true"
+                    />
+                    <div class="bubble-ripples"></div>
+                  </div>
+                  <span class="flowing-label">The Gnarled Tree</span>
+                </button>
+                <button
+                  type="button"
+                  class="liquid-node"
+                  data-cluster="qu-poxii"
+                  aria-describedby="bond-desc"
+                >
+                  <div class="node-bubble">
+                    <img
+                      src="assets/images/bond.svg"
+                      alt=""
+                      aria-hidden="true"
+                    />
+                    <div class="bubble-ripples"></div>
+                  </div>
+                  <span class="flowing-label">The Qu'Poxii</span>
+                </button>
+                <button
+                  type="button"
+                  class="liquid-node"
+                  data-cluster="star-chanter"
+                  aria-describedby="chant-desc"
+                >
+                  <div class="node-bubble">
+                    <img
+                      src="assets/images/chant.svg"
+                      alt=""
+                      aria-hidden="true"
+                    />
+                    <div class="bubble-ripples"></div>
+                  </div>
+                  <span class="flowing-label">The Star Chanter</span>
+                </button>
+                <button
+                  type="button"
+                  class="liquid-node"
+                  data-cluster="hatching-egg"
+                  aria-describedby="egg-desc"
+                >
+                  <div class="node-bubble">
+                    <img
+                      src="assets/images/egg.svg"
+                      alt=""
+                      aria-hidden="true"
+                    />
+                    <div class="bubble-ripples"></div>
+                  </div>
+                  <span class="flowing-label">The Hatching Egg</span>
+                </button>
+                <button
+                  type="button"
+                  class="liquid-node"
+                  data-cluster="void"
+                  aria-describedby="void-desc"
+                >
+                  <div class="node-bubble">
+                    <img
+                      src="assets/images/void.svg"
+                      alt=""
+                      aria-hidden="true"
+                    />
+                    <div class="bubble-ripples"></div>
+                  </div>
+                  <span class="flowing-label">The Void</span>
+                </button>
+              </div>
+
+              <!-- 2D Tooltip -->
+              <div
+                id="constellation-tooltip-2d"
+                class="constellation-tooltip constellation-tooltip--2d"
+                aria-hidden="true"
+              >
+                <div class="tooltip-content">
+                  <span class="tooltip-text"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Flowing Descriptions - populated dynamically -->
+            <div class="sr-only">
+              <div id="tree-desc"></div>
+              <div id="bond-desc"></div>
+              <div id="chant-desc"></div>
+              <div id="egg-desc"></div>
+              <div id="void-desc"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fluid Data Streams -->
+        <div
+          id="gnarled-tree-view"
+          class="constellation-view"
+          aria-hidden="true"
+        >
+          <!-- Stream Header -->
+          <div class="stream-essence">
+            <div class="essence-icon">
+              <div class="icon-droplet">
+                <img src="assets/images/tree.svg" alt="" aria-hidden="true" />
+                <div class="icon-waves"></div>
+              </div>
+            </div>
+            <div class="essence-flow">
+              <h2 class="stream-title"></h2>
+              <div class="essence-meaning"></div>
+              <p class="stream-description"></p>
+            </div>
+          </div>
+
+          <!-- Flowing Data Nodes -->
+          <div
+            class="data-stream"
+            id="gnarled-tree-nodes"
+            role="region"
+            aria-label="Gnarled Tree data streams"
+          >
+            <!-- Nodes will flow dynamically -->
+          </div>
+        </div>
+
+        <div id="qu-poxii-view" class="constellation-view" aria-hidden="true">
+          <div class="stream-essence">
+            <div class="essence-icon">
+              <div class="icon-droplet">
+                <img src="assets/images/bond.svg" alt="" aria-hidden="true" />
+                <div class="icon-waves"></div>
+              </div>
+            </div>
+            <div class="essence-flow">
+              <h2 class="stream-title"></h2>
+              <div class="essence-meaning"></div>
+              <p class="stream-description"></p>
+            </div>
+          </div>
+          <div
+            class="data-stream"
+            id="qu-poxii-nodes"
+            role="region"
+            aria-label="Qu'Poxii data streams"
+          >
+            <!-- Nodes will flow dynamically -->
+          </div>
+        </div>
+
+        <div
+          id="star-chanter-view"
+          class="constellation-view"
+          aria-hidden="true"
+        >
+          <div class="stream-essence">
+            <div class="essence-icon">
+              <div class="icon-droplet">
+                <img src="assets/images/chant.svg" alt="" aria-hidden="true" />
+                <div class="icon-waves"></div>
+              </div>
+            </div>
+            <div class="essence-flow">
+              <h2 class="stream-title"></h2>
+              <div class="essence-meaning"></div>
+              <p class="stream-description"></p>
+            </div>
+          </div>
+          <div
+            class="data-stream"
+            id="star-chanter-nodes"
+            role="region"
+            aria-label="Star Chanter data streams"
+          >
+            <!-- Nodes will flow dynamically -->
+          </div>
+        </div>
+
+        <div
+          id="hatching-egg-view"
+          class="constellation-view"
+          aria-hidden="true"
+        >
+          <div class="stream-essence">
+            <div class="essence-icon">
+              <div class="icon-droplet">
+                <img src="assets/images/egg.svg" alt="" aria-hidden="true" />
+                <div class="icon-waves"></div>
+              </div>
+            </div>
+            <div class="essence-flow">
+              <h2 class="stream-title"></h2>
+              <div class="essence-meaning"></div>
+              <p class="stream-description"></p>
+            </div>
+          </div>
+          <div
+            class="data-stream"
+            id="hatching-egg-nodes"
+            role="region"
+            aria-label="Hatching Egg data streams"
+          >
+            <!-- Nodes will flow dynamically -->
+          </div>
+        </div>
+
+        <div id="void-view" class="constellation-view" aria-hidden="true">
+          <div class="stream-essence">
+            <div class="essence-icon">
+              <div class="icon-droplet">
+                <img src="assets/images/void.svg" alt="" aria-hidden="true" />
+                <div class="icon-waves"></div>
+              </div>
+            </div>
+            <div class="essence-flow">
+              <h2 class="stream-title"></h2>
+              <div class="essence-meaning"></div>
+              <p class="stream-description"></p>
+              <div class="clearance-bubbles">
+                <span class="clearance-droplet consular"
+                  >Consular Officer Access Granted</span
+                >
+                <span class="clearance-droplet aide"
+                  >Diplomatic Aide Clearance Active</span
+                >
+              </div>
+            </div>
+          </div>
+          <div
+            class="data-stream"
+            id="void-nodes"
+            role="region"
+            aria-label="Void data streams"
+          >
+            <!-- Nodes will flow dynamically -->
+          </div>
+        </div>
+      </main>
+
+      <!-- Flowing Data Detail -->
+      <div
+        id="node-modal"
+        class="data-bubble-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-hidden="true"
+      >
+        <div class="bubble-ocean"></div>
+        <div class="data-bubble">
+          <div class="bubble-header">
+            <h3 id="modal-title" class="bubble-title"></h3>
+            <button
+              type="button"
+              id="modal-close"
+              class="bubble-close"
+              aria-label="Close dialog"
+            >
+              <div class="close-ripple">×</div>
+            </button>
+          </div>
+          <div id="modal-body" class="bubble-content">
+            <!-- Paper editor will be integrated here -->
+            <div
+              class="paper-document-container"
+              id="modal-paper-container"
+              aria-label="Document Viewer"
+            >
+              <div class="paper-document-toolbar">
+                <button
+                  class="corp-btn corp-btn--primary corp-btn--icon"
+                  id="modal-pilcrow"
+                  title="Toggle psionic script encoding view"
+                  aria-label="Toggle between Psionic Wake rendering and neural script encoding modes"
+                >
+                  ¶
+                </button>
+
+                <div class="toolbar-spacer" aria-hidden="true"></div>
+
+                <button
+                  class="corp-btn corp-btn--primary corp-btn--standard"
+                  id="modal-copy"
+                  title="Extract psionic script"
+                  aria-label="Extract raw psionic script to Nlom buffer"
+                >
+                  Extract
+                </button>
+
+                <button
+                  class="corp-btn corp-btn--primary corp-btn--standard"
+                  id="modal-save"
+                  title="Download psionic data stream"
+                  aria-label="Download document as psionic text stream file"
+                >
+                  Download Stream
+                </button>
+              </div>
+
+              <div class="paper-document-body">
+                <div
+                  class="paper-document-paper"
+                  id="modal-paper"
+                  aria-label="Document content"
+                  aria-live="polite"
+                >
+                  <!-- Paper content will be rendered here -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bubble-actions">
+            <button
+              type="button"
+              id="modal-inscribe"
+              class="flow-action"
+              data-action="inscribe"
+            >
+              <div class="action-bubble">Inscribe Psionic Memory (.md)</div>
+            </button>
+            <button
+              type="button"
+              id="modal-transmit"
+              class="flow-action"
+              data-action="transmit"
+            >
+              <div class="action-bubble">
+                Encode for Psionic Wake Transmission (.json)
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating Notifications -->
+      <div
+        id="toast-container"
+        class="notification-stream"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <!-- Toast bubbles will appear here -->
+      </div>
+
+      <!-- Invisible Navigation Footer -->
+      <footer
+        class="neural-navigation-anchor"
+        role="contentinfo"
+        aria-hidden="true"
+      >
+                    <div class="navigation-essence">
+          Navigate through diplomatic mission Psionic Wake data constellations
+        </div>
+      </footer>
+    </div>
+
+    <!-- CDN Libraries -->
+    <script type="importmap" id="importmap-script">
+      {
+        "imports": {
+          "three": "https://cdn.skypack.dev/three@0.150.1",
+          "three/addons/": "https://cdn.skypack.dev/three@0.150.1/examples/jsm/"
+        }
+      }
+    </script>
+
+    <!-- Application Scripts -->
+    <script type="module" src="js/script.js"></script>
+  </body>
+</html>

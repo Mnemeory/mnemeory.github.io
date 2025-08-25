@@ -1,0 +1,1026 @@
+/**
+ * Constellation Views
+ * Data node grids and constellation interfaces
+ */
+
+.constellation-view {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  transition: all var(--duration-slower) var(--ease-neural);
+  pointer-events: none;
+  padding: var(--space-8) var(--space-6);
+  overflow-y: auto;
+  background: 
+    /* Thought-specific nebula */ radial-gradient(
+      ellipse 600px 400px at center top,
+      rgba(175, 238, 238, 0.03) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 400px 300px at 80% 60%,
+      rgba(254, 221, 216, 0.02) 0%,
+      transparent 60%
+    ),
+    /* Consciousness flow */
+      linear-gradient(
+        135deg,
+        transparent 40%,
+        rgba(46, 27, 73, 0.01) 60%,
+        transparent 80%
+      );
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+}
+
+.constellation-view.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  animation: thought-materialization 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    forwards;
+}
+
+.constellation-view[aria-hidden="true"] {
+  position: absolute;
+  inset: 0;
+}
+
+@keyframes thought-materialization {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    filter: blur(2px);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateY(-5px) scale(1.02);
+    filter: blur(0.5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.constellation-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  margin-bottom: var(--space-10);
+  padding: var(--space-8) var(--space-10);
+  background: var(--gradient-constellation-header),
+    var(--gradient-neural-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-neural-lg),
+    var(--shadow-inset-glow);
+  animation: thought-header-breathe var(--duration-pulse) ease-in-out infinite;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.constellation-header::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-energy-horizontal);
+  animation: consciousness-energy-flow 6s ease-in-out infinite;
+  border-radius: var(--radius-organic-1);
+}
+
+@keyframes thought-header-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    border-radius: 60px 20px 60px 20px;
+  }
+  50% {
+    transform: scale(1.01);
+    border-radius: 40px 40px 40px 40px;
+  }
+}
+
+@keyframes consciousness-energy-flow {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translateX(-10px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(10px);
+  }
+}
+
+.constellation-icon {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg-medium);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-glow), inset 0 0 20px rgba(92, 231, 231, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.constellation-icon::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: var(--radius-full);
+  background: conic-gradient(
+    var(--color-cyan),
+    var(--color-skrell-blue),
+    var(--color-cyan)
+  );
+  animation: base-rotation 6s linear infinite;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+/* Icon rotation animation moved to utilities.css as base-rotation */
+
+.constellation-icon img {
+  width: 40px;
+  height: 40px;
+  filter: drop-shadow(var(--shadow-glow));
+}
+
+.constellation-info h2 {
+  color: var(--color-accent);
+  margin-bottom: var(--space-2);
+}
+
+.constellation-meaning {
+  font-size: var(--text-sm);
+  color: var(--color-gold);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: var(--space-3);
+}
+
+.constellation-description {
+  color: var(--color-text-muted);
+  max-width: 60ch;
+}
+
+/* Data Node Grid */
+.node-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: var(--space-8);
+  padding: var(--space-6);
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: start;
+  justify-content: center;
+}
+
+.node-grid::after {
+  content: "";
+  grid-column: 1 / -1;
+  height: 0;
+}
+
+/* Thought Bubble Document Layout - Row-based display */
+.thought-bubble-documents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Enhanced floating with organic easing */
+.thought-bubble-document {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  transition: all var(--duration-base) var(--ease-organic);
+  animation: thought-bubble-float var(--duration-float) var(--ease-organic) infinite;
+  position: relative;
+  min-width: 140px;
+  max-width: 160px;
+  transform-origin: center;
+}
+
+.thought-bubble-document:nth-child(2n) {
+  animation-delay: -3s;
+}
+.thought-bubble-document:nth-child(3n) {
+  animation-delay: -6s;
+}
+.thought-bubble-document:nth-child(4n) {
+  animation-delay: -9s;
+}
+.thought-bubble-document:nth-child(5n) {
+  animation-delay: -12s;
+}
+
+.thought-bubble-document .document-bubble {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-organic-1);
+  position: relative;
+  overflow: hidden;
+}
+
+.thought-bubble-document .document-bubble::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    var(--color-cyan),
+    var(--color-skrell-blue),
+    var(--color-cyan)
+  );
+  animation: base-rotation var(--duration-pulse) linear infinite;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+.thought-bubble-document .document-bubble::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--glass-bg-medium);
+  border: 1px solid var(--glass-border);
+  border-radius: inherit;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.thought-bubble-document .document-icon {
+  width: 40px;
+  height: 40px;
+  filter: drop-shadow(0 0 10px var(--glow-cyan-medium));
+  z-index: var(--z-raised);
+  transition: all var(--duration-base) ease;
+}
+
+.thought-bubble-document .document-ripples {
+  position: absolute;
+  inset: -20px;
+  border-radius: inherit;
+  background: var(--gradient-consciousness-flow);
+  opacity: 0;
+  transition: all var(--duration-base) ease;
+  animation: base-ripples var(--duration-ripples) ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Enhanced base ripple animation - more organic and fluid */
+@keyframes base-ripples {
+  0% {
+    transform: scale(0.8) rotate(0deg);
+    opacity: 0;
+    border-radius: 50% 40% 60% 30% / 40% 60% 30% 50%;
+  }
+  25% {
+    transform: scale(1.1) rotate(90deg);
+    opacity: 0.3;
+    border-radius: 40% 60% 30% 50% / 60% 30% 50% 40%;
+  }
+  50% {
+    transform: scale(1.3) rotate(180deg);
+    opacity: 0.5;
+    border-radius: 60% 30% 50% 40% / 30% 50% 40% 60%;
+  }
+  75% {
+    transform: scale(1.1) rotate(270deg);
+    opacity: 0.3;
+    border-radius: 30% 50% 40% 60% / 50% 40% 60% 30%;
+  }
+  100% {
+    transform: scale(0.8) rotate(360deg);
+    opacity: 0;
+    border-radius: 50% 40% 60% 30% / 40% 60% 30% 50%;
+  }
+}
+
+.thought-bubble-document .document-label {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--color-pale-turquoise);
+  text-align: center;
+  text-shadow: 0 0 8px var(--glow-cyan-strong);
+  transition: all var(--duration-base) ease;
+  max-width: 120px;
+  line-height: 1.3;
+}
+
+.thought-bubble-document .document-seal {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: var(--z-raised);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Hover effects */
+.thought-bubble-document:hover .document-bubble {
+  transform: scale(1.1);
+  border-radius: var(--radius-organic-2);
+  box-shadow: 0 0 30px var(--glow-cyan-medium),
+    inset 0 0 30px var(--glow-cyan-ultra);
+}
+
+.thought-bubble-document:hover .document-icon {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 15px var(--glow-cyan-intense));
+}
+
+.thought-bubble-document:hover .document-ripples {
+  opacity: 1;
+  animation: ripple-expand var(--duration-base) ease-out forwards;
+}
+
+.thought-bubble-document:hover .document-label {
+  transform: translateY(-3px);
+  text-shadow: 0 0 12px var(--glow-cyan-intense),
+    0 0 24px var(--glow-cyan-medium);
+}
+
+/* Smooth ripple expansion animation */
+@keyframes ripple-expand {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0.3;
+  }
+}
+
+/* Enhanced ripple effect with multiple layers */
+.thought-bubble-document .document-ripples::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--gradient-consciousness-flow);
+  opacity: 0;
+  transition: all var(--duration-base) ease;
+  animation: ripple-pulse var(--duration-pulse) ease-in-out infinite;
+}
+
+.thought-bubble-document:hover .document-ripples::before {
+  opacity: 0.4;
+  animation: ripple-pulse var(--duration-pulse) ease-in-out infinite;
+}
+
+/* Additional ripple layer for enhanced effect */
+.thought-bubble-document .document-ripples::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: inherit;
+  background: var(--gradient-consciousness-flow);
+  opacity: 0;
+  transition: all var(--duration-base) ease;
+  animation: ripple-outer var(--duration-pulse) ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+.thought-bubble-document:hover .document-ripples::after {
+  opacity: 0.2;
+  animation: ripple-outer var(--duration-pulse) ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+@keyframes ripple-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.6;
+  }
+}
+
+@keyframes ripple-outer {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.4;
+  }
+}
+
+/* Smooth border radius morphing on hover */
+.thought-bubble-document .document-bubble {
+  transition: all var(--duration-base) var(--ease-organic);
+}
+
+.thought-bubble-document:hover .document-bubble {
+  border-radius: var(--radius-organic-2);
+  transition: all var(--duration-base) var(--ease-organic);
+}
+
+/* Enhanced glow effect on hover */
+.thought-bubble-document:hover .document-bubble::after {
+  box-shadow: 0 0 20px var(--glow-cyan-strong),
+    inset 0 0 20px var(--glow-cyan-whisper);
+  transition: all var(--duration-base) var(--ease-organic);
+}
+
+/* Smooth icon scaling */
+.thought-bubble-document .document-icon {
+  transition: all var(--duration-base) var(--ease-organic);
+}
+
+.thought-bubble-document:hover .document-icon {
+  transform: scale(1.1);
+  transition: all var(--duration-base) var(--ease-organic);
+}
+
+/* Smooth label movement */
+.thought-bubble-document .document-label {
+  transition: all var(--duration-base) var(--ease-organic);
+}
+
+.thought-bubble-document:hover .document-label {
+  transform: translateY(-3px);
+  transition: all var(--duration-base) var(--ease-organic);
+}
+
+/* Constellation-specific theming for thought bubbles */
+.thought-bubble-documents[data-constellation="gnarled-tree"] .thought-bubble-document .document-bubble::before {
+  background: conic-gradient(
+    var(--constellation-tree-primary),
+    var(--constellation-tree-secondary),
+    var(--constellation-tree-primary)
+  );
+}
+
+.thought-bubble-documents[data-constellation="qu-poxii"] .thought-bubble-document .document-bubble::before {
+  background: conic-gradient(
+    var(--constellation-bond-primary),
+    var(--constellation-bond-secondary),
+    var(--constellation-bond-primary)
+  );
+}
+
+.thought-bubble-documents[data-constellation="star-chanter"] .thought-bubble-document .document-bubble::before {
+  background: conic-gradient(
+    var(--constellation-chant-primary),
+    var(--constellation-chant-secondary),
+    var(--constellation-chant-primary)
+  );
+}
+
+.thought-bubble-documents[data-constellation="hatching-egg"] .thought-bubble-document .document-bubble::before {
+  background: conic-gradient(
+    var(--constellation-egg-primary),
+    var(--constellation-egg-secondary),
+    var(--constellation-egg-primary)
+  );
+}
+
+.thought-bubble-documents[data-constellation="void"] .thought-bubble-document .document-bubble::before {
+  background: conic-gradient(
+    var(--constellation-void-primary),
+    var(--constellation-void-secondary),
+    var(--constellation-void-primary)
+  );
+}
+
+/* Seal-specific styling for thought bubble documents */
+.thought-bubble-document .document-seal.open {
+  background: var(--glass-bg-starfield-accent);
+  border: 1px solid var(--glass-cultural-border);
+  color: var(--color-cyan);
+  box-shadow: var(--shadow-neural-sm);
+}
+
+.thought-bubble-document .document-seal.filed {
+  background: var(--glass-bg-starfield-void);
+  border: 1px solid var(--glass-border);
+  color: var(--color-mist);
+  box-shadow: var(--shadow-neural-sm);
+}
+
+.thought-bubble-document .document-seal.black-star {
+  background: var(--glass-bg-starfield-void);
+  border: 1px solid var(--constellation-void-primary);
+  color: var(--constellation-void-primary);
+  box-shadow: var(--shadow-void);
+}
+
+.thought-bubble-document .document-seal.consular {
+  background: var(--glass-cultural-gradient-start);
+  border: 1px solid var(--color-gold);
+  color: var(--color-gold);
+  box-shadow: var(--shadow-authority);
+}
+
+.thought-bubble-document .document-seal.aide {
+  background: var(--glass-cultural-gradient-mid);
+  border: 1px solid var(--color-cyan);
+  color: var(--color-cyan);
+  box-shadow: var(--shadow-neural-sm);
+}
+
+/* Animation for thought bubble floating */
+@keyframes thought-bubble-float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translateY(-6px) rotate(0.3deg) scale(1.01);
+  }
+  50% {
+    transform: translateY(3px) rotate(-0.2deg) scale(0.99);
+  }
+  75% {
+    transform: translateY(-4px) rotate(0.1deg) scale(1.005);
+  }
+}
+
+.data-node {
+  background: var(--gradient-neural-primary),
+    var(--gradient-neural-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6) var(--space-8);
+  transition: all var(--duration-slower) var(--ease-neural);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-neural-md),
+    var(--shadow-inset-neural);
+  animation: thought-node-float var(--duration-float) ease-in-out infinite;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.data-node:nth-child(2n) {
+  animation-delay: -3s;
+  border-radius: 24px 16px 24px 16px;
+}
+
+.data-node:nth-child(3n) {
+  animation-delay: -6s;
+  border-radius: 16px 24px 16px 24px;
+}
+
+.data-node:nth-child(4n) {
+  animation-delay: -9s;
+  border-radius: 20px;
+}
+
+.data-node:nth-child(5n) {
+  animation-delay: -12s;
+  border-radius: 28px 12px 28px 12px;
+}
+
+.data-node::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: var(--gradient-energy-conic);
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity var(--duration-slower) var(--ease-neural);
+  animation: base-rotation var(--duration-pulse) linear infinite;
+}
+
+.data-node::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-energy-horizontal);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--duration-slower) var(--ease-neural);
+  animation: energy-pulse 4s ease-in-out infinite;
+}
+
+.data-node:hover {
+  background: var(--gradient-consciousness-flow),
+    var(--gradient-neural-secondary);
+  border-color: var(--color-cyan);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-neural-xl),
+    var(--shadow-consciousness), var(--shadow-inset-glow);
+  animation-play-state: paused;
+}
+
+.data-node:hover::before {
+  opacity: 1;
+}
+
+.data-node:hover::after {
+  opacity: 1;
+}
+
+/* thought-node-float removed - using base-floating from utilities.css */
+
+/* Thought aurora rotation animation moved to utilities.css as base-rotation */
+
+@keyframes energy-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scaleX(0.8);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scaleX(1.2);
+  }
+}
+
+.node-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.node-seal {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.node-seal.open {
+  background: rgba(92, 231, 231, 0.2);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+
+.node-seal.filed {
+  background: rgba(229, 199, 107, 0.2);
+  color: var(--color-gold);
+  border: 1px solid var(--color-gold);
+}
+
+.node-seal.black-star {
+  background: rgba(62, 46, 92, 0.4);
+  color: var(--color-text);
+  border: 1px solid var(--color-quasar);
+  position: relative;
+}
+
+.node-seal.black-star::after {
+  content: "★";
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-quasar);
+  font-size: 0.8em;
+}
+
+.node-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.node-description {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  margin-bottom: var(--space-3);
+}
+
+.node-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.node-tag {
+  padding: var(--space-1) var(--space-2);
+  background: var(--glass-bg-medium);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+}
+
+/* Constellation-Specific View Theming */
+
+/* Gnarled Tree - Age, Wisdom, Tradition */
+#gnarled-tree-view {
+  --theme-primary: var(--constellation-tree-primary);
+  --theme-secondary: var(--constellation-tree-secondary);
+  --theme-accent: var(--constellation-tree-accent);
+  --theme-bg: var(--constellation-tree-bg);
+  --theme-glow: var(--constellation-tree-glow);
+}
+
+#gnarled-tree-view.constellation-view {
+  background: radial-gradient(
+      ellipse 600px 400px at center top,
+      var(--theme-bg) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 400px 300px at 80% 60%,
+      rgba(139, 69, 19, 0.05) 0%,
+      transparent 60%
+    ),
+    linear-gradient(135deg, rgba(34, 139, 34, 0.02) 0%, transparent 50%);
+}
+
+/* Qu'Poxii - Love, Friendship, Support */
+#qu-poxii-view {
+  --theme-primary: var(--constellation-bond-primary);
+  --theme-secondary: var(--constellation-bond-secondary);
+  --theme-accent: var(--constellation-bond-accent);
+  --theme-bg: var(--constellation-bond-bg);
+  --theme-glow: var(--constellation-bond-glow);
+}
+
+#qu-poxii-view.constellation-view {
+  background: radial-gradient(
+      ellipse 600px 400px at center top,
+      var(--theme-bg) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 400px 300px at 80% 60%,
+      rgba(220, 20, 60, 0.05) 0%,
+      transparent 60%
+    ),
+    linear-gradient(135deg, rgba(255, 105, 180, 0.02) 0%, transparent 50%);
+}
+
+/* Star Chanter - Wisdom, Science, Connection */
+#star-chanter-view {
+  --theme-primary: var(--constellation-chant-primary);
+  --theme-secondary: var(--constellation-chant-secondary);
+  --theme-accent: var(--constellation-chant-accent);
+  --theme-bg: var(--constellation-chant-bg);
+  --theme-glow: var(--constellation-chant-glow);
+}
+
+#star-chanter-view.constellation-view {
+  background: radial-gradient(
+      ellipse 600px 400px at center top,
+      var(--theme-bg) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 400px 300px at 80% 60%,
+      rgba(65, 105, 225, 0.05) 0%,
+      transparent 60%
+    ),
+    linear-gradient(135deg, rgba(0, 191, 255, 0.02) 0%, transparent 50%);
+}
+
+/* Hatching Egg - New Beginnings, Progress */
+#hatching-egg-view {
+  --theme-primary: var(--constellation-egg-primary);
+  --theme-secondary: var(--constellation-egg-secondary);
+  --theme-accent: var(--constellation-egg-accent);
+  --theme-bg: var(--constellation-egg-bg);
+  --theme-glow: var(--constellation-egg-glow);
+}
+
+#hatching-egg-view.constellation-view {
+  background: radial-gradient(
+      ellipse 600px 400px at center top,
+      var(--theme-bg) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 400px 300px at 80% 60%,
+      rgba(50, 205, 50, 0.05) 0%,
+      transparent 60%
+    ),
+    linear-gradient(135deg, rgba(173, 255, 47, 0.02) 0%, transparent 50%);
+}
+
+/* Void - Mystery, Restriction, Death */
+#void-view {
+  --theme-primary: var(--constellation-void-primary);
+  --theme-secondary: var(--constellation-void-secondary);
+  --theme-accent: var(--constellation-void-accent);
+  --theme-bg: var(--constellation-void-bg);
+  --theme-glow: var(--constellation-void-glow);
+}
+
+#void-view.constellation-view {
+  background: radial-gradient(
+      ellipse 600px 400px at center top,
+      var(--theme-bg) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 400px 300px at 80% 60%,
+      rgba(47, 47, 47, 0.1) 0%,
+      transparent 60%
+    ),
+    linear-gradient(135deg, rgba(148, 0, 211, 0.03) 0%, transparent 50%);
+}
+
+/* Apply constellation themes to their components */
+.constellation-view .stream-title {
+  color: var(--theme-accent, var(--color-accent));
+}
+
+.constellation-view .essence-meaning {
+  color: var(--theme-secondary, var(--color-gold));
+}
+
+.constellation-view .stream-essence {
+  border-color: var(--theme-primary, var(--color-accent));
+}
+
+.constellation-view .icon-droplet {
+  box-shadow: 0 8px 32px var(--theme-glow, rgba(175, 238, 238, 0.15)),
+    inset 0 0 20px var(--theme-bg, rgba(175, 238, 238, 0.1));
+  border-color: var(--theme-primary, var(--glass-border));
+}
+
+/* Constellation Shell Styles for Future Functionality */
+.constellation-shell {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-8);
+  background: var(--gradient-neural-primary),
+    var(--gradient-consciousness-flow);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.shell-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(175, 238, 238, 0.2);
+}
+
+.shell-header h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--color-accent);
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.shell-subtitle {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  font-style: italic;
+}
+
+.shell-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  text-align: center;
+}
+
+.shell-icon {
+  font-size: 4rem;
+  opacity: 0.7;
+  margin: var(--space-4) 0;
+  filter: drop-shadow(0 0 20px rgba(175, 238, 238, 0.3));
+}
+
+.shell-description {
+  color: var(--color-text);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0;
+}
+
+.shell-features {
+  background: var(--bg-overlay-white-subtle);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  width: 100%;
+  max-width: 500px;
+  text-align: left;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.shell-features h4 {
+  margin: 0 0 1rem 0;
+  color: var(--color-accent);
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.shell-features ul {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: var(--color-text-muted);
+}
+
+.shell-features li {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.security-notice {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  width: 100%;
+  max-width: 500px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.security-notice p {
+  margin: 0;
+  color: var(--color-error);
+  font-size: 0.9rem;
+}
+
+.shell-status {
+  margin-top: 1rem;
+}
+
+.status-indicator {
+  display: inline-block;
+  padding: var(--space-2) var(--space-4);
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-full);
+  color: var(--color-accent);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.status-indicator.classified {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--color-error);
+}
