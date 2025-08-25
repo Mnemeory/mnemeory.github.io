@@ -1,0 +1,170 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- The Void - Death, Mystery, The Unknown -->
+  <defs>
+    <linearGradient id="voidGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0E3757;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3E2E5C;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0E3757;stop-opacity:1" />
+    </linearGradient>
+    <filter id="voidGlow">
+      <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="darkGlow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Central void - an absence that defines presence -->
+  <circle cx="20" cy="20" r="6" 
+          stroke="url(#voidGradient)" 
+          stroke-width="2" 
+          fill="none"
+          filter="url(#voidGlow)"
+          stroke-dasharray="8,4"/>
+  
+  <!-- Event horizon - the boundary of the unknown -->
+  <circle cx="20" cy="20" r="10" 
+          stroke="url(#voidGradient)" 
+          stroke-width="1.5" 
+          fill="none"
+          opacity="0.7"
+          stroke-dasharray="6,6"/>
+  
+  <!-- Outer distortion field -->
+  <circle cx="20" cy="20" r="15" 
+          stroke="url(#voidGradient)" 
+          stroke-width="1" 
+          fill="none"
+          opacity="0.4"
+          stroke-dasharray="4,8"/>
+  
+  <!-- Warped reality lines being drawn into the void -->
+  <path d="M4 4 C8 8, 12 12, 16 16"
+        stroke="url(#voidGradient)" 
+        stroke-width="1.2" 
+        fill="none" 
+        stroke-linecap="round"
+        opacity="0.8"
+        filter="url(#voidGlow)"/>
+        
+  <path d="M36 4 C32 8, 28 12, 24 16"
+        stroke="url(#voidGradient)" 
+        stroke-width="1.2" 
+        fill="none" 
+        stroke-linecap="round"
+        opacity="0.8"
+        filter="url(#voidGlow)"/>
+        
+  <path d="M4 36 C8 32, 12 28, 16 24"
+        stroke="url(#voidGradient)" 
+        stroke-width="1.2" 
+        fill="none" 
+        stroke-linecap="round"
+        opacity="0.8"
+        filter="url(#voidGlow)"/>
+        
+  <path d="M36 36 C32 32, 28 28, 24 24"
+        stroke="url(#voidGradient)" 
+        stroke-width="1.2" 
+        fill="none" 
+        stroke-linecap="round"
+        opacity="0.8"
+        filter="url(#voidGlow)"/>
+  
+  <!-- Straight lines being warped -->
+  <path d="M20 2 C20 6, 20 10, 20 14"
+        stroke="url(#voidGradient)" 
+        stroke-width="1" 
+        fill="none" 
+        stroke-linecap="round"
+        opacity="0.7"/>
+        
+  <path d="M20 26 C20 30, 20 34, 20 38"
+        stroke="url(#voidGradient)" 
+        stroke-width="1" 
+        fill="none" 
+        stroke-linecap="round"
+        opacity="0.7"/>
+        
+  <path d="M2 20 C6 20, 10 20, 14 20"
+        stroke="url(#voidGradient)" 
+        stroke-width="1" 
+        fill="none" 
+        stroke-linecap="round"
+        opacity="0.7"/>
+        
+  <path d="M26 20 C30 20, 34 20, 38 20"
+        stroke="url(#voidGradient)" 
+        stroke-width="1" 
+        fill="none" 
+        stroke-linecap="round"
+        opacity="0.7"/>
+  
+  <!-- Mysterious fragments around the edges -->
+  <circle cx="6" cy="6" r="1" 
+          fill="url(#voidGradient)"
+          opacity="0.9"
+          filter="url(#darkGlow)"/>
+          
+  <circle cx="34" cy="6" r="1" 
+          fill="url(#voidGradient)"
+          opacity="0.9"
+          filter="url(#darkGlow)"/>
+          
+  <circle cx="6" cy="34" r="1" 
+          fill="url(#voidGradient)"
+          opacity="0.9"
+          filter="url(#darkGlow)"/>
+          
+  <circle cx="34" cy="34" r="1" 
+          fill="url(#voidGradient)"
+          opacity="0.9"
+          filter="url(#darkGlow)"/>
+  
+  <!-- Inner mystery - what lies within is unknowable -->
+  <circle cx="20" cy="20" r="2" 
+          fill="url(#voidGradient)"
+          opacity="0.3"/>
+  
+  <!-- Distortion effects - reality bending -->
+  <path d="M14 14 C16 18, 18 16, 16 18 C18 20, 16 22, 18 24"
+        stroke="url(#voidGradient)" 
+        stroke-width="0.8" 
+        fill="none" 
+        stroke-linecap="round"
+        opacity="0.5"/>
+        
+  <path d="M26 14 C24 18, 22 16, 24 18 C22 20, 24 22, 22 24"
+        stroke="url(#voidGradient)" 
+        stroke-width="0.8" 
+        fill="none" 
+        stroke-linecap="round"
+        opacity="0.5"/>
+  
+  <!-- Quantum fluctuations - tiny disturbances in space -->
+  <circle cx="10" cy="15" r="0.5" 
+          fill="url(#voidGradient)"
+          opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  
+  <circle cx="30" cy="25" r="0.5" 
+          fill="url(#voidGradient)"
+          opacity="0.6">
+    <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  
+  <circle cx="15" cy="30" r="0.5" 
+          fill="url(#voidGradient)"
+          opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0.2;0.6" dur="5s" repeatCount="indefinite"/>
+  </circle>
+</svg>

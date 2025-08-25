@@ -1,0 +1,337 @@
+/**
+ * Responsive Design & Accessibility
+ * Media queries, reduced motion, and accessibility enhancements
+ */
+
+/* Reduced Motion Support - CSS-09 Standard Implementation */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Remove shimmer effects */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-shadow: none !important;
+  }
+
+  .text-shimmer {
+    text-shadow: none !important;
+  }
+
+  /* Disable complex background animations */
+  .fluid-consciousness {
+    animation: none !important;
+    background: var(--color-midnight-indigo) !important;
+  }
+
+  .fluid-consciousness::before {
+    animation: none !important;
+    opacity: 0.2 !important;
+  }
+
+  /* Simplify floating elements */
+  .neural-particles > * {
+    animation: none !important;
+    position: static !important;
+  }
+
+  /* Disable morphing animations */
+  .liquid-bubble,
+  .node-bubble,
+  .data-bubble,
+  .return-bubble,
+  .action-bubble {
+    border-radius: var(--radius-lg) !important;
+    animation: none !important;
+  }
+
+  /* Remove ripple effects */
+  .ripple-field,
+  .bubble-ripples,
+  .consciousness-ripple {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  /* Disable 3D starfield for reduced motion */
+  .starfield-canvas {
+    display: none !important;
+  }
+
+  .starfield-2d {
+    display: flex !important;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) { /* --breakpoint-md */
+  .header-content {
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: stretch;
+  }
+
+  .constellation-nav {
+    width: 100%;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: var(--glass-bg-heavy);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    margin-top: var(--space-2);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all var(--motion-base) var(--ease-organic);
+    pointer-events: none;
+  }
+
+  .nav-toggle[aria-expanded="true"] + .nav-menu {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .constellation-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .node-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-content {
+    height: calc(100vh - 180px);
+  }
+
+  .constellation-clusters {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  .floating-nodes {
+    gap: var(--space-6);
+  }
+
+  .cosmic-word {
+    font-size: var(--text-2xl);
+  }
+}
+
+/* Responsive adjustments for data nodes */
+@media (max-width: 768px) {
+  .data-node {
+    min-height: 160px;
+    padding: var(--space-4) var(--space-6);
+  }
+
+  .data-node:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+}
+
+/* Responsive adjustments for thought bubble documents */
+@media (max-width: 1200px) {
+  .thought-bubble-documents {
+    gap: var(--space-4);
+    padding: var(--space-4);
+  }
+  
+  .thought-bubble-document {
+    min-width: 120px;
+    max-width: 140px;
+    padding: var(--space-4);
+  }
+  
+  .thought-bubble-document .document-bubble {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .thought-bubble-document .document-icon {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .thought-bubble-document .document-label {
+    font-size: var(--text-xs);
+    max-width: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .thought-bubble-documents {
+    gap: var(--space-3);
+    padding: var(--space-3);
+    justify-content: center;
+  }
+  
+  .thought-bubble-document {
+    min-width: 100px;
+    max-width: 120px;
+    padding: var(--space-3);
+  }
+  
+  .thought-bubble-document .document-bubble {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .thought-bubble-document .document-icon {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .thought-bubble-document .document-seal {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    top: -6px;
+    right: -6px;
+  }
+  
+  .thought-bubble-document .document-label {
+    font-size: var(--text-xs);
+    max-width: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .thought-bubble-documents {
+    gap: var(--space-2);
+    padding: var(--space-2);
+  }
+  
+  .thought-bubble-document {
+    min-width: 90px;
+    max-width: 100px;
+    padding: var(--space-2);
+  }
+  
+  .thought-bubble-document .document-bubble {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .thought-bubble-document .document-icon {
+    width: 25px;
+    height: 25px;
+  }
+  
+  .thought-bubble-document .document-seal {
+    width: 18px;
+    height: 18px;
+    font-size: 9px;
+    top: -5px;
+    right: -5px;
+  }
+  
+  .thought-bubble-document .document-label {
+    font-size: var(--text-xs);
+    max-width: 80px;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .glass-bg-light,
+  .glass-bg-medium,
+  .glass-bg-heavy {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-border {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .data-node:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Forced Colors Mode (Windows High Contrast) */
+@media (forced-colors: active) {
+  .glass-bg-light,
+  .glass-bg-medium,
+  .glass-bg-heavy {
+    background: ButtonFace;
+  }
+
+  .glass-border {
+    border-color: ButtonBorder;
+  }
+
+  .nlom-header {
+    background: Canvas;
+    border-bottom: 1px solid ButtonBorder;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .nlom-header,
+  .astral-query-container,
+  .nav-menu,
+  .a11y-controls,
+  .starfield-view {
+    display: none !important;
+  }
+
+  .constellation-view {
+    position: static !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  .app-container {
+    background: white !important;
+  }
+
+  .constellation-header,
+  .data-node {
+    background: white !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+
+  .main-content {
+    padding: 0 !important;
+  }
+}
+
+/* Focus management for users navigating with keyboard */
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: none;
+}
+
+/* Large text preferences */
+@media (prefers-reduced-data: reduce) {
+  .starfield-container {
+    background: var(--color-bg);
+  }
+
+  .app-container {
+    background: var(--color-bg);
+  }
+}

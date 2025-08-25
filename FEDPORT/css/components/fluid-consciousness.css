@@ -1,0 +1,164 @@
+/**
+ * Fluid Consciousness System
+ * Background animations and consciousness flow effects
+ */
+
+.fluid-consciousness {
+  position: relative;
+  background: 
+    /* Primary fluid streams */ radial-gradient(
+      ellipse 1800px 1200px at 20% 30%,
+      var(--color-russian-violet) 0%,
+      transparent 80%
+    ),
+    radial-gradient(
+      ellipse 1400px 900px at 80% 70%,
+      var(--color-midnight-indigo) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 1600px 1100px at 60% 20%,
+      var(--color-celestial-blue) 0%,
+      transparent 65%
+    ),
+    /* Flowing essence patterns */
+      radial-gradient(
+        ellipse 800px 600px at 10% 80%,
+        var(--glow-enhanced-primary) 0%,
+        transparent 90%
+      ),
+    radial-gradient(
+      ellipse 900px 700px at 90% 40%,
+      var(--glow-pink-soft) 0%,
+      transparent 85%
+    ),
+    /* Organic fluid movement */
+      radial-gradient(
+        circle 600px at 40% 60%,
+        var(--glow-medium) 0%,
+        transparent 95%
+      ),
+    radial-gradient(
+      circle 500px at 30% 30%,
+      var(--glow-purple-soft) 0%,
+      transparent 90%
+    ),
+    radial-gradient(
+      circle 400px at 70% 80%,
+      var(--glow-pink-gentle) 0%,
+      transparent 85%
+    ),
+    /* Consciousness droplets */
+      radial-gradient(
+        circle 300px at 15% 60%,
+        var(--glow-subtle) 0%,
+        transparent 95%
+      ),
+    radial-gradient(
+      circle 250px at 85% 25%,
+      var(--glow-cyan-ultra) 0%,
+      transparent 95%
+    ),
+    radial-gradient(
+      circle 350px at 50% 90%,
+      var(--glow-pink-subtle) 0%,
+      transparent 90%
+    ),
+    /* Deep fluid foundation */ var(--color-midnight-indigo);
+  background-attachment: fixed;
+  background-size: 3600px 2400px, 2800px 1800px, 3200px 2200px, 1600px 1200px,
+    1800px 1400px, 1200px 1200px, 1000px 1000px, 800px 800px, 600px 600px,
+    500px 500px, 700px 700px, 100% 100%;
+  animation: fluid-consciousness-flow var(--duration-flow) ease-in-out infinite;
+}
+
+@keyframes fluid-consciousness-flow {
+  0%,
+  100% {
+    background-position: 0% 0%, 100% 100%, 50% 0%, 0% 100%, 100% 0%, 0% 50%,
+      50% 50%, 100% 50%, 25% 25%, 75% 75%, 50% 100%;
+  }
+  25% {
+    background-position: 25% 25%, 75% 75%, 25% 25%, 25% 75%, 75% 25%, 25% 25%,
+      75% 25%, 25% 75%, 50% 0%, 50% 100%, 75% 75%;
+  }
+  50% {
+    background-position: 50% 50%, 50% 50%, 0% 50%, 50% 50%, 50% 50%, 50% 0%,
+      0% 75%, 50% 25%, 75% 25%, 25% 75%, 0% 50%;
+  }
+  75% {
+    background-position: 75% 75%, 25% 25%, 75% 75%, 75% 25%, 25% 75%, 75% 75%,
+      25% 75%, 75% 25%, 100% 50%, 0% 50%, 25% 25%;
+  }
+}
+
+/* Flowing consciousness overlay */
+.fluid-consciousness::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: 
+    /* Organic flow streams */ radial-gradient(
+      ellipse 800px 600px at var(--flow-x, 20%) var(--flow-y, 30%),
+      var(--glow-cyan-whisper) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 600px 400px at var(--flow-x2, 80%) var(--flow-y2, 70%),
+      var(--glow-pink-whisper) 0%,
+      transparent 60%
+    ),
+    /* Liquid ripples */
+      radial-gradient(
+        ellipse 400px 300px at var(--flow-x3, 50%) var(--flow-y3, 50%),
+        var(--glow-purple-whisper) 0%,
+        transparent 80%
+      );
+  animation: consciousness-flow-patterns var(--duration-flow-extended) ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes consciousness-flow-patterns {
+  0%,
+  100% {
+    --flow-x: 20%;
+    --flow-y: 30%;
+    --flow-x2: 80%;
+    --flow-y2: 70%;
+    --flow-x3: 50%;
+    --flow-y3: 50%;
+    transform: scale(1) rotate(0deg);
+    opacity: 0.6;
+  }
+  33% {
+    --flow-x: 70%;
+    --flow-y: 20%;
+    --flow-x2: 30%;
+    --flow-y2: 80%;
+    --flow-x3: 80%;
+    --flow-y3: 60%;
+    transform: scale(1.1) rotate(2deg);
+    opacity: 0.8;
+  }
+  66% {
+    --flow-x: 40%;
+    --flow-y: 80%;
+    --flow-x2: 90%;
+    --flow-y2: 40%;
+    --flow-x3: 20%;
+    --flow-y3: 70%;
+    transform: scale(0.9) rotate(-1deg);
+    opacity: 0.5;
+  }
+}
+
+.consciousness-ocean {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  z-index: var(--z-base);
+  overflow: hidden;
+}
