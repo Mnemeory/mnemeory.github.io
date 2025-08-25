@@ -3,7 +3,7 @@
  * Common functions used across multiple modules to eliminate duplication
  */
 
-import { CONSTANTS, getSelector } from "../config.js";
+import { CONSTANTS, getSelector, debug } from "../config.js";
 
 /**
  * Toast Notification System - Consolidated from multiple files
@@ -454,7 +454,7 @@ export class PerformanceUtils {
     const start = performance.now();
     const result = func();
     const end = performance.now();
-    console.log(`${name} execution time: ${end - start}ms`);
+    debug(`${name} execution time: ${end - start}ms`);
     return result;
   }
 

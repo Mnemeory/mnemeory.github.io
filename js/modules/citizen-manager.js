@@ -11,7 +11,8 @@ import {
   getSuccessMessage,
   getInfoMessage,
   renderTemplate,
-  SITE_CONFIG
+  SITE_CONFIG,
+  debug
 } from "../config.js";
 
 export class CitizenManager {
@@ -436,11 +437,11 @@ export class CitizenManager {
    */
   setCitizenFiles(files) {
     this.citizenFiles = files;
-    console.log(`Citizen Manager: Loaded ${files.length} citizen files from file system`);
+    debug(`Citizen Manager: Loaded ${files.length} citizen files from file system`);
     
     // Log the available files
     files.forEach(file => {
-      console.log(`Citizen file available: ${file.name} (${file.metadata?.category || 'CITIZEN'})`);
+      debug(`Citizen file available: ${file.name} (${file.metadata?.category || 'CITIZEN'})`);
     });
   }
 

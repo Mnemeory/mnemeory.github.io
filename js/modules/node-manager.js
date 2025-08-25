@@ -17,6 +17,7 @@ import {
   logError,
   getDocumentTemplate,
   renderTemplate,
+  debug
 } from "../config.js";
 import { ToastManager, FileUtils, IDUtils } from "./shared-utilities.js";
 import { CitizenUI } from "./citizen-ui.js";
@@ -106,7 +107,7 @@ export class NodeManager {
         const citizenFiles = this.state.get('citizenFiles');
         if (citizenFiles && citizenFiles.length > 0) {
           this.citizenUI.citizenManager.setCitizenFiles(citizenFiles);
-          console.log(`Node Manager: Passed ${citizenFiles.length} citizen files to Citizen Manager`);
+          debug(`Node Manager: Passed ${citizenFiles.length} citizen files to Citizen Manager`);
         }
       }, 100);
       
@@ -552,6 +553,6 @@ ${node.metadata?.description || "No description available."}
     this.currentNode = null;
     this.modal = null;
     this.modalPaperInstance = null;
-    console.log("NodeManager destroyed");
+    debug("NodeManager destroyed");
   }
 }

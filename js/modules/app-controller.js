@@ -28,6 +28,7 @@ import {
   getErrorMessage,
   getErrorTemplate,
   getSelector,
+  debug
 } from "../config.js";
 
 export class NlomInterface {
@@ -49,7 +50,7 @@ export class NlomInterface {
    */
   async init() {
     try {
-      console.log("Initializing Nlom Interface...");
+      debug("Initializing Nlom Interface...");
 
       // First populate HTML with configuration values
       this.populateHTMLConfiguration();
@@ -93,7 +94,7 @@ export class NlomInterface {
       this.hideLoading();
 
       this.isInitialized = true;
-      console.log("Nlom Interface initialized successfully");
+      debug("Nlom Interface initialized successfully");
     } catch (error) {
       console.error("Failed to initialize Nlom Interface:", error);
       this.showError(getErrorMessage("psionicFailure"));
@@ -223,10 +224,10 @@ export class NlomInterface {
       
       // Log repository configuration
       const repoInfo = scanner.getRepositoryInfo();
-      console.log('GitHub repository configuration:', repoInfo);
+      debug('GitHub repository configuration:', repoInfo);
 
       // Test GitHub API connection first
-      console.log('Testing GitHub API connection...');
+      debug('Testing GitHub API connection...');
       const connectionTest = await scanner.testGitHubConnection();
       if (!connectionTest) {
         throw new Error('Failed to connect to GitHub API. Please check your repository configuration and internet connection.');
@@ -245,14 +246,14 @@ export class NlomInterface {
       // Scan each directory for files
       for (const pathConfig of scanPaths) {
         try {
-          console.log(`\n--- Scanning ${pathConfig.path} directory ---`);
+          debug(`\n--- Scanning ${pathConfig.path} directory ---`);
           const nodes = await scanner.scanDirectory(
             pathConfig.path,
             pathConfig.constellation,
             pathConfig.seal
           );
           allNodes.push(...nodes);
-          console.log(`✅ Scanned ${pathConfig.path}: found ${nodes.length} files`);
+          debug(`✅ Scanned ${pathConfig.path}: found ${nodes.length} files`);
         } catch (error) {
           console.warn(`❌ Could not scan directory ${pathConfig.path}:`, error);
           // Continue with other directories even if one fails
@@ -271,8 +272,8 @@ export class NlomInterface {
       // Pass citizen files to the citizen manager if available
       const citizenNodes = sortedNodes.filter(node => node.constellation === 'qu-poxii');
       if (citizenNodes.length > 0) {
-        console.log(`Found ${citizenNodes.length} citizen files from file system`);
-        console.log('Citizen nodes:', citizenNodes.map(node => ({
+        debug(`Found ${citizenNodes.length} citizen files from file system`);
+        debug('Citizen nodes:', citizenNodes.map(node => ({
           id: node.id,
           name: node.name,
           constellation: node.constellation,
@@ -283,11 +284,11 @@ export class NlomInterface {
         // We'll store this information for later use
         this.state.set('citizenFiles', citizenNodes);
       } else {
-        console.log('No citizen files found in the repository');
+        debug('No citizen files found in the repository');
       }
 
-      console.log(`\n🎉 Successfully loaded ${sortedNodes.length} nodes from GitHub repository`);
-      console.log('Node summary:', sortedNodes.map(node => ({
+      debug(`\n🎉 Successfully loaded ${sortedNodes.length} nodes from GitHub repository`);
+      debug('Node summary:', sortedNodes.map(node => ({
         name: node.name,
         constellation: node.constellation,
         seal: node.seal
@@ -446,6 +447,6 @@ export class NlomInterface {
       this.clearanceManager.destroy();
     }
 
-    console.log("Nlom Interface destroyed");
+    debug("Nlom Interface destroyed");
   }
 }

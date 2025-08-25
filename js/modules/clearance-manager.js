@@ -3,7 +3,7 @@
  * Handles authentication status and security clearance indicators
  */
 
-import { CONSTANTS, getClearanceWelcome } from "../config.js";
+import { CONSTANTS, getClearanceWelcome, debug } from "../config.js";
 import { ToastManager } from "./shared-utilities.js";
 
 export class ClearanceManager {
@@ -90,7 +90,7 @@ export class ClearanceManager {
     const timestamp = new Date().toISOString();
     const currentLevel = this.getCurrentClearanceLevel();
 
-    console.log(
+    debug(
       `[Clearance Log] ${timestamp} - Access ${status} - Resource: ${resource} - Level: ${currentLevel}`
     );
   }
@@ -124,6 +124,6 @@ export class ClearanceManager {
    * Clean up resources
    */
   destroy() {
-    console.log("ClearanceManager destroyed");
+    debug("ClearanceManager destroyed");
   }
 }

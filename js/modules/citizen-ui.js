@@ -5,7 +5,7 @@
 
 import { CitizenManager } from "./citizen-manager.js";
 import { ToastManager } from "./shared-utilities.js";
-import { CITIZEN_STATUSES, SITE_CONFIG, CONSTANTS } from "../config.js";
+import { CITIZEN_STATUSES, SITE_CONFIG, CONSTANTS, debug } from "../config.js";
 
 export class CitizenUI {
   constructor() {
@@ -44,7 +44,7 @@ export class CitizenUI {
     this.setupEventListeners();
     
     // Log initialization
-    console.log('Citizen UI initialized for Qu\'Poxii constellation');
+    debug('Citizen UI initialized for Qu\'Poxii constellation');
   }
 
   /**

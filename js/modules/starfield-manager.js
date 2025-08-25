@@ -15,6 +15,7 @@ import {
   logError,
   getPerformanceConfig,
   // shouldEnablePerformanceMode, // No longer used - disabled performance mode switching
+  debug
 } from "../config.js";
 
 const LOCAL_CONFIG = ENHANCED_STARFIELD_CONFIG;
@@ -44,7 +45,7 @@ export class StarfieldManager {
 
     // Check WebGL support
     this.is3DEnabled = StarfieldFallback.checkWebGLSupport();
-    console.log("WebGL support check:", {
+    debug("WebGL support check:", {
       is3DEnabled: this.is3DEnabled,
       webglSupported: StarfieldFallback.checkWebGLSupport()
     });
@@ -65,11 +66,11 @@ export class StarfieldManager {
       }
 
       if (!this.is3DEnabled) {
-        console.log("WebGL not supported, falling back to 2D");
+        debug("WebGL not supported, falling back to 2D");
         return this.initFallback2D();
       }
 
-      console.log("WebGL supported, initializing 3D starfield");
+      debug("WebGL supported, initializing 3D starfield");
       return await this.init3D();
     } catch (error) {
       const standardError = createStandardError(
@@ -88,35 +89,35 @@ export class StarfieldManager {
   async init3D() {
     try {
       // Create and initialize scene
-      console.log("Creating StarfieldScene...");
+      debug("Creating StarfieldScene...");
       this.scene = new StarfieldScene();
-      console.log("Initializing scene with canvas and container...");
+      debug("Initializing scene with canvas and container...");
       const sceneInitialized = this.scene.init(this.canvas, this.container);
 
       if (!sceneInitialized) {
         throw new Error("Scene initialization failed");
       }
       
-      console.log("Scene initialized successfully");
+      debug("Scene initialized successfully");
 
       // Create and initialize interactions
-      console.log("Creating StarfieldInteractions...");
+      debug("Creating StarfieldInteractions...");
       this.interactions = new StarfieldInteractions(this.scene, this.canvas);
-      console.log("Initializing interactions...");
+      debug("Initializing interactions...");
       this.interactions.init();
-      console.log("Interactions initialized successfully");
+      debug("Interactions initialized successfully");
 
       // Setup event listeners
-      console.log("Setting up event listeners...");
+      debug("Setting up event listeners...");
       this.setupEventListeners();
 
       // Start animation loop
-      console.log("Starting animation loop...");
+      debug("Starting animation loop...");
       this.startAnimation();
 
       this.isInitialized = true;
-      console.log("3D Starfield initialized successfully");
-      console.log("Final initialization state:", {
+      debug("3D Starfield initialized successfully");
+      debug("Final initialization state:", {
         isInitialized: this.isInitialized,
         is3DEnabled: this.is3DEnabled,
         scene: !!this.scene,
@@ -153,7 +154,7 @@ export class StarfieldManager {
     if (fallbackInitialized) {
       this.isInitialized = true;
       this.is3DEnabled = false;
-      console.log("2D Fallback starfield initialized");
+      debug("2D Fallback starfield initialized");
       return true;
     }
 
@@ -209,7 +210,7 @@ export class StarfieldManager {
   startAnimation() {
     if (this.animationId || !this.is3DEnabled) return;
 
-    console.log("Starting starfield animation loop");
+    debug("Starting starfield animation loop");
 
     const animate = (currentTime) => {
       this.animationId = requestAnimationFrame(animate);
@@ -233,7 +234,7 @@ export class StarfieldManager {
     };
 
     this.animationId = requestAnimationFrame(animate);
-    console.log("Animation loop started with ID:", this.animationId);
+    debug("Animation loop started with ID:", this.animationId);
   }
 
   /**
@@ -242,7 +243,7 @@ export class StarfieldManager {
   update() {
     if (this.scene) {
       this.scene.update();
-      // console.log("Scene updated"); // Uncomment for verbose logging
+      // debug("Scene updated"); // Uncomment for verbose logging
     }
   }
 
@@ -252,7 +253,7 @@ export class StarfieldManager {
   render() {
     if (this.scene) {
       this.scene.render();
-      // console.log("Scene rendered"); // Uncomment for verbose logging
+      // debug("Scene rendered"); // Uncomment for verbose logging
     }
   }
 
@@ -263,7 +264,7 @@ export class StarfieldManager {
     if (this.performanceMode) return;
 
     this.performanceMode = true;
-    console.log("Starfield: Enabling performance mode");
+    debug("Starfield: Enabling performance mode");
 
     if (this.scene) {
       this.scene.enablePerformanceMode();
@@ -363,6 +364,6 @@ export class StarfieldManager {
     this.container = null;
     this.fallback2D = null;
 
-    console.log("Starfield destroyed");
+    debug("Starfield destroyed");
   }
 }

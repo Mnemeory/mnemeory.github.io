@@ -3,6 +3,7 @@
  * Automatically scans directories and detects files based on naming patterns
  * Uses GitHub API for dynamic file discovery with proper error handling
  */
+import { debug } from "../config.js";
 
 export class FileScanner {
   constructor() {
@@ -49,7 +50,7 @@ export class FileScanner {
       // Use GitHub API to get actual directory contents
       const files = await this.listDirectoryFiles(directoryPath);
       
-      console.log(`Found ${files.length} files in ${directoryPath}`);
+      debug(`Found ${files.length} files in ${directoryPath}`);
 
       // Process each file
       for (const file of files) {
@@ -65,13 +66,13 @@ export class FileScanner {
         }
       }
 
-      console.log(`Successfully loaded ${nodes.length} files from ${directoryPath}`);
+      debug(`Successfully loaded ${nodes.length} files from ${directoryPath}`);
       
       // Log details about each node for debugging
       nodes.forEach(node => {
-        console.log(`  - ${node.name} (${node.constellation}/${node.seal})`);
+        debug(`  - ${node.name} (${node.constellation}/${node.seal})`);
         if (node.metadata) {
-          console.log(`    Metadata:`, node.metadata);
+          debug(`    Metadata:`, node.metadata);
         }
       });
       
@@ -88,7 +89,7 @@ export class FileScanner {
   async listDirectoryFiles(directoryPath) {
     try {
       const apiUrl = this.getGitHubApiUrl(directoryPath);
-      console.log(`Fetching directory contents from: ${apiUrl}`);
+      debug(`Fetching directory contents from: ${apiUrl}`);
       
       // Add headers to help with CORS and rate limiting
       const response = await fetch(apiUrl, {
@@ -99,8 +100,8 @@ export class FileScanner {
         }
       });
       
-      console.log(`Response status: ${response.status} ${response.statusText}`);
-      console.log(`Response headers:`, Object.fromEntries(response.headers.entries()));
+      debug(`Response status: ${response.status} ${response.statusText}`);
+      debug(`Response headers:`, Object.fromEntries(response.headers.entries()));
       
       if (!response.ok) {
         if (response.status === 404) {
@@ -115,11 +116,11 @@ export class FileScanner {
       }
 
       const contents = await response.json();
-      console.log(`GitHub API response for ${directoryPath}:`, contents);
+      debug(`GitHub API response for ${directoryPath}:`, contents);
       
       // Filter for files only (not directories)
       const files = contents.filter(item => item.type === 'file');
-      console.log(`Found ${files.length} files in ${directoryPath}:`, files.map(f => f.name));
+      debug(`Found ${files.length} files in ${directoryPath}:`, files.map(f => f.name));
       
       return files;
     } catch (error) {
@@ -135,7 +136,7 @@ export class FileScanner {
     try {
       // Get the raw content URL
       const rawUrl = this.getGitHubRawUrl(file.path);
-      console.log(`Fetching file content from: ${rawUrl}`);
+      debug(`Fetching file content from: ${rawUrl}`);
       
       // Fetch the file content with better error handling
       const response = await fetch(rawUrl, {
@@ -146,7 +147,7 @@ export class FileScanner {
         }
       });
       
-      console.log(`Raw content response status: ${response.status} ${response.statusText}`);
+      debug(`Raw content response status: ${response.status} ${response.statusText}`);
       
       if (!response.ok) {
         if (response.status === 404) {
@@ -158,7 +159,7 @@ export class FileScanner {
       }
 
       const content = await response.text();
-      console.log(`Successfully fetched file ${file.name}, content length: ${content.length} characters`);
+      debug(`Successfully fetched file ${file.name}, content length: ${content.length} characters`);
       
       const nodeData = this.parseFileName(file.name, constellation);
       
@@ -184,7 +185,7 @@ export class FileScanner {
         }
       };
 
-      console.log(`Created node for ${file.name}:`, {
+      debug(`Created node for ${file.name}:`, {
         id: node.id,
         name: node.name,
         constellation: node.constellation,
@@ -387,13 +388,13 @@ export class FileScanner {
   async testGitHubConnection() {
     try {
       const apiUrl = this.getGitHubApiUrl('');
-      console.log(`Testing GitHub API connection to: ${apiUrl}`);
+      debug(`Testing GitHub API connection to: ${apiUrl}`);
       
       const response = await fetch(apiUrl);
       
       if (response.ok) {
         const contents = await response.json();
-        console.log(`✅ GitHub API connection successful. Repository root contains:`, contents.map(item => item.name));
+        debug(`✅ GitHub API connection successful. Repository root contains:`, contents.map(item => item.name));
         return true;
       } else {
         console.error(`❌ GitHub API connection failed: ${response.status} ${response.statusText}`);

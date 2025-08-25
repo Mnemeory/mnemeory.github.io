@@ -3,7 +3,7 @@
  * Handles transitions between different application views
  */
 
-import { ROUTES, ANIMATION_CONFIG, CONSTANTS } from "../config.js";
+import { ROUTES, ANIMATION_CONFIG, CONSTANTS, debug } from "../config.js";
 
 export class ViewManager {
   constructor(state) {
@@ -189,6 +189,6 @@ export class ViewManager {
     this.hideAllViews();
     this.views.clear();
     this.currentView = null;
-    console.log("ViewManager destroyed");
+    debug("ViewManager destroyed");
   }
 }

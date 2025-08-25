@@ -12,6 +12,9 @@ export const CONSTANTS = {
   MIN_QUERY_LENGTH: 2,
   DEBOUNCE_DELAY: 300,
 
+  // Debug flag - enables verbose logging when true
+  DEBUG: false,
+
   // Animation Durations (ms)
   ANIMATION_FAST: 150,
   ANIMATION_BASE: 300,
@@ -1192,4 +1195,11 @@ export function getStarGenerationParams() {
 
 export function getInteractionConfig() {
   return SITE_CONFIG.starfield.interaction;
+}
+
+// Conditional debug logger to replace verbose logging in production builds
+export function debug(...args) {
+  if (CONSTANTS.DEBUG) {
+    console.debug(...args);
+  }
 }

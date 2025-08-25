@@ -3,7 +3,7 @@
  * Handles route changes, navigation, and view transitions
  */
 
-import { ROUTES, getSelector } from "../config.js";
+import { ROUTES, getSelector, debug } from "../config.js";
 
 export class Router {
   constructor(state, viewManager) {
@@ -126,7 +126,7 @@ export class Router {
 
         // Validate constellation name to prevent null/undefined errors
         if (constellation && constellation.trim() !== "") {
-          console.log("Navigating to constellation:", constellation);
+          debug("Navigating to constellation:", constellation);
           this.viewManager.showConstellation(constellation);
         } else {
           console.warn("Invalid constellation route:", route);
@@ -176,6 +176,6 @@ export class Router {
   destroy() {
     // Note: We don't remove these listeners as they're global and may be used by other parts
     // In a real implementation, we'd need a more sophisticated event management system
-    console.log("Router destroyed");
+    debug("Router destroyed");
   }
 }

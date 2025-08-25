@@ -3,7 +3,7 @@
  * Provides a 2D alternative when WebGL is not available
  */
 
-import { CONSTELLATIONS } from "../config.js";
+import { CONSTELLATIONS, debug } from "../config.js";
 import { TooltipManager } from "./shared-utilities.js";
 
 export class StarfieldFallback {
@@ -82,7 +82,7 @@ export class StarfieldFallback {
       });
     });
 
-    console.log("2D Fallback starfield initialized");
+    debug("2D Fallback starfield initialized");
     return true;
   }
 

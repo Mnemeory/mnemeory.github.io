@@ -10,6 +10,7 @@ import {
   CONSTANTS,
   getStarfieldConfig,
   getStarGenerationParams,
+  debug
 } from "../config.js";
 
 const LOCAL_CONFIG = ENHANCED_STARFIELD_CONFIG;
@@ -51,7 +52,7 @@ export class StarfieldScene {
     this.scene = new THREE.Scene();
     this.scene.fog = new THREE.Fog(0x071422, 400, 1200); // Reduced fog to make stars more visible
     
-    console.log("Scene created with fog:", {
+    debug("Scene created with fog:", {
       fog: this.scene.fog,
       children: this.scene.children.length
     });
@@ -71,7 +72,7 @@ export class StarfieldScene {
     );
     this.camera.position.set(0, 0, 300);
     
-    console.log("Camera created:", {
+    debug("Camera created:", {
       fov: LOCAL_CONFIG.CAMERA_FOV,
       aspect,
       near: LOCAL_CONFIG.CAMERA_NEAR,
@@ -98,7 +99,7 @@ export class StarfieldScene {
       this.renderer.setClearColor(0x0a1f2a, 0.9); // Slightly lighter background for better star visibility
       this.renderer.sortObjects = true; // Enable render order sorting
       
-      console.log("WebGL renderer created successfully:", {
+      debug("WebGL renderer created successfully:", {
         canvas: this.canvas,
         width,
         height,
@@ -213,7 +214,7 @@ export class StarfieldScene {
     this.backgroundStars = new THREE.Points(geometry, material);
     this.scene.add(this.backgroundStars);
     
-    console.log("Background stars added to scene:", {
+    debug("Background stars added to scene:", {
       stars: this.backgroundStars,
       geometry: this.backgroundStars.geometry,
       material: this.backgroundStars.material,
@@ -222,7 +223,7 @@ export class StarfieldScene {
     });
     
     // Debug: Log star creation
-    console.log(`Created ${LOCAL_CONFIG.PARTICLE_COUNT} background stars at positions:`, {
+    debug(`Created ${LOCAL_CONFIG.PARTICLE_COUNT} background stars at positions:`, {
       minX: Math.min(...Array.from({length: LOCAL_CONFIG.PARTICLE_COUNT}, (_, i) => positions[i * 3])),
       maxX: Math.max(...Array.from({length: LOCAL_CONFIG.PARTICLE_COUNT}, (_, i) => positions[i * 3])),
       minY: Math.min(...Array.from({length: LOCAL_CONFIG.PARTICLE_COUNT}, (_, i) => positions[i * 3 + 1])),
@@ -766,7 +767,7 @@ export class StarfieldScene {
       
       // Debug: Log render info
       if (this.backgroundStars) {
-        console.log('Rendering scene with background stars:', {
+        debug('Rendering scene with background stars:', {
           visible: this.backgroundStars.visible,
           count: this.backgroundStars.geometry.attributes.position.count,
           position: this.backgroundStars.position,
