@@ -5,6 +5,39 @@
 
 /* ==== SHARED COMPONENT UTILITIES ==== */
 
+/* GitHub Export Status Indicators */
+.github-export-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  transition: all var(--motion-base) var(--ease-organic);
+}
+
+.github-export-status.success {
+  background: var(--glass-bg-starfield-accent);
+  color: var(--color-success);
+  border: 1px solid var(--glass-cultural-border);
+  box-shadow: var(--shadow-neural-sm);
+}
+
+.github-export-status.warning {
+  background: var(--glass-bg-starfield-void);
+  color: var(--color-warning);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-neural-sm);
+}
+
+.github-export-status.error {
+  background: var(--glass-bg-starfield-void);
+  color: var(--color-error);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-neural-sm);
+}
+
 /* Base Bubble Component */
 .base-bubble {
   border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;

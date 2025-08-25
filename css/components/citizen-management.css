@@ -105,6 +105,10 @@
   background: var(--bg-overlay-white-subtle);
   border-radius: var(--radius-lg);
   border: 1px solid var(--glass-border);
+  /* Enhanced for better integration with thought bubble documents */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-neural-sm);
 }
 
 .citizen-files-header {

@@ -13,7 +13,7 @@
   pointer-events: none;
   padding: var(--space-8) var(--space-6);
   overflow-y: auto;
-  background: 
+  background:
     /* Thought-specific nebula */
     radial-gradient(
       ellipse 600px 400px at center top,
@@ -212,6 +212,16 @@
   margin: 0 auto;
   justify-content: center;
   align-items: flex-start;
+}
+
+/* Enhanced styling for citizen files within Qu'Poxii constellation */
+.thought-bubble-documents[data-constellation="qu-poxii"] {
+  background: var(--bg-overlay-white-subtle);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  margin-top: var(--space-4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* Enhanced floating with organic easing */

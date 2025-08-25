@@ -173,6 +173,45 @@
     width: 35px;
     height: 35px;
   }
+}
+
+/* Citizen files section mobile optimization */
+@media (max-width: 768px) {
+  .citizen-files-section {
+    margin-top: var(--space-4);
+    padding: var(--space-3);
+  }
+
+  .citizen-files-header h4 {
+    font-size: var(--text-lg);
+  }
+
+  .citizen-files-header p {
+    font-size: var(--text-sm);
+  }
+}
+
+@media (max-width: 1200px) {
+  .thought-bubble-documents {
+    gap: var(--space-4);
+    padding: var(--space-4);
+  }
+
+  .thought-bubble-document {
+    min-width: 120px;
+    max-width: 140px;
+    padding: var(--space-4);
+  }
+
+  .thought-bubble-document .document-bubble {
+    width: 90px;
+    height: 90px;
+  }
+
+  .thought-bubble-document .document-icon {
+    width: 35px;
+    height: 35px;
+  }
 
   .thought-bubble-document .document-label {
     font-size: var(--text-xs);
