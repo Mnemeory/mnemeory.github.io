@@ -268,6 +268,24 @@ export class NlomInterface {
         this.nodeManager.populateConstellation(constellation, sortedNodes);
       });
 
+      // Pass citizen files to the citizen manager if available
+      const citizenNodes = sortedNodes.filter(node => node.constellation === 'qu-poxii');
+      if (citizenNodes.length > 0) {
+        console.log(`Found ${citizenNodes.length} citizen files from file system`);
+        console.log('Citizen nodes:', citizenNodes.map(node => ({
+          id: node.id,
+          name: node.name,
+          constellation: node.constellation,
+          seal: node.seal,
+          metadata: node.metadata
+        })));
+        // The citizen manager will be initialized when the constellation is populated
+        // We'll store this information for later use
+        this.state.set('citizenFiles', citizenNodes);
+      } else {
+        console.log('No citizen files found in the repository');
+      }
+
       console.log(`\n🎉 Successfully loaded ${sortedNodes.length} nodes from GitHub repository`);
       console.log('Node summary:', sortedNodes.map(node => ({
         name: node.name,

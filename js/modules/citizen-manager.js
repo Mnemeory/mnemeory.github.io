@@ -417,6 +417,110 @@ export class CitizenManager {
   }
 
   /**
+   * Check if citizen files are available from the file system
+   */
+  hasCitizenFiles() {
+    // This will be populated by the file scanner
+    return this.citizenFiles && this.citizenFiles.length > 0;
+  }
+
+  /**
+   * Get citizen files from the file system
+   */
+  getCitizenFiles() {
+    return this.citizenFiles || [];
+  }
+
+  /**
+   * Set citizen files from the file system
+   */
+  setCitizenFiles(files) {
+    this.citizenFiles = files;
+    console.log(`Citizen Manager: Loaded ${files.length} citizen files from file system`);
+    
+    // Log the available files
+    files.forEach(file => {
+      console.log(`Citizen file available: ${file.name} (${file.metadata?.category || 'CITIZEN'})`);
+    });
+  }
+
+  /**
+   * Import citizen data from a file
+   */
+  importCitizenFromFile(fileId) {
+    if (!this.citizenFiles) return null;
+    
+    const file = this.citizenFiles.find(f => f.id === fileId);
+    if (!file) return null;
+
+    // Parse the file content to extract citizen information
+    const citizenData = this.parseCitizenFileContent(file.content);
+    if (citizenData) {
+      const citizen = this.createCitizen(citizenData);
+      this.addLogEntry(`Imported citizen from file: ${file.name}`, citizen.id);
+      return citizen;
+    }
+    
+    return null;
+  }
+
+  /**
+   * Parse citizen file content to extract structured data
+   */
+  parseCitizenFileContent(content) {
+    try {
+      const lines = content.split('\n').map(line => line.trim()).filter(line => line);
+      
+      const citizenData = {};
+      
+      lines.forEach(line => {
+        if (line.includes(':')) {
+          const [key, value] = line.split(':').map(part => part.trim());
+          
+          switch (key.toLowerCase()) {
+            case 'name':
+              citizenData.primaryName = value;
+              break;
+            case 'status':
+              citizenData.citizenStatus = value;
+              break;
+            case 'notes':
+              citizenData.notes = value;
+              break;
+            case 'sci':
+            case 'sci score':
+            case 'social compatibility index':
+              const sciScore = parseFloat(value);
+              if (!isNaN(sciScore)) {
+                citizenData.sciScore = sciScore;
+              }
+              break;
+            case 'location':
+              citizenData.location = value;
+              break;
+            case 'occupation':
+              citizenData.occupation = value;
+              break;
+            case 'quya':
+              citizenData.quya = value;
+              break;
+          }
+        }
+      });
+      
+      // Set defaults if not provided
+      if (!citizenData.primaryName) return null;
+      if (!citizenData.citizenStatus) citizenData.citizenStatus = DEFAULT_CITIZEN_STATUS;
+      if (!citizenData.sciScore) citizenData.sciScore = 5.0;
+      
+      return citizenData;
+    } catch (error) {
+      console.warn('Failed to parse citizen file content:', error);
+      return null;
+    }
+  }
+
+  /**
    * Add behavioral tag to citizen
    */
   addBehavioralTag(citizenId, tagName) {

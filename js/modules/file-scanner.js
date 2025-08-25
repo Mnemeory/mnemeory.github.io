@@ -1,10 +1,8 @@
 /**
  * File Scanner - Dynamic file detection system
  * Automatically scans directories and detects files based on naming patterns
- * Uses GitHub API for dynamic file discovery instead of hardcoded lists
+ * Uses GitHub API for dynamic file discovery with proper error handling
  */
-
-import { FetchUtils } from './shared-utilities.js';
 
 export class FileScanner {
   constructor() {
@@ -13,8 +11,8 @@ export class FileScanner {
     
     // GitHub repository configuration
     this.githubConfig = {
-      username: 'Mnemeory', // Default username, can be overridden
-      repo: 'mnemeory.github.io', // Default repo, can be overridden
+      username: 'Mnemeory',
+      repo: 'mnemeory.github.io',
       apiBase: 'https://api.github.com/repos'
     };
   }
@@ -68,6 +66,15 @@ export class FileScanner {
       }
 
       console.log(`Successfully loaded ${nodes.length} files from ${directoryPath}`);
+      
+      // Log details about each node for debugging
+      nodes.forEach(node => {
+        console.log(`  - ${node.name} (${node.constellation}/${node.seal})`);
+        if (node.metadata) {
+          console.log(`    Metadata:`, node.metadata);
+        }
+      });
+      
       return nodes;
     } catch (error) {
       console.warn(`Could not scan directory ${directoryPath}:`, error);
@@ -83,7 +90,17 @@ export class FileScanner {
       const apiUrl = this.getGitHubApiUrl(directoryPath);
       console.log(`Fetching directory contents from: ${apiUrl}`);
       
-      const response = await fetch(apiUrl);
+      // Add headers to help with CORS and rate limiting
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'Mnemeory-GitHub-Pages'
+        }
+      });
+      
+      console.log(`Response status: ${response.status} ${response.statusText}`);
+      console.log(`Response headers:`, Object.fromEntries(response.headers.entries()));
       
       if (!response.ok) {
         if (response.status === 404) {
@@ -120,8 +137,17 @@ export class FileScanner {
       const rawUrl = this.getGitHubRawUrl(file.path);
       console.log(`Fetching file content from: ${rawUrl}`);
       
-      // Fetch the file content
-      const response = await fetch(rawUrl);
+      // Fetch the file content with better error handling
+      const response = await fetch(rawUrl, {
+        method: 'GET',
+        headers: {
+          'Accept': 'text/plain,text/html',
+          'User-Agent': 'Mnemeory-GitHub-Pages'
+        }
+      });
+      
+      console.log(`Raw content response status: ${response.status} ${response.statusText}`);
+      
       if (!response.ok) {
         if (response.status === 404) {
           console.warn(`File ${file.path} not found at raw URL`);
@@ -180,11 +206,11 @@ export class FileScanner {
     const nameWithoutExt = fileName.replace(/\.(txt|md|json)$/i, '');
     
     switch (constellation) {
-      case 'filed':
+      case 'gnarled-tree':
         return this.parseFiledFileName(nameWithoutExt);
-      case 'templates':
+      case 'hatching-egg':
         return this.parseTemplateFileName(nameWithoutExt);
-      case 'citizen':
+      case 'qu-poxii':
         return this.parseCitizenFileName(nameWithoutExt);
       default:
         return null;
@@ -286,11 +312,30 @@ export class FileScanner {
       return null;
     }
 
+    // Handle different citizen file naming patterns
+    let displayName = nameWithoutExt;
+    let category = 'CITIZEN';
+    
+    // Check if it's a sample or test file
+    if (nameWithoutExt.toLowerCase().includes('sample') || 
+        nameWithoutExt.toLowerCase().includes('test')) {
+      category = 'SAMPLE';
+      displayName = `${nameWithoutExt} (Test Record)`;
+    }
+    
+    // Check if it's a template
+    if (nameWithoutExt.toLowerCase().includes('template')) {
+      category = 'TEMPLATE';
+      displayName = `${nameWithoutExt} (Template)`;
+    }
+
     return {
       type: 'citizen',
       name: nameWithoutExt,
-      displayName: nameWithoutExt,
-      sortKey: nameWithoutExt
+      displayName: displayName,
+      category: category,
+      sortKey: `${category}-${nameWithoutExt}`,
+      description: 'Citizen record from the Qu\'Poxii constellation'
     };
   }
 
@@ -334,73 +379,6 @@ export class FileScanner {
     });
 
     return groups;
-  }
-
-  /**
-   * Add a new file pattern to check for
-   * This allows easy extension of the file discovery system
-   */
-  addFilePattern(constellation, pattern) {
-    // This method can be used to dynamically add new file patterns
-    // For now, we'll just log it
-    console.log(`Adding file pattern for ${constellation}: ${pattern}`);
-  }
-
-  /**
-   * Get all available file patterns for a constellation
-   * This can be used to see what patterns are currently being checked
-   */
-  getFilePatterns(constellation) {
-    return this.getFilesToCheck('', constellation);
-  }
-
-  /**
-   * Add multiple file patterns at once
-   */
-  addFilePatterns(constellation, patterns) {
-    patterns.forEach(pattern => this.addFilePattern(constellation, pattern));
-    console.log(`Added ${patterns.length} patterns for ${constellation}`);
-  }
-
-  /**
-   * Remove a file pattern (for cleanup purposes)
-   */
-  removeFilePattern(constellation, pattern) {
-    console.log(`Removing file pattern for ${constellation}: ${pattern}`);
-  }
-
-  /**
-   * Clear file cache
-   */
-  clearCache() {
-    this.fileCache.clear();
-  }
-
-  /**
-   * Get cached file content
-   */
-  getCachedContent(filePath) {
-    return this.fileCache.get(filePath);
-  }
-
-  /**
-   * Cache file content
-   */
-  cacheContent(filePath, content) {
-    this.fileCache.set(filePath, {
-      content: content,
-      timestamp: Date.now()
-    });
-  }
-
-  /**
-   * Legacy method for backward compatibility - now uses dynamic scanning
-   */
-  getFilesToCheck(directoryPath, constellation) {
-    // This method is now deprecated in favor of dynamic GitHub API scanning
-    // Return empty array to indicate no hardcoded files
-    console.warn('getFilesToCheck is deprecated - using dynamic GitHub API scanning instead');
-    return [];
   }
 
   /**

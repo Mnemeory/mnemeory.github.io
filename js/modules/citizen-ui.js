@@ -42,6 +42,9 @@ export class CitizenUI {
 
     this.render();
     this.setupEventListeners();
+    
+    // Log initialization
+    console.log('Citizen UI initialized for Qu\'Poxii constellation');
   }
 
   /**
@@ -166,6 +169,28 @@ export class CitizenUI {
               `
                     )
                     .join("")
+            }
+          </div>
+        </div>
+
+        <div class="files-panel">
+          <h4>Available Citizen Files</h4>
+          <div class="files-list">
+            ${
+              this.citizenManager.hasCitizenFiles()
+                ? this.citizenManager.getCitizenFiles()
+                    .map((file) => `
+                      <div class="file-item">
+                        <span class="file-name">${file.name}</span>
+                        <span class="file-type">${file.metadata?.category || 'CITIZEN'}</span>
+                        <button type="button" class="corp-btn corp-btn--small corp-btn--secondary view-file-btn" 
+                                data-file-id="${file.id}">View</button>
+                        <button type="button" class="corp-btn corp-btn--small corp-btn--primary import-file-btn" 
+                                data-file-id="${file.id}">Import</button>
+                      </div>
+                    `)
+                    .join("")
+                : `<p class=\"empty-state\">No citizen files available from repository</p>`
             }
           </div>
         </div>
@@ -652,6 +677,16 @@ export class CitizenUI {
       if (e.target.matches("#print-from-view-btn")) {
         this.printCitizenRecord(e.target.dataset.citizenId);
       }
+
+      // File viewing
+      if (e.target.matches(".view-file-btn")) {
+        this.viewCitizenFile(e.target.dataset.fileId);
+      }
+
+      // File importing
+      if (e.target.matches(".import-file-btn")) {
+        this.importCitizenFile(e.target.dataset.fileId);
+      }
     });
 
     // Form submissions
@@ -834,6 +869,58 @@ export class CitizenUI {
       } else {
         ToastManager.show("Could not remove tag", "error");
       }
+    }
+  }
+
+  /**
+   * Import citizen from file
+   */
+  importCitizenFile(fileId) {
+    try {
+      const citizen = this.citizenManager.importCitizenFromFile(fileId);
+      
+      if (citizen) {
+        ToastManager.show(
+          `Successfully imported citizen: ${this.citizenManager.getFullName(citizen)}`,
+          "success"
+        );
+        this.render(); // Refresh the UI to show the new citizen
+      } else {
+        ToastManager.show("Failed to import citizen from file", "error");
+      }
+    } catch (error) {
+      ToastManager.show("Error importing citizen: " + error.message, "error");
+    }
+  }
+
+  /**
+   * View citizen file from the file system
+   */
+  viewCitizenFile(fileId) {
+    const citizenFiles = this.citizenManager.getCitizenFiles();
+    const file = citizenFiles.find(f => f.id === fileId);
+    
+    if (!file) {
+      ToastManager.show("Citizen file not found", "error");
+      return;
+    }
+
+    // Open the file in the paper editor modal
+    if (window.nlomInterface && window.nlomInterface.getSubsystem('paper')) {
+      const paperEditor = window.nlomInterface.getSubsystem('paper');
+      paperEditor.loadDocument("modal", file.content, file.name);
+      
+      // Show the modal
+      const modal = document.querySelector('[data-modal="nodeModal"]');
+      if (modal) {
+        modal.setAttribute("aria-hidden", "false");
+        modal.classList.remove("hidden");
+      }
+      
+      ToastManager.show(`Opened citizen file: ${file.name}`, "success");
+    } else {
+      // Fallback: show content in alert
+      alert(`Citizen File: ${file.name}\n\n${file.content}`);
     }
   }
 

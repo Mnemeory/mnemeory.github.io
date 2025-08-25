@@ -1,0 +1,11 @@
+Sample Citizen Record
+
+This is a test citizen file to ensure the citizen directory scanning works properly.
+
+Name: Test Citizen
+Status: Active
+Notes: This file is used for testing the file scanner functionality.
+SCI: 7.5
+Location: Biesel Station
+Occupation: Test Subject
+Quya: Test Family Unit

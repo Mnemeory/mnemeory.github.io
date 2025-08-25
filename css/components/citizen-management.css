@@ -98,6 +98,83 @@
   padding: var(--space-4);
 }
 
+/* Citizen Files Section */
+.citizen-files-section {
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  background: var(--bg-overlay-white-subtle);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+}
+
+.citizen-files-header {
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+
+.citizen-files-header h4 {
+  margin: 0 0 var(--space-2) 0;
+  color: var(--color-primary-light);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.citizen-files-header p {
+  margin: 0;
+  color: var(--color-primary-muted);
+  font-size: 0.9rem;
+}
+
+/* Files Panel */
+.files-panel {
+  background: var(--bg-overlay-white-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  border: 1px solid var(--glass-border);
+}
+
+.files-panel h4 {
+  margin: 0 0 var(--space-3) 0;
+  color: var(--color-primary-light);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.files-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--bg-overlay-interface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+}
+
+.file-name {
+  flex: 1;
+  font-weight: 500;
+  color: var(--color-primary-light);
+}
+
+.file-type {
+  padding: var(--space-1) var(--space-2);
+  background: var(--constellation-bond-bg);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.file-item .corp-btn {
+  flex-shrink: 0;
+}
+
 /* Overview Grid */
 .overview-grid {
   display: grid;

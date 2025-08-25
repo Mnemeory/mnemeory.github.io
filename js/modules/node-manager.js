@@ -101,7 +101,61 @@ export class NodeManager {
       // Initialize citizen UI
       setTimeout(() => {
         this.citizenUI.init(`#${citizenInterfaceId}`);
+        
+        // Pass citizen files to the citizen manager if available
+        const citizenFiles = this.state.get('citizenFiles');
+        if (citizenFiles && citizenFiles.length > 0) {
+          this.citizenUI.citizenManager.setCitizenFiles(citizenFiles);
+          console.log(`Node Manager: Passed ${citizenFiles.length} citizen files to Citizen Manager`);
+        }
       }, 100);
+      
+      // Also show citizen files as thought bubble documents below the management interface
+      const filteredNodes = nodes.filter(
+        (node) => node.constellation === constellation
+      );
+      
+      if (filteredNodes.length > 0) {
+        const citizenFilesContainer = document.createElement("div");
+        citizenFilesContainer.className = "citizen-files-section";
+        citizenFilesContainer.innerHTML = `
+          <div class="citizen-files-header">
+            <h4>Citizen Records</h4>
+            <p>Available citizen data files from the repository</p>
+          </div>
+        `;
+        
+        const thoughtBubbleContainer = document.createElement("div");
+        thoughtBubbleContainer.className = "thought-bubble-documents";
+        thoughtBubbleContainer.setAttribute("data-constellation", constellation);
+        thoughtBubbleContainer.setAttribute("role", "region");
+        thoughtBubbleContainer.setAttribute("aria-label", `${constellationData?.name || constellation} citizen files collection`);
+
+        // Create thought bubble documents for citizen files
+        filteredNodes.forEach((node, index) => {
+          const thoughtBubble = this.createThoughtBubbleDocument(node, constellation);
+
+          // Stagger animations
+          thoughtBubble.style.opacity = "0";
+          thoughtBubble.style.transform = "translateY(20px) scale(0.9)";
+
+          setTimeout(() => {
+            thoughtBubble.style.transition = `opacity ${ANIMATION_CONFIG.nodeBloom}ms ease-out, transform ${ANIMATION_CONFIG.nodeBloom}ms ease-out`;
+            thoughtBubble.style.opacity = "1";
+            thoughtBubble.style.transform = "translateY(0) scale(1)";
+
+            setTimeout(() => {
+              thoughtBubble.style.transition = "";
+            }, ANIMATION_CONFIG.nodeBloom);
+          }, index * 100);
+
+          thoughtBubbleContainer.appendChild(thoughtBubble);
+        });
+        
+        citizenFilesContainer.appendChild(thoughtBubbleContainer);
+        container.appendChild(citizenFilesContainer);
+      }
+      
       return;
     }
 
