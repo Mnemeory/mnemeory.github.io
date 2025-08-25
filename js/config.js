@@ -762,7 +762,7 @@ Sealed by the Grand Council • Qerrbalak Prime • Nralakk System[/center]`,
 [b]Active Citizens Abroad:[/b] 847,329
 [b]Average SCI Rating:[/b] 7.3/10.0
 [b]Primary Numericals:[/b] 12.4% of population
-[b]Secondary Numericals:[/b] 74.2% of population  
+[b]Secondary Numericals:[/b] 74.2% of population
 [b]Tertiary Numericals:[/b] 13.4% of population
 [b]Stipend Distribution:[/b] 98.7% completion
 

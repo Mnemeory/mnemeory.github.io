@@ -73,10 +73,10 @@ export class CitizenUI {
         </div>
 
         <div class="citizen-navigation">
-          <button type="button" class="nav-btn ${
+          <button type="button" class="corp-btn nav-btn ${
             this.currentView === "overview" ? "active" : ""
           }" data-view="overview">${SITE_CONFIG.interfaceText.citizen.navigation.overview}</button>
-          <button type="button" class="nav-btn ${
+          <button type="button" class="corp-btn nav-btn ${
             this.currentView === "add-citizen" ? "active" : ""
           }" data-view="add-citizen">${SITE_CONFIG.interfaceText.citizen.navigation.addCitizen}</button>
         </div>
@@ -175,26 +175,8 @@ export class CitizenUI {
 
         <div class="files-panel">
           <h4>Available Citizen Files</h4>
-          <div class="files-list">
-            ${
-              this.citizenManager.hasCitizenFiles()
-                ? this.citizenManager
-                    .getCitizenFiles()
-                    .map(
-                      (file) => `
-                      <div class="file-item">
-                        <span class="file-name">${file.name}</span>
-                        <span class="file-type">${file.metadata?.category || "CITIZEN"}</span>
-                        <button type="button" class="corp-btn corp-btn--small corp-btn--secondary view-file-btn" 
-                                data-file-id="${file.id}">View</button>
-                        <button type="button" class="corp-btn corp-btn--small corp-btn--primary import-file-btn" 
-                                data-file-id="${file.id}">Import</button>
-                      </div>
-                    `
-                    )
-                    .join("")
-                : `<p class=\"empty-state\">No citizen files available from repository</p>`
-            }
+          <div class="citizen-files-bubbles" id="citizen-files-bubbles">
+            <p class="empty-state">Citizen files will be populated by node manager</p>
           </div>
         </div>
       </div>
@@ -241,11 +223,11 @@ export class CitizenUI {
           }
         </div>
         <div class="citizen-card-actions">
-          <button type="button" class="corp-btn corp-btn--small corp-btn--secondary view-citizen-btn" 
+          <button type="button" class="corp-btn corp-btn--small corp-btn--secondary view-citizen-btn"
                   data-citizen-id="${citizen.id}">View</button>
-          <button type="button" class="corp-btn corp-btn--small corp-btn--primary edit-citizen-btn" 
+          <button type="button" class="corp-btn corp-btn--small corp-btn--primary edit-citizen-btn"
                   data-citizen-id="${citizen.id}">Edit</button>
-          <button type="button" class="corp-btn corp-btn--small corp-btn--success print-citizen-btn" 
+          <button type="button" class="corp-btn corp-btn--small corp-btn--success print-citizen-btn"
                   data-citizen-id="${citizen.id}">Print</button>
         </div>
       </div>
@@ -263,62 +245,62 @@ export class CitizenUI {
           <div class="form-grid">
             <div class="form-group">
               <label for="primary-name">Primary Name *</label>
-              <input type="text" id="primary-name" name="primaryName" required 
+              <input type="text" id="primary-name" name="primaryName" required
                      placeholder="e.g., Weashbi">
             </div>
-            
+
             <div class="form-group">
               <label for="secondary-name">Secondary Name *</label>
-              <input type="text" id="secondary-name" name="secondaryName" required 
+              <input type="text" id="secondary-name" name="secondaryName" required
                      placeholder="e.g., Jrugl">
             </div>
-            
+
             <div class="form-group">
               <label for="name-extensions">Name Extensions</label>
-              <input type="text" id="name-extensions" name="nameExtensions" 
+              <input type="text" id="name-extensions" name="nameExtensions"
                      placeholder="e.g., -Qvorth'qi (honorific)">
               <small>Use hyphen (-) for respect, apostrophe (') for personal connection</small>
             </div>
-            
+
             <div class="form-group">
               <label for="sci-score">Social Compatibility Index *</label>
-              <input type="number" id="sci-score" name="sciScore" min="0" max="10" step="0.01" 
+              <input type="number" id="sci-score" name="sciScore" min="0" max="10" step="0.01"
                      value="5.00" required>
               <small>Scale: 0.00 - 10.00</small>
             </div>
-            
+
               <div class="form-group">
                 <label for="citizen-status">Citizen Status *</label>
                 <select id="citizen-status" name="citizenStatus" required>
                   ${this.renderStatusOptions()}
                 </select>
               </div>
-            
+
             <div class="form-group">
               <label for="location">Current Location</label>
-              <input type="text" id="location" name="location" 
+              <input type="text" id="location" name="location"
                      placeholder="e.g., Biesel Station, Tau Ceti">
             </div>
-            
+
             <div class="form-group">
               <label for="occupation">Occupation</label>
-              <input type="text" id="occupation" name="occupation" 
+              <input type="text" id="occupation" name="occupation"
                      placeholder="e.g., Research Scientist, Corporate Liaison">
             </div>
-            
+
             <div class="form-group">
               <label for="quya">Quya (Family Unit)</label>
-              <input type="text" id="quya" name="quya" 
+              <input type="text" id="quya" name="quya"
                      placeholder="Family unit composition">
             </div>
-            
+
             <div class="form-group form-group--full">
               <label for="notes">Administrative Notes</label>
-              <textarea id="notes" name="notes" rows="3" 
+              <textarea id="notes" name="notes" rows="3"
                         placeholder="Additional notes about this citizen..."></textarea>
             </div>
           </div>
-          
+
           <div class="form-actions">
             <button type="button" class="corp-btn corp-btn--secondary" id="cancel-add-btn">
               Cancel
@@ -346,60 +328,60 @@ export class CitizenUI {
         )}</h4>
         <form id="edit-citizen-form">
           <input type="hidden" name="citizenId" value="${citizen.id}">
-          
+
           <div class="form-grid">
             <div class="form-group">
               <label for="edit-primary-name">Primary Name *</label>
-              <input type="text" id="edit-primary-name" name="primaryName" required 
+              <input type="text" id="edit-primary-name" name="primaryName" required
                      value="${citizen.primaryName}">
             </div>
-            
+
             <div class="form-group">
               <label for="edit-secondary-name">Secondary Name *</label>
-              <input type="text" id="edit-secondary-name" name="secondaryName" required 
+              <input type="text" id="edit-secondary-name" name="secondaryName" required
                      value="${citizen.secondaryName}">
             </div>
-            
+
             <div class="form-group">
               <label for="edit-name-extensions">Name Extensions</label>
-              <input type="text" id="edit-name-extensions" name="nameExtensions" 
+              <input type="text" id="edit-name-extensions" name="nameExtensions"
                      value="${citizen.nameExtensions}">
             </div>
-            
+
             <div class="form-group">
               <label for="edit-sci-score">Social Compatibility Index *</label>
-              <input type="number" id="edit-sci-score" name="sciScore" min="0" max="10" step="0.01" 
+              <input type="number" id="edit-sci-score" name="sciScore" min="0" max="10" step="0.01"
                      value="${citizen.sciScore}" required>
             </div>
-            
+
             <div class="form-group">
               <label for="edit-citizen-status">Citizen Status *</label>
               <select id="edit-citizen-status" name="citizenStatus" required>
                 ${this.renderStatusOptions(citizen.citizenStatus)}
               </select>
             </div>
-            
+
             <div class="form-group">
               <label for="edit-location">Current Location</label>
               <input type="text" id="edit-location" name="location" value="${
                 citizen.location
               }">
             </div>
-            
+
             <div class="form-group">
               <label for="edit-occupation">Occupation</label>
               <input type="text" id="edit-occupation" name="occupation" value="${
                 citizen.occupation
               }">
             </div>
-            
+
             <div class="form-group">
               <label for="edit-quya">Quya (Family Unit)</label>
               <input type="text" id="edit-quya" name="quya" value="${
                 citizen.quya
               }">
             </div>
-            
+
             <div class="form-group form-group--full">
               <label for="edit-notes">Administrative Notes</label>
               <textarea id="edit-notes" name="notes" rows="3">${
@@ -417,7 +399,7 @@ export class CitizenUI {
               </button>
             </div>
           </div>
-          
+
           <div class="form-actions">
             <button type="button" class="corp-btn corp-btn--secondary" id="cancel-edit-btn">
               Cancel
@@ -543,7 +525,7 @@ export class CitizenUI {
                 }
               </div>
             </div>
-            
+
             <div class="add-tags">
               <h6>Add Behavioral Tag:</h6>
               <select id="tag-selector" class="tag-selector">

@@ -181,14 +181,14 @@ export class StarfieldScene {
         attribute float size;
         varying vec3 vColor;
         varying float vAlpha;
-        
+
         void main() {
           vColor = color;
-          
+
           // Organic twinkling based on position and time
           float twinkle = sin(time * 0.5 + position.x * 0.01 + position.y * 0.007) * 0.3 + 0.7;
           vAlpha = twinkle * (0.7 + size * 0.3); // Increased alpha for better visibility
-          
+
           vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
           gl_PointSize = size * (300.0 / -mvPosition.z);
           gl_Position = projectionMatrix * mvPosition;
@@ -197,12 +197,12 @@ export class StarfieldScene {
       fragmentShader: `
         varying vec3 vColor;
         varying float vAlpha;
-        
+
         void main() {
           float distanceToCenter = distance(gl_PointCoord, vec2(0.5));
           float alpha = 1.0 - smoothstep(0.0, 0.5, distanceToCenter);
           alpha *= vAlpha;
-          
+
           gl_FragColor = vec4(vColor, alpha);
         }
       `,
@@ -339,15 +339,15 @@ export class StarfieldScene {
         attribute float size;
         varying vec3 vColor;
         varying float vAlpha;
-        
+
         void main() {
           // Organic pulsing
           float pulse = sin(time * 0.8 + position.x * 0.02 + position.y * 0.015) * 0.2 + 0.8;
-          
+
           // Warmth effect
           vColor = mix(color, vec3(1.0, 0.8, 0.6), warmth * 0.3);
           vAlpha = pulse * (0.6 + warmth * 0.4);
-          
+
           vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
           gl_PointSize = size * (1.0 + warmth * 0.5) * (200.0 / -mvPosition.z);
           gl_Position = projectionMatrix * mvPosition;
@@ -356,15 +356,15 @@ export class StarfieldScene {
       fragmentShader: `
         varying vec3 vColor;
         varying float vAlpha;
-        
+
         void main() {
           float distanceToCenter = distance(gl_PointCoord, vec2(0.5));
           float alpha = 1.0 - smoothstep(0.0, 0.5, distanceToCenter);
           alpha *= vAlpha;
-          
+
           // Soft glow effect
           vec3 glow = vColor * (1.0 + alpha * 0.5);
-          
+
           gl_FragColor = vec4(glow, alpha);
         }
       `,
@@ -425,14 +425,14 @@ export class StarfieldScene {
          uniform float warmth;
          varying vec2 vUv;
          varying float vWarmth;
-         
+
          void main() {
            vUv = uv;
            vWarmth = warmth;
-           
+
            // Subtle pulsing animation
            vec3 pos = position * (1.0 + sin(time * 1.2) * 0.08 + warmth * 0.15);
-           
+
            gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
          }
        `,
@@ -441,19 +441,19 @@ export class StarfieldScene {
          uniform float time;
          varying vec2 vUv;
          varying float vWarmth;
-         
+
          void main() {
            float dist = distance(vUv, vec2(0.5));
-           
+
            // Create soft circular gradient
            float alpha = 1.0 - smoothstep(0.3, 0.5, dist);
-           
+
            // Add gentle pulsing
            alpha *= 0.4 + sin(time * 1.5) * 0.1;
-           
+
            // Warmth effect
            vec3 finalColor = mix(color, vec3(1.0, 0.9, 0.7), vWarmth * 0.4);
-           
+
            gl_FragColor = vec4(finalColor, alpha * (0.6 + vWarmth * 0.4));
          }
        `,
@@ -603,14 +603,14 @@ export class StarfieldScene {
         uniform float time;
         varying vec2 vUv;
         varying vec3 vNormal;
-        
+
         void main() {
           vUv = uv;
           vNormal = normalize(normalMatrix * normal);
-          
+
           // Subtle pulsing
           vec3 pos = position * (1.0 + sin(time * 1.5) * 0.05);
-          
+
           gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
         }
       `,
@@ -618,15 +618,15 @@ export class StarfieldScene {
         uniform float time;
         varying vec2 vUv;
         varying vec3 vNormal;
-        
+
         void main() {
           // Core glow
           float fresnel = 1.0 - dot(vNormal, vec3(0.0, 0.0, 1.0));
           fresnel = pow(fresnel, 2.0);
-          
+
           vec3 color = vec3(0.36, 0.91, 0.91);
           float alpha = fresnel * (0.6 + sin(time * 2.0) * 0.2);
-          
+
           gl_FragColor = vec4(color, alpha);
         }
       `,
@@ -682,11 +682,11 @@ export class StarfieldScene {
         uniform float progress;
         varying float vProgress;
         varying vec2 vUv;
-        
+
         void main() {
           vUv = uv;
           vProgress = uv.x;
-          
+
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
       `,
@@ -695,21 +695,21 @@ export class StarfieldScene {
         uniform float progress;
         varying float vProgress;
         varying vec2 vUv;
-        
+
         void main() {
           // Energy flow effect
           float flow = sin(vProgress * 6.28 - time * 8.0) * 0.5 + 0.5;
-          
+
           // Fade based on progress
-          float alpha = smoothstep(progress, progress + 0.1, vProgress) * 
+          float alpha = smoothstep(progress, progress + 0.1, vProgress) *
                        (1.0 - smoothstep(progress + 0.1, progress + 0.3, vProgress));
-          
+
           // Edge fade
           float edgeFade = 1.0 - abs(vUv.y - 0.5) * 2.0;
           alpha *= edgeFade;
-          
+
           vec3 color = vec3(0.36, 0.91, 0.91) * (1.0 + flow * 0.5);
-          
+
           gl_FragColor = vec4(color, alpha * 0.8);
         }
       `,

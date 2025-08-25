@@ -110,58 +110,12 @@ export class NodeManager {
             `Node Manager: Passed ${citizenFiles.length} citizen files to Citizen Manager`
           );
         }
+
+        // Populate citizen files as thought bubble documents in the existing container
+        if (nodes.length > 0) {
+          this.populateCitizenFileBubbles(nodes, constellation);
+        }
       }, 100);
-
-      // Also show citizen files as thought bubble documents below the management interface
-      if (nodes.length > 0) {
-        const citizenFilesContainer = document.createElement("div");
-        citizenFilesContainer.className = "citizen-files-section";
-        citizenFilesContainer.innerHTML = `
-          <div class="citizen-files-header">
-            <h4>Citizen Records</h4>
-            <p>Available citizen data files from the repository</p>
-          </div>
-        `;
-
-        const thoughtBubbleContainer = document.createElement("div");
-        thoughtBubbleContainer.className = "thought-bubble-documents";
-        thoughtBubbleContainer.setAttribute(
-          "data-constellation",
-          constellation
-        );
-        thoughtBubbleContainer.setAttribute("role", "region");
-        thoughtBubbleContainer.setAttribute(
-          "aria-label",
-          `${CONSTELLATIONS[constellation]?.name || constellation} citizen files collection`
-        );
-
-        // Create thought bubble documents for citizen files
-        nodes.forEach((node, index) => {
-          const thoughtBubble = this.createThoughtBubbleDocument(
-            node,
-            constellation
-          );
-
-          // Stagger animations
-          thoughtBubble.style.opacity = "0";
-          thoughtBubble.style.transform = "translateY(20px) scale(0.9)";
-
-          setTimeout(() => {
-            thoughtBubble.style.transition = `opacity ${ANIMATION_CONFIG.nodeBloom}ms ease-out, transform ${ANIMATION_CONFIG.nodeBloom}ms ease-out`;
-            thoughtBubble.style.opacity = "1";
-            thoughtBubble.style.transform = "translateY(0) scale(1)";
-
-            setTimeout(() => {
-              thoughtBubble.style.transition = "";
-            }, ANIMATION_CONFIG.nodeBloom);
-          }, index * 100);
-
-          thoughtBubbleContainer.appendChild(thoughtBubble);
-        });
-
-        citizenFilesContainer.appendChild(thoughtBubbleContainer);
-        container.appendChild(citizenFilesContainer);
-      }
 
       return;
     }
@@ -249,6 +203,62 @@ export class NodeManager {
     });
 
     container.appendChild(thoughtBubbleContainer);
+  }
+
+  /**
+   * Populate citizen file bubbles in the citizen management interface
+   */
+  populateCitizenFileBubbles(nodes, constellation) {
+    // Wait for the citizen UI to be fully rendered
+    setTimeout(() => {
+      const bubblesContainer = document.getElementById("citizen-files-bubbles");
+      if (!bubblesContainer) {
+        console.warn("Citizen files bubbles container not found");
+        return;
+      }
+
+      // Clear the placeholder content
+      bubblesContainer.innerHTML = "";
+
+      // Create thought bubble container with grid layout
+      const thoughtBubbleContainer = document.createElement("div");
+      thoughtBubbleContainer.className = "thought-bubble-documents citizen-files-grid";
+      thoughtBubbleContainer.setAttribute(
+        "data-constellation",
+        constellation
+      );
+      thoughtBubbleContainer.setAttribute("role", "region");
+      thoughtBubbleContainer.setAttribute(
+        "aria-label",
+        `${CONSTELLATIONS[constellation]?.name || constellation} citizen files collection`
+      );
+
+      // Create thought bubble documents for citizen files
+      nodes.forEach((node, index) => {
+        const thoughtBubble = this.createThoughtBubbleDocument(
+          node,
+          constellation
+        );
+
+        // Stagger animations
+        thoughtBubble.style.opacity = "0";
+        thoughtBubble.style.transform = "translateY(20px) scale(0.9)";
+
+        setTimeout(() => {
+          thoughtBubble.style.transition = `opacity ${ANIMATION_CONFIG.nodeBloom}ms ease-out, transform ${ANIMATION_CONFIG.nodeBloom}ms ease-out`;
+          thoughtBubble.style.opacity = "1";
+          thoughtBubble.style.transform = "translateY(0) scale(1)";
+
+          setTimeout(() => {
+            thoughtBubble.style.transition = "";
+          }, ANIMATION_CONFIG.nodeBloom);
+        }, index * 100);
+
+        thoughtBubbleContainer.appendChild(thoughtBubble);
+      });
+
+      bubblesContainer.appendChild(thoughtBubbleContainer);
+    }, 200); // Extra delay to ensure citizen UI is fully rendered
   }
 
   /**
@@ -516,9 +526,9 @@ export class NodeManager {
 
     return `# ${node.name}
 
-**Constellation:** ${constellation?.name || node.constellation}  
-**Seal Level:** ${node.seal}  
-**Node ID:** ${node.id}  
+**Constellation:** ${constellation?.name || node.constellation}
+**Seal Level:** ${node.seal}
+**Node ID:** ${node.id}
 **Tags:** ${tags.join(", ")}
 
 ## Description
@@ -527,17 +537,17 @@ ${node.metadata?.description || "No description available."}
 
 ## Source
 
-**URL:** ${node.url}  
+**URL:** ${node.url}
 **Cluster:** ${node.constellation}
 
 ---
 
-*Exported from Nralakk Federation Diplomatic Mission Interface*  
-*Date: ${new Date().toISOString()}*  
+*Exported from Nralakk Federation Diplomatic Mission Interface*
+*Date: ${new Date().toISOString()}*
 *Location: SCCV Horizon, Stellar Corporate Conglomerate*
 *By: Diplomatic Mission Staff*
 
-> "In the constellation of psionic data, every node is a star that guides the way to understanding through Nlom resonance."  
+> "In the constellation of psionic data, every node is a star that guides the way to understanding through Nlom resonance."
 > — Traditional Skrellian Diplomatic Wisdom
 `;
   }
