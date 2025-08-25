@@ -30,6 +30,7 @@ export const CONSTANTS = {
   TOAST_DURATION: 3000,
   WARNING_TOAST_DURATION: 5000,
   TENDRIL_ANIMATION_DURATION: 1200,
+  SHORT_DELAY: 100,
 
   // Canvas/3D
   CAMERA_FOV: 75,
@@ -41,6 +42,14 @@ export const CONSTANTS = {
   SCI_PRIMARY_THRESHOLD: 7,
   SCI_SECONDARY_THRESHOLD: 4,
   RECENT_LOGS_LIMIT: 5,
+};
+
+// Keyboard key constants
+export const KEYS = {
+  ENTER: "Enter",
+  SPACE: " ",
+  ESCAPE: "Escape",
+  TAB: "Tab",
 };
 
 // Application routes and views

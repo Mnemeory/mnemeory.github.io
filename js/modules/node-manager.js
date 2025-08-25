@@ -18,7 +18,7 @@ import {
   getDocumentTemplate,
   renderTemplate,
 } from "../config.js";
-import { ToastManager, FileUtils, IDUtils } from "./shared-utilities.js";
+import { ToastManager, FileUtils, IDUtils, EventUtils } from "./shared-utilities.js";
 import { CitizenUI } from "./citizen-ui.js";
 
 export class NodeManager {
@@ -60,7 +60,7 @@ export class NodeManager {
     // Escape key
     document.addEventListener("keydown", (event) => {
       if (
-        event.key === "Escape" &&
+        EventUtils.isEscapeKey(event) &&
         this.modal.getAttribute("aria-hidden") === "false"
       ) {
         this.closeModal();
@@ -115,7 +115,7 @@ export class NodeManager {
         if (nodes.length > 0) {
           this.populateCitizenFileBubbles(nodes, constellation);
         }
-      }, 100);
+      }, CONSTANTS.SHORT_DELAY);
 
       return;
     }
@@ -197,7 +197,7 @@ export class NodeManager {
         setTimeout(() => {
           thoughtBubble.style.transition = "";
         }, ANIMATION_CONFIG.nodeBloom);
-      }, index * 100);
+      }, index * CONSTANTS.SHORT_DELAY);
 
       thoughtBubbleContainer.appendChild(thoughtBubble);
     });
@@ -252,13 +252,13 @@ export class NodeManager {
           setTimeout(() => {
             thoughtBubble.style.transition = "";
           }, ANIMATION_CONFIG.nodeBloom);
-        }, index * 100);
+        }, index * CONSTANTS.SHORT_DELAY);
 
         thoughtBubbleContainer.appendChild(thoughtBubble);
       });
 
       bubblesContainer.appendChild(thoughtBubbleContainer);
-    }, 200); // Extra delay to ensure citizen UI is fully rendered
+    }, CONSTANTS.SHORT_DELAY * 2); // Extra delay to ensure citizen UI is fully rendered
   }
 
   /**
@@ -297,7 +297,7 @@ export class NodeManager {
 
     bubble.addEventListener("click", activate);
     bubble.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === " ") {
+      if (EventUtils.isActivationKey(event)) {
         event.preventDefault();
         activate();
       }
@@ -349,7 +349,7 @@ export class NodeManager {
 
     card.addEventListener("click", activate);
     card.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === " ") {
+      if (EventUtils.isActivationKey(event)) {
         event.preventDefault();
         activate();
       }

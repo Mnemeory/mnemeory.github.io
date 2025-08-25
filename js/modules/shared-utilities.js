@@ -3,7 +3,26 @@
  * Common functions used across multiple modules to eliminate duplication
  */
 
-import { CONSTANTS, getSelector } from "../config.js";
+import { CONSTANTS, getSelector, KEYS } from "../config.js";
+
+/**
+ * Event utility helpers to standardize keyboard interaction checks
+ */
+export class EventUtils {
+  /**
+   * Determine if an event uses an activation key (Enter or Space)
+   */
+  static isActivationKey(event) {
+    return event.key === KEYS.ENTER || event.key === KEYS.SPACE;
+  }
+
+  /**
+   * Determine if an event uses the Escape key
+   */
+  static isEscapeKey(event) {
+    return event.key === KEYS.ESCAPE;
+  }
+}
 
 /**
  * Toast Notification System - Consolidated from multiple files
@@ -335,7 +354,11 @@ export class AnimationUtils {
   /**
    * Animate element with stagger effect
    */
-  static staggerAnimation(elements, animationConfig, delayBetween = 100) {
+  static staggerAnimation(
+    elements,
+    animationConfig,
+    delayBetween = CONSTANTS.SHORT_DELAY
+  ) {
     elements.forEach((element, index) => {
       // Initial state
       Object.entries(animationConfig.from).forEach(([prop, value]) => {
