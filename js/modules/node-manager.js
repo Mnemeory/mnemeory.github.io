@@ -115,6 +115,13 @@ export class NodeManager {
         if (nodes.length > 0) {
           this.populateCitizenFileBubbles(nodes, constellation);
         }
+
+        // Populate session files if available
+        const allNodes = this.state.get("nodes") || [];
+        const sessionFiles = allNodes.filter(node => node.metadata?.type === "session");
+        if (sessionFiles.length > 0) {
+          this.populateSessionFileBubbles(sessionFiles, constellation);
+        }
       }, CONSTANTS.SHORT_DELAY);
 
       return;
@@ -259,6 +266,62 @@ export class NodeManager {
 
       bubblesContainer.appendChild(thoughtBubbleContainer);
     }, CONSTANTS.SHORT_DELAY * 2); // Extra delay to ensure citizen UI is fully rendered
+  }
+
+  /**
+   * Populate session file bubbles in the citizen management interface
+   */
+  populateSessionFileBubbles(sessionFiles, constellation) {
+    // Wait for the citizen UI to be fully rendered
+    setTimeout(() => {
+      const bubblesContainer = document.getElementById("session-files-bubbles");
+      if (!bubblesContainer) {
+        console.warn("Session files bubbles container not found");
+        return;
+      }
+
+      // Clear the placeholder content
+      bubblesContainer.innerHTML = "";
+
+      // Create thought bubble container with grid layout
+      const thoughtBubbleContainer = document.createElement("div");
+      thoughtBubbleContainer.className = "thought-bubble-documents session-files-grid";
+      thoughtBubbleContainer.setAttribute(
+        "data-constellation",
+        constellation
+      );
+      thoughtBubbleContainer.setAttribute("role", "region");
+      thoughtBubbleContainer.setAttribute(
+        "aria-label",
+        "Available session files collection"
+      );
+
+      // Create thought bubble documents for session files
+      sessionFiles.forEach((node, index) => {
+        const thoughtBubble = this.createThoughtBubbleDocument(
+          node,
+          constellation
+        );
+
+        // Stagger animations
+        thoughtBubble.style.opacity = "0";
+        thoughtBubble.style.transform = "translateY(20px) scale(0.9)";
+
+        setTimeout(() => {
+          thoughtBubble.style.transition = `opacity ${ANIMATION_CONFIG.nodeBloom}ms ease-out, transform ${ANIMATION_CONFIG.nodeBloom}ms ease-out`;
+          thoughtBubble.style.opacity = "1";
+          thoughtBubble.style.transform = "translateY(0) scale(1)";
+
+          setTimeout(() => {
+            thoughtBubble.style.transition = "";
+          }, ANIMATION_CONFIG.nodeBloom);
+        }, index * CONSTANTS.SHORT_DELAY);
+
+        thoughtBubbleContainer.appendChild(thoughtBubble);
+      });
+
+      bubblesContainer.appendChild(thoughtBubbleContainer);
+    }, CONSTANTS.SHORT_DELAY * 3); // Extra delay to ensure citizen UI is fully rendered
   }
 
   /**

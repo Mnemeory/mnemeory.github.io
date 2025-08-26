@@ -225,6 +225,11 @@ export class FileScanner {
   parseFileName(fileName, constellation) {
     const nameWithoutExt = fileName.replace(/\.(txt|md|json)$/i, "");
 
+    // Check for session file pattern first (SF##-[DATE].txt)
+    if (this.isSessionFile(nameWithoutExt)) {
+      return this.parseSessionFileName(nameWithoutExt);
+    }
+
     switch (constellation) {
       case "gnarled-tree":
         return this.parseFiledFileName(nameWithoutExt);
@@ -358,6 +363,50 @@ export class FileScanner {
       category: category,
       sortKey: `${category}-${nameWithoutExt}`,
       description: "Citizen record from the Qu'Poxii constellation",
+    };
+  }
+
+  /**
+   * Check if filename matches session file pattern: SF##-[DATE]
+   * Example: SF01-20250825, SF12-20241201
+   */
+  isSessionFile(nameWithoutExt) {
+    // Pattern: SF followed by digits, hyphen, then date
+    const sessionPattern = /^SF\d{2}-\d{8}$/;
+    return sessionPattern.test(nameWithoutExt);
+  }
+
+  /**
+   * Parse session file names: SF##-[DATE]
+   * Example: SF01-20250825
+   */
+  parseSessionFileName(nameWithoutExt) {
+    const parts = nameWithoutExt.split("-");
+
+    if (parts.length !== 2) {
+      return null;
+    }
+
+    const sessionId = parts[0]; // SF##
+    const dateStr = parts[1]; // YYYYMMDD
+
+    // Parse date (YYYYMMDD format)
+    let formattedDate = dateStr;
+    if (dateStr.length === 8 && /^\d{8}$/.test(dateStr)) {
+      const year = dateStr.substring(0, 4);
+      const month = dateStr.substring(4, 6);
+      const day = dateStr.substring(6, 8);
+      formattedDate = `${year}-${month}-${day}`;
+    }
+
+    return {
+      type: "session",
+      sessionId: sessionId,
+      date: formattedDate,
+      displayName: `${sessionId} • ${formattedDate}`,
+      category: "SESSION",
+      sortKey: `${sessionId}-${dateStr}`,
+      description: "Session file from diplomatic mission operations",
     };
   }
 

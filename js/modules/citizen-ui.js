@@ -153,6 +153,13 @@ export class CitizenUI {
           </div>
         </div>
 
+        <div class="session-files-panel">
+          <h4>${SITE_CONFIG.interfaceText.citizen.headers.sessionFiles}</h4>
+          <div class="session-files-bubbles" id="session-files-bubbles">
+            <p class="empty-state">Session files will be populated dynamically</p>
+          </div>
+        </div>
+
         <div class="activity-panel">
           <h4>${SITE_CONFIG.interfaceText.citizen.headers.activity}</h4>
           <div class="activity-log">

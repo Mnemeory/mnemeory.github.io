@@ -247,7 +247,7 @@ export class NlomInterface {
       // FIXED: Proper directory to constellation mapping
       const scanPaths = [
         { path: "filed", constellation: "gnarled-tree", seal: "filed" },      // Filed docs go to Gnarled Tree
-        { path: "templates", constellation: "hatching-egg", seal: "open" },  // Templates go to Hatching Egg  
+        { path: "templates", constellation: "hatching-egg", seal: "open" },  // Templates go to Hatching Egg
         { path: "citizen", constellation: "qu-poxii", seal: "open" },        // Citizen docs go to Qu'Poxii
       ];
 
@@ -285,14 +285,14 @@ export class NlomInterface {
         const constellationNodes = sortedNodes.filter(
           node => node.constellation === constellation
         );
-        
+
         console.log(`Populating ${constellation} with ${constellationNodes.length} nodes`);
         this.nodeManager.populateConstellation(constellation, constellationNodes);
       });
 
       // Pass citizen files specifically to the citizen manager
       const citizenNodes = sortedNodes.filter(
-        (node) => node.constellation === "qu-poxii"
+        (node) => node.constellation === "qu-poxii" && node.metadata?.type === "citizen"
       );
       if (citizenNodes.length > 0) {
         console.log(
@@ -303,10 +303,23 @@ export class NlomInterface {
         console.log("No citizen files found in the repository");
       }
 
+      // Handle session files - they can be found in any directory
+      const sessionNodes = sortedNodes.filter(
+        (node) => node.metadata?.type === "session"
+      );
+      if (sessionNodes.length > 0) {
+        console.log(
+          `Found ${sessionNodes.length} session files`
+        );
+        this.state.set("sessionFiles", sessionNodes);
+      } else {
+        console.log("No session files found in the repository");
+      }
+
       console.log(
         `\n🎉 Successfully loaded ${sortedNodes.length} nodes from GitHub repository`
       );
-      
+
       // Log distribution
       const distribution = {};
       sortedNodes.forEach(node => {

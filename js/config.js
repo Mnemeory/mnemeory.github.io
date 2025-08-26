@@ -1040,9 +1040,10 @@ In a full implementation, this would contain the actual document content loaded 
     citizen: {
       headers: {
         session: "Current Session:",
-        stats: "Session Statistics",
+        stats: "Session Overview",
         citizens: "Citizen Records",
-        activity: "Recent Activity",
+        activity: "Session Statistics",
+        sessionFiles: "Available Session Files",
       },
       buttons: {
         setRound: "Set Round Number",
