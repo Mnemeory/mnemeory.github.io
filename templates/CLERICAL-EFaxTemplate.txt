@@ -3,11 +3,11 @@
 [large][b]Second Nralakk Federation[/b]
 Priority Emergency Transmission[/center][/large][hr][/large][b]Cycle/Segment Timestamp:[/b] [date]|[time]
 
-[b]Origin Node:[/b] [field]
+[b]Origin Node:[/b] SCC Diplomatic Corps
 
-[b]Transmitting Officer (Primary Numerical):[/b] [field]
+[b]Transmitting Officer:[/b] Iqi Alora Xi'Troj-Ormeq, Qu'vesi
 
-[b]Officer SCI Rating:[/b] [field]
+[b]Officer SCI Rating:[/b] 9.3
 [hr][b]Transmission Priority Level:[/b]
 [list][*][[field]] Priority 1 - Existential Threat / Immediate Kala Deployment
 
