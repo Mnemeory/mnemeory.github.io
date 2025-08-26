@@ -146,10 +146,21 @@
   width: 100%;
   height: 100%;
   min-height: 400px;
+  box-sizing: border-box;
   background:
     var(--gradient-neural-primary), var(--gradient-neural-secondary),
     var(--gradient-consciousness-flow);
   overflow: hidden;
+}
+
+/* Hide scrollbars specifically for liquid space */
+.liquid-space::-webkit-scrollbar {
+  display: none;
+}
+
+.liquid-space {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .consciousness-canvas {
@@ -168,6 +179,17 @@
   align-items: center;
   justify-content: center;
   z-index: var(--z-raised);
+  overflow: hidden;
+}
+
+/* Hide scrollbars in liquid clusters */
+.liquid-clusters::-webkit-scrollbar {
+  display: none;
+}
+
+.liquid-clusters {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .floating-nodes {

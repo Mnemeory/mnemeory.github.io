@@ -12,8 +12,9 @@
   transition: all var(--duration-slower) var(--ease-neural);
   pointer-events: none;
   padding: var(--space-8) var(--space-6);
-  overflow-y: auto;
+  overflow: hidden;
   z-index: var(--z-base);
+  box-sizing: border-box;
   background:
     /* Thought-specific nebula */
     var(--gradient-interface-light),
@@ -27,6 +28,16 @@
       );
   backdrop-filter: blur(1px);
   -webkit-backdrop-filter: blur(1px);
+}
+
+/* Hide scrollbars specifically for constellation views */
+.constellation-view::-webkit-scrollbar {
+  display: none;
+}
+
+.constellation-view {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .constellation-view.active {

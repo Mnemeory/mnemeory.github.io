@@ -93,10 +93,7 @@
   --space-16: 4rem; /* 64px */
   --space-20: 5rem; /* 80px */
 
-  /* Responsive Breakpoints - Mobile-first approach */
-  --breakpoint-xs: 480px; /* Extra small devices */
-  --breakpoint-sm: 640px; /* Small devices */
-  --breakpoint-md: 768px; /* Medium devices (tablets) */
+  /* Desktop-focused breakpoints only */
   --breakpoint-lg: 1024px; /* Large devices (desktops) */
   --breakpoint-xl: 1200px; /* Extra large devices */
   --breakpoint-2xl: 1536px; /* 2X large devices */

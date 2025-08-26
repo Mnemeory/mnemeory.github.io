@@ -12,6 +12,17 @@
   display: flex;
   flex-direction: column;
   z-index: var(--z-raised);
+  overflow: hidden;
+}
+
+/* Hide scrollbars in starfield view */
+.starfield-view::-webkit-scrollbar {
+  display: none;
+}
+
+.starfield-view {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .starfield-view:not(.active) {
@@ -54,7 +65,7 @@
 .starfield-container {
   position: relative;
   width: 100%;
-  flex: 1;
+  height: 100%;
   overflow: hidden;
   background:
     radial-gradient(
@@ -74,6 +85,16 @@
     ),
     var(--color-bg);
   box-shadow: inset 0 0 100px var(--glass-shadow-base);
+}
+
+/* Hide scrollbars specifically for constellation map */
+.starfield-container::-webkit-scrollbar {
+  display: none;
+}
+
+.starfield-container {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 .starfield-canvas {

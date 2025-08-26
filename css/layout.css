@@ -99,14 +99,7 @@
   padding: 0 var(--space-6);
 }
 
-@media (max-width: 1024px) {
-  /* --breakpoint-lg */
-  .neural-flow-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
-    text-align: center;
-  }
-}
+/* Desktop-only layout - mobile media queries removed */
 
 /* Protocol Status Left with Home Navigation */
 .protocol-status-left {
@@ -322,7 +315,9 @@
   flex: 1;
   position: relative;
   min-height: 0; /* Allow flex shrinking */
-  padding: var(--space-6);
+  padding: 0; /* Remove padding to fill screen */
+  /* Full screen height for constellation map */
+  height: calc(100vh - 100px); /* Full height minus header */
 }
 
 /* Neural Navigation Footer */
@@ -372,22 +367,4 @@
   cursor: default !important;
 }
 
-/* Responsive Layout Adjustments */
-@media (max-width: 768px) {
-  /* --breakpoint-md */
-  .neural-command-interface {
-    padding: var(--space-3) var(--space-4);
-  }
-
-  .search-nexus {
-    min-width: auto;
-  }
-
-  .interface-identity .flowing-word {
-    font-size: var(--text-xl);
-  }
-
-  .consciousness-ocean {
-    padding: var(--space-4);
-  }
-}
+/* Mobile responsive adjustments removed - desktop-focused experience */
