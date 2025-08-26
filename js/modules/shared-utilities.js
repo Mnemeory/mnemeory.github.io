@@ -512,7 +512,7 @@ export class IDUtils {
    */
   static generateSessionId() {
     const date = new Date();
-    const year = date.getFullYear();
+    const year = 2467; // Fixed year for the federation timeline
     const dayOfYear = Math.floor(
       (date - new Date(date.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24
     );

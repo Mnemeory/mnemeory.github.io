@@ -110,15 +110,15 @@ export const CONSTELLATIONS = {
         description:
           "This constellation is reserved for future Qeblak spiritual and analytical functionality. The Star Chanter will eventually provide insights into psionic patterns, Nlom fluctuations, and sacred astronomical data for deep-space Skrell spiritual practices.",
         subtitle: "Qeblak Spiritual Analytics • Future Implementation",
-        icon: "🌟",
+        icon: "⬢",
         features: [
           "Qeblak ritual calendar integration",
           "Psionic resonance monitoring",
           "Astronomical event tracking",
-          "Spiritual guidance algorithms",
+          "Sacred guidance matrices",
           "Sacred site coordination",
         ],
-        status: "Status: Awaiting Sacred Development",
+        status: "Status: Reserved for Sacred Implementation",
       },
     },
     icon: "chant",
@@ -155,7 +155,7 @@ export const CONSTELLATIONS = {
         description:
           "This constellation is reserved for highly classified and dangerous information. Access to The Void requires special authorization beyond standard Aide clearance. Future implementation will handle deep intelligence, threat assessments, and sensitive data requiring the highest levels of security.",
         subtitle: "Classified Operations • Maximum Security",
-        icon: "🔒",
+        icon: "⬡",
         features: [
           "Deep intelligence archives",
           "Threat assessment protocols",
@@ -166,7 +166,7 @@ export const CONSTELLATIONS = {
         status: "Status: Secured & Dormant",
         statusClass: "classified",
         securityNotice:
-          "⚠️ Security Notice: This area contains no active data streams. Any unauthorized access attempts are logged and reported to Federation Security.",
+          "⬡ Security Protocol: This constellation contains no active data streams. Any unauthorized access attempts are logged and reported to Federation Central Authority.",
       },
     },
     icon: "void",
@@ -642,7 +642,7 @@ export const SITE_CONFIG = {
       `,
       accessDenied: `
         <div class="clearance-warning">
-          <h4>🔒 Insufficient Clearance</h4>
+          <h4>⬡ Insufficient Clearance</h4>
           <p>{{resource}} requires {{level}} authorization.</p>
           <p>Current clearance: {{currentLevel}}</p>
         </div>
@@ -1067,7 +1067,7 @@ In a full implementation, this would contain the actual document content loaded 
     paperEditor: {
       placeholders: {
         templates:
-          "[h1]NRALAKK FEDERATION DOCUMENT[/h1]\n\n[center]Document Template[/center]\n\nThis is a Federation document template. Click the ¶ button to toggle pencode view and edit the content directly.\n\n[field] Enter text here [/field]\n\n[hr]\n\n[list]\n[*] First item\n[*] Second item\n[*] Third item\n[/list]\n\n[small]Additional notes can go here[/small]",
+          "[h1]NRALAKK FEDERATION DOCUMENT[/h1]\n\n[center]Document Template[/center]\n\nThis is a Federation document template. Use the ¶ control to toggle between psionic script view and neural encoding display modes.\n\n[field] Enter text here [/field]\n\n[hr]\n\n[list]\n[*] First item\n[*] Second item\n[*] Third item\n[/list]\n\n[small]Additional notes can go here[/small]",
         completed: "Select a filed document to view it here.",
         default: "Document content will appear here.",
       },

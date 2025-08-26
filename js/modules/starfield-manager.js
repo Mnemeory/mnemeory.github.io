@@ -55,7 +55,7 @@ export class StarfieldManager {
    */
   async init(containerSelector = getSelector("starfieldContainer")) {
     try {
-      console.log("🌟 Initializing Starfield System...");
+      console.log("Initializing Starfield System...");
 
       this.container = document.querySelector(containerSelector);
       this.canvas = document.querySelector(getSelector("starfieldCanvas"));

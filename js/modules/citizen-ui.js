@@ -53,6 +53,13 @@ export class CitizenUI {
   render() {
     if (!this.container) return;
 
+    // Check if session has been initialized
+    if (!this.citizenManager.isSessionInitialized()) {
+      this.container.innerHTML = this.renderSessionGate();
+      return;
+    }
+
+    // Render normal interface if session is initialized
     this.container.innerHTML = `
       <div class="citizen-management">
         <div class="citizen-header">
@@ -83,6 +90,74 @@ export class CitizenUI {
 
         <div class="citizen-content">
           ${this.renderCurrentView()}
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Render session gate screen
+   */
+  renderSessionGate() {
+    return `
+      <div class="session-gate">
+        <div class="session-gate-content">
+          <div class="session-gate-header">
+            <div class="gate-emblem">
+              <img src="assets/images/bond.svg" alt="" aria-hidden="true" class="gate-emblem-icon" />
+              <div class="gate-ripples"></div>
+            </div>
+            <h2 class="gate-title">The Qu'Poxii</h2>
+            <p class="gate-subtitle">Love • Friendship • Support</p>
+          </div>
+
+          <div class="session-gate-body">
+            <div class="gate-welcome">
+              <h3>Diplomatic Citizen Management System</h3>
+              <p>Welcome to the Federation's Citizen Oversight Interface. This system provides essential services for Social Compatibility Index management and diaspora welfare coordination aboard corporate vessels.</p>
+
+              <div class="gate-features">
+                <div class="gate-feature">
+                  <span class="feature-icon">⬡</span>
+                  <div class="feature-text">
+                    <h4>Citizen Registration</h4>
+                    <p>Maintain Federation citizen records and Social Compatibility Index assessments</p>
+                  </div>
+                </div>
+                <div class="gate-feature">
+                  <span class="feature-icon">⬢</span>
+                  <div class="feature-text">
+                    <h4>Diplomatic Session Protocols</h4>
+                    <p>Record welfare operations and maintain Grand Council compliance</p>
+                  </div>
+                </div>
+                <div class="gate-feature">
+                  <span class="feature-icon">⬣</span>
+                  <div class="feature-text">
+                    <h4>Nlom Network Integration</h4>
+                    <p>Synchronized with Federation Central Authority via secure psionic channels</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="gate-session-start">
+              <div class="session-requirement">
+                <p><strong>Session Required:</strong> A new diplomatic session must be initiated before accessing citizen management features.</p>
+                <p class="session-note">This ensures proper logging and maintains Federation protocols for citizen welfare operations.</p>
+              </div>
+
+              <button type="button" class="corp-btn corp-btn--primary corp-btn--large" id="start-new-session-btn">
+                <span class="btn-icon">⬢</span>
+                Initialize Diplomatic Session
+              </button>
+            </div>
+          </div>
+
+          <div class="session-gate-footer">
+            <p class="gate-authority">Nralakk Federation Diplomatic Mission • SCCV Horizon</p>
+            <p class="gate-motto">"Every citizen is a star in our constellation"</p>
+          </div>
         </div>
       </div>
     `;
@@ -601,6 +676,11 @@ export class CitizenUI {
         this.render();
       }
 
+      // Session gate controls
+      if (e.target.matches("#start-new-session-btn")) {
+        this.handleStartNewSession();
+      }
+
       // Session controls
       if (e.target.matches("#set-round-btn")) {
         this.handleSetRound();
@@ -703,6 +783,23 @@ export class CitizenUI {
   }
 
   /**
+   * Handle starting a new session
+   */
+  handleStartNewSession() {
+    try {
+      const session = this.citizenManager.startNewSession();
+      this.currentView = "overview"; // Reset to overview when starting new session
+      this.render();
+      ToastManager.show(
+        `New diplomatic session initiated: ${session.id}`,
+        "success"
+      );
+    } catch (error) {
+      ToastManager.show("Error starting new session: " + error.message, "error");
+    }
+  }
+
+  /**
    * Handle setting round number
    */
   handleSetRound() {
@@ -725,7 +822,7 @@ export class CitizenUI {
     ) {
       this.citizenManager.clearSession();
       this.currentView = "overview";
-      this.render();
+      this.render(); // This will now show the session gate since sessionInitialized is false
     }
   }
 

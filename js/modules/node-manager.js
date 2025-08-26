@@ -111,16 +111,16 @@ export class NodeManager {
           );
         }
 
-        // Populate citizen files as thought bubble documents in the existing container
-        if (nodes.length > 0) {
-          this.populateCitizenFileBubbles(nodes, constellation);
+        // Populate citizen files as thought bubble documents (exclude session files)
+        const citizenFilesOnly = nodes.filter(node => node.metadata?.type === "citizen");
+        if (citizenFilesOnly.length > 0) {
+          this.populateCitizenFileBubbles(citizenFilesOnly, constellation);
         }
 
-        // Populate session files if available
-        const allNodes = this.state.get("nodes") || [];
-        const sessionFiles = allNodes.filter(node => node.metadata?.type === "session");
-        if (sessionFiles.length > 0) {
-          this.populateSessionFileBubbles(sessionFiles, constellation);
+        // Populate session files if available (only from qu-poxii constellation)
+        const sessionFilesOnly = nodes.filter(node => node.metadata?.type === "session");
+        if (sessionFilesOnly.length > 0) {
+          this.populateSessionFileBubbles(sessionFilesOnly, constellation);
         }
       }, CONSTANTS.SHORT_DELAY);
 
@@ -512,7 +512,7 @@ export class NodeManager {
     const templateData = {
       // Common data for all templates
       documentId: node.id.toUpperCase(),
-      date: new Date().toISOString().split("T")[0], // YYYY-MM-DD format
+      date: `2467-${new Date().toISOString().split("T")[0].substring(5)}`, // Federation year format
 
       // Cluster-specific data
       clearanceLevel: formatClearanceLevel(node.seal, cluster),

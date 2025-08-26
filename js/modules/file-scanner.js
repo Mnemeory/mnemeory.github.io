@@ -225,17 +225,16 @@ export class FileScanner {
   parseFileName(fileName, constellation) {
     const nameWithoutExt = fileName.replace(/\.(txt|md|json)$/i, "");
 
-    // Check for session file pattern first (SF##-[DATE].txt)
-    if (this.isSessionFile(nameWithoutExt)) {
-      return this.parseSessionFileName(nameWithoutExt);
-    }
-
     switch (constellation) {
       case "gnarled-tree":
         return this.parseFiledFileName(nameWithoutExt);
       case "hatching-egg":
         return this.parseTemplateFileName(nameWithoutExt);
       case "qu-poxii":
+        // Check for session file pattern first, only in citizen directory
+        if (this.isSessionFile(nameWithoutExt)) {
+          return this.parseSessionFileName(nameWithoutExt);
+        }
         return this.parseCitizenFileName(nameWithoutExt);
       default:
         return null;
@@ -244,7 +243,7 @@ export class FileScanner {
 
   /**
    * Parse filed document names: [ROUNDID]-[DATE]-[NAME]-[FILE-NAME]
-   * Example: cBgcwAo-20250825-Test-Contract
+   * Example: cBgcwAo-24670825-Test-Contract
    */
   parseFiledFileName(nameWithoutExt) {
     const parts = nameWithoutExt.split("-");
@@ -368,7 +367,7 @@ export class FileScanner {
 
   /**
    * Check if filename matches session file pattern: SF##-[DATE]
-   * Example: SF01-20250825, SF12-20241201
+   * Example: SF01-24670825, SF12-24671201
    */
   isSessionFile(nameWithoutExt) {
     // Pattern: SF followed by digits, hyphen, then date
@@ -378,7 +377,7 @@ export class FileScanner {
 
   /**
    * Parse session file names: SF##-[DATE]
-   * Example: SF01-20250825
+   * Example: SF01-24670825
    */
   parseSessionFileName(nameWithoutExt) {
     const parts = nameWithoutExt.split("-");

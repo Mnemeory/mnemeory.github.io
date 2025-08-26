@@ -18,6 +18,7 @@ export class CitizenManager {
   constructor() {
     this.currentSession = this.initializeSession();
     this.citizens = new Map(); // Store citizen records for current session
+    this.sessionInitialized = false; // Track if user has started a new session
 
     // Lore-friendly behavioral tags for Skrell citizens
     this.behavioralTags = {
@@ -50,6 +51,17 @@ export class CitizenManager {
       logEntries: [],
       activeCitizen: null,
     };
+  }
+
+  /**
+   * Start a new session (user-initiated)
+   */
+  startNewSession() {
+    this.currentSession = this.initializeSession();
+    this.citizens.clear();
+    this.sessionInitialized = true;
+    this.addLogEntry("New diplomatic session initiated by Consular Officer");
+    return this.currentSession;
   }
 
   /**
@@ -277,7 +289,7 @@ export class CitizenManager {
     try {
       // Get GitHub API URL
       const apiUrl = `https://api.github.com/repos/Mnemeory/mnemeory.github.io/contents/citizen/${filename}`;
-      
+
       // Get token from sessionStorage or prompt
       let token = sessionStorage.getItem('github_token');
       if (!token) {
@@ -429,7 +441,15 @@ export class CitizenManager {
   clearSession() {
     this.citizens.clear();
     this.currentSession = this.initializeSession();
+    this.sessionInitialized = false; // Reset session initialization state
     ToastManager.show(getInfoMessage("sessionInitialized"), "info");
+  }
+
+  /**
+   * Check if session has been initialized by user
+   */
+  isSessionInitialized() {
+    return this.sessionInitialized;
   }
 
   /**
