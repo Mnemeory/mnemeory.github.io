@@ -12,7 +12,7 @@
   pointer-events: none;
   background: radial-gradient(
     ellipse 1000px 600px at center,
-    rgba(175, 238, 238, 0.03) 0%,
+    var(--glow-cyan-ultra) 0%,
     transparent 70%
   );
 }
@@ -46,7 +46,7 @@
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 60px;
+  gap: var(--space-16); /* 64px - closest to 60px */
   z-index: var(--z-raised);
 }
 
@@ -57,8 +57,8 @@
   color: var(--color-pale-turquoise);
   text-shadow:
     0 0 15px var(--color-pale-turquoise),
-    0 0 30px var(--glow-enhanced-secondary),
-    0 0 60px var(--glow-medium);
+    0 0 30px var(--glow-cyan-medium),
+    0 0 60px var(--glow-cyan-gentle);
   /* Uses .base-float utility class for consistent floating effect */
   position: relative;
   cursor: pointer;
@@ -89,11 +89,11 @@
   transform: scale(1.15);
   text-shadow:
     0 0 20px var(--color-pale-turquoise),
-    0 0 40px var(--glow-intense-secondary),
-    0 0 80px var(--glow-enhanced-primary);
+    0 0 40px var(--glow-cyan-bright),
+    0 0 80px var(--glow-cyan-intense);
 }
 
-/* bubble-float removed - using base-floating from utilities.css */
+
 
 @keyframes essence-field {
   0%,
@@ -142,8 +142,10 @@
 
 /* Liquid Space Container */
 .liquid-space {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
   background:
     var(--gradient-neural-primary), var(--gradient-neural-secondary),
     var(--gradient-consciousness-flow);
@@ -154,7 +156,8 @@
   width: 100%;
   height: 100%;
   display: block;
-  opacity: 0.8;
+  opacity: 1.0;
+  z-index: 1;
 }
 
 /* Flowing Clusters */
@@ -164,12 +167,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: var(--z-raised);
 }
 
 .floating-nodes {
   display: flex;
   flex-wrap: wrap;
-  gap: 80px;
+  gap: var(--space-20);
   align-items: center;
   justify-content: center;
   max-width: 90vw;
@@ -202,7 +206,7 @@
   gap: var(--space-5);
   padding: var(--space-8);
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  animation: node-float 18s ease-in-out infinite;
+  animation: base-floating 18s ease-in-out infinite;
   position: relative;
 }
 
@@ -235,15 +239,12 @@
 .node-bubble img {
   width: 50px;
   height: 50px;
-  filter: drop-shadow(0 0 10px var(--glow-enhanced-secondary));
+  filter: drop-shadow(var(--drop-shadow-medium));
   z-index: var(--z-raised);
   transition: all 0.6s ease;
 }
 
-.bubble-ripples {
-  inset: -30px;
-  /* Uses .base-ripples from utilities.css */
-}
+
 
 .flowing-label {
   font-family: var(--font-primary);
@@ -251,7 +252,7 @@
   font-weight: 400;
   color: var(--color-pale-turquoise);
   text-align: center;
-  text-shadow: 0 0 8px var(--glow-enhanced-primary);
+  text-shadow: 0 0 8px var(--glow-cyan-bright);
   transition: all 0.6s ease;
 }
 
@@ -259,8 +260,8 @@
   transform: scale(1.1);
   border-radius: 40% 60% 50% 30% / 30% 50% 60% 40%;
   box-shadow:
-    0 0 30px var(--glow-enhanced-secondary),
-    inset 0 0 30px var(--glow-subtle);
+    0 0 30px var(--glow-cyan-medium),
+    inset 0 0 30px var(--glow-cyan-faint);
 }
 
 .liquid-node:hover .bubble-ripples {
@@ -270,8 +271,8 @@
 .liquid-node:hover .flowing-label {
   transform: translateY(-5px);
   text-shadow:
-    0 0 12px var(--glow-intense-secondary),
-    0 0 24px var(--glow-enhanced-secondary);
+    0 0 12px var(--glow-cyan-bright),
+    0 0 24px var(--glow-cyan-medium);
 }
 
-/* Duplicate keyframes removed - using shared utilities from utilities.css */
+

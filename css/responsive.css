@@ -71,6 +71,28 @@
   .starfield-2d {
     display: flex !important;
   }
+
+  /* Disable floating animations */
+  .base-float,
+  .neural-particles > *,
+  .floating-nodes,
+  .liquid-node {
+    animation: none !important;
+  }
+
+  /* Disable morphing transitions */
+  .base-morph,
+  .input-morph {
+    border-radius: var(--radius-md) !important;
+    animation: none !important;
+  }
+
+  /* Simplify hover effects */
+  .base-action-btn:hover,
+  .corp-btn:hover,
+  .data-node:hover {
+    transform: none !important;
+  }
 }
 
 /* Responsive Design */
@@ -175,8 +197,24 @@
   }
 }
 
-/* Citizen files section mobile optimization */
+/* Citizen management responsive adjustments */
+@media (max-width: 1200px) {
+  .overview-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+}
+
 @media (max-width: 768px) {
+  .citizen-files-grid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: var(--space-1);
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
   .citizen-files-section {
     margin-top: var(--space-4);
     padding: var(--space-3);
@@ -188,6 +226,13 @@
 
   .citizen-files-header p {
     font-size: var(--text-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .citizen-files-grid {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: var(--space-1);
   }
 }
 
@@ -307,6 +352,26 @@
   .data-node:hover {
     background: rgba(255, 255, 255, 0.2);
   }
+
+  /* Improve button contrast */
+  .corp-btn,
+  .base-action-btn {
+    border-color: currentColor;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .corp-btn:hover,
+  .corp-btn:focus-visible,
+  .base-action-btn:hover,
+  .base-action-btn:focus-visible {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: currentColor;
+  }
+
+  /* Improve text contrast */
+  .color-text-muted {
+    color: var(--color-text);
+  }
 }
 
 /* Forced Colors Mode (Windows High Contrast) */
@@ -333,6 +398,7 @@
   .astral-query-container,
   .nav-menu,
   .a11y-controls,
+  /* Starfield not needed in print */
   .starfield-view {
     display: none !important;
   }

@@ -55,23 +55,42 @@ export class StarfieldManager {
    */
   async init(containerSelector = getSelector("starfieldContainer")) {
     try {
+      console.log("🌟 Initializing Starfield System...");
+
       this.container = document.querySelector(containerSelector);
       this.canvas = document.querySelector(getSelector("starfieldCanvas"));
       this.fallback2D = document.querySelector(getSelector("starfield2D"));
 
+      console.log("Starfield elements found:", {
+        container: !!this.container,
+        canvas: !!this.canvas,
+        fallback2D: !!this.fallback2D,
+        containerSelector,
+        canvasSelector: getSelector("starfieldCanvas"),
+        fallback2DSelector: getSelector("starfield2D")
+      });
+
       if (!this.container) {
-        console.warn("Starfield container not found");
+        console.warn("❌ Starfield container not found with selector:", containerSelector);
         return false;
       }
 
-      if (!this.is3DEnabled) {
-        console.log("WebGL not supported, falling back to 2D");
+      if (!this.canvas) {
+        console.warn("❌ Starfield canvas not found with selector:", getSelector("starfieldCanvas"));
         return this.initFallback2D();
       }
 
-      console.log("WebGL supported, initializing 3D starfield");
-      return await this.init3D();
+      if (!this.is3DEnabled) {
+        console.log("⚠️ WebGL not supported, falling back to 2D");
+        return this.initFallback2D();
+      }
+
+      console.log("✅ WebGL supported, initializing 3D starfield");
+      const result = await this.init3D();
+      console.log("3D starfield initialization result:", result);
+      return result;
     } catch (error) {
+      console.error("❌ Starfield initialization failed:", error);
       const standardError = createStandardError(
         "Starfield initialization failed",
         error,
@@ -139,13 +158,24 @@ export class StarfieldManager {
    * Initialize 2D fallback interface
    */
   initFallback2D() {
+    console.log("🔄 Initializing 2D fallback starfield...");
+
     if (!this.fallback2D) {
-      console.warn("2D fallback element not found");
+      console.warn("❌ 2D fallback element not found");
+      console.log("Available elements:", {
+        starfieldContainer: !!document.querySelector("#starfield-container"),
+        starfield2D: !!document.querySelector("#starfield-2d"),
+        liquidClusters: !!document.querySelector(".liquid-clusters"),
+        floatingNodes: !!document.querySelector(".floating-nodes")
+      });
       return false;
     }
 
     // Hide 3D canvas and show 2D fallback
-    if (this.canvas) this.canvas.style.display = "none";
+    if (this.canvas) {
+      this.canvas.style.display = "none";
+      console.log("✅ Hidden 3D canvas");
+    }
 
     this.fallback = new StarfieldFallback(this.fallback2D);
     const fallbackInitialized = this.fallback.init();
@@ -153,10 +183,11 @@ export class StarfieldManager {
     if (fallbackInitialized) {
       this.isInitialized = true;
       this.is3DEnabled = false;
-      console.log("2D Fallback starfield initialized");
+      console.log("✅ 2D Fallback starfield initialized successfully");
       return true;
     }
 
+    console.warn("❌ 2D fallback initialization failed");
     return false;
   }
 

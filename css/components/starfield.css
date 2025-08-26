@@ -11,6 +11,7 @@
   transition: opacity var(--motion-base) var(--ease-in-out);
   display: flex;
   flex-direction: column;
+  z-index: var(--z-raised);
 }
 
 .starfield-view:not(.active) {
@@ -18,6 +19,11 @@
   pointer-events: none;
   position: absolute;
   inset: 0;
+  z-index: var(--z-base);
+}
+
+.starfield-view.active {
+  z-index: var(--z-floating);
 }
 
 .starfield-instructions {
@@ -36,7 +42,7 @@
 
 .keyboard-hint kbd {
   display: inline-block;
-  padding: 2px 6px;
+  padding: var(--space-1) var(--space-2);
   background: var(--glass-bg-medium);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-sm);
@@ -53,27 +59,29 @@
   background:
     radial-gradient(
       ellipse at center,
-      var(--glass-bg-starfield-light) 0%,
+      var(--glass-bg-neural) 0%,
       transparent 50%
     ),
     radial-gradient(
       ellipse at top left,
-      var(--glass-bg-starfield-void) 0%,
+      var(--glass-bg-cosmic) 0%,
       transparent 40%
     ),
     radial-gradient(
       ellipse at bottom right,
-      var(--glass-bg-starfield-accent) 0%,
+      var(--glass-bg-accent) 0%,
       transparent 40%
     ),
     var(--color-bg);
-  box-shadow: inset 0 0 100px var(--glass-starfield-shadow);
+  box-shadow: inset 0 0 100px var(--glass-shadow-base);
 }
 
 .starfield-canvas {
   width: 100%;
   height: 100%;
   display: block;
+  min-height: 400px;
+  background: transparent;
 }
 
 /* 2D Fallback */
@@ -87,7 +95,11 @@
 }
 
 .starfield-2d.hidden {
-  display: none;
+  display: none !important;
+}
+
+.starfield-2d:not(.hidden) {
+  display: flex !important;
 }
 
 .constellation-clusters {
@@ -156,6 +168,8 @@
   box-shadow: var(--shadow-glow);
 }
 
+
+
 .cluster-node:focus-visible {
   border-color: var(--color-accent);
   box-shadow: var(--shadow-glow);
@@ -182,7 +196,7 @@
 /* Constellation Tooltips */
 .constellation-tooltip {
   position: absolute;
-  z-index: 9999;
+  z-index: var(--z-tooltip);
   background: var(--glass-bg-dark);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
@@ -202,13 +216,13 @@
 .constellation-tooltip--3d {
   transform: translate(-50%, -100%);
   margin-top: -8px;
-  z-index: 9999;
+  z-index: var(--z-tooltip);
 }
 
 .constellation-tooltip--2d {
   transform: translate(-50%, -100%);
   margin-top: -8px;
-  z-index: 9999;
+  z-index: var(--z-tooltip);
 }
 
 .tooltip-content {

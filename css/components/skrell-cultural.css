@@ -258,9 +258,9 @@
   color: var(--color-pale-turquoise);
   text-shadow:
     0 0 5px var(--color-pale-turquoise),
-    0 0 15px var(--glow-enhanced-primary),
-    0 0 25px var(--glow-enhanced-secondary);
-  /* Uses base-float utility class for consistent floating effect */
+    0 0 15px var(--glow-cyan-bright),
+    0 0 25px var(--glow-cyan-medium);
+
   position: relative;
   transition: all var(--duration-cultural-hover) ease;
 }
@@ -294,15 +294,15 @@
   transform: scale(1.1);
   text-shadow:
     0 0 8px var(--color-pale-turquoise),
-    0 0 20px var(--glow-intense-primary),
-    0 0 35px var(--glow-intense-secondary);
+    0 0 20px var(--glow-cyan-intense),
+    0 0 35px var(--glow-cyan-bright);
 }
 
 .cosmic-letter:hover::before {
   opacity: 1;
 }
 
-/* Using .base-float animation from utilities.css for similar effect */
+
 
 /* Enhanced accessibility for Skrell visual preferences */
 @media (prefers-contrast: high) {

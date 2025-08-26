@@ -5,7 +5,7 @@
 
 .fluid-consciousness {
   position: relative;
-  background: 
+  background:
     /* Primary fluid streams */
     radial-gradient(
       ellipse 1800px 1200px at 20% 30%,
@@ -25,7 +25,7 @@
     /* Flowing essence patterns */
       radial-gradient(
         ellipse 800px 600px at 10% 80%,
-        var(--glow-enhanced-primary) 0%,
+        var(--glow-cyan-bright) 0%,
         transparent 90%
       ),
     radial-gradient(
@@ -36,7 +36,7 @@
     /* Organic fluid movement */
       radial-gradient(
         circle 600px at 40% 60%,
-        var(--glow-medium) 0%,
+        var(--glow-cyan-gentle) 0%,
         transparent 95%
       ),
     radial-gradient(
@@ -148,7 +148,7 @@
   content: "";
   position: fixed;
   inset: 0;
-  background: 
+  background:
     /* Organic flow streams */
     radial-gradient(
       ellipse 800px 600px at var(--flow-x, 20%) var(--flow-y, 30%),

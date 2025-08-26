@@ -1,6 +1,6 @@
 /**
  * Nralakk Federation Nlom Interface - Main Stylesheet
- * 
+ *
  * Entry point for the modular CSS architecture.
  * Follows CSS cascade layers for optimal specificity management.
  */
@@ -18,17 +18,24 @@
 /* Layout */
 @import url("./layout.css") layer(layout);
 
-/* Components */
+/* Components - Ordered by dependency hierarchy */
+/* Base visual effects (no dependencies) */
 @import url("./components/fluid-consciousness.css") layer(components);
 @import url("./components/neural-particles.css") layer(components);
-@import url("./components/flowing-states.css") layer(components);
-@import url("./components/starfield.css") layer(components);
+@import url("./components/skrell-cultural.css") layer(components);
+
+/* Core interface components */
 @import url("./components/navigation.css") layer(components);
 @import url("./components/modals.css") layer(components);
 @import url("./components/notifications.css") layer(components);
-@import url("./components/paper-editor.css") layer(components);
+
+/* Content and layout components */
+@import url("./components/flowing-states.css") layer(components);
+@import url("./components/starfield.css") layer(components);
 @import url("./components/constellation-views.css") layer(components);
-@import url("./components/skrell-cultural.css") layer(components);
+
+/* Specialized components */
+@import url("./components/paper-editor.css") layer(components);
 @import url("./components/citizen-management.css") layer(components);
 
 /* Utilities */

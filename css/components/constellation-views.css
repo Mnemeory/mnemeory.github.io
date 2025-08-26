@@ -13,18 +13,11 @@
   pointer-events: none;
   padding: var(--space-8) var(--space-6);
   overflow-y: auto;
+  z-index: var(--z-base);
   background:
     /* Thought-specific nebula */
-    radial-gradient(
-      ellipse 600px 400px at center top,
-      rgba(175, 238, 238, 0.03) 0%,
-      transparent 70%
-    ),
-    radial-gradient(
-      ellipse 400px 300px at 80% 60%,
-      rgba(254, 221, 216, 0.02) 0%,
-      transparent 60%
-    ),
+    var(--gradient-interface-light),
+    var(--gradient-interface-accent),
     /* Consciousness flow */
       linear-gradient(
         135deg,
@@ -40,6 +33,7 @@
   opacity: 1;
   transform: translateY(0) scale(1);
   pointer-events: auto;
+  z-index: var(--z-floating);
   animation: thought-materialization 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)
     forwards;
 }
@@ -47,6 +41,8 @@
 .constellation-view[aria-hidden="true"] {
   position: absolute;
   inset: 0;
+  visibility: hidden;
+  z-index: -1;
 }
 
 @keyframes thought-materialization {
@@ -157,7 +153,7 @@
   opacity: 0.3;
 }
 
-/* Icon rotation animation moved to utilities.css as base-rotation */
+
 
 .constellation-icon img {
   width: 40px;
@@ -235,8 +231,7 @@
   gap: var(--space-4);
   padding: var(--space-6);
   transition: all var(--duration-base) var(--ease-organic);
-  animation: thought-bubble-float var(--duration-float) var(--ease-organic)
-    infinite;
+  animation: base-floating var(--duration-float) var(--ease-organic) infinite;
   position: relative;
   min-width: 140px;
   max-width: 160px;
@@ -565,21 +560,21 @@
 
 /* Seal-specific styling for thought bubble documents */
 .thought-bubble-document .document-seal.open {
-  background: var(--glass-bg-starfield-accent);
+  background: var(--glass-bg-accent);
   border: 1px solid var(--glass-cultural-border);
   color: var(--color-cyan);
   box-shadow: var(--shadow-neural-sm);
 }
 
 .thought-bubble-document .document-seal.filed {
-  background: var(--glass-bg-starfield-void);
+  background: var(--glass-bg-cosmic);
   border: 1px solid var(--glass-border);
   color: var(--color-mist);
   box-shadow: var(--shadow-neural-sm);
 }
 
 .thought-bubble-document .document-seal.black-star {
-  background: var(--glass-bg-starfield-void);
+  background: var(--glass-bg-cosmic);
   border: 1px solid var(--constellation-void-primary);
   color: var(--constellation-void-primary);
   box-shadow: var(--shadow-void);
@@ -599,22 +594,7 @@
   box-shadow: var(--shadow-neural-sm);
 }
 
-/* Animation for thought bubble floating */
-@keyframes thought-bubble-float {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg) scale(1);
-  }
-  25% {
-    transform: translateY(-6px) rotate(0.3deg) scale(1.01);
-  }
-  50% {
-    transform: translateY(3px) rotate(-0.2deg) scale(0.99);
-  }
-  75% {
-    transform: translateY(-4px) rotate(0.1deg) scale(1.005);
-  }
-}
+
 
 .data-node {
   background: var(--gradient-neural-primary), var(--gradient-neural-secondary);
@@ -628,7 +608,7 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: var(--shadow-neural-md), var(--shadow-inset-neural);
-  animation: thought-node-float var(--duration-float) ease-in-out infinite;
+  animation: base-floating var(--duration-float) ease-in-out infinite;
   min-height: 180px;
   display: flex;
   flex-direction: column;
@@ -701,9 +681,9 @@
   opacity: 1;
 }
 
-/* thought-node-float removed - using base-floating from utilities.css */
 
-/* Thought aurora rotation animation moved to utilities.css as base-rotation */
+
+
 
 @keyframes energy-pulse {
   0%,
@@ -814,7 +794,7 @@
       rgba(139, 69, 19, 0.05) 0%,
       transparent 60%
     ),
-    linear-gradient(135deg, rgba(34, 139, 34, 0.02) 0%, transparent 50%);
+    var(--gradient-theme-tree);
 }
 
 /* Qu'Poxii - Love, Friendship, Support */
@@ -838,7 +818,7 @@
       rgba(220, 20, 60, 0.05) 0%,
       transparent 60%
     ),
-    linear-gradient(135deg, rgba(255, 105, 180, 0.02) 0%, transparent 50%);
+    var(--gradient-theme-bond);
 }
 
 /* Star Chanter - Wisdom, Science, Connection */
@@ -862,7 +842,7 @@
       rgba(65, 105, 225, 0.05) 0%,
       transparent 60%
     ),
-    linear-gradient(135deg, rgba(0, 191, 255, 0.02) 0%, transparent 50%);
+    var(--gradient-theme-chant);
 }
 
 /* Hatching Egg - New Beginnings, Progress */
@@ -886,7 +866,7 @@
       rgba(50, 205, 50, 0.05) 0%,
       transparent 60%
     ),
-    linear-gradient(135deg, rgba(173, 255, 47, 0.02) 0%, transparent 50%);
+    var(--gradient-theme-egg);
 }
 
 /* Void - Mystery, Restriction, Death */
@@ -910,7 +890,7 @@
       rgba(47, 47, 47, 0.1) 0%,
       transparent 60%
     ),
-    linear-gradient(135deg, rgba(148, 0, 211, 0.03) 0%, transparent 50%);
+    var(--gradient-theme-void);
 }
 
 /* Apply constellation themes to their components */
@@ -949,7 +929,7 @@
   text-align: center;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(175, 238, 238, 0.2);
+  border-bottom: 1px solid var(--glow-cyan-medium);
 }
 
 .shell-header h3 {

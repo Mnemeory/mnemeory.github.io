@@ -49,7 +49,7 @@ export class StarfieldScene {
 
     // Create scene
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.Fog(0x071422, 400, 1200); // Reduced fog to make stars more visible
+    this.scene.fog = new THREE.Fog(0x071422, 800, 2000); // Further reduced fog density to ensure star visibility
 
     console.log("Scene created with fog:", {
       fog: this.scene.fog,
@@ -58,8 +58,18 @@ export class StarfieldScene {
 
     // Get container dimensions
     const containerRect = container.getBoundingClientRect();
-    const width = containerRect.width;
-    const height = containerRect.height;
+    const width = Math.max(containerRect.width, 800); // Ensure minimum width
+    const height = Math.max(containerRect.height, 600); // Ensure minimum height
+
+    console.log("Container dimensions:", {
+      containerRect,
+      width,
+      height,
+      containerWidth: container.clientWidth,
+      containerHeight: container.clientHeight,
+      offsetWidth: container.offsetWidth,
+      offsetHeight: container.offsetHeight
+    });
 
     // Create camera
     const aspect = width / height;
@@ -82,6 +92,14 @@ export class StarfieldScene {
 
     // Create renderer
     try {
+      console.log("Creating WebGL renderer with canvas:", {
+        canvas: this.canvas,
+        width,
+        height,
+        canvasSize: `${this.canvas.width}x${this.canvas.height}`,
+        canvasStyle: `${this.canvas.style.width}x${this.canvas.style.height}`
+      });
+
       this.renderer = new THREE.WebGLRenderer({
         canvas: this.canvas,
         antialias: !this.performanceMode,
@@ -95,18 +113,20 @@ export class StarfieldScene {
 
       this.renderer.setSize(width, height);
       this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      this.renderer.setClearColor(0x0a1f2a, 0.9); // Slightly lighter background for better star visibility
+      this.renderer.setClearColor(0x071422, 0.0); // Transparent background to show CSS background
       this.renderer.sortObjects = true; // Enable render order sorting
 
-      console.log("WebGL renderer created successfully:", {
+      console.log("✅ WebGL renderer created successfully:", {
         canvas: this.canvas,
         width,
         height,
         pixelRatio: this.renderer.getPixelRatio(),
-        context: this.renderer.getContext(),
+        context: !!this.renderer.getContext(),
+        capabilities: this.renderer.capabilities,
+        canvasRect: this.canvas.getBoundingClientRect()
       });
     } catch (error) {
-      console.error("Failed to create WebGL renderer:", error);
+      console.error("❌ Failed to create WebGL renderer:", error);
       throw error;
     }
 
@@ -114,6 +134,18 @@ export class StarfieldScene {
     this.createBackgroundStars();
     this.createConstellations();
     this.createNlomNode();
+
+    // Immediate test render to ensure everything is working
+    console.log("Performing initial test render...");
+    this.render();
+
+    console.log("Scene initialization complete:", {
+      backgroundStars: !!this.backgroundStars,
+      constellationCount: this.constellations.size,
+      nlomNode: !!this.nlomNode,
+      sceneChildren: this.scene.children.length,
+      rendererInfo: this.renderer.info
+    });
 
     return true;
   }
@@ -133,10 +165,10 @@ export class StarfieldScene {
       const i3 = i * 3;
 
       // Position - using config spread
-      const spread = starConfig.spread * 20; // Scale up for proper distribution
+      const spread = starConfig.spread * 40; // Increase spread for better distribution
       positions[i3] = (Math.random() - 0.5) * spread;
       positions[i3 + 1] = (Math.random() - 0.5) * spread;
-      positions[i3 + 2] = (Math.random() - 0.5) * (spread * 0.5) + 100; // Position stars in front of camera
+      positions[i3 + 2] = (Math.random() - 0.5) * spread - 100; // Position stars in front of camera for visibility
 
       // Color (various blues and cyans) - using config brightness and color variance
       const colorChoice = Math.random();
@@ -186,8 +218,8 @@ export class StarfieldScene {
           vColor = color;
 
           // Organic twinkling based on position and time
-          float twinkle = sin(time * 0.5 + position.x * 0.01 + position.y * 0.007) * 0.3 + 0.7;
-          vAlpha = twinkle * (0.7 + size * 0.3); // Increased alpha for better visibility
+          float twinkle = sin(time * 0.5 + position.x * 0.01 + position.y * 0.007) * 0.2 + 0.8;
+          vAlpha = twinkle * (0.9 + size * 0.4); // Further increased alpha for better visibility
 
           vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
           gl_PointSize = size * (300.0 / -mvPosition.z);
@@ -801,13 +833,16 @@ export class StarfieldScene {
     if (this.renderer && this.scene && this.camera) {
       this.renderer.render(this.scene, this.camera);
 
-      // Debug: Log render info
-      if (this.backgroundStars) {
+      // Debug: Log render info occasionally (not every frame)
+      if (this.backgroundStars && Math.random() < 0.001) { // 0.1% chance each frame
         console.log("Rendering scene with background stars:", {
           visible: this.backgroundStars.visible,
           count: this.backgroundStars.geometry.attributes.position.count,
           position: this.backgroundStars.position,
           material: this.backgroundStars.material,
+          sceneChildren: this.scene.children.length,
+          cameraPosition: this.camera.position,
+          rendererSize: this.renderer.getSize(new THREE.Vector2()),
         });
       }
     }

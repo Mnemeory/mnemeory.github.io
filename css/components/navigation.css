@@ -97,7 +97,7 @@
   transition: all var(--motion-base) var(--ease-organic);
 }
 
-/* Uses .base-hover-scale from utilities.css for transform */
+
 .federation-emblem:hover {
   filter: drop-shadow(var(--shadow-glow-intense));
 }
@@ -105,7 +105,7 @@
 @keyframes neural-emblem-pulse {
   0%,
   100% {
-    filter: drop-shadow(var(--shadow-glow));
+    filter: drop-shadow(0 0 8px var(--glow-cyan-medium));
     opacity: 0.9;
   }
   50% {
@@ -133,7 +133,7 @@
   transition: all var(--motion-base) var(--ease-organic);
 }
 
-/* Uses .base-hover-scale-small from utilities.css for transform */
+
 .liquid-text-button:hover {
   filter: brightness(1.1);
 }
@@ -260,7 +260,7 @@
 .return-bubble {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: var(--space-4); /* 16px - closest to 15px */
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   position: relative;
@@ -294,6 +294,6 @@
   opacity: 1;
 }
 
-/* return-float removed - using base-floating from utilities.css */
 
-/* Rotation animation moved to utilities.css as base-rotation */
+
+
