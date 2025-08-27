@@ -117,8 +117,6 @@
 
 /* Print Styles */
 @media print {
-    .astral-query-container,
-    .a11y-controls,
     /* Starfield not needed in print */
     .starfield-view {
       display: none !important;
@@ -129,10 +127,6 @@
     opacity: 1 !important;
     transform: none !important;
     pointer-events: auto !important;
-  }
-
-  .app-container {
-    background: white !important;
   }
 
   .constellation-header,
@@ -155,10 +149,6 @@
 /* Large text preferences */
 @media (prefers-reduced-data: reduce) {
   .starfield-container {
-    background: transparent;
-  }
-
-  .app-container {
     background: transparent;
   }
 }
