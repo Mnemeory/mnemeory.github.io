@@ -24,7 +24,6 @@
   transform: translateX(100%);
   opacity: 0;
   transition: all var(--duration-slow) var(--ease-neural);
-
 }
 
 .toast.show {
@@ -51,8 +50,6 @@
   text-shadow: 0 0 5px var(--glow-gold-error-text);
 }
 
-
-
 .toast-container {
   position: fixed;
   bottom: var(--space-6);
@@ -64,8 +61,6 @@
   max-width: 400px;
 }
 
-
-
 /* Loading Screen */
 .loading-veil {
   position: fixed;
@@ -76,7 +71,7 @@
   justify-content: center;
   z-index: var(--z-modal);
   opacity: 1;
-  transition: opacity var(--motion-slow) var(--ease-in-out);
+  transition: opacity var(--duration-slow) var(--ease-neural);
 }
 
 .loading-veil.hidden {
