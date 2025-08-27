@@ -1,15 +1,164 @@
 /**
  * Utility Classes
- * Small, reusable utility classes following standards
+ * Small, reusable utility classes for layout, spacing, and visual treatment
  */
 
-/* ==== SHARED COMPONENT UTILITIES ==== */
+/* ==== SPACING UTILITIES ==== */
 
-/* Base Floating Animation */
+.mt-0 { margin-top: 0 !important; }
+.mb-0 { margin-bottom: 0 !important; }
+.mt-1 { margin-top: var(--space-1) !important; }
+.mt-2 { margin-top: var(--space-2) !important; }
+.mt-3 { margin-top: var(--space-3) !important; }
+.mt-4 { margin-top: var(--space-4) !important; }
+.mt-5 { margin-top: var(--space-5) !important; }
+.mt-6 { margin-top: var(--space-6) !important; }
+.mt-8 { margin-top: var(--space-8) !important; }
 
+.mb-1 { margin-bottom: var(--space-1) !important; }
+.mb-2 { margin-bottom: var(--space-2) !important; }
+.mb-3 { margin-bottom: var(--space-3) !important; }
+.mb-4 { margin-bottom: var(--space-4) !important; }
+.mb-5 { margin-bottom: var(--space-5) !important; }
+.mb-6 { margin-bottom: var(--space-6) !important; }
+.mb-8 { margin-bottom: var(--space-8) !important; }
+
+.ml-0 { margin-left: 0 !important; }
+.ml-1 { margin-left: var(--space-1) !important; }
+.ml-2 { margin-left: var(--space-2) !important; }
+.ml-3 { margin-left: var(--space-3) !important; }
+.ml-4 { margin-left: var(--space-4) !important; }
+
+.mr-0 { margin-right: 0 !important; }
+.mr-1 { margin-right: var(--space-1) !important; }
+.mr-2 { margin-right: var(--space-2) !important; }
+.mr-3 { margin-right: var(--space-3) !important; }
+.mr-4 { margin-right: var(--space-4) !important; }
+
+.mx-auto { margin-left: auto !important; margin-right: auto !important; }
+.my-auto { margin-top: auto !important; margin-bottom: auto !important; }
+
+/* Padding utilities */
+.p-0 { padding: 0 !important; }
+.p-1 { padding: var(--space-1) !important; }
+.p-2 { padding: var(--space-2) !important; }
+.p-3 { padding: var(--space-3) !important; }
+.p-4 { padding: var(--space-4) !important; }
+.p-5 { padding: var(--space-5) !important; }
+.p-6 { padding: var(--space-6) !important; }
+.p-8 { padding: var(--space-8) !important; }
+.pad { padding: var(--space-5) !important; } /* Legacy padding utility */
+
+.px-1 { padding-left: var(--space-1) !important; padding-right: var(--space-1) !important; }
+.px-2 { padding-left: var(--space-2) !important; padding-right: var(--space-2) !important; }
+.px-3 { padding-left: var(--space-3) !important; padding-right: var(--space-3) !important; }
+.px-4 { padding-left: var(--space-4) !important; padding-right: var(--space-4) !important; }
+
+.py-1 { padding-top: var(--space-1) !important; padding-bottom: var(--space-1) !important; }
+.py-2 { padding-top: var(--space-2) !important; padding-bottom: var(--space-2) !important; }
+.py-3 { padding-top: var(--space-3) !important; padding-bottom: var(--space-3) !important; }
+.py-4 { padding-top: var(--space-4) !important; padding-bottom: var(--space-4) !important; }
+
+/* ==== LAYOUT UTILITIES ==== */
+
+/* Display */
+.block { display: block !important; }
+.inline { display: inline !important; }
+.inline-block { display: inline-block !important; }
+.flex { display: flex !important; }
+.inline-flex { display: inline-flex !important; }
+.grid { display: grid !important; }
+.hidden { display: none !important; }
+.invisible { visibility: hidden !important; }
+
+/* Flex utilities */
+.flex-row { flex-direction: row !important; }
+.flex-col { flex-direction: column !important; }
+.flex-wrap { flex-wrap: wrap !important; }
+.flex-nowrap { flex-wrap: nowrap !important; }
+.flex-1 { flex: 1 !important; }
+.flex-auto { flex: auto !important; }
+.flex-grow { flex-grow: 1 !important; }
+.flex-shrink { flex-shrink: 1 !important; }
+.flex-no-shrink { flex-shrink: 0 !important; }
+
+/* Alignment */
+.items-center { align-items: center !important; }
+.items-start { align-items: flex-start !important; }
+.items-end { align-items: flex-end !important; }
+.items-stretch { align-items: stretch !important; }
+.items-baseline { align-items: baseline !important; }
+
+.justify-center { justify-content: center !important; }
+.justify-start { justify-content: flex-start !important; }
+.justify-end { justify-content: flex-end !important; }
+.justify-between { justify-content: space-between !important; }
+.justify-around { justify-content: space-around !important; }
+
+/* Position */
+.relative { position: relative !important; }
+.absolute { position: absolute !important; }
+.fixed { position: fixed !important; }
+.sticky { position: sticky !important; }
+.inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+
+/* Sizing */
+.w-full { width: 100% !important; }
+.w-auto { width: auto !important; }
+.h-full { height: 100% !important; }
+.h-auto { height: auto !important; }
+
+/* ==== TEXT UTILITIES ==== */
+
+.text-center { text-align: center !important; }
+.text-left { text-align: left !important; }
+.text-right { text-align: right !important; }
+.text-justify { text-align: justify !important; }
+
+.truncate {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.break-words { word-wrap: break-word !important; }
+.break-normal { word-wrap: normal !important; }
+.whitespace-normal { white-space: normal !important; }
+.whitespace-nowrap { white-space: nowrap !important; }
+.whitespace-pre { white-space: pre !important; }
+.whitespace-pre-wrap { white-space: pre-wrap !important; }
+
+/* ==== ANIMATION UTILITIES ==== */
+
+/* Animation Delay System */
+.stagger-delay:nth-child(1) { animation-delay: 0s; }
+.stagger-delay:nth-child(2) { animation-delay: -3s; }
+.stagger-delay:nth-child(3) { animation-delay: -6s; }
+.stagger-delay:nth-child(4) { animation-delay: -9s; }
+.stagger-delay:nth-child(5) { animation-delay: -12s; }
+
+/* Fast stagger for quick sequences */
+.stagger-delay--fast:nth-child(1) { animation-delay: 0s; }
+.stagger-delay--fast:nth-child(2) { animation-delay: -1s; }
+.stagger-delay--fast:nth-child(3) { animation-delay: -2s; }
+.stagger-delay--fast:nth-child(4) { animation-delay: -3s; }
+.stagger-delay--fast:nth-child(5) { animation-delay: -4s; }
+
+/* Long stagger for flowing elements */
+.stagger-delay--flow:nth-child(1) { animation-delay: 0s; }
+.stagger-delay--flow:nth-child(2) { animation-delay: -4s; }
+.stagger-delay--flow:nth-child(3) { animation-delay: -8s; }
+.stagger-delay--flow:nth-child(4) { animation-delay: -12s; }
+.stagger-delay--flow:nth-child(5) { animation-delay: -16s; }
+
+/* Alternating delays for odd/even patterns */
+.stagger-delay--alt:nth-child(odd) { animation-delay: -1s; }
+.stagger-delay--alt:nth-child(3n) { animation-delay: -2s; }
+.stagger-delay--alt:nth-child(5n) { animation-delay: -3s; }
+
+/* Base Animation Keyframes */
 @keyframes base-floating {
-  0%,
-  100% {
+  0%, 100% {
     transform: translateY(0) rotate(0deg) scale(1);
     opacity: 0.9;
   }
@@ -27,10 +176,8 @@
   }
 }
 
-/* Base Morphing Animation */
 @keyframes base-morphing {
-  0%,
-  100% {
+  0%, 100% {
     border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
     transform: scale(1) rotate(0deg);
   }
@@ -48,134 +195,16 @@
   }
 }
 
-/* === UNIFIED HOVER TRANSFORM SYSTEM === */
-
-/* Scale-Only Transforms */
-.base-hover-micro:hover {
-  transform: scale(1.01);
+@keyframes base-rotation {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-.base-hover-small:hover {
-  transform: scale(1.02);
+@keyframes base-rotation-centered {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-.base-hover-medium:hover {
-  transform: scale(1.05);
-}
-
-.base-hover-large:hover {
-  transform: scale(1.1);
-}
-
-.base-hover-extra:hover {
-  transform: scale(1.15);
-}
-
-.base-hover-massive:hover {
-  transform: scale(1.2);
-}
-
-/* Lift-Only Transforms */
-.base-hover-lift:hover {
-  transform: translateY(-5px);
-}
-
-.base-hover-lift-large:hover {
-  transform: translateY(-8px);
-}
-
-.base-hover-lift-subtle:hover {
-  transform: translateY(-2px);
-}
-
-.base-hover-lift-extreme:hover {
-  transform: translateY(-12px);
-}
-
-/* Combined Lift + Scale Transforms */
-.base-hover-lift-scale:hover {
-  transform: translateY(-5px) scale(1.02);
-}
-
-.base-hover-lift-scale-large:hover {
-  transform: translateY(-8px) scale(1.02);
-}
-
-.base-hover-lift-scale-medium:hover {
-  transform: translateY(-5px) scale(1.05);
-}
-
-.base-hover-lift-scale-strong:hover {
-  transform: translateY(-8px) scale(1.1);
-}
-
-/* Directional Movement Transforms */
-.base-hover-slide-left:hover {
-  transform: translateX(-5px);
-}
-
-.base-hover-slide-right:hover {
-  transform: translateX(5px);
-}
-
-.base-hover-complex-left:hover {
-  transform: translateX(-5px) scale(1.05);
-}
-
-.base-hover-complex-right:hover {
-  transform: translateX(5px) scale(1.05);
-}
-
-/* Rotation-Based Transforms */
-.base-hover-rotate-subtle:hover {
-  transform: rotate(2deg);
-}
-
-.base-hover-rotate-medium:hover {
-  transform: rotate(5deg);
-}
-
-.base-hover-rotate-scale:hover {
-  transform: rotate(2deg) scale(1.05);
-}
-
-/* Morphing Shape Transforms */
-.base-hover-morph:hover {
-  border-radius: var(--radius-morph-2);
-  transform: scale(1.02);
-}
-
-.base-hover-morph-strong:hover {
-  border-radius: var(--radius-organic-3);
-  transform: scale(1.05);
-}
-
-/* Document/Bubble Specific Transforms */
-.base-hover-bubble:hover {
-  transform: scale(1.1);
-  border-radius: var(--radius-organic-2);
-}
-
-.base-hover-document:hover {
-  transform: translateY(-3px) scale(1.05);
-}
-
-.base-hover-node:hover {
-  transform: translateY(-4px) scale(1.01);
-}
-
-/* Icon-Specific Transforms */
-.base-hover-icon:hover {
-  transform: scale(1.1);
-}
-
-.base-hover-icon-large:hover {
-  transform: scale(1.15);
-}
-
-/* === RIPPLE ANIMATIONS === */
-
-/* Expanding ripple for hover effects */
 @keyframes ripple-expand {
   0% {
     transform: scale(0.8);
@@ -191,29 +220,9 @@
   }
 }
 
-/* Shared Rotation Animations */
-@keyframes base-rotation {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes base-rotation-centered {
-  from {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
-}
-
-/* Shared Neural Loading Animations */
+/* Neural loading animation keyframes */
 @keyframes nlom-neural-pulse {
-  0%,
-  100% {
+  0%, 100% {
     transform: scale(1);
     opacity: 0.6;
   }
@@ -224,8 +233,7 @@
 }
 
 @keyframes nlom-neural-outer {
-  0%,
-  100% {
+  0%, 100% {
     transform: scale(1);
     opacity: 0.2;
   }
@@ -236,8 +244,7 @@
 }
 
 @keyframes nlom-neural-core {
-  0%,
-  100% {
+  0%, 100% {
     transform: scale(0.8);
     opacity: 0.8;
   }
@@ -247,322 +254,95 @@
   }
 }
 
-/* === UNIFIED NEURAL BUTTON SYSTEM === */
+/* Hover utilities */
+.base-hover-micro:hover { transform: scale(1.01); }
+.base-hover-small:hover { transform: scale(1.02); }
+.base-hover-medium:hover { transform: scale(1.05); }
+.base-hover-large:hover { transform: scale(1.1); }
+.base-hover-extra:hover { transform: scale(1.15); }
+.base-hover-massive:hover { transform: scale(1.2); }
 
-/* Base Neural Button - Foundation for all button variants */
-.neural-button {
-  /* Reset */
-  background: none;
-  border: none;
-  margin: 0;
+.base-hover-lift:hover { transform: translateY(-5px); }
+.base-hover-lift-large:hover { transform: translateY(-8px); }
+.base-hover-lift-subtle:hover { transform: translateY(-2px); }
+.base-hover-lift-extreme:hover { transform: translateY(-12px); }
 
-  /* Base Styling */
-  padding: var(--space-3) var(--space-6);
-  background: var(--glass-bg-light);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-organic-dynamic);
-  color: var(--color-cyan);
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all var(--duration-base) var(--ease-organic);
-  position: relative;
-  overflow: hidden;
-  text-shadow: 0 0 5px var(--glow-cyan-gentle);
+.base-hover-lift-scale:hover { transform: translateY(-5px) scale(1.02); }
+.base-hover-lift-scale-large:hover { transform: translateY(-8px) scale(1.02); }
+.base-hover-lift-scale-medium:hover { transform: translateY(-5px) scale(1.05); }
+.base-hover-lift-scale-strong:hover { transform: translateY(-8px) scale(1.1); }
 
-  /* Accessibility */
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
+.base-hover-slide-left:hover { transform: translateX(-5px); }
+.base-hover-slide-right:hover { transform: translateX(5px); }
+.base-hover-complex-left:hover { transform: translateX(-5px) scale(1.05); }
+.base-hover-complex-right:hover { transform: translateX(5px) scale(1.05); }
+
+.base-hover-rotate-subtle:hover { transform: rotate(2deg); }
+.base-hover-rotate-medium:hover { transform: rotate(5deg); }
+.base-hover-rotate-scale:hover { transform: rotate(2deg) scale(1.05); }
+
+.base-hover-morph:hover {
+  border-radius: var(--radius-morph-2);
+  transform: scale(1.02);
 }
 
-/* Neural Button Consciousness Flow Effect */
-.neural-button::before {
-  content: "";
+.base-hover-morph-strong:hover {
+  border-radius: var(--radius-organic-3);
+  transform: scale(1.05);
+}
+
+/* Component specific hover transforms */
+.base-hover-bubble:hover {
+  transform: scale(1.1);
+  border-radius: var(--radius-organic-2);
+}
+
+.base-hover-document:hover {
+  transform: translateY(-3px) scale(1.05);
+}
+
+.base-hover-node:hover {
+  transform: translateY(-4px) scale(1.01);
+}
+
+.base-hover-icon:hover {
+  transform: scale(1.1);
+}
+
+.base-hover-icon-large:hover {
+  transform: scale(1.15);
+}
+
+/* Opacity utilities */
+.opacity-0 { opacity: 0 !important; }
+.opacity-25 { opacity: 0.25 !important; }
+.opacity-50 { opacity: 0.5 !important; }
+.opacity-75 { opacity: 0.75 !important; }
+.opacity-100 { opacity: 1 !important; }
+
+/* ==== ACCESSIBILITY UTILITIES ==== */
+.sr-only {
   position: absolute;
-  inset: 0;
-  background: var(--gradient-consciousness-flow);
-  opacity: 0;
-  transition: opacity var(--duration-base) var(--ease-neural);
-  z-index: -1;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-/* Neural Button Hover States */
-.neural-button:hover {
-  background: var(--glass-bg-accent);
-  border-color: var(--glow-cyan-border);
-  color: var(--color-cyan);
-  text-shadow: 0 0 8px var(--glow-cyan-gentle);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-neural-sm);
+.no-focus-outline:focus {
+  outline: none;
 }
 
-.neural-button:hover::before {
-  opacity: 1;
+/* Scrollbar utilities */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
-.neural-button:active {
-  transform: translateY(0);
-  box-shadow: var(--shadow-neural-sm);
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
-
-.neural-button:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-  border-color: var(--color-accent);
-}
-
-/* Active/Pressed State */
-.neural-button[aria-pressed="true"],
-.neural-button.active {
-  background: var(--glow-gold-error-bg-outer);
-  border-color: var(--glow-gold-error-border);
-  color: var(--color-warning);
-  text-shadow: 0 0 5px var(--glow-gold-error-text);
-}
-
-/* === SIZE VARIANTS === */
-
-.neural-button--small {
-  padding: var(--space-1) var(--space-3);
-  font-size: var(--text-xs);
-}
-
-.neural-button--large {
-  padding: var(--space-4) var(--space-8);
-  font-size: var(--text-lg);
-  font-weight: 600;
-  min-height: 60px;
-}
-
-.neural-button--large .btn-icon {
-  font-size: var(--text-xl);
-}
-
-.neural-button--large:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-neural-lg);
-}
-
-/* Responsive adjustments for large buttons */
-@media (max-width: 768px) {
-  .neural-button--large {
-    padding: var(--space-3) var(--space-6);
-    font-size: var(--text-base);
-    min-height: 50px;
-  }
-}
-
-/* === COLOR VARIANTS === */
-
-.neural-button--primary {
-  background: var(--glass-bg-accent);
-  border-color: var(--color-accent);
-  color: var(--color-accent);
-}
-
-.neural-button--primary:hover {
-  background: var(--glass-bg-medium);
-  box-shadow: var(--shadow-neural-md);
-}
-
-.neural-button--success {
-  background: var(--glass-bg-accent);
-  border-color: var(--color-success);
-  color: var(--color-success);
-}
-
-.neural-button--success:hover {
-  background: var(--glass-bg-medium);
-  text-shadow: 0 0 6px var(--color-success);
-}
-
-.neural-button--warning {
-  background: var(--glow-gold-error-bg-outer);
-  border-color: var(--color-error);
-  color: var(--color-error);
-}
-
-.neural-button--warning:hover {
-  background: var(--glow-gold-error-bg-inner);
-  text-shadow: 0 0 6px var(--glow-gold-error-text);
-}
-
-.neural-button--gold {
-  background: var(--glow-gold-error-bg-outer);
-  border-color: var(--glow-gold-error-border);
-  color: var(--color-warning);
-  text-shadow: 0 0 5px var(--glow-gold-error-text);
-}
-
-.neural-button--gold:hover {
-  box-shadow: var(--shadow-authority);
-}
-
-/* === CONTEXT VARIANTS === */
-
-.neural-button--toolbar {
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-organic-dynamic);
-}
-
-.neural-button--minimal {
-  background: transparent;
-  border-color: transparent;
-  text-shadow: none;
-}
-
-.neural-button--minimal:hover {
-  background: var(--glass-bg-light);
-  border-color: var(--glass-border);
-}
-
-/* === LEGACY ALIASES === */
-
-
-/* === ANIMATION DELAY UTILITY SYSTEM === */
-
-/* Base staggered animation delays for nth-child elements */
-.stagger-delay:nth-child(1) {
-  animation-delay: 0s;
-}
-.stagger-delay:nth-child(2) {
-  animation-delay: -3s;
-}
-.stagger-delay:nth-child(3) {
-  animation-delay: -6s;
-}
-.stagger-delay:nth-child(4) {
-  animation-delay: -9s;
-}
-.stagger-delay:nth-child(5) {
-  animation-delay: -12s;
-}
-
-/* Fast stagger for quick sequences */
-.stagger-delay--fast:nth-child(1) {
-  animation-delay: 0s;
-}
-.stagger-delay--fast:nth-child(2) {
-  animation-delay: -1s;
-}
-.stagger-delay--fast:nth-child(3) {
-  animation-delay: -2s;
-}
-.stagger-delay--fast:nth-child(4) {
-  animation-delay: -3s;
-}
-.stagger-delay--fast:nth-child(5) {
-  animation-delay: -4s;
-}
-
-/* Long stagger for flowing elements */
-.stagger-delay--flow:nth-child(1) {
-  animation-delay: 0s;
-}
-.stagger-delay--flow:nth-child(2) {
-  animation-delay: -4s;
-}
-.stagger-delay--flow:nth-child(3) {
-  animation-delay: -8s;
-}
-.stagger-delay--flow:nth-child(4) {
-  animation-delay: -12s;
-}
-.stagger-delay--flow:nth-child(5) {
-  animation-delay: -16s;
-}
-
-/* Alternating delays for odd/even patterns */
-.stagger-delay--alt:nth-child(odd) {
-  animation-delay: -1s;
-}
-.stagger-delay--alt:nth-child(3n) {
-  animation-delay: -2s;
-}
-.stagger-delay--alt:nth-child(5n) {
-  animation-delay: -3s;
-}
-
-.hidden {
-  display: none !important;
-}
-.invisible {
-  visibility: hidden !important;
-}
-.opacity-0 {
-  opacity: 0 !important;
-}
-.opacity-50 {
-  opacity: 0.5 !important;
-}
-.opacity-100 {
-  opacity: 1 !important;
-}
-
-.text-center {
-  text-align: center !important;
-}
-.text-left {
-  text-align: left !important;
-}
-.text-right {
-  text-align: right !important;
-}
-
-.flex {
-  display: flex !important;
-}
-.flex-col {
-  flex-direction: column !important;
-}
-.items-center {
-  align-items: center !important;
-}
-.justify-center {
-  justify-content: center !important;
-}
-.justify-between {
-  justify-content: space-between !important;
-}
-
-
-.mt-0 {
-  margin-top: 0 !important;
-}
-.mb-0 {
-  margin-bottom: 0 !important;
-}
-.mt-4 {
-  margin-top: var(--space-4) !important;
-}
-.mb-2 {
-  margin-bottom: var(--space-2) !important;
-}
-.mb-4 {
-  margin-bottom: var(--space-4) !important;
-}
-.mb-6 {
-  margin-bottom: var(--space-6) !important;
-}
-.mb-8 {
-  margin-bottom: var(--space-8) !important;
-}
-
-.p-4 {
-  padding: var(--space-4) !important;
-}
-.p-6 {
-  padding: var(--space-6) !important;
-}
-.p-8 {
-  padding: var(--space-8) !important;
-}
-.pad {
-  padding: var(--space-5) !important;
-}
-
-

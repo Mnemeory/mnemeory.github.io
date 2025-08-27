@@ -323,28 +323,28 @@
       <!-- Flowing Data Detail -->
       <div
         id="node-modal"
-        class="base-modal"
+        class="modal"
         role="dialog"
         aria-modal="true"
         aria-hidden="true"
       >
-        <div class="bubble-ocean"></div>
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3 id="modal-title" class="modal-title"></h3>
+        <div class="modal__backdrop"></div>
+        <div class="modal__container">
+          <div class="modal__header">
+            <h3 id="modal-title" class="modal__title"></h3>
             <button
               type="button"
               id="modal-close"
-              class="modal-close"
+              class="modal__close"
               aria-label="Close dialog"
             >
               <div class="close-ripple">×</div>
             </button>
           </div>
-          <div id="modal-body" class="modal-body">
+          <div id="modal-body" class="modal__body">
             <!-- Document editor integrated here -->
             <div
-              class="neural-document document-container"
+              class="neural-document document-container theme-neural"
               id="modal-paper-container"
               data-document-container="modal-paper-container"
               aria-label="Document Viewer"
@@ -382,7 +382,7 @@
               </div>
 
               <div
-                class="document-editor"
+                class="document-editor neural-theme-neural"
                 id="modal-paper"
                 contenteditable="false"
                 aria-label="Document content"
@@ -393,12 +393,10 @@
                 <!-- Document content will be rendered here -->
               </div>
 
-              <div class="document-status" id="modal-document-status">
-                Ready
-              </div>
+              <div class="document-status" id="modal-document-status">Preview Mode</div>
             </div>
           </div>
-          <div class="modal-footer">
+          <div class="modal__footer">
             <button
               type="button"
               id="modal-inscribe"
@@ -424,7 +422,7 @@
       <!-- Floating Notifications -->
       <div
         id="toast-container"
-        class="notification-stream"
+        class="notification-container"
         aria-live="polite"
         aria-atomic="true"
       >
@@ -457,3 +455,4 @@
     <script type="module" src="js/script.js"></script>
   </body>
 </html>
+

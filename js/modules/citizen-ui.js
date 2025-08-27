@@ -915,9 +915,11 @@ export class CitizenUI {
         .querySelector(".citizen-name")
         .textContent.toLowerCase();
       if (name.includes(query.toLowerCase())) {
-        card.style.display = "block";
+        card.classList.add('visible');
+        card.classList.remove('hidden');
       } else {
-        card.style.display = "none";
+        card.classList.add('hidden');
+        card.classList.remove('visible');
       }
     });
   }

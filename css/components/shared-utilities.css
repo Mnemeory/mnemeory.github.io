@@ -1,0 +1,29 @@
+/**
+ * Shared Utilities Styles
+ * Replaces inline styles used in shared-utilities.js
+ */
+
+/* Toast and tooltip positioning */
+.neural-tooltip {
+  position: fixed;
+  z-index: var(--z-tooltip);
+  pointer-events: none;
+}
+
+.tooltip-initial {
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.tooltip-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Form validation styling */
+.form-error {
+  color: var(--color-error);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}

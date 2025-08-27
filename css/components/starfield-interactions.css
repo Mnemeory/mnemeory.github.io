@@ -1,0 +1,13 @@
+/**
+ * Starfield Interactions Styles
+ * Replaces inline styles used in starfield-interactions.js
+ */
+
+/* Cursor styles */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-default {
+  cursor: default;
+}

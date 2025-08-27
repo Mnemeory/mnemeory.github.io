@@ -1,0 +1,21 @@
+/**
+ * Node Manager Styles
+ * Replaces inline styles used in node-manager.js
+ */
+
+/* Thought bubble animation states */
+.thought-bubble-document {
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+}
+
+.thought-bubble-document.animate-in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity var(--duration-slow) ease-out, transform var(--duration-slow) ease-out;
+}
+
+/* Remove transition after animation completes */
+.thought-bubble-document.animation-complete {
+  transition: none;
+}

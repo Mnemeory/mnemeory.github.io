@@ -102,11 +102,13 @@ export class StarfieldInteractions {
         const constellation = this.scene.getConstellation(newHover);
         if (constellation) {
           constellation.targetWarmth = 1;
-          this.canvas.style.cursor = "pointer";
+          this.canvas.classList.add('cursor-pointer');
+          this.canvas.classList.remove('cursor-default');
           this.showConstellationTooltip(newHover, event.clientX, event.clientY);
         }
       } else {
-        this.canvas.style.cursor = "default";
+        this.canvas.classList.add('cursor-default');
+        this.canvas.classList.remove('cursor-pointer');
         TooltipManager.hide();
       }
 
@@ -268,7 +270,8 @@ export class StarfieldInteractions {
       }
       TooltipManager.hide();
       this.currentHover = null;
-      this.canvas.style.cursor = "default";
+      this.canvas.classList.add('cursor-default');
+      this.canvas.classList.remove('cursor-pointer');
     }
   }
 
@@ -289,7 +292,8 @@ export class StarfieldInteractions {
         prevConstellation.targetWarmth = 0;
       }
       this.currentHover = null;
-      this.canvas.style.cursor = "default";
+      this.canvas.classList.add('cursor-default');
+      this.canvas.classList.remove('cursor-pointer');
       TooltipManager.hide();
     }
   }

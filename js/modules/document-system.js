@@ -514,82 +514,35 @@ export class DocumentInstance {
     // Create template selector overlay
     const overlay = document.createElement('div');
     overlay.className = 'template-selector-overlay';
-    overlay.style.cssText = `
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: var(--gradient-neural-primary);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-lg);
-      padding: var(--space-4);
-      z-index: 10;
-      backdrop-filter: blur(10px);
-    `;
+    overlay.className = 'template-selector-overlay';
 
     const header = document.createElement('div');
-    header.style.cssText = `
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: var(--space-4);
-    `;
+    header.className = 'template-selector-header';
 
     const title = document.createElement('h4');
     title.textContent = 'Select Template';
-    title.style.cssText = `
-      margin: 0;
-      color: var(--color-pale-turquoise);
-      font-family: var(--font-primary);
-    `;
+    title.className = 'template-selector-title';
 
     const closeBtn = document.createElement('button');
     closeBtn.innerHTML = '×';
-    closeBtn.style.cssText = `
-      background: none;
-      border: 1px solid var(--glass-border);
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      color: var(--color-pale-turquoise);
-      cursor: pointer;
-      font-size: var(--text-lg);
-    `;
+    closeBtn.className = 'template-selector-close-btn';
 
     const grid = document.createElement('div');
-    grid.style.cssText = `
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--space-3);
-      max-height: 300px;
-      overflow-y: auto;
-    `;
+    grid.className = 'template-selector-grid';
 
     // Create template buttons
     templateNames.forEach(templateName => {
       const button = document.createElement('button');
       button.className = 'flow-action';
-      button.style.cssText = `
-        padding: var(--space-3);
-        text-align: center;
-        min-width: auto;
-        height: auto;
-      `;
+      button.className = 'template-selector-button flow-action';
 
       const name = document.createElement('div');
       name.textContent = templateName.charAt(0).toUpperCase() + templateName.slice(1);
-      name.style.cssText = `
-        font-weight: 600;
-        margin-bottom: var(--space-1);
-      `;
+      name.className = 'template-name';
 
       const desc = document.createElement('div');
       desc.textContent = this.getTemplateDescription(templateName);
-      desc.style.cssText = `
-        font-size: var(--text-xs);
-        opacity: 0.8;
-      `;
+      desc.className = 'template-description';
 
       button.appendChild(name);
       button.appendChild(desc);
@@ -608,7 +561,7 @@ export class DocumentInstance {
     overlay.appendChild(grid);
 
     // Position relative to editor
-    this.elements.container.style.position = 'relative';
+    this.elements.container.classList.add('neural-document-container');
     this.elements.container.appendChild(overlay);
 
     // Event listeners
@@ -743,7 +696,7 @@ export class DocumentInstance {
     ];
 
     controls.forEach(control => {
-      if (control) control.style.display = 'none';
+      if (control) control.classList.add('hidden');
     });
   }
 

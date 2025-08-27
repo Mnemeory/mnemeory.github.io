@@ -122,16 +122,12 @@ export class TooltipManager {
     }
 
     // Position tooltip
-    tooltip.style.position = "fixed";
+    tooltip.className = 'neural-tooltip';
     tooltip.style.left = `${x + offset.x}px`;
     tooltip.style.top = `${y + offset.y}px`;
-    tooltip.style.zIndex = "9999";
-    tooltip.style.pointerEvents = "none";
 
     if (animation) {
-      tooltip.style.opacity = "0";
-      tooltip.style.transform = "translateY(-5px)";
-      tooltip.style.transition = "opacity 0.2s ease, transform 0.2s ease";
+      tooltip.classList.add('tooltip-initial');
     }
 
     document.body.appendChild(tooltip);
@@ -140,8 +136,7 @@ export class TooltipManager {
     if (animation) {
       requestAnimationFrame(() => {
         if (tooltip && document.body.contains(tooltip)) {
-          tooltip.style.opacity = "1";
-          tooltip.style.transform = "translateY(0)";
+          tooltip.classList.add('tooltip-visible');
         }
       });
     }
@@ -171,8 +166,7 @@ export class TooltipManager {
     this.activeTooltip = null;
 
     if (document.body.contains(tooltip)) {
-      tooltip.style.opacity = "0";
-      tooltip.style.transform = "translateY(-5px)";
+      tooltip.classList.remove('tooltip-visible');
 
       setTimeout(() => {
         if (document.body.contains(tooltip)) {
@@ -686,9 +680,7 @@ export class FormUtils {
         const errorElement = document.createElement("div");
         errorElement.className = "field-error";
         errorElement.textContent = errors[field];
-        errorElement.style.color = "var(--color-error)";
-        errorElement.style.fontSize = "0.8rem";
-        errorElement.style.marginTop = "0.25rem";
+        errorElement.className = 'form-error';
 
         fieldElement.parentNode.appendChild(errorElement);
       }

@@ -10,33 +10,55 @@
 
 /* Import modular stylesheets in correct layer order */
 
-/* Reset & Base */
+/* 1) Reset */
 @import url("./reset.css") layer(reset);
+
+/* 2) Design Tokens */
 @import url("./design-tokens.css") layer(base);
+
+/* 3) Typography */
 @import url("./typography.css") layer(base);
 
-/* Layout */
+/* 4) Layout */
 @import url("./layout.css") layer(layout);
 
-/* Components - Ordered by dependency hierarchy */
-/* Base visual effects (no dependencies) */
-@import url("./components/atmospheric-system.css") layer(components);
-@import url("./components/skrell-cultural.css") layer(components);
+/* 5) Utilities */
+@import url("./utilities.css") layer(utilities);
 
-/* Core interface components */
+/* 6) Components - Ordered by dependency hierarchy */
+/* Navigation components */
 @import url("./components/navigation.css") layer(components);
+
+/* Modal system */
 @import url("./components/modals.css") layer(components);
+
+/* Notification system */
 @import url("./components/notifications.css") layer(components);
 
-/* Content and layout components */
+/* Form controls and neural documents */
+@import url("./components/neural-documents.css") layer(components);
+
+/* UI components */
 @import url("./components/flowing-states.css") layer(components);
-@import url("./components/starfield.css") layer(components);
 @import url("./components/constellation-views.css") layer(components);
 
-/* Specialized components */
-@import url("./components/neural-documents.css") layer(components);
+/* Domain-specific components */
 @import url("./components/citizen-management.css") layer(components);
+@import url("./components/citizen-ui.css") layer(components);
+@import url("./components/node-manager.css") layer(components);
 
-/* Utilities */
-@import url("./utilities.css") layer(utilities);
+/* Utility components */
+@import url("./components/shared-utilities.css") layer(components);
+@import url("./components/view-manager.css") layer(components);
+@import url("./components/starfield-interactions.css") layer(components);
+
+/* Visual effects and theming */
+@import url("./components/atmospheric-system.css") layer(components);
+@import url("./components/starfield.css") layer(components);
+@import url("./components/skrell-cultural.css") layer(components);
+
+/* 7) Global styles */
+/* Currently all styles are in component files, no additional global style needed */
+
+/* 8) Responsive */
 @import url("./responsive.css") layer(utilities);

@@ -1,7 +1,189 @@
 /**
- * Constellation Views
- * Data node grids and constellation interfaces
+ * Cards & Surface Components
+ * Standardized card components and view container styling
+ *
+ * MIGRATION GUIDE:
+ * - Previous class: .data-node => Now use .card or .card--data
+ * - Previous class: .node-bubble => Now use .card--bubble
+ * - Previous class: .thought-bubble-document => Now use .card--document
  */
+
+/* === BASE CARD COMPONENT === */
+
+.card {
+  /* Base styling */
+  background: var(--gradient-neural-primary), var(--gradient-neural-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  
+  /* Container behavior */
+  position: relative;
+  overflow: hidden;
+  
+  /* Glass effect */
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-neural-md), var(--shadow-inset-neural);
+  
+  /* Transitions */
+  transition: all var(--duration-base) var(--ease-neural);
+}
+
+/* Card header */
+.card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+/* Card title */
+.card__title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+/* Card content area */
+.card__body {
+  margin-bottom: var(--space-4);
+}
+
+/* Card description text */
+.card__description {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  margin-bottom: var(--space-3);
+}
+
+/* Card footer */
+.card__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+/* === CARD VARIATIONS === */
+
+/* Elevated card */
+.card--elevated {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-neural-lg), var(--shadow-inset-neural);
+}
+
+/* Inset card */
+.card--inset {
+  background: var(--glass-bg-light);
+  box-shadow: 
+    inset 0 2px 4px var(--glass-shadow-base),
+    var(--shadow-inset-neural);
+}
+
+/* Data node card (with floating animation) */
+.card--data {
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  animation: base-floating var(--duration-float) ease-in-out infinite;
+  cursor: pointer;
+}
+
+/* Card with energy flow effect */
+.card--energy::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: var(--gradient-energy-conic);
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity var(--duration-slower) var(--ease-neural);
+  animation: base-rotation var(--duration-pulse) linear infinite;
+}
+
+.card--energy::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-energy-horizontal);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--duration-slower) var(--ease-neural);
+  animation: energy-pulse var(--duration-neural-pulse) ease-in-out infinite;
+}
+
+.card--energy:hover::before,
+.card--energy:hover::after {
+  opacity: 1;
+}
+
+/* Document card (circular bubble style) */
+.card--document {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  transition: all var(--duration-base) var(--ease-organic);
+  animation: base-floating var(--duration-float) var(--ease-organic) infinite;
+  position: relative;
+  min-width: 140px;
+  max-width: 160px;
+  transform-origin: center;
+  box-shadow: none;
+}
+
+.card--bubble {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius-organic-1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: none;
+  border: none;
+}
+
+.card--bubble::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    var(--color-cyan),
+    var(--color-skrell-blue),
+    var(--color-cyan)
+  );
+  animation: base-rotation var(--duration-pulse) linear infinite;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+.card--bubble::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--glass-bg-medium);
+  border: 1px solid var(--glass-border);
+  border-radius: inherit;
+  backdrop-filter: blur(16px);
+}
+
+/* === CONSTELLATION VIEW CONTAINER === */
 
 .constellation-view {
   position: relative;
@@ -12,7 +194,6 @@
   transition: all var(--duration-slower) var(--ease-neural);
   pointer-events: none;
   padding: var(--space-8) var(--space-6);
-  /* overflow: hidden; - Removed to allow atmospheric effects to extend beyond container */
   z-index: var(--z-base);
   box-sizing: border-box;
   
@@ -28,8 +209,7 @@
   transform: translateY(0) scale(1);
   pointer-events: auto;
   z-index: var(--z-floating);
-  animation: thought-materialization var(--duration-slower) var(--ease-neural)
-    forwards;
+  animation: thought-materialization var(--duration-slower) var(--ease-neural) forwards;
 }
 
 .constellation-view[aria-hidden="true"] {
@@ -56,6 +236,8 @@
     filter: blur(0);
   }
 }
+
+/* === CONSTELLATION HEADER === */
 
 .constellation-header {
   display: flex;
@@ -86,14 +268,12 @@
   right: 0;
   height: 3px;
   background: var(--gradient-energy-horizontal);
-  animation: consciousness-energy-flow var(--duration-ripples) ease-in-out
-    infinite;
+  animation: consciousness-energy-flow var(--duration-ripples) ease-in-out infinite;
   border-radius: var(--radius-organic-1);
 }
 
 @keyframes thought-header-breathe {
-  0%,
-  100% {
+  0%, 100% {
     transform: scale(1);
     border-radius: var(--radius-organic-1);
   }
@@ -104,8 +284,7 @@
 }
 
 @keyframes consciousness-energy-flow {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 0.5;
     transform: translateX(-10px);
   }
@@ -172,6 +351,8 @@
   max-width: 60ch;
 }
 
+/* === GRID LAYOUTS === */
+
 /* Data Node Grid */
 .node-grid {
   display: grid;
@@ -184,13 +365,7 @@
   justify-content: center;
 }
 
-.node-grid::after {
-  content: "";
-  grid-column: 1 / -1;
-  height: 0;
-}
-
-/* Thought Bubble Document Layout - Row-based display */
+/* Thought Bubble Document Layout */
 .thought-bubble-documents {
   display: flex;
   flex-wrap: wrap;
@@ -202,8 +377,8 @@
   align-items: flex-start;
 }
 
-/* Enhanced styling for citizen files within Qu'Poxii constellation */
-.thought-bubble-documents[data-constellation="qu-poxii"] {
+/* Constellation-specific styling */
+.thought-bubble-documents[data-constellation] {
   background: var(--bg-overlay-white-subtle);
   border-radius: var(--radius-lg);
   border: 1px solid var(--glass-border);
@@ -211,357 +386,10 @@
   backdrop-filter: blur(8px);
 }
 
-/* Enhanced floating with organic easing */
-.thought-bubble-document {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-6);
-  transition: all var(--duration-base) var(--ease-organic);
-  animation: base-floating var(--duration-float) var(--ease-organic) infinite;
-  position: relative;
-  min-width: 140px;
-  max-width: 160px;
-  transform-origin: center;
-}
+/* === STATUS TAGS AND BADGES === */
 
-/* Animation delays moved to unified utility system: .stagger-delay */
-
-.thought-bubble-document .document-bubble {
-  width: 100px;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(20px);
-  border-radius: var(--radius-organic-1);
-  position: relative;
-  overflow: hidden;
-}
-
-.thought-bubble-document .document-bubble::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  background: conic-gradient(
-    var(--color-cyan),
-    var(--color-skrell-blue),
-    var(--color-cyan)
-  );
-  animation: base-rotation var(--duration-pulse) linear infinite;
-  z-index: -1;
-  opacity: 0.3;
-}
-
-.thought-bubble-document .document-bubble::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--glass-bg-medium);
-  border: 1px solid var(--glass-border);
-  border-radius: inherit;
-  backdrop-filter: blur(16px);
-}
-
-.thought-bubble-document .document-icon {
-  width: 40px;
-  height: 40px;
-  filter: drop-shadow(0 0 10px var(--glow-cyan-medium));
-  z-index: var(--z-raised);
-  transition: all var(--duration-base) ease;
-}
-
-/* Document ripples now use unified ripple system from utilities.css */
-.thought-bubble-document .document-ripples {
-  transform-origin: center;
-}
-
-.thought-bubble-document .document-label {
-  font-family: var(--font-primary);
-  font-size: var(--text-sm);
-  font-weight: 400;
-  color: var(--color-cyan);
-  text-align: center;
-  text-shadow: 0 0 8px var(--glow-cyan-strong);
-  transition: all var(--duration-base) ease;
-  max-width: 120px;
-  line-height: 1.3;
-}
-
-.thought-bubble-document .document-seal {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: bold;
-  z-index: var(--z-raised);
-  backdrop-filter: blur(8px);
-}
-
-/* Hover effects */
-.thought-bubble-document:hover .document-bubble {
-  transform: scale(1.1);
-  border-radius: var(--radius-organic-2);
-  box-shadow:
-    0 0 30px var(--glow-cyan-medium),
-    inset 0 0 30px var(--glow-cyan-ultra);
-}
-
-.thought-bubble-document:hover .document-icon {
-  transform: scale(1.1);
-  filter: drop-shadow(0 0 15px var(--glow-cyan-intense));
-}
-
-/* Ripple hover effects now use unified ripple system */
-.thought-bubble-document:hover .document-ripples {
-  opacity: 1;
-  animation: ripple-expand var(--duration-base) ease-out forwards;
-}
-
-.thought-bubble-document:hover .document-label {
-  transform: translateY(-3px);
-  text-shadow:
-    0 0 12px var(--glow-cyan-intense),
-    0 0 24px var(--glow-cyan-medium);
-}
-
-/* Smooth border radius morphing on hover */
-.thought-bubble-document .document-bubble {
-  transition: all var(--duration-base) var(--ease-organic);
-}
-
-.thought-bubble-document:hover .document-bubble {
-  border-radius: var(--radius-organic-2);
-  transition: all var(--duration-base) var(--ease-organic);
-}
-
-/* Enhanced glow effect on hover */
-.thought-bubble-document:hover .document-bubble::after {
-  box-shadow:
-    0 0 20px var(--glow-cyan-strong),
-    inset 0 0 20px var(--glow-cyan-whisper);
-  transition: all var(--duration-base) var(--ease-organic);
-}
-
-/* Smooth icon scaling */
-.thought-bubble-document .document-icon {
-  transition: all var(--duration-base) var(--ease-organic);
-}
-
-.thought-bubble-document:hover .document-icon {
-  transform: scale(1.1);
-  transition: all var(--duration-base) var(--ease-organic);
-}
-
-/* Smooth label movement */
-.thought-bubble-document .document-label {
-  transition: all var(--duration-base) var(--ease-organic);
-}
-
-.thought-bubble-document:hover .document-label {
-  transform: translateY(-3px);
-  transition: all var(--duration-base) var(--ease-organic);
-}
-
-/* Constellation-specific theming for thought bubbles */
-.thought-bubble-documents[data-constellation="gnarled-tree"]
-  .thought-bubble-document
-  .document-bubble::before {
-  background: conic-gradient(
-    var(--constellation-tree-primary),
-    var(--constellation-tree-secondary),
-    var(--constellation-tree-primary)
-  );
-}
-
-.thought-bubble-documents[data-constellation="qu-poxii"]
-  .thought-bubble-document
-  .document-bubble::before {
-  background: conic-gradient(
-    var(--constellation-bond-primary),
-    var(--constellation-bond-secondary),
-    var(--constellation-bond-primary)
-  );
-}
-
-.thought-bubble-documents[data-constellation="star-chanter"]
-  .thought-bubble-document
-  .document-bubble::before {
-  background: conic-gradient(
-    var(--constellation-chant-primary),
-    var(--constellation-chant-secondary),
-    var(--constellation-chant-primary)
-  );
-}
-
-.thought-bubble-documents[data-constellation="hatching-egg"]
-  .thought-bubble-document
-  .document-bubble::before {
-  background: conic-gradient(
-    var(--constellation-egg-primary),
-    var(--constellation-egg-secondary),
-    var(--constellation-egg-primary)
-  );
-}
-
-.thought-bubble-documents[data-constellation="void"]
-  .thought-bubble-document
-  .document-bubble::before {
-  background: conic-gradient(
-    var(--constellation-void-primary),
-    var(--constellation-void-secondary),
-    var(--constellation-void-primary)
-  );
-}
-
-/* Seal-specific styling for thought bubble documents */
-.thought-bubble-document .document-seal.open {
-  background: var(--glass-bg-accent);
-  border: 1px solid var(--glass-cultural-border);
-  color: var(--color-cyan);
-  box-shadow: var(--shadow-neural-sm);
-}
-
-.thought-bubble-document .document-seal.filed {
-  background: var(--glass-bg-cosmic);
-  border: 1px solid var(--glass-border);
-  color: var(--color-mist);
-  box-shadow: var(--shadow-neural-sm);
-}
-
-.thought-bubble-document .document-seal.black-star {
-  background: var(--glass-bg-cosmic);
-  border: 1px solid var(--constellation-void-primary);
-  color: var(--constellation-void-primary);
-  box-shadow: var(--shadow-void);
-}
-
-.thought-bubble-document .document-seal.consular {
-  background: var(--glass-cultural-gradient-start);
-  border: 1px solid var(--color-warning);
-  color: var(--color-warning);
-  box-shadow: var(--shadow-authority);
-}
-
-.thought-bubble-document .document-seal.aide {
-  background: var(--glass-cultural-gradient-mid);
-  border: 1px solid var(--color-cyan);
-  color: var(--color-cyan);
-  box-shadow: var(--shadow-neural-sm);
-}
-
-.data-node {
-  background: var(--gradient-neural-primary), var(--gradient-neural-secondary);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-xl);
-  padding: var(--space-6) var(--space-8);
-  transition: all var(--duration-slower) var(--ease-neural);
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(12px);
-  box-shadow: var(--shadow-neural-md), var(--shadow-inset-neural);
-  animation: base-floating var(--duration-float) ease-in-out infinite;
-  min-height: 180px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-/* Animation delays moved to unified utility system: .stagger-delay */
-.data-node:nth-child(2n) {
-  border-radius: var(--radius-organic-subtle);
-}
-
-.data-node:nth-child(3n) {
-  border-radius: var(--radius-organic-dynamic);
-}
-
-.data-node:nth-child(4n) {
-  border-radius: var(--radius-lg);
-}
-
-.data-node:nth-child(5n) {
-  border-radius: var(--radius-organic-subtle);
-}
-
-.data-node::after {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  background: var(--gradient-energy-conic);
-  border-radius: inherit;
-  pointer-events: none;
-  opacity: 0;
-  z-index: -1;
-  transition: opacity var(--duration-slower) var(--ease-neural);
-  animation: base-rotation var(--duration-pulse) linear infinite;
-}
-
-.data-node::before {
-  content: "";
-  position: absolute;
-  top: -1px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--gradient-energy-horizontal);
-  border-radius: inherit;
-  opacity: 0;
-  transition: opacity var(--duration-slower) var(--ease-neural);
-  animation: energy-pulse var(--duration-neural-pulse) ease-in-out infinite;
-}
-
-.data-node:hover {
-  background:
-    var(--gradient-consciousness-flow), var(--gradient-neural-secondary);
-  border-color: var(--color-cyan);
-  transform: translateY(-8px) scale(1.02);
-  box-shadow:
-    var(--shadow-neural-xl), var(--shadow-consciousness),
-    var(--shadow-inset-glow);
-  animation-play-state: paused;
-}
-
-.data-node:hover::before {
-  opacity: 1;
-}
-
-.data-node:hover::after {
-  opacity: 1;
-}
-
-@keyframes energy-pulse {
-  0%,
-  100% {
-    opacity: 0.3;
-    transform: scaleX(0.8);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scaleX(1.2);
-  }
-}
-
-.node-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  margin-bottom: var(--space-4);
-}
-
-.node-seal {
+/* Status badge */
+.status-badge {
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-full);
   font-size: var(--text-xs);
@@ -570,26 +398,29 @@
   letter-spacing: 0.5px;
 }
 
-.node-seal.open {
+/* Open status */
+.status-badge--open {
   background: var(--glow-cyan-medium);
   color: var(--color-accent);
   border: 1px solid var(--color-accent);
 }
 
-.node-seal.filed {
+/* Filed status */
+.status-badge--filed {
   background: var(--glow-gold-error-bg-outer);
   color: var(--color-warning);
   border: 1px solid var(--color-warning);
 }
 
-.node-seal.black-star {
+/* Restricted status */
+.status-badge--restricted {
   background: var(--constellation-void-bg);
   color: var(--color-text);
   border: 1px solid var(--color-quasar);
   position: relative;
 }
 
-.node-seal.black-star::after {
+.status-badge--restricted::after {
   content: "★";
   position: absolute;
   right: -10px;
@@ -599,27 +430,9 @@
   font-size: 0.8em;
 }
 
-.node-title {
-  font-size: var(--text-lg);
-  font-weight: 600;
-  color: var(--color-text);
-  margin: 0;
-}
+/* === TAG SYSTEM === */
 
-.node-description {
-  color: var(--color-text-muted);
-  font-size: var(--text-sm);
-  line-height: 1.6;
-  margin-bottom: var(--space-3);
-}
-
-.node-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-.node-tag {
+.tag {
   padding: var(--space-1) var(--space-2);
   background: var(--glass-bg-medium);
   border: 1px solid var(--glass-border);
@@ -628,141 +441,68 @@
   color: var(--color-text-dim);
 }
 
-/* Constellation-Specific View Theming - Now handled by atmospheric-system.css */
+/* === CARD HOVER EFFECTS === */
 
-/* Constellation views will receive atmospheric theming through:
- * - .constellation-atmosphere with appropriate theme class
- * - .constellation-content-overlay for subtle content enhancement
- * 
- * Theme classes applied via JavaScript:
- * - .tree-theme for Gnarled Tree
- * - .bond-theme for Qu'Poxii  
- * - .chant-theme for Star Chanter
- * - .egg-theme for Hatching Egg
- * - .void-theme for Void
- */
-
-/* Constellation-specific component styling now uses direct design tokens */
-/* Each constellation view can override these with specific constellation colors as needed */
-
-/* Constellation Shell Styles for Future Functionality */
-.constellation-shell {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: var(--space-8);
-  background:
-    var(--gradient-neural-primary), var(--gradient-consciousness-flow);
-  border-radius: var(--radius-xl);
-  backdrop-filter: blur(12px);
+.card:hover {
+  background: var(--gradient-consciousness-flow), var(--gradient-neural-secondary);
+  border-color: var(--color-cyan);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-neural-lg), var(--shadow-consciousness);
 }
 
-.shell-header {
-  text-align: center;
-  margin-bottom: var(--space-8);
-  padding-bottom: var(--space-4);
-  border-bottom: 1px solid var(--glow-cyan-medium);
+.card--document:hover .card--bubble {
+  transform: scale(1.1);
+  border-radius: var(--radius-organic-2);
+  box-shadow: 
+    0 0 30px var(--glow-cyan-medium),
+    inset 0 0 30px var(--glow-cyan-ultra);
 }
 
-.shell-header h3 {
-  margin: 0 0 var(--space-2) 0;
-  color: var(--color-accent);
-  font-size: var(--text-2xl);
-  font-weight: 600;
+/* === ENERGY PULSE ANIMATION === */
+
+@keyframes energy-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scaleX(0.8);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scaleX(1.2);
+  }
 }
 
-.shell-subtitle {
-  margin: 0;
-  color: var(--color-text-muted);
-  font-size: var(--text-base);
-  font-style: italic;
+/* === CONSTELLATION-SPECIFIC THEMING === */
+
+/* Constellation-specific themes handled via atmospheric-system.css */
+/* Each constellation can apply these classes for theming: */
+/* .tree-theme, .bond-theme, .chant-theme, .egg-theme, .void-theme */
+
+/* === ACCESSIBILITY === */
+
+@media (prefers-reduced-motion: reduce) {
+  .card--data,
+  .card--document {
+    animation: none;
+  }
+  
+  .constellation-header {
+    animation: none;
+  }
+  
+  .constellation-view.active {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
 }
 
-.shell-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-6);
-  text-align: center;
-}
-
-.shell-icon {
-  font-size: var(--text-3xl);
-  opacity: 0.7;
-  margin: var(--space-4) 0;
-  filter: drop-shadow(0 0 20px var(--glow-cyan-medium));
-}
-
-.shell-description {
-  color: var(--color-text);
-  font-size: var(--text-lg);
-  line-height: 1.6;
-  max-width: 600px;
-  margin: 0;
-}
-
-.shell-features {
-  background: var(--bg-overlay-white-subtle);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-xl);
-  padding: var(--space-6);
-  width: 100%;
-  max-width: 500px;
-  text-align: left;
-  backdrop-filter: blur(8px);
-}
-
-.shell-features h4 {
-  margin: 0 0 1rem 0;
-  color: var(--color-accent);
-  font-size: var(--text-lg);
-  text-align: center;
-}
-
-.shell-features ul {
-  margin: 0;
-  padding-left: var(--space-6);
-  color: var(--color-text-muted);
-}
-
-.shell-features li {
-  margin-bottom: var(--space-2);
-  font-size: var(--text-sm);
-}
-
-.security-notice {
-  background: var(--glow-gold-error-bg-inner);
-  border: 1px solid var(--glow-gold-error-border);
-  border-radius: var(--radius-xl);
-  padding: var(--space-4);
-  width: 100%;
-  max-width: 500px;
-  backdrop-filter: blur(8px);
-}
-
-.security-notice p {
-  margin: 0;
-  color: var(--color-error);
-  font-size: var(--text-sm);
-}
-
-.shell-status {
-  margin-top: var(--space-4);
-}
-
-.status-indicator {
-  display: inline-block;
-  padding: var(--space-2) var(--space-4);
-  background: var(--glass-bg-light);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-full);
-  color: var(--color-accent);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  backdrop-filter: blur(8px);
-}
-
-.status-indicator.classified {
-  background: var(--glow-gold-error-bg-inner);
-  border-color: var(--glow-gold-error-border);
-  color: var(--color-error);
+@media (prefers-contrast: high) {
+  .card {
+    border-width: 2px;
+  }
+  
+  .constellation-header {
+    border-width: 2px;
+  }
 }

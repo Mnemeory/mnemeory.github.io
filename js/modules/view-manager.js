@@ -135,8 +135,7 @@ export class ViewManager {
       currentView.setAttribute("inert", "");
 
       setTimeout(() => {
-        currentView.style.opacity = "";
-        currentView.style.transform = "";
+        currentView.classList.add('view-transition-reset');
       }, CONSTANTS.TENDRIL_ANIMATION_DURATION);
     }
 

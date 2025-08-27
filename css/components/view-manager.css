@@ -1,0 +1,10 @@
+/**
+ * View Manager Styles
+ * Replaces inline styles used in view-manager.js
+ */
+
+/* View transition states */
+.view-transition-reset {
+  opacity: 1;
+  transform: none;
+}

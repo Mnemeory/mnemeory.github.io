@@ -1,29 +1,47 @@
 /**
  * Modal System
- * Fluid bubble modals and overlay systems
+ * Standardized modal components with consistent structure
+ *
+ * MIGRATION GUIDE:
+ * - Previous classes: .base-modal and .bubble-modal => Now use .modal
+ * - Previous classes: .modal-content and .bubble-content => Now use .modal__container
+ * - Previous classes: .modal-header and .bubble-header => Now use .modal__header
+ * - Previous classes: .modal-body and .bubble-content => Now use .modal__body
+ * - Previous classes: .modal-footer and .bubble-actions => Now use .modal__footer
  */
 
-/* Unified Modal System */
+/* === MODAL CONTAINER === */
+.modal,
 .base-modal {
+  /* Positioning */
   position: fixed;
   inset: 0;
   z-index: var(--z-modal);
+  
+  /* Layout */
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--space-4);
+  
+  /* Initial state */
   opacity: 0;
   visibility: hidden;
+  
+  /* Transitions */
   transition: all var(--duration-slower) var(--ease-neural);
 }
 
-.base-modal.active,
+/* Active state */
+.modal.is-open,
+.modal[aria-hidden="false"],
 .base-modal[aria-hidden="false"] {
   opacity: 1;
   visibility: visible;
 }
 
-.modal-backdrop,
+/* === MODAL BACKDROP === */
+.modal__backdrop,
 .bubble-ocean {
   position: absolute;
   inset: 0;
@@ -33,7 +51,21 @@
   animation: ocean-flow 60s ease-in-out infinite;
 }
 
-.modal-content {
+@keyframes ocean-flow {
+  0%, 100% {
+    background-position:
+      0% 0%,
+      100% 100%;
+  }
+  50% {
+    background-position:
+      100% 50%,
+      0% 50%;
+  }
+}
+
+/* === MODAL CONTAINER === */
+.modal__container {
   position: relative;
   width: 100%;
   max-width: 920px;
@@ -47,9 +79,12 @@
   transform: scale(0.95);
   transition: all var(--duration-slower) var(--ease-neural);
   animation: bubble-gentle-float 12s ease-in-out infinite;
+  display: flex;
+  flex-direction: column;
 }
 
-.modal-content::before {
+/* Energy flow effect on top of modal */
+.modal__container::before {
   content: "";
   position: absolute;
   top: 0;
@@ -61,8 +96,7 @@
 }
 
 @keyframes modal-energy-flow {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 0.4;
   }
   50% {
@@ -70,12 +104,31 @@
   }
 }
 
-.base-modal.active .modal-content,
-.base-modal[aria-hidden="false"] .modal-content {
+@keyframes bubble-gentle-float {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.95;
+  }
+  33% {
+    transform: scale(1.005) translateY(-2px);
+    opacity: 1;
+  }
+  66% {
+    transform: scale(0.998) translateY(1px);
+    opacity: 0.98;
+  }
+}
+
+/* Show content when modal is active */
+.modal.is-open .modal__container,
+.modal[aria-hidden="false"] .modal__container,
+.base-modal.is-open .modal__container,
+.base-modal[aria-hidden="false"] .modal__container {
   transform: scale(1);
 }
 
-.modal-header {
+/* === MODAL HEADER === */
+.modal__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -84,7 +137,7 @@
   background: var(--glass-bg-light);
 }
 
-.modal-title {
+.modal__title {
   flex: 1;
   margin: 0;
   color: var(--color-cyan);
@@ -94,7 +147,8 @@
   text-shadow: 0 0 8px var(--glow-cyan-gentle);
 }
 
-.modal-close {
+/* === MODAL CLOSE BUTTON === */
+.modal__close {
   width: 40px;
   height: 40px;
   background: none;
@@ -112,78 +166,24 @@
   animation: close-float 4s ease-in-out infinite;
 }
 
-.close-ripple {
+.modal__close-icon {
   transition: all var(--duration-base) var(--ease-organic);
 }
 
-.modal-close:hover .close-ripple {
+.modal__close:hover .modal__close-icon {
   transform: scale(1.2);
   text-shadow: 0 0 6px var(--glow-cyan-medium);
 }
 
-.modal-close:hover {
+.modal__close:hover {
   background: var(--gradient-bubble-base);
   border-radius: 50% 50% 50% 50%;
   transform: scale(1.1);
   box-shadow: var(--shadow-glow), var(--shadow-inset-neural);
 }
 
-.modal-body {
-  padding: var(--space-6);
-  max-height: 60vh;
-  overflow-y: auto;
-  color: var(--color-mist);
-  line-height: 1.7;
-  text-shadow: 0 0 3px var(--color-mist);
-}
-
-.modal-footer {
-  display: flex;
-  gap: var(--space-4);
-  padding: var(--space-6);
-  border-top: 1px solid var(--glass-border);
-  justify-content: center;
-  background: var(--glass-bg-subtle);
-  flex-wrap: wrap;
-}
-
-@keyframes ocean-flow {
-  0%,
-  100% {
-    background-position:
-      0% 0%,
-      100% 100%;
-  }
-  50% {
-    background-position:
-      100% 50%,
-      0% 50%;
-  }
-}
-
-@keyframes bubble-gentle-float {
-  0%,
-  100% {
-    transform: scale(1) translateY(0);
-    opacity: 0.95;
-  }
-  33% {
-    transform: scale(1.005) translateY(-2px);
-    opacity: 1;
-  }
-  66% {
-    transform: scale(0.998) translateY(1px);
-    opacity: 0.98;
-  }
-}
-
-/* Removed duplicate .bubble-header and .bubble-title - use .modal-header and .modal-title instead */
-
-/* Removed duplicate .bubble-close - use .modal-close instead */
-
 @keyframes close-float {
-  0%,
-  100% {
+  0%, 100% {
     transform: rotate(0deg);
     border-radius: var(--radius-morph-bubble);
   }
@@ -193,29 +193,67 @@
   }
 }
 
-/* Removed duplicate .bubble-content and .bubble-actions - use .modal-body and .modal-footer instead */
-
-.flow-action {
-  background: var(--gradient-bubble-base);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-organic-dynamic);
-  cursor: pointer;
-  padding: var(--space-4);
-  color: var(--color-cyan);
-  font-family: var(--font-ui);
-  transition: all var(--duration-base) var(--ease-neural);
-  min-width: 200px;
+/* === MODAL BODY === */
+.modal__body {
+  padding: var(--space-6);
+  max-height: 60vh;
+  overflow-y: auto;
+  color: var(--color-mist);
+  line-height: 1.7;
+  text-shadow: 0 0 3px var(--color-mist);
+  flex: 1;
 }
 
-.flow-action:hover {
-  background: var(--gradient-neural-primary);
-  border-color: var(--glow-cyan-border);
-  transform: scale(1.05);
-  box-shadow: var(--shadow-neural-md);
+/* === MODAL FOOTER === */
+.modal__footer {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border-top: 1px solid var(--glass-border);
+  justify-content: center;
+  background: var(--glass-bg-subtle);
+  flex-wrap: wrap;
 }
 
-.action-bubble {
-  text-align: center;
-  font-size: var(--text-sm);
-  text-shadow: 0 0 4px var(--glow-cyan-gentle);
+/* === SIZE VARIANTS === */
+.modal--small .modal__container {
+  max-width: 480px;
+}
+
+.modal--large .modal__container {
+  max-width: 1200px;
+}
+
+.modal--fullscreen .modal__container {
+  max-width: 95vw;
+  max-height: 95vh;
+  height: 95vh;
+}
+
+/* === DIALOG POLYFILL === */
+/* For browsers that don't support <dialog> element */
+.modal[role="dialog"] {
+  /* Same styles as .modal */
+}
+
+/* === ACCESSIBILITY === */
+
+/* Focus trap - keep focus within modal */
+.modal:focus-within {
+  outline: none;
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .modal__container {
+    animation: none;
+  }
+  
+  .modal__close {
+    animation: none;
+  }
+  
+  .modal__backdrop {
+    animation: none;
+  }
 }

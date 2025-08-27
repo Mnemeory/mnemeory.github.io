@@ -554,7 +554,7 @@ export class PencodeRenderEngine {
     const imageRegex = /\[image id=([\w]*?\.[\w]*?)\]/gi;
     text = text.replace(imageRegex, (match, filename) => {
       const imageHost = SITE_CONFIG.docsImageHost || `${SITE_CONFIG.assets.directories.images}documents/`;
-      return `<img style="display:block;width:90%;" src="${imageHost}${filename}" alt="Document Image" class="neural-document-image">`;
+      return `<img src="${imageHost}${filename}" alt="Document Image" class="neural-document-image">`;
     });
 
     return text;
@@ -824,7 +824,7 @@ export class PencodeRenderEngine {
    */
   applyNeuralEnhancements(html) {
     // Add neural glow effects to headings
-    html = html.replace(/<h([123])([^>]*)>/g, '<h$1$2 style="text-shadow: 0 0 8px var(--glow-cyan-gentle);">');
+    html = html.replace(/<h([123])([^>]*)>/g, '<h$1$2 class="neural-heading">');
 
     // Enhance lists with neural indicators
     html = html.replace(/<li([^>]*)>/g, '<li$1 data-neural-marker="▸">');
@@ -837,7 +837,7 @@ export class PencodeRenderEngine {
    */
   applyDiplomaticEnhancements(html) {
     // Add diplomatic authority styling
-    html = html.replace(/<strong([^>]*)>/g, '<strong$1 style="color: var(--color-gold);">');
+    html = html.replace(/<strong([^>]*)>/g, '<strong$1 class="neural-strong">');
     return html;
   }
 
@@ -846,7 +846,7 @@ export class PencodeRenderEngine {
    */
   applyFederationEnhancements(html) {
     // Add federation-specific styling
-    html = html.replace(/<h1([^>]*)>/g, '<h1$1 style="border-bottom: 1px solid var(--glass-border); padding-bottom: var(--space-2);">');
+    html = html.replace(/<h1([^>]*)>/g, '<h1$1 class="neural-h1">');
     return html;
   }
 
@@ -1144,7 +1144,7 @@ export class PencodeRenderEngine {
         <h1 class="neural-heading neural-heading--primary">⚠️ NEURAL RENDERING ERROR</h1>
         <p><strong>Error:</strong> ${error.message}</p>
         <p><strong>Original Text:</strong></p>
-        <pre style="background: var(--glass-bg-light); padding: var(--space-3); border-radius: var(--radius-md); overflow-x: auto;">${originalText}</pre>
+        <pre class="neural-error-container">${originalText}</pre>
       </div>
     </div>`;
   }

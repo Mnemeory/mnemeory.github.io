@@ -36,6 +36,10 @@ export class NodeManager {
   setupModal() {
     this.modal = document.querySelector(getSelector("nodeModal"));
     if (!this.modal) return;
+    
+    // Ensure proper modal class
+    this.modal.classList.remove('base-modal');
+    this.modal.classList.add('modal');
 
     // Initialize document system for modal
     this.modalDocument = documentSystem.instance.createDocument("modal-paper-container", {
@@ -194,16 +198,11 @@ export class NodeManager {
       );
 
       // Stagger animations
-      thoughtBubble.style.opacity = "0";
-      thoughtBubble.style.transform = "translateY(20px) scale(0.9)";
-
       setTimeout(() => {
-        thoughtBubble.style.transition = `opacity ${ANIMATION_CONFIG.nodeBloom}ms ease-out, transform ${ANIMATION_CONFIG.nodeBloom}ms ease-out`;
-        thoughtBubble.style.opacity = "1";
-        thoughtBubble.style.transform = "translateY(0) scale(1)";
-
+        thoughtBubble.classList.add('animate-in');
+        
         setTimeout(() => {
-          thoughtBubble.style.transition = "";
+          thoughtBubble.classList.add('animation-complete');
         }, ANIMATION_CONFIG.nodeBloom);
       }, index * CONSTANTS.SHORT_DELAY);
 
@@ -249,16 +248,13 @@ export class NodeManager {
         );
 
         // Stagger animations
-        thoughtBubble.style.opacity = "0";
-        thoughtBubble.style.transform = "translateY(20px) scale(0.9)";
+        // Animation handled by CSS classes
 
         setTimeout(() => {
-          thoughtBubble.style.transition = `opacity ${ANIMATION_CONFIG.nodeBloom}ms ease-out, transform ${ANIMATION_CONFIG.nodeBloom}ms ease-out`;
-          thoughtBubble.style.opacity = "1";
-          thoughtBubble.style.transform = "translateY(0) scale(1)";
-
+          thoughtBubble.classList.add('animate-in');
+          
           setTimeout(() => {
-            thoughtBubble.style.transition = "";
+            thoughtBubble.classList.add('animation-complete');
           }, ANIMATION_CONFIG.nodeBloom);
         }, index * CONSTANTS.SHORT_DELAY);
 
@@ -305,16 +301,13 @@ export class NodeManager {
         );
 
         // Stagger animations
-        thoughtBubble.style.opacity = "0";
-        thoughtBubble.style.transform = "translateY(20px) scale(0.9)";
+        // Animation handled by CSS classes
 
         setTimeout(() => {
-          thoughtBubble.style.transition = `opacity ${ANIMATION_CONFIG.nodeBloom}ms ease-out, transform ${ANIMATION_CONFIG.nodeBloom}ms ease-out`;
-          thoughtBubble.style.opacity = "1";
-          thoughtBubble.style.transform = "translateY(0) scale(1)";
-
+          thoughtBubble.classList.add('animate-in');
+          
           setTimeout(() => {
-            thoughtBubble.style.transition = "";
+            thoughtBubble.classList.add('animation-complete');
           }, ANIMATION_CONFIG.nodeBloom);
         }, index * CONSTANTS.SHORT_DELAY);
 
@@ -433,6 +426,9 @@ export class NodeManager {
     if (title) {
       title.textContent = node.name;
     }
+    
+    // Ensure modal has correct classes
+    this.modal.classList.add('is-open');
 
     try {
       // Load document content
@@ -561,6 +557,7 @@ export class NodeManager {
     if (!this.modal) return;
 
     this.modal.setAttribute("aria-hidden", "true");
+    this.modal.classList.remove('is-open');
     this.currentNode = null;
   }
 
