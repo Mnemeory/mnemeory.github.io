@@ -278,22 +278,14 @@
   text-shadow: 0 0 5px var(--glow-cyan-strong);
 }
 
-.button-ripples {
-  animation: base-rotation var(--duration-ripples) linear infinite;
-}
+/* Button ripples now use unified ripple system: .base-ripples .base-ripples--button */
 
 .flow-return:hover .return-bubble {
   transform: translateX(-5px) scale(1.05);
-  border-radius: 30px 30px 30px 30px;
+  border-radius: var(--radius-organic-3);
   box-shadow:
     0 0 25px var(--glow-cyan-strong),
     inset 0 0 25px var(--glow-subtle);
 }
 
-.flow-return:hover .button-ripples {
-  opacity: 1;
-}
-
-
-
-
+/* Return button ripples now use unified ripple system: .base-ripples .base-ripples--button */

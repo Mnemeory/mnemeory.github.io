@@ -55,15 +55,15 @@
     );
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(175, 238, 238, 0.3);
+  border: 1px solid var(--glass-border);
   position: relative;
   overflow: hidden;
-  transition: all 0.8s ease;
+  transition: all var(--duration-slower) var(--ease-organic);
 }
 
 /* Base Floating Animation */
 .base-float {
-  animation: base-floating 16s ease-in-out infinite;
+  animation: base-floating var(--duration-float) ease-in-out infinite;
 }
 
 @keyframes base-floating {
@@ -88,7 +88,7 @@
 
 /* Base Morphing Animation */
 .base-morph {
-  animation: base-morphing 8s ease-in-out infinite;
+  animation: base-morphing var(--duration-morph) ease-in-out infinite;
 }
 
 @keyframes base-morphing {
@@ -114,9 +114,9 @@
 /* Base Glow Effect */
 .base-glow-hover:hover {
   box-shadow:
-    0 0 25px rgba(175, 238, 238, 0.4),
-    inset 0 0 25px rgba(175, 238, 238, 0.1);
-  border-color: rgba(175, 238, 238, 0.5);
+    0 0 25px var(--glow-cyan-strong),
+    inset 0 0 25px var(--glow-cyan-gentle);
+  border-color: var(--glow-cyan-border);
 }
 
 /* === UNIFIED HOVER TRANSFORM SYSTEM === */
@@ -244,89 +244,45 @@
   transform: scale(1.15);
 }
 
-/* Common Button Base */
-.corp-btn {
-  padding: 8px 16px;
-  border: 1px solid rgba(92, 231, 231, 0.3);
-  border-radius: 8px;
-  background: rgba(27, 94, 85, 0.3);
-  color: var(--color-cyan);
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  cursor: pointer;
-  transition: all var(--motion-base) var(--ease-organic);
-  text-decoration: none;
-  text-align: center;
-  user-select: none;
-}
 
-.corp-btn:hover,
-.corp-btn:focus-visible {
-  background: rgba(27, 94, 85, 0.6);
-  border-color: rgba(92, 231, 231, 0.5);
-  text-shadow: 0 0 4px rgba(92, 231, 231, 0.5);
-}
 
-.corp-btn:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-}
+/* === UNIFIED RIPPLE EFFECT SYSTEM === */
 
-.corp-btn--icon {
-  min-width: 36px;
-  padding: var(--space-2) var(--space-3);
-  font-family: var(--font-primary);
-  font-size: 1rem;
-}
-
-.corp-btn.active {
-  background: var(--bg-corp-btn-active);
-  border-color: var(--border-paper-stronger);
-  color: var(--color-cyan);
-}
-
-.corp-btn--small {
-  padding: var(--space-1) var(--space-3);
-  font-size: var(--text-xs);
-}
-
-.corp-btn--warning {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: var(--color-error);
-  color: var(--color-error);
-}
-
-.corp-btn--warning:hover {
-  background: rgba(239, 68, 68, 0.3);
-}
-
-.corp-btn--success {
-  background: rgba(34, 197, 94, 0.2);
-  border-color: var(--color-success);
-  color: var(--color-success);
-}
-
-.corp-btn--success:hover {
-  background: rgba(34, 197, 94, 0.3);
-}
-
-/* Unified Ripple Effect System */
+/* Base Ripple Component */
 .base-ripples {
   position: absolute;
   inset: -20px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    var(--glow-cyan-faint) 0%,
-    var(--glow-pink-subtle) 40%,
-    transparent 70%
-  );
-  animation: base-ripple-expand 8s ease-out infinite;
+  background: var(--gradient-consciousness-flow);
   opacity: 0;
   pointer-events: none;
+  transition: all var(--duration-base) ease;
+  animation: ripple-simple var(--duration-ripples) ease-out infinite;
 }
 
-/* Ripple Variants */
+/* Ripple Size Variants */
+.base-ripples--small {
+  inset: -5px;
+}
+
+.base-ripples--medium {
+  inset: -15px;
+}
+
+.base-ripples--large {
+  inset: -30px;
+}
+
+.base-ripples--massive {
+  inset: -40px;
+}
+
+/* Ripple Shape Variants */
+.base-ripples--organic {
+  border-radius: var(--radius-morph-bubble);
+  animation: ripple-organic var(--duration-ripples) ease-in-out infinite;
+}
+
 .base-ripples--button {
   inset: -5px;
   border-radius: var(--radius-organic-1);
@@ -341,14 +297,42 @@
 
 .base-ripples--close {
   inset: -10px;
-  animation: close-float 4s ease-in-out infinite;
+  animation: ripple-float var(--duration-neural-pulse) ease-in-out infinite;
 }
 
 .base-ripples--bubble {
   inset: -30px;
+  border-radius: inherit;
 }
 
-@keyframes base-ripple-expand {
+/* Ripple Background Variants */
+.base-ripples--cyan {
+  background: radial-gradient(
+    circle,
+    var(--glow-cyan-faint) 0%,
+    var(--glow-cyan-gentle) 40%,
+    transparent 70%
+  );
+}
+
+.base-ripples--conic {
+  background: conic-gradient(
+    transparent 0deg,
+    var(--glow-cyan-medium) 90deg,
+    transparent 180deg,
+    var(--glow-pink-gentle) 270deg,
+    transparent 360deg
+  );
+}
+
+.base-ripples--consciousness {
+  background: var(--gradient-consciousness-flow);
+}
+
+/* === RIPPLE ANIMATIONS === */
+
+/* Simple expanding ripple */
+@keyframes ripple-simple {
   0% {
     transform: scale(0.5);
     opacity: 0.6;
@@ -356,6 +340,89 @@
   100% {
     transform: scale(2);
     opacity: 0;
+  }
+}
+
+/* Organic morphing ripple with rotation */
+@keyframes ripple-organic {
+  0% {
+    transform: scale(0.8) rotate(0deg);
+    opacity: 0;
+    border-radius: 50% 40% 60% 30% / 40% 60% 30% 50%;
+  }
+  25% {
+    transform: scale(1.1) rotate(90deg);
+    opacity: 0.3;
+    border-radius: 40% 60% 30% 50% / 60% 30% 50% 40%;
+  }
+  50% {
+    transform: scale(1.3) rotate(180deg);
+    opacity: 0.5;
+    border-radius: 60% 30% 50% 40% / 30% 50% 40% 60%;
+  }
+  75% {
+    transform: scale(1.1) rotate(270deg);
+    opacity: 0.3;
+    border-radius: 30% 50% 40% 60% / 50% 40% 60% 30%;
+  }
+  100% {
+    transform: scale(0.8) rotate(360deg);
+    opacity: 0;
+    border-radius: 50% 40% 60% 30% / 40% 60% 30% 50%;
+  }
+}
+
+/* Gentle floating ripple for close buttons */
+@keyframes ripple-float {
+  0%, 100% {
+    transform: rotate(0deg);
+    border-radius: 50% 30% 50% 30% / 30% 50% 30% 50%;
+    opacity: 0.3;
+  }
+  50% {
+    transform: rotate(180deg);
+    border-radius: 30% 50% 30% 50% / 50% 30% 50% 30%;
+    opacity: 0.6;
+  }
+}
+
+/* Expanding ripple for hover effects */
+@keyframes ripple-expand {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0.3;
+  }
+}
+
+/* Pulse ripple for continuous effects */
+@keyframes ripple-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.6;
+  }
+}
+
+/* Outer layer ripple for complex effects */
+@keyframes ripple-outer {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.4;
   }
 }
 
@@ -378,35 +445,240 @@
   }
 }
 
-/* Base Action Button */
-/* Unified Action Button System */
-.base-action-btn {
+/* Shared Neural Loading Animations */
+@keyframes nlom-neural-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes nlom-neural-outer {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.4;
+  }
+}
+
+@keyframes nlom-neural-core {
+  0%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* === UNIFIED NEURAL BUTTON SYSTEM === */
+
+/* Base Neural Button - Foundation for all button variants */
+.neural-button {
+  /* Reset */
+  background: none;
+  border: none;
+  margin: 0;
+
+  /* Base Styling */
   padding: var(--space-3) var(--space-6);
-  background: radial-gradient(
-    ellipse at center,
-    var(--glow-cyan-faint) 0%,
-    transparent 70%
-  );
-  border: 1px solid var(--glow-cyan-border);
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-organic-dynamic);
+  color: var(--color-cyan);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--duration-base) var(--ease-organic);
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 0 5px var(--glow-cyan-gentle);
+
+  /* Accessibility */
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+/* Neural Button Consciousness Flow Effect */
+.neural-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-consciousness-flow);
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease-neural);
+  z-index: -1;
+}
+
+/* Neural Button Hover States */
+.neural-button:hover {
+  background: var(--glass-bg-accent);
+  border-color: var(--glow-cyan-border);
+  color: var(--color-pale-turquoise);
+  text-shadow: 0 0 8px var(--glow-cyan-gentle);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-neural-sm);
+}
+
+.neural-button:hover::before {
+  opacity: 1;
+}
+
+.neural-button:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-neural-sm);
+}
+
+.neural-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-color: var(--color-accent);
+}
+
+/* Active/Pressed State */
+.neural-button[aria-pressed="true"],
+.neural-button.active {
+  background: var(--glow-gold-error-bg-outer);
+  border-color: var(--glow-gold-error-border);
+  color: var(--color-gold);
+  text-shadow: 0 0 5px var(--glow-gold-error-text);
+}
+
+/* === SIZE VARIANTS === */
+
+.neural-button--small {
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-xs);
+}
+
+.neural-button--large {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  min-height: 60px;
+}
+
+.neural-button--large .btn-icon {
+  font-size: var(--text-xl);
+}
+
+.neural-button--large:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-neural-lg);
+}
+
+/* Responsive adjustments for large buttons */
+@media (max-width: 768px) {
+  .neural-button--large {
+    padding: var(--space-3) var(--space-6);
+    font-size: var(--text-base);
+    min-height: 50px;
+  }
+}
+
+/* === COLOR VARIANTS === */
+
+.neural-button--primary {
+  background: var(--glass-bg-accent);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.neural-button--primary:hover {
+  background: var(--glass-bg-medium);
+  box-shadow: var(--shadow-neural-md);
+}
+
+.neural-button--success {
+  background: var(--glass-bg-accent);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.neural-button--success:hover {
+  background: var(--glass-bg-medium);
+  text-shadow: 0 0 6px var(--color-success);
+}
+
+.neural-button--warning {
+  background: var(--glow-gold-error-bg-outer);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.neural-button--warning:hover {
+  background: var(--glow-gold-error-bg-inner);
+  text-shadow: 0 0 6px var(--glow-gold-error-text);
+}
+
+.neural-button--gold {
+  background: var(--glow-gold-error-bg-outer);
+  border-color: var(--glow-gold-error-border);
+  color: var(--color-gold);
+  text-shadow: 0 0 5px var(--glow-gold-error-text);
+}
+
+.neural-button--gold:hover {
+  box-shadow: var(--shadow-authority);
+}
+
+/* === CONTEXT VARIANTS === */
+
+.neural-button--toolbar {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-organic-dynamic);
+}
+
+.neural-button--minimal {
+  background: transparent;
+  border-color: transparent;
+  text-shadow: none;
+}
+
+.neural-button--minimal:hover {
+  background: var(--glass-bg-light);
+  border-color: var(--glass-border);
+}
+
+/* === LEGACY ALIASES === */
+
+/* Maintain compatibility with existing .base-action-btn usage */
+.base-action-btn {
+  /* Use .neural-button classes instead */
+  padding: var(--space-3) var(--space-6);
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-organic-1);
   color: var(--color-pale-turquoise);
   font-family: var(--font-ui);
   font-size: var(--text-sm);
   font-weight: 500;
   cursor: pointer;
-  transition: all var(--motion-base) var(--ease-organic);
+  transition: all var(--duration-base) var(--ease-organic);
   position: relative;
   overflow: hidden;
   text-shadow: 0 0 5px var(--glow-cyan-gentle);
-  background: none;
-  border: none;
 }
-
 
 .base-action-btn:hover,
 .base-action-btn:focus-visible {
   border-radius: var(--radius-organic-3);
-  box-shadow: var(--shadow-glow), var(--shadow-inset-glow);
+  box-shadow: var(--shadow-neural-sm), var(--shadow-inset-glow);
   transform: translateY(-2px);
 }
 
@@ -415,13 +687,8 @@
   outline-offset: 2px;
 }
 
-
 .base-action-btn--gold {
-  background: radial-gradient(
-    ellipse at center,
-    var(--glow-gold-error-bg-outer) 0%,
-    transparent 70%
-  );
+  background: var(--glow-gold-error-bg-outer);
   border-color: var(--glow-gold-error-border);
   color: var(--color-gold);
   text-shadow: 0 0 5px var(--glow-gold-error-text);
@@ -430,6 +697,34 @@
 .base-action-btn--gold:hover {
   box-shadow: var(--shadow-authority), var(--shadow-inset-glow);
 }
+
+/* === ANIMATION DELAY UTILITY SYSTEM === */
+
+/* Base staggered animation delays for nth-child elements */
+.stagger-delay:nth-child(1) { animation-delay: 0s; }
+.stagger-delay:nth-child(2) { animation-delay: -3s; }
+.stagger-delay:nth-child(3) { animation-delay: -6s; }
+.stagger-delay:nth-child(4) { animation-delay: -9s; }
+.stagger-delay:nth-child(5) { animation-delay: -12s; }
+
+/* Fast stagger for quick sequences */
+.stagger-delay--fast:nth-child(1) { animation-delay: 0s; }
+.stagger-delay--fast:nth-child(2) { animation-delay: -1s; }
+.stagger-delay--fast:nth-child(3) { animation-delay: -2s; }
+.stagger-delay--fast:nth-child(4) { animation-delay: -3s; }
+.stagger-delay--fast:nth-child(5) { animation-delay: -4s; }
+
+/* Long stagger for flowing elements */
+.stagger-delay--flow:nth-child(1) { animation-delay: 0s; }
+.stagger-delay--flow:nth-child(2) { animation-delay: -4s; }
+.stagger-delay--flow:nth-child(3) { animation-delay: -8s; }
+.stagger-delay--flow:nth-child(4) { animation-delay: -12s; }
+.stagger-delay--flow:nth-child(5) { animation-delay: -16s; }
+
+/* Alternating delays for odd/even patterns */
+.stagger-delay--alt:nth-child(odd) { animation-delay: -1s; }
+.stagger-delay--alt:nth-child(3n) { animation-delay: -2s; }
+.stagger-delay--alt:nth-child(5n) { animation-delay: -3s; }
 
 /* Legacy aliases - use .base-ripples .base-ripples--button classes in HTML */
 
@@ -519,4 +814,40 @@
 
 .w-100 {
   width: 100% !important;
+}
+
+/* Scrollbar hiding utility */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Backdrop filter utilities */
+.backdrop-blur-subtle {
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+}
+
+.backdrop-blur-light {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.backdrop-blur-medium {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.backdrop-blur-strong {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.backdrop-blur-heavy {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }

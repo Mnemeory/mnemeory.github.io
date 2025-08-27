@@ -3,142 +3,11 @@
  * State management for constellation views and transitions
  */
 
-.flow-state {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: translateZ(50px) scale(0.95);
-  transition: all var(--duration-ultra) var(--ease-neural);
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 1000px 600px at center,
-    var(--glow-cyan-ultra) 0%,
-    transparent 70%
-  );
-}
+/* Removed unused flow-state container */
 
-.flow-state.active {
-  opacity: 1;
-  transform: translateZ(0) scale(1);
-  pointer-events: auto;
-  animation: state-emergence var(--duration-ultra) var(--ease-neural);
-}
+/* Removed unused word-bubbles component */
 
-@keyframes state-emergence {
-  0% {
-    opacity: 0;
-    transform: translateZ(50px) scale(0.95) blur(2px);
-  }
-  60% {
-    opacity: 0.8;
-    transform: translateZ(-10px) scale(1.02) blur(0.5px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateZ(0) scale(1) blur(0);
-  }
-}
-
-/* Floating Word Bubbles */
-.word-bubbles {
-  position: absolute;
-  top: 20vh;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: var(--space-16); /* 64px - closest to 60px */
-  z-index: var(--z-raised);
-}
-
-.bubble-word {
-  font-family: var(--font-primary);
-  font-size: clamp(2rem, 6vw, 4rem);
-  font-weight: 200;
-  color: var(--color-pale-turquoise);
-  text-shadow:
-    0 0 15px var(--color-pale-turquoise),
-    0 0 30px var(--glow-cyan-medium),
-    0 0 60px var(--glow-cyan-gentle);
-  /* Uses .base-float utility class for consistent floating effect */
-  position: relative;
-  cursor: pointer;
-  transition: all 0.8s ease;
-}
-
-.bubble-word[data-essence="consular"] {
-  animation-delay: 0s;
-}
-.bubble-word[data-essence="protocol"] {
-  animation-delay: -5s;
-}
-.bubble-word[data-essence="active"] {
-  animation-delay: -10s;
-}
-
-.bubble-word::before {
-  content: "";
-  position: absolute;
-  inset: -30px;
-  background: var(--gradient-consciousness-flow);
-  border-radius: 50% 40% 60% 30% / 40% 60% 30% 50%;
-  z-index: -1;
-  animation: essence-field 12s ease-in-out infinite;
-}
-
-.bubble-word:hover {
-  transform: scale(1.15);
-  text-shadow:
-    0 0 20px var(--color-pale-turquoise),
-    0 0 40px var(--glow-cyan-bright),
-    0 0 80px var(--glow-cyan-intense);
-}
-
-
-
-@keyframes essence-field {
-  0%,
-  100% {
-    border-radius: 50% 40% 60% 30% / 40% 60% 30% 50%;
-    transform: rotate(0deg) scale(1);
-    opacity: 0.3;
-  }
-  50% {
-    border-radius: 40% 60% 30% 50% / 60% 30% 50% 40%;
-    transform: rotate(180deg) scale(1.1);
-    opacity: 0.6;
-  }
-}
-
-/* Floating Whispers */
-.floating-whispers {
-  position: absolute;
-  bottom: 25vh;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: var(--z-raised);
-}
-
-.whisper-stream {
-  color: var(--color-soft-pink);
-  font-size: var(--text-lg);
-  text-align: center;
-  opacity: 0.8;
-  text-shadow: 0 0 8px var(--color-soft-pink);
-  animation: whisper-flow 6s ease-in-out infinite;
-  max-width: 80vw;
-}
-
-@keyframes whisper-flow {
-  0%,
-  100% {
-    opacity: 0.8;
-    transform: translateY(0);
-  }
-  50% {
-    opacity: 0.6;
-    transform: translateY(-3px);
-  }
-}
+/* Removed unused floating-whispers component */
 
 /* Liquid Space Container */
 .liquid-space {
@@ -153,22 +22,14 @@
   overflow: hidden;
 }
 
-/* Hide scrollbars specifically for liquid space */
-.liquid-space::-webkit-scrollbar {
-  display: none;
-}
-
-.liquid-space {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+/* Hide scrollbars specifically for liquid space - using utility class */
 
 .consciousness-canvas {
   width: 100%;
   height: 100%;
   display: block;
   opacity: 1.0;
-  z-index: 1;
+  z-index: var(--z-raised);
 }
 
 /* Flowing Clusters */
@@ -182,15 +43,7 @@
   overflow: hidden;
 }
 
-/* Hide scrollbars in liquid clusters */
-.liquid-clusters::-webkit-scrollbar {
-  display: none;
-}
-
-.liquid-clusters {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+/* Hide scrollbars in liquid clusters - using utility class */
 
 .floating-nodes {
   display: flex;
@@ -227,26 +80,12 @@
   align-items: center;
   gap: var(--space-5);
   padding: var(--space-8);
-  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  animation: base-floating 18s ease-in-out infinite;
+  transition: all var(--duration-slower) var(--ease-neural);
+  animation: base-floating var(--duration-float) ease-in-out infinite;
   position: relative;
 }
 
-.liquid-node:nth-child(1) {
-  animation-delay: 0s;
-}
-.liquid-node:nth-child(2) {
-  animation-delay: -3s;
-}
-.liquid-node:nth-child(3) {
-  animation-delay: -6s;
-}
-.liquid-node:nth-child(4) {
-  animation-delay: -9s;
-}
-.liquid-node:nth-child(5) {
-  animation-delay: -12s;
-}
+/* Animation delays moved to unified utility system: .stagger-delay */
 
 .node-bubble {
   width: 120px;
@@ -263,7 +102,7 @@
   height: 50px;
   filter: drop-shadow(var(--drop-shadow-medium));
   z-index: var(--z-raised);
-  transition: all 0.6s ease;
+  transition: all var(--duration-slow) var(--ease-organic);
 }
 
 
@@ -275,20 +114,18 @@
   color: var(--color-pale-turquoise);
   text-align: center;
   text-shadow: 0 0 8px var(--glow-cyan-bright);
-  transition: all 0.6s ease;
+  transition: all var(--duration-slow) var(--ease-organic);
 }
 
 .liquid-node:hover .node-bubble {
   transform: scale(1.1);
-  border-radius: 40% 60% 50% 30% / 30% 50% 60% 40%;
+  border-radius: var(--radius-morph-4);
   box-shadow:
     0 0 30px var(--glow-cyan-medium),
     inset 0 0 30px var(--glow-cyan-faint);
 }
 
-.liquid-node:hover .bubble-ripples {
-  opacity: 1;
-}
+/* Liquid node ripples now use unified ripple system: .base-ripples .base-ripples--bubble */
 
 .liquid-node:hover .flowing-label {
   transform: translateY(-5px);

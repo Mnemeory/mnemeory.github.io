@@ -4,7 +4,7 @@
  *
  * REFACTORED TO USE DESIGN SYSTEM:
  * - Replaced hardcoded values with design tokens
- * - Uses existing utility classes (.corp-btn, spacing tokens, etc.)
+ * - Uses existing utility classes (.neural-button, spacing tokens, etc.)
  * - Replaced non-existent CSS variables with proper design system variables
  * - Uses fluid typography and consistent spacing scale
  * - Maintains all original functionality while improving maintainability
@@ -78,7 +78,7 @@
   border-radius: var(--radius-md);
 }
 
-/* Navigation buttons - extends corp-btn base styles */
+/* Navigation buttons - extends neural-button base styles */
 .nav-btn.active {
   background: var(--constellation-bond-bg);
   border-color: var(--color-kelpie);
@@ -204,7 +204,7 @@
 .search-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 2px var(--glass-glow);
+  box-shadow: var(--shadow-neural-sm);
 }
 
 .search-input::placeholder {
@@ -401,7 +401,7 @@
 .form-group textarea:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 2px var(--glass-glow);
+  box-shadow: var(--shadow-neural-sm);
 }
 
 .form-group small {
@@ -478,12 +478,12 @@
   );
   pointer-events: none;
   opacity: 0.3;
-  z-index: 0;
+  z-index: var(--z-base);
 }
 
 .session-gate-header {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-raised);
   margin-bottom: var(--space-6);
 }
 
@@ -576,7 +576,7 @@
 
 .session-gate-body {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-raised);
   margin-bottom: var(--space-6);
 }
 
@@ -654,28 +654,11 @@
   margin-bottom: var(--space-6);
 }
 
-.corp-btn--large {
-  padding: var(--space-4) var(--space-8);
-  font-size: var(--text-lg);
-  font-weight: 600;
-  min-height: 60px;
-  position: relative;
-  overflow: hidden;
-}
-
-.corp-btn--large .btn-icon {
-  margin-right: var(--space-2);
-  font-size: var(--text-xl);
-}
-
-.corp-btn--large:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-neural-lg);
-}
+/* Neural button large variant moved to unified system in utilities.css */
 
 .session-gate-footer {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-raised);
   border-top: 1px solid var(--glass-border);
   padding-top: var(--space-4);
 }
@@ -710,9 +693,5 @@
     grid-template-columns: 1fr;
   }
 
-  .corp-btn--large {
-    padding: var(--space-3) var(--space-6);
-    font-size: var(--text-base);
-    min-height: 50px;
-  }
+  /* Neural button large responsive styles handled in utilities.css */
 }

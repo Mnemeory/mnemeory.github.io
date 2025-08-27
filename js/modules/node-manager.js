@@ -15,18 +15,16 @@ import {
   formatClearanceLevel,
   createStandardError,
   logError,
-  getDocumentTemplate,
-  renderTemplate,
 } from "../config.js";
 import { ToastManager, FileUtils, IDUtils, EventUtils } from "./shared-utilities.js";
 import { CitizenUI } from "./citizen-ui.js";
+import { documentSystem } from "./document-system.js";
 
 export class NodeManager {
-  constructor(state, paperEditor) {
+  constructor(state) {
     this.state = state;
-    this.paperEditor = paperEditor;
     this.modal = null;
-    this.modalPaperInstance = null;
+    this.modalDocument = null;
     this.currentNode = null;
     this.citizenUI = new CitizenUI();
     this.setupModal();
@@ -39,10 +37,13 @@ export class NodeManager {
     this.modal = document.querySelector(getSelector("nodeModal"));
     if (!this.modal) return;
 
-    // Initialize paper editor for modal
-    this.modalPaperInstance = this.paperEditor.init("modal", {
+    // Initialize document system for modal
+    this.modalDocument = documentSystem.instance.createDocument("modal-paper-container", {
       readOnly: false,
-      defaultName: "document.txt",
+      theme: 'neural',
+      templateCategory: 'constellations',
+      fileName: "document.txt",
+      enableValidation: true,
     });
 
     // Close button
@@ -437,8 +438,8 @@ export class NodeManager {
       // Load document content
       const content = await this.loadNodeContent(node);
 
-      // Load content into paper editor
-      this.paperEditor.loadDocument("modal", content, node.name);
+      // Load content into document system
+      this.modalDocument.setContent(content, node.name);
       this.currentNode = node;
     } catch (error) {
       const standardError = createStandardError(
@@ -448,9 +449,10 @@ export class NodeManager {
       );
       logError(standardError, "NodeModal");
 
-      // Load error message into paper editor
+      // Load error message into document system
       const errorContent = `[h1]⚠️ PSIONIC DATA STREAM DISRUPTED[/h1]\n\n${standardError.message}\n\nNlom resonance error: ${error.message}\n\nAttempting automatic psionic pathway re-establishment...`;
-      this.paperEditor.loadDocument("modal", errorContent, "Psionic Error");
+
+      this.modalDocument.setContent(errorContent, "Psionic Error");
     }
 
     // Show modal
@@ -495,9 +497,26 @@ export class NodeManager {
   generateDocumentTemplate(node) {
     const cluster = node.constellation;
 
-    // Get template from config - try cluster-specific first, then fallback to generic
-    const template =
-      getDocumentTemplate(cluster) || getDocumentTemplate("generic");
+    // Use new template engine for constellation-specific templates
+    const templateEngine = documentSystem.instance.templateEngine;
+
+    // Try constellation-specific template first, then fallback to generic
+    let content;
+    try {
+      content = templateEngine.getTemplate('constellations', cluster, this.getTemplateData(node));
+    } catch (error) {
+      console.warn(`No constellation template for ${cluster}, using generic`);
+      content = templateEngine.getTemplate('constellations', 'generic', this.getTemplateData(node));
+    }
+
+    return content;
+  }
+
+  /**
+   * Prepare template data for constellation documents
+   */
+  getTemplateData(node) {
+    const cluster = node.constellation;
 
     // Generate tags from metadata if available
     const tags = node.tags || [];
@@ -508,8 +527,7 @@ export class NodeManager {
       tags.push(node.metadata.category);
     }
 
-    // Prepare data for template rendering
-    const templateData = {
+    return {
       // Common data for all templates
       documentId: node.id.toUpperCase(),
       date: `2467-${new Date().toISOString().split("T")[0].substring(5)}`, // Federation year format
@@ -527,9 +545,13 @@ export class NodeManager {
       cluster: cluster,
       seal: node.seal,
       tags: tags.join(", "),
-    };
 
-    return renderTemplate(template, templateData);
+      // Additional required data for templates
+      content: node.metadata?.description || "This data stream contains archived Federation diplomatic information accessed via the Nlom neural interface.",
+      classification: formatClearanceLevel(node.seal, cluster),
+      authority: "Nralakk Federation Diplomatic Mission",
+      location: "SCCV Horizon, Stellar Corporate Conglomerate",
+    };
   }
 
   /**
@@ -643,7 +665,7 @@ ${node.metadata?.description || "No description available."}
     this.closeModal();
     this.currentNode = null;
     this.modal = null;
-    this.modalPaperInstance = null;
+    this.modalDocument = null;
     console.log("NodeManager destroyed");
   }
 }

@@ -5,8 +5,7 @@
  */
 
 import { StarfieldManager } from "./starfield-manager.js";
-
-import { PaperDocumentEditor } from "../paper-editor.js";
+import { documentSystem } from "./document-system.js";
 import { AppState } from "./state-manager.js";
 import { Router } from "./router.js";
 import { ViewManager } from "./view-manager.js";
@@ -39,7 +38,7 @@ export class NlomInterface {
     this.router = null;
     this.nodeManager = null;
     this.clearanceManager = null;
-    this.paperEditor = null;
+
 
     this.isInitialized = false;
   }
@@ -61,15 +60,11 @@ export class NlomInterface {
 
       // Initialize core systems
       this.viewManager = new ViewManager(this.state);
-      this.paperEditor = new PaperDocumentEditor();
-      this.nodeManager = new NodeManager(this.state, this.paperEditor);
+      this.nodeManager = new NodeManager(this.state);
       this.clearanceManager = new ClearanceManager(this.state);
 
-      // Initialize modal paper editor
-      this.paperEditor.init("modal", {
-        readOnly: false,
-        defaultName: "document.txt",
-      });
+      // Initialize document system (replaces old paper editor)
+      // No need to explicitly init modal - NodeManager handles it
 
       // Initialize starfield
       this.starfieldManager = new StarfieldManager();
@@ -409,7 +404,7 @@ export class NlomInterface {
       router: this.router,
       nodes: this.nodeManager,
       clearance: this.clearanceManager,
-      paper: this.paperEditor,
+      documents: documentSystem.instance,
     };
 
     return subsystems[name];

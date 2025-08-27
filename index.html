@@ -419,31 +419,33 @@
         aria-hidden="true"
       >
         <div class="bubble-ocean"></div>
-        <div class="data-bubble">
-          <div class="bubble-header">
-            <h3 id="modal-title" class="bubble-title"></h3>
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="modal-title" class="modal-title"></h3>
             <button
               type="button"
               id="modal-close"
-              class="bubble-close"
+              class="modal-close"
               aria-label="Close dialog"
             >
               <div class="close-ripple">×</div>
             </button>
           </div>
-          <div id="modal-body" class="bubble-content">
-            <!-- Paper editor will be integrated here -->
+          <div id="modal-body" class="modal-body">
+            <!-- Document editor integrated here -->
             <div
-              class="paper-document-container"
+              class="neural-document document-container"
               id="modal-paper-container"
+              data-document-container="modal-paper-container"
               aria-label="Document Viewer"
             >
-              <div class="paper-document-toolbar">
+              <div class="document-toolbar">
                 <button
-                  class="corp-btn corp-btn--primary corp-btn--icon"
+                  class="neural-button document-toggle"
                   id="modal-pilcrow"
                   title="Toggle psionic script encoding view"
                   aria-label="Toggle between Psionic Wake rendering and neural script encoding modes"
+                  aria-pressed="false"
                 >
                   ¶
                 </button>
@@ -451,7 +453,7 @@
                 <div class="toolbar-spacer" aria-hidden="true"></div>
 
                 <button
-                  class="corp-btn corp-btn--primary corp-btn--standard"
+                  class="neural-button document-copy"
                   id="modal-copy"
                   title="Extract psionic script"
                   aria-label="Extract raw psionic script to Nlom buffer"
@@ -460,7 +462,7 @@
                 </button>
 
                 <button
-                  class="corp-btn corp-btn--primary corp-btn--standard"
+                  class="neural-button document-save"
                   id="modal-save"
                   title="Download psionic data stream"
                   aria-label="Download document as psionic text stream file"
@@ -469,19 +471,24 @@
                 </button>
               </div>
 
-              <div class="paper-document-body">
-                <div
-                  class="paper-document-paper"
-                  id="modal-paper"
-                  aria-label="Document content"
-                  aria-live="polite"
-                >
-                  <!-- Paper content will be rendered here -->
-                </div>
+              <div
+                class="document-editor"
+                id="modal-paper"
+                contenteditable="false"
+                aria-label="Document content"
+                aria-live="polite"
+                role="textbox"
+                tabindex="0"
+              >
+                <!-- Document content will be rendered here -->
+              </div>
+
+              <div class="document-status" id="modal-document-status">
+                Ready
               </div>
             </div>
           </div>
-          <div class="bubble-actions">
+          <div class="modal-footer">
             <button
               type="button"
               id="modal-inscribe"

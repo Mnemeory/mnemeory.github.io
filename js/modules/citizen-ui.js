@@ -66,13 +66,13 @@ export class CitizenUI {
           <div class="session-info">
             <h3>${SITE_CONFIG.interfaceText.citizen.headers.session} ${this.citizenManager.currentSession.id}</h3>
             <div class="session-controls">
-              <button type="button" class="corp-btn corp-btn--secondary" id="set-round-btn">
+              <button type="button" class="neural-button" id="set-round-btn">
                 ${SITE_CONFIG.interfaceText.citizen.buttons.setRound}
               </button>
-              <button type="button" class="corp-btn corp-btn--primary" id="export-session-btn">
+              <button type="button" class="neural-button" id="export-session-btn">
                 ${SITE_CONFIG.interfaceText.citizen.buttons.exportSession}
               </button>
-              <button type="button" class="corp-btn corp-btn--warning" id="clear-session-btn">
+              <button type="button" class="neural-button neural-button--warning" id="clear-session-btn">
                 ${SITE_CONFIG.interfaceText.citizen.buttons.newSession}
               </button>
             </div>
@@ -80,10 +80,10 @@ export class CitizenUI {
         </div>
 
         <div class="citizen-navigation">
-          <button type="button" class="corp-btn nav-btn ${
+          <button type="button" class="neural-button nav-btn ${
             this.currentView === "overview" ? "active" : ""
           }" data-view="overview">${SITE_CONFIG.interfaceText.citizen.navigation.overview}</button>
-          <button type="button" class="corp-btn nav-btn ${
+          <button type="button" class="neural-button nav-btn ${
             this.currentView === "add-citizen" ? "active" : ""
           }" data-view="add-citizen">${SITE_CONFIG.interfaceText.citizen.navigation.addCitizen}</button>
         </div>
@@ -147,7 +147,7 @@ export class CitizenUI {
                 <p class="session-note">This ensures proper logging and maintains Federation protocols for citizen welfare operations.</p>
               </div>
 
-              <button type="button" class="corp-btn corp-btn--primary corp-btn--large" id="start-new-session-btn">
+              <button type="button" class="neural-button neural-button--large" id="start-new-session-btn">
                 <span class="btn-icon">⬢</span>
                 Initialize Diplomatic Session
               </button>
@@ -305,11 +305,11 @@ export class CitizenUI {
           }
         </div>
         <div class="citizen-card-actions">
-          <button type="button" class="corp-btn corp-btn--small corp-btn--secondary view-citizen-btn"
+          <button type="button" class="neural-button neural-button--small"
                   data-citizen-id="${citizen.id}">View</button>
-          <button type="button" class="corp-btn corp-btn--small corp-btn--primary edit-citizen-btn"
+          <button type="button" class="neural-button neural-button--small"
                   data-citizen-id="${citizen.id}">Edit</button>
-          <button type="button" class="corp-btn corp-btn--small corp-btn--success print-citizen-btn"
+          <button type="button" class="neural-button neural-button--small neural-button--success"
                   data-citizen-id="${citizen.id}">Print</button>
         </div>
       </div>
@@ -384,10 +384,10 @@ export class CitizenUI {
           </div>
 
           <div class="form-actions">
-            <button type="button" class="corp-btn corp-btn--secondary" id="cancel-add-btn">
+            <button type="button" class="neural-button" id="cancel-add-btn">
               Cancel
             </button>
-            <button type="submit" class="corp-btn corp-btn--primary">
+            <button type="submit" class="neural-button">
               Register Citizen
             </button>
           </div>
@@ -476,17 +476,17 @@ export class CitizenUI {
             <h5>Add Log Entry</h5>
             <div class="form-group">
               <input type="text" id="new-log-entry" placeholder="Add new log entry for this citizen...">
-              <button type="button" class="corp-btn corp-btn--secondary" id="add-log-btn">
+              <button type="button" class="neural-button" id="add-log-btn">
                 Add Entry
               </button>
             </div>
           </div>
 
           <div class="form-actions">
-            <button type="button" class="corp-btn corp-btn--secondary" id="cancel-edit-btn">
+            <button type="button" class="neural-button" id="cancel-edit-btn">
               Cancel
             </button>
-            <button type="submit" class="corp-btn corp-btn--primary">
+            <button type="submit" class="neural-button">
               Update Record
             </button>
           </div>
@@ -510,17 +510,17 @@ export class CitizenUI {
         <div class="citizen-view-header">
           <h4>Citizen Record: ${this.citizenManager.getFullName(citizen)}</h4>
           <div class="view-actions">
-            <button type="button" class="corp-btn corp-btn--primary" id="edit-from-view-btn" data-citizen-id="${
+            <button type="button" class="neural-button" id="edit-from-view-btn" data-citizen-id="${
               citizen.id
             }">
               Edit Record
             </button>
-            <button type="button" class="corp-btn corp-btn--success" id="print-from-view-btn" data-citizen-id="${
+            <button type="button" class="neural-button neural-button--success" id="print-from-view-btn" data-citizen-id="${
               citizen.id
             }">
               Print Record
             </button>
-            <button type="button" class="corp-btn corp-btn--secondary" id="back-to-overview-btn">
+            <button type="button" class="neural-button" id="back-to-overview-btn">
               Back to Overview
             </button>
           </div>
@@ -620,7 +620,7 @@ export class CitizenUI {
                   )
                   .join("")}
               </select>
-              <button type="button" class="corp-btn corp-btn--small corp-btn--primary" id="add-tag-btn" data-citizen-id="${
+              <button type="button" class="neural-button neural-button--small" id="add-tag-btn" data-citizen-id="${
                 citizen.id
               }">
                 Add Tag
@@ -994,19 +994,23 @@ export class CitizenUI {
       return;
     }
 
-    // Open the file in the paper editor modal
-    if (window.nlomInterface && window.nlomInterface.getSubsystem("paper")) {
-      const paperEditor = window.nlomInterface.getSubsystem("paper");
-      paperEditor.loadDocument("modal", file.content, file.name);
+    // Open the file in the document system modal
+    if (window.nlomInterface && window.nlomInterface.getSubsystem("nodes")) {
+      const nodeManager = window.nlomInterface.getSubsystem("nodes");
+      if (nodeManager && nodeManager.modalDocument) {
+        nodeManager.modalDocument.setContent(file.content, file.name);
 
-      // Show the modal
-      const modal = document.querySelector('[data-modal="nodeModal"]');
-      if (modal) {
-        modal.setAttribute("aria-hidden", "false");
-        modal.classList.remove("hidden");
+        // Show the modal
+        const modal = document.querySelector(SITE_CONFIG.selectors.nodeModal);
+        if (modal) {
+          modal.setAttribute("aria-hidden", "false");
+        }
+
+        ToastManager.show(`Opened citizen file: ${file.name}`, "success");
+      } else {
+        // Fallback: show content in alert
+        alert(`Citizen File: ${file.name}\n\n${file.content}`);
       }
-
-      ToastManager.show(`Opened citizen file: ${file.name}`, "success");
     } else {
       // Fallback: show content in alert
       alert(`Citizen File: ${file.name}\n\n${file.content}`);

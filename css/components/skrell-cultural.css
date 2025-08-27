@@ -47,20 +47,7 @@
   opacity: 0.15;
 }
 
-/* Nlom Resonance Animations - Psionic Energy Visualization */
-@keyframes nlom-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 5px var(--color-nlom-resonance);
-    opacity: 0.8;
-  }
-  50% {
-    box-shadow:
-      0 0 20px var(--color-nlom-resonance),
-      0 0 30px var(--color-nlom-resonance);
-    opacity: 1;
-  }
-}
+/* Nlom Resonance Animations - Psionic Energy Visualization (uses shared nlom-pulse from utilities.css) */
 
 .nlom-resonance {
   animation: nlom-pulse var(--duration-nlom-pulse) ease-in-out infinite;
@@ -157,7 +144,7 @@
     var(--color-nlom-resonance) 100%
   );
   border: 1px solid var(--color-cyan);
-  border-radius: 20px 8px 20px 8px;
+  border-radius: var(--radius-organic-subtle);
   padding: var(--space-4);
   backdrop-filter: blur(12px);
   position: relative;
@@ -265,15 +252,7 @@
   transition: all var(--duration-cultural-hover) ease;
 }
 
-.cosmic-letter:nth-child(odd) {
-  animation-delay: -1s;
-}
-.cosmic-letter:nth-child(3n) {
-  animation-delay: -2s;
-}
-.cosmic-letter:nth-child(5n) {
-  animation-delay: -3s;
-}
+/* Animation delays moved to unified utility system: .stagger-delay--alt */
 
 .cosmic-letter::before {
   content: "";
@@ -323,7 +302,7 @@
 @media (prefers-reduced-motion: reduce) {
   .nlom-resonance {
     animation: none;
-    box-shadow: 0 0 5px var(--color-nlom-resonance);
+    box-shadow: var(--shadow-neural-sm);
   }
 
   .organic-flow-element {

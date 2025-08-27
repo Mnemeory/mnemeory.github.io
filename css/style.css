@@ -21,7 +21,7 @@
 /* Components - Ordered by dependency hierarchy */
 /* Base visual effects (no dependencies) */
 @import url("./components/fluid-consciousness.css") layer(components);
-@import url("./components/neural-particles.css") layer(components);
+/* @import url("./components/neural-particles.css") layer(components); -- DEPRECATED: Disabled in layout.css */
 @import url("./components/skrell-cultural.css") layer(components);
 
 /* Core interface components */
@@ -35,7 +35,7 @@
 @import url("./components/constellation-views.css") layer(components);
 
 /* Specialized components */
-@import url("./components/paper-editor.css") layer(components);
+@import url("./components/neural-documents.css") layer(components);
 @import url("./components/citizen-management.css") layer(components);
 
 /* Utilities */

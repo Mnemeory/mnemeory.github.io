@@ -56,9 +56,7 @@
   }
 
   /* Remove ripple effects */
-  .ripple-field,
-  .bubble-ripples,
-  .consciousness-ripple {
+  .base-ripples {
     animation: none !important;
     opacity: 0 !important;
   }
@@ -82,17 +80,13 @@
 
   /* Simplify hover effects */
   .base-action-btn:hover,
-  .corp-btn:hover,
+  .neural-button:hover,
   .data-node:hover {
     transform: none !important;
   }
 }
 
-/* Desktop-focused responsive design - mobile code removed */
-
-/* Mobile adjustments removed - desktop-focused only */
-
-/* All mobile adjustments removed - desktop experience only */
+/* Desktop-focused design system - optimized for desktop experience only */
 
 /* High Contrast Mode */
 @media (prefers-contrast: high) {
@@ -111,14 +105,14 @@
   }
 
   /* Improve button contrast */
-  .corp-btn,
+  .neural-button,
   .base-action-btn {
     border-color: currentColor;
     background: rgba(255, 255, 255, 0.1);
   }
 
-  .corp-btn:hover,
-  .corp-btn:focus-visible,
+  .neural-button:hover,
+  .neural-button:focus-visible,
   .base-action-btn:hover,
   .base-action-btn:focus-visible {
     background: rgba(255, 255, 255, 0.2);

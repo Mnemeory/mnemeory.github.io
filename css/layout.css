@@ -121,7 +121,7 @@
   border: none;
   cursor: pointer;
   padding: 0;
-  transition: all 0.3s ease;
+  transition: all var(--duration-base) var(--ease-organic);
   border-radius: var(--radius-full);
 }
 
@@ -295,13 +295,13 @@
   font-size: var(--text-sm);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  transition: all 0.3s ease;
+  transition: all var(--duration-base) var(--ease-organic);
 }
 
 .search-nexus .liquid-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 2px rgba(175, 238, 238, 0.2);
+  box-shadow: var(--shadow-neural-sm);
   background: rgba(0, 0, 0, 0.4);
 }
 
@@ -342,29 +342,6 @@
   white-space: nowrap;
 }
 
-/* Override old neural particles positioning */
-.neural-particles {
-  display: none; /* Disable old floating system */
-}
-
-/* Legacy element overrides - prevent conflicts */
-.floating-emblem,
-.title-stream,
-.search-bubble,
-.liquid-text-button {
-  position: static !important;
-  transform: none !important;
-  top: auto !important;
-  left: auto !important;
-  animation: none !important;
-}
-
-/* Remove old button styles that are no longer needed */
-.liquid-text-button {
-  background: none !important;
-  border: none !important;
-  padding: 0 !important;
-  cursor: default !important;
-}
+/* Neural particles system and legacy overrides removed - deprecated system disabled */
 
 /* Mobile responsive adjustments removed - desktop-focused experience */

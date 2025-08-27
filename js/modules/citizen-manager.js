@@ -7,37 +7,21 @@ import { ToastManager, FileUtils, IDUtils } from "./shared-utilities.js";
 import {
   DEFAULT_CITIZEN_STATUS,
   USER_PROFILE,
-  getDocumentTemplate,
   getSuccessMessage,
   getInfoMessage,
-  renderTemplate,
   SITE_CONFIG,
 } from "../config.js";
+import { TemplateEngine, BEHAVIORAL_TAGS } from "./template-engine.js";
 
 export class CitizenManager {
   constructor() {
     this.currentSession = this.initializeSession();
     this.citizens = new Map(); // Store citizen records for current session
     this.sessionInitialized = false; // Track if user has started a new session
+    this.templateEngine = new TemplateEngine();
 
-    // Lore-friendly behavioral tags for Skrell citizens
-    this.behavioralTags = {
-      "Nlom-Centered": "Exhibits strong connection to Nlom ideals",
-      Cooperative: "Works well within group dynamics",
-      Individualistic: "Shows tendency toward independent thought",
-      Traditionalist: "Respects established Federation customs",
-      Progressive: "Embraces new ideas and changes",
-      "Quya-Focused": "Prioritizes family unit bonds",
-      "Career-Driven": "Shows ambition in professional pursuits",
-      "Academically-Inclined": "Demonstrates scholarly interests",
-      "Socially-Withdrawn": "Prefers limited social interaction",
-      "Community-Oriented": "Actively participates in communal activities",
-      "Psionically-Sensitive": "Shows heightened psionic awareness",
-      "Culturally-Adaptive": "Adapts well to non-Skrell environments",
-      "Federation-Loyal": "Strong allegiance to Federation ideals",
-      "Diplomatically-Minded": "Shows skills in inter-species relations",
-      "Scientifically-Curious": "Exhibits research-oriented behavior",
-    };
+    // Use consolidated behavioral tags from template engine
+    this.behavioralTags = BEHAVIORAL_TAGS;
   }
 
   /**
@@ -257,9 +241,8 @@ export class CitizenManager {
       activityLog += "\n";
     }
 
-    // Use template from config
-    const template = getDocumentTemplate("citizenReport");
-    return renderTemplate(template, {
+    // Use new template engine
+    return this.templateEngine.getTemplate("federation", "citizenReport", {
       location: "SCCV Horizon, Stellar Corporate Conglomerate",
       sessionId: this.currentSession.id,
       roundNumber: this.currentSession.roundNumber || "Not specified",
@@ -409,9 +392,8 @@ export class CitizenManager {
         this.formatLogEntries(citizen.logEntries).join("\n") + "\n\n";
     }
 
-    // Use template from config
-    const template = getDocumentTemplate("individualCitizen");
-    return renderTemplate(template, {
+    // Use new template engine
+    return this.templateEngine.getTemplate("federation", "individualCitizen", {
       location: "SCCV Horizon Diplomatic Mission",
       fullName: this.getFullName(citizen),
       citizenId: citizen.id,
