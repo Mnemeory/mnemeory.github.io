@@ -39,14 +39,8 @@
     opacity: 0.2 !important;
   }
 
-  /* Simplify floating elements */
-  .neural-particles > * {
-    animation: none !important;
-    position: static !important;
-  }
-
-  /* Disable morphing animations */
-  .liquid-bubble,
+    /* Disable morphing animations */
+    .liquid-bubble,
   .node-bubble,
   .data-bubble,
   .return-bubble,
@@ -55,35 +49,25 @@
     animation: none !important;
   }
 
-  /* Remove ripple effects */
-  .base-ripples {
-    animation: none !important;
-    opacity: 0 !important;
-  }
+    /* Keep 3D starfield for desktop experience */
 
-  /* Keep 3D starfield for desktop experience */
+    /* Disable floating animations */
+    .floating-nodes,
+    .liquid-node {
+      animation: none !important;
+    }
 
-  /* Disable floating animations */
-  .base-float,
-  .neural-particles > *,
-  .floating-nodes,
-  .liquid-node {
-    animation: none !important;
-  }
-
-  /* Disable morphing transitions */
-  .base-morph,
-  .input-morph {
-    border-radius: var(--radius-md) !important;
-    animation: none !important;
-  }
+    /* Disable morphing transitions */
+    .input-morph {
+      border-radius: var(--radius-md) !important;
+      animation: none !important;
+    }
 
   /* Simplify hover effects */
-  .base-action-btn:hover,
-  .neural-button:hover,
-  .data-node:hover {
-    transform: none !important;
-  }
+    .neural-button:hover,
+    .data-node:hover {
+      transform: none !important;
+    }
 }
 
 /* Desktop-focused design system - optimized for desktop experience only */
@@ -105,19 +89,16 @@
   }
 
   /* Improve button contrast */
-  .neural-button,
-  .base-action-btn {
-    border-color: currentColor;
-    background: rgba(255, 255, 255, 0.1);
-  }
+    .neural-button {
+      border-color: currentColor;
+      background: rgba(255, 255, 255, 0.1);
+    }
 
-  .neural-button:hover,
-  .neural-button:focus-visible,
-  .base-action-btn:hover,
-  .base-action-btn:focus-visible {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: currentColor;
-  }
+    .neural-button:hover,
+    .neural-button:focus-visible {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: currentColor;
+    }
 
   /* Improve text contrast */
   .color-text-muted {
@@ -133,26 +114,19 @@
     background: ButtonFace;
   }
 
-  .glass-border {
-    border-color: ButtonBorder;
+    .glass-border {
+      border-color: ButtonBorder;
+    }
   }
-
-  .nlom-header {
-    background: Canvas;
-    border-bottom: 1px solid ButtonBorder;
-  }
-}
 
 /* Print Styles */
 @media print {
-  .nlom-header,
-  .astral-query-container,
-  .nav-menu,
-  .a11y-controls,
-  /* Starfield not needed in print */
-  .starfield-view {
-    display: none !important;
-  }
+    .astral-query-container,
+    .a11y-controls,
+    /* Starfield not needed in print */
+    .starfield-view {
+      display: none !important;
+    }
 
   .constellation-view {
     position: static !important;

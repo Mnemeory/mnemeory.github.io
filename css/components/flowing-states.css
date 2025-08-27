@@ -123,7 +123,6 @@
     inset 0 0 30px var(--glow-cyan-faint);
 }
 
-/* Liquid node ripples now use unified ripple system: .base-ripples .base-ripples--bubble */
 
 .liquid-node:hover .flowing-label {
   transform: translateY(-5px);
