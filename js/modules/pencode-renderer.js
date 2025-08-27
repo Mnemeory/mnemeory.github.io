@@ -61,16 +61,12 @@ export class PencodeRenderEngine {
       'small': {
         tag: 'span',
         class: 'neural-text-small',
-        processor: null,
-        htmlTag: 'font',
-        htmlAttrs: 'size="1"'
+        processor: null
       },
       'large': {
         tag: 'span',
         class: 'neural-text-large',
-        processor: null,
-        htmlTag: 'font',
-        htmlAttrs: 'size="4"'
+        processor: null
       },
 
       // Layout tags
@@ -89,9 +85,7 @@ export class PencodeRenderEngine {
       'table': {
         tag: 'table',
         class: 'neural-table',
-        processor: null,
-        htmlTag: 'table',
-        htmlAttrs: 'border="1" cellspacing="0" cellpadding="3" style="border: 1px solid black;"'
+        processor: null
       },
       'grid': {
         tag: 'table',
@@ -554,7 +548,7 @@ export class PencodeRenderEngine {
     const imageRegex = /\[image id=([\w]*?\.[\w]*?)\]/gi;
     text = text.replace(imageRegex, (match, filename) => {
       const imageHost = SITE_CONFIG.docsImageHost || `${SITE_CONFIG.assets.directories.images}documents/`;
-      return `<img style="display:block;width:90%;" src="${imageHost}${filename}" alt="Document Image" class="neural-document-image">`;
+      return `<img src="${imageHost}${filename}" alt="Document Image" class="neural-document-image">`;
     });
 
     return text;
@@ -823,8 +817,11 @@ export class PencodeRenderEngine {
    * Apply neural theme enhancements
    */
   applyNeuralEnhancements(html) {
-    // Add neural glow effects to headings
-    html = html.replace(/<h([123])([^>]*)>/g, '<h$1$2 style="text-shadow: 0 0 8px var(--glow-cyan-gentle);">');
+    // Add neural glow effects to headings via classes
+    html = html
+      .replace(/<h1([^>]*)>/g, '<h1$1 class="neural-heading neural-heading--primary">')
+      .replace(/<h2([^>]*)>/g, '<h2$1 class="neural-heading neural-heading--secondary">')
+      .replace(/<h3([^>]*)>/g, '<h3$1 class="neural-heading neural-heading--tertiary">');
 
     // Enhance lists with neural indicators
     html = html.replace(/<li([^>]*)>/g, '<li$1 data-neural-marker="▸">');
@@ -837,7 +834,7 @@ export class PencodeRenderEngine {
    */
   applyDiplomaticEnhancements(html) {
     // Add diplomatic authority styling
-    html = html.replace(/<strong([^>]*)>/g, '<strong$1 style="color: var(--color-gold);">');
+    html = html.replace(/<strong([^>]*)>/g, '<strong$1 class="neural-bold">');
     return html;
   }
 
@@ -846,7 +843,6 @@ export class PencodeRenderEngine {
    */
   applyFederationEnhancements(html) {
     // Add federation-specific styling
-    html = html.replace(/<h1([^>]*)>/g, '<h1$1 style="border-bottom: 1px solid var(--glass-border); padding-bottom: var(--space-2);">');
     return html;
   }
 
@@ -1144,7 +1140,7 @@ export class PencodeRenderEngine {
         <h1 class="neural-heading neural-heading--primary">⚠️ NEURAL RENDERING ERROR</h1>
         <p><strong>Error:</strong> ${error.message}</p>
         <p><strong>Original Text:</strong></p>
-        <pre style="background: var(--glass-bg-light); padding: var(--space-3); border-radius: var(--radius-md); overflow-x: auto;">${originalText}</pre>
+        <pre class="neural-code-block">${originalText}</pre>
       </div>
     </div>`;
   }

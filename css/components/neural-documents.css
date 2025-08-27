@@ -220,6 +220,40 @@
   transform: scale(1.2);
 }
 
+/* === NEURAL TABLES === */
+
+.neural-table,
+.neural-grid {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--glass-border);
+}
+
+.neural-table td,
+.neural-table th,
+.neural-grid td,
+.neural-grid th {
+  border: 1px solid var(--glass-border);
+  padding: var(--space-1);
+}
+
+/* === NEURAL IMAGES === */
+
+.neural-document-image {
+  display: block;
+  width: 90%;
+  margin: 0 auto;
+}
+
+/* === NEURAL CODE BLOCKS === */
+
+.neural-code-block {
+  background: var(--glass-bg-light);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
 /* === NEURAL DIVIDERS === */
 
 .neural-divider {
