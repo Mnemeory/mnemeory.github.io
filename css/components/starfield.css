@@ -8,7 +8,7 @@
   height: 100%;
   width: 100%;
   opacity: 1;
-  transition: opacity var(--motion-base) var(--ease-in-out);
+  transition: opacity var(--duration-base) var(--ease-neural);
   display: flex;
   flex-direction: column;
   z-index: var(--z-raised);
@@ -162,7 +162,7 @@
   color: var(--color-text);
   text-decoration: none;
   cursor: pointer;
-  transition: all var(--motion-base) var(--ease-organic);
+  transition: all var(--duration-base) var(--ease-organic);
   min-height: 140px;
 }
 
@@ -173,8 +173,6 @@
   box-shadow: var(--shadow-glow);
 }
 
-
-
 .cluster-node:focus-visible {
   border-color: var(--color-accent);
   box-shadow: var(--shadow-glow);
@@ -184,7 +182,7 @@
   width: 32px;
   height: 32px;
   filter: drop-shadow(var(--shadow-glow));
-  transition: transform var(--motion-base) var(--ease-organic);
+  transition: transform var(--duration-base) var(--ease-organic);
 }
 
 .cluster-node:hover img {
@@ -209,7 +207,7 @@
   box-shadow: var(--shadow-glow);
   pointer-events: none;
   opacity: 0;
-  transition: opacity var(--motion-base) var(--ease-in-out);
+  transition: opacity var(--duration-base) var(--ease-neural);
   max-width: 200px;
   backdrop-filter: blur(10px);
 }

@@ -149,10 +149,6 @@
   flex-wrap: wrap;
 }
 
-
-
-
-
 @keyframes ocean-flow {
   0%,
   100% {
@@ -166,8 +162,6 @@
       0% 50%;
   }
 }
-
-
 
 @keyframes bubble-gentle-float {
   0%,
@@ -227,7 +221,3 @@
   font-size: var(--text-sm);
   text-shadow: 0 0 4px var(--glow-cyan-gentle);
 }
-
-
-
-

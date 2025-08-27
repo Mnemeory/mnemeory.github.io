@@ -281,8 +281,6 @@
   opacity: 1;
 }
 
-
-
 /* Enhanced accessibility for Skrell visual preferences */
 @media (prefers-contrast: high) {
   .thermal-comfort-glow::after {
