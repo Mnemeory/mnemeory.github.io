@@ -4,10 +4,10 @@
  */
 
 /* Cursor styles */
-.cursor-pointer {
+[data-hover-state="active"] {
   cursor: pointer;
 }
 
-.cursor-default {
+[data-hover-state="default"] {
   cursor: default;
 }

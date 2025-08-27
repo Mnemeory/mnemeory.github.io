@@ -1,14 +1,14 @@
 /**
- * Notification System
- * Standardized notification components for alerts, toasts, and banners
+ * Toast Notification System
+ * Standardized toast components for alerts and banners
  *
  * MIGRATION GUIDE:
- * - Previous classes: .toast, .alert => Now use .notification
- * - Previous classes: .toast.success => Now use .notification.notification--success
- * - Previous classes: .toast.error => Now use .notification.notification--error
+ * - Previous classes: .toast, .alert => Now use .toast
+ * - Previous classes: .toast.success => Now use .toast.toast--success
+ * - Previous classes: .toast.error => Now use .toast.toast--error
  */
 
-/* === NOTIFICATION CONTAINER === */
+/* === TOAST CONTAINER === */
 [data-component="toast-container"] {
   position: fixed;
   bottom: var(--space-6);
@@ -18,11 +18,11 @@
   flex-direction: column;
   gap: var(--space-3);
   max-width: 400px;
-  pointer-events: none; /* Let clicks pass through container, but not notifications */
+  pointer-events: none; /* Let clicks pass through container, but not toasts */
 }
 
-/* === BASE NOTIFICATION COMPONENT === */
-.notification {
+/* === BASE TOAST COMPONENT === */
+.toast {
   /* Base styling */
   padding: var(--space-5) var(--space-6);
   backdrop-filter: blur(15px);
@@ -39,7 +39,7 @@
   opacity: 0;
   transition: all var(--duration-slow) var(--ease-neural);
   
-  /* Allow interaction with notification */
+  /* Allow interaction with toast */
   pointer-events: auto;
   
   /* Content styling */
@@ -49,57 +49,57 @@
 }
 
 /* Visible state */
-.notification.is-visible {
+.toast.is-visible {
   transform: translateX(0);
   opacity: 1;
 }
 
-/* === NOTIFICATION HEADER === */
-.notification__header {
+/* === TOAST HEADER === */
+.toast__header {
   display: flex;
   align-items: center;
   gap: var(--space-3);
   margin-bottom: var(--space-2);
 }
 
-.notification__icon {
+.toast__icon {
   font-size: var(--text-xl);
   color: var(--color-accent);
 }
 
-.notification__title {
+.toast__title {
   font-weight: 600;
   font-size: var(--text-base);
   margin: 0;
 }
 
-/* === NOTIFICATION BODY === */
-.notification__body {
+/* === TOAST BODY === */
+.toast__body {
   margin-bottom: var(--space-1);
 }
 
-/* === NOTIFICATION ACTIONS === */
-.notification__actions {
+/* === TOAST ACTIONS === */
+.toast__actions {
   display: flex;
   gap: var(--space-3);
   margin-top: var(--space-2);
   justify-content: flex-end;
 }
 
-/* === NOTIFICATION VARIANTS === */
+/* === TOAST VARIANTS === */
 
 /* Default/Info variant */
-.notification--info {
+.toast--info {
   background: var(--glass-bg-accent);
   border-color: var(--color-accent);
 }
 
-.notification--info .notification__icon {
+.toast--info .toast__icon {
   color: var(--color-accent);
 }
 
 /* Success variant */
-.notification--success {
+.toast--success {
   background: linear-gradient(
     135deg,
     var(--glass-bg-accent) 0%,
@@ -111,12 +111,12 @@
     0 0 30px var(--glow-toast-success-inner);
 }
 
-.notification--success .notification__icon {
+.toast--success .toast__icon {
   color: var(--color-success);
 }
 
 /* Error variant */
-.notification--error {
+.toast--error {
   background: radial-gradient(
     ellipse at top left,
     var(--glow-gold-error-bg-outer) 0%,
@@ -126,14 +126,14 @@
   border-color: var(--glow-gold-error-border);
 }
 
-.notification--error .notification__icon,
-.notification--error .notification__title {
+.toast--error .toast__icon,
+.toast--error .toast__title {
   color: var(--color-warning);
   text-shadow: 0 0 5px var(--glow-gold-error-text);
 }
 
 /* Warning variant */
-.notification--warning {
+.toast--warning {
   background: linear-gradient(
     135deg,
     var(--glow-gold-error-bg-inner) 0%,
@@ -142,12 +142,12 @@
   border-color: var(--glow-gold-error-border);
 }
 
-.notification--warning .notification__icon {
+.toast--warning .toast__icon {
   color: var(--color-warning);
 }
 
-/* === BANNER NOTIFICATION === */
-.notification--banner {
+/* === BANNER TOAST === */
+.toast--banner {
   position: sticky;
   top: var(--space-4);
   left: 0;
@@ -160,7 +160,7 @@
   opacity: 0;
 }
 
-.notification--banner.is-visible {
+.toast--banner.is-visible {
   transform: translateY(0);
   opacity: 1;
 }
@@ -304,7 +304,7 @@
 /* === ACCESSIBILITY === */
 
 @media (prefers-reduced-motion: reduce) {
-  .notification {
+  .toast {
     transition-duration: 0.01ms !important;
   }
   

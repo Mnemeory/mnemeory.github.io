@@ -4,7 +4,7 @@
  */
 
 /* View transition states */
-.view-transition-reset {
+[data-transition="reset"] {
   opacity: 1;
   transform: none;
 }

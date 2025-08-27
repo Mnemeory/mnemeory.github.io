@@ -34,7 +34,7 @@
 /* === NEURAL BUTTON SYSTEM === */
 
 /* Base Neural Button - Foundation for all button variants */
-.neural-button {
+[data-component="neural-button"] {
   /* Reset */
   background: none;
   border: none;
@@ -64,7 +64,7 @@
 }
 
 /* Neural Button Consciousness Flow Effect */
-.neural-button::before {
+[data-component="neural-button"]::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -75,7 +75,7 @@
 }
 
 /* Neural Button Hover States */
-.neural-button:hover {
+[data-component="neural-button"]:hover {
   background: var(--glass-bg-accent);
   border-color: var(--glow-cyan-border);
   color: var(--color-cyan);
@@ -84,24 +84,24 @@
   box-shadow: var(--shadow-neural-sm);
 }
 
-.neural-button:hover::before {
+[data-component="neural-button"]:hover::before {
   opacity: 1;
 }
 
-.neural-button:active {
+[data-component="neural-button"]:active {
   transform: translateY(0);
   box-shadow: var(--shadow-neural-sm);
 }
 
-.neural-button:focus-visible {
+[data-component="neural-button"]:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
   border-color: var(--color-accent);
 }
 
 /* Active/Pressed State */
-.neural-button[aria-pressed="true"],
-.neural-button.active {
+[data-component="neural-button"][aria-pressed="true"],
+[data-component="neural-button"][data-active="true"] {
   background: var(--glow-gold-error-bg-outer);
   border-color: var(--glow-gold-error-border);
   color: var(--color-warning);
@@ -110,30 +110,30 @@
 
 /* === SIZE VARIANTS === */
 
-.neural-button--small {
+[data-component="neural-button"].neural-button--small {
   padding: var(--space-1) var(--space-3);
   font-size: var(--text-xs);
 }
 
-.neural-button--large {
+[data-component="neural-button"].neural-button--large {
   padding: var(--space-4) var(--space-8);
   font-size: var(--text-lg);
   font-weight: 600;
   min-height: 60px;
 }
 
-.neural-button--large .btn-icon {
+[data-component="neural-button"].neural-button--large .btn-icon {
   font-size: var(--text-xl);
 }
 
-.neural-button--large:hover {
+[data-component="neural-button"].neural-button--large:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-neural-lg);
 }
 
 /* Responsive adjustments for large buttons */
 @media (max-width: 768px) {
-  .neural-button--large {
+  [data-component="neural-button"].neural-button--large {
     padding: var(--space-3) var(--space-6);
     font-size: var(--text-base);
     min-height: 50px;
@@ -142,64 +142,64 @@
 
 /* === COLOR VARIANTS === */
 
-.neural-button--primary {
+[data-component="neural-button"].neural-button--primary {
   background: var(--glass-bg-accent);
   border-color: var(--color-accent);
   color: var(--color-accent);
 }
 
-.neural-button--primary:hover {
+[data-component="neural-button"].neural-button--primary:hover {
   background: var(--glass-bg-medium);
   box-shadow: var(--shadow-neural-md);
 }
 
-.neural-button--success {
+[data-component="neural-button"].neural-button--success {
   background: var(--glass-bg-accent);
   border-color: var(--color-success);
   color: var(--color-success);
 }
 
-.neural-button--success:hover {
+[data-component="neural-button"].neural-button--success:hover {
   background: var(--glass-bg-medium);
   text-shadow: 0 0 6px var(--color-success);
 }
 
-.neural-button--warning {
+[data-component="neural-button"].neural-button--warning {
   background: var(--glow-gold-error-bg-outer);
   border-color: var(--color-error);
   color: var(--color-error);
 }
 
-.neural-button--warning:hover {
+[data-component="neural-button"].neural-button--warning:hover {
   background: var(--glow-gold-error-bg-inner);
   text-shadow: 0 0 6px var(--glow-gold-error-text);
 }
 
-.neural-button--gold {
+[data-component="neural-button"].neural-button--gold {
   background: var(--glow-gold-error-bg-outer);
   border-color: var(--glow-gold-error-border);
   color: var(--color-warning);
   text-shadow: 0 0 5px var(--glow-gold-error-text);
 }
 
-.neural-button--gold:hover {
+[data-component="neural-button"].neural-button--gold:hover {
   box-shadow: var(--shadow-authority);
 }
 
 /* === CONTEXT VARIANTS === */
 
-.neural-button--toolbar {
+[data-component="neural-button"].neural-button--toolbar {
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-organic-dynamic);
 }
 
-.neural-button--minimal {
+[data-component="neural-button"].neural-button--minimal {
   background: transparent;
   border-color: transparent;
   text-shadow: none;
 }
 
-.neural-button--minimal:hover {
+[data-component="neural-button"].neural-button--minimal:hover {
   background: var(--glass-bg-light);
   border-color: var(--glass-border);
 }
