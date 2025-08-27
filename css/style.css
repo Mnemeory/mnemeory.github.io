@@ -20,7 +20,7 @@
 
 /* Components - Ordered by dependency hierarchy */
 /* Base visual effects (no dependencies) */
-@import url("./components/fluid-consciousness.css") layer(components);
+@import url("./components/atmospheric-system.css") layer(components);
 @import url("./components/skrell-cultural.css") layer(components);
 
 /* Core interface components */

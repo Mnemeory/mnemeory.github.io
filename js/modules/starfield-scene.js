@@ -49,10 +49,9 @@ export class StarfieldScene {
 
     // Create scene
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.Fog(0x071422, 800, 2000); // Further reduced fog density to ensure star visibility
+    // Removed fog effect to eliminate potential visual artifacts
 
-    console.log("Scene created with fog:", {
-      fog: this.scene.fog,
+    console.log("Scene created:", {
       children: this.scene.children.length,
     });
 
@@ -113,7 +112,7 @@ export class StarfieldScene {
 
       this.renderer.setSize(width, height);
       this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      this.renderer.setClearColor(0x071422, 0.0); // Transparent background to show CSS background
+      this.renderer.setClearColor(0x000000, 0.0); // Truly transparent background to allow atmospheric effects
       this.renderer.sortObjects = true; // Enable render order sorting
 
       console.log("✅ WebGL renderer created successfully:", {
@@ -160,15 +159,16 @@ export class StarfieldScene {
     const colors = new Float32Array(LOCAL_CONFIG.PARTICLE_COUNT * 3);
     const sizes = new Float32Array(LOCAL_CONFIG.PARTICLE_COUNT);
 
-    // Generate random stars
+    // Generate random stars with improved distribution
     for (let i = 0; i < LOCAL_CONFIG.PARTICLE_COUNT; i++) {
       const i3 = i * 3;
 
-      // Position - using config spread
-      const spread = starConfig.spread * 40; // Increase spread for better distribution
-      positions[i3] = (Math.random() - 0.5) * spread;
-      positions[i3 + 1] = (Math.random() - 0.5) * spread;
-      positions[i3 + 2] = (Math.random() - 0.5) * spread - 100; // Position stars in front of camera for visibility
+      // Position - using config spread with better randomization
+      const spread = starConfig.spread * 50; // Increase spread for better distribution
+      // Use different random seeds to avoid patterns
+      positions[i3] = (Math.random() * 2 - 1) * spread + (Math.random() - 0.5) * 20;
+      positions[i3 + 1] = (Math.random() * 2 - 1) * spread + (Math.random() - 0.5) * 20;
+      positions[i3 + 2] = (Math.random() * 2 - 1) * spread - 100 + (Math.random() - 0.5) * 50;
 
       // Color (various blues and cyans) - using config brightness and color variance
       const colorChoice = Math.random();

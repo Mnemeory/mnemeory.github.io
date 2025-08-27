@@ -3,15 +3,26 @@
  * Handles transitions between different application views
  */
 
-import { ROUTES, ANIMATION_CONFIG, CONSTANTS } from "../config.js";
+import { ROUTES, ANIMATION_CONFIG, CONSTANTS, SITE_CONFIG } from "../config.js";
 
 export class ViewManager {
   constructor(state) {
     this.state = state;
     this.currentView = null;
     this.views = new Map();
+    
+    // Atmospheric system properties
+    this.atmosphereElement = null;
+    this.constellationThemes = {
+      'tree': 'tree-theme',
+      'qu-poxii': 'bond-theme', 
+      'chant': 'chant-theme',
+      'egg': 'egg-theme',
+      'void': 'void-theme'
+    };
 
     this.initializeViews();
+    this.initializeAtmosphericSystem();
   }
 
   /**
@@ -28,9 +39,54 @@ export class ViewManager {
   }
 
   /**
+   * Initialize atmospheric system
+   */
+  initializeAtmosphericSystem() {
+    this.atmosphereElement = document.querySelector(SITE_CONFIG.selectors.constellationAtmosphere);
+    if (!this.atmosphereElement) {
+      console.warn('Constellation atmosphere element not found');
+    }
+  }
+
+  /**
+   * Activate constellation atmosphere theme
+   */
+  activateConstellationAtmosphere(constellation) {
+    if (!this.atmosphereElement) return;
+    
+    // Remove all existing theme classes
+    Object.values(this.constellationThemes).forEach(theme => {
+      this.atmosphereElement.classList.remove(theme);
+    });
+    
+    // Add constellation-specific theme
+    const themeClass = this.constellationThemes[constellation];
+    if (themeClass) {
+      this.atmosphereElement.classList.add(themeClass);
+      this.atmosphereElement.classList.add('active');
+      console.log(`Activated ${constellation} atmosphere theme: ${themeClass}`);
+    }
+  }
+
+  /**
+   * Deactivate constellation atmosphere
+   */
+  deactivateConstellationAtmosphere() {
+    if (!this.atmosphereElement) return;
+    
+    // Remove all theme classes and active state
+    Object.values(this.constellationThemes).forEach(theme => {
+      this.atmosphereElement.classList.remove(theme);
+    });
+    this.atmosphereElement.classList.remove('active');
+    console.log('Deactivated constellation atmosphere');
+  }
+
+  /**
    * Show starfield view (home)
    */
   showStarfield() {
+    this.deactivateConstellationAtmosphere();
     this.transitionToView("starfield-view");
   }
 
@@ -48,6 +104,7 @@ export class ViewManager {
     const viewId = `${constellation}-view`;
 
     if (this.views.has(viewId)) {
+      this.activateConstellationAtmosphere(constellation);
       this.transitionToView(viewId);
     } else {
       console.warn(
@@ -187,8 +244,10 @@ export class ViewManager {
    */
   destroy() {
     this.hideAllViews();
+    this.deactivateConstellationAtmosphere();
     this.views.clear();
     this.currentView = null;
+    this.atmosphereElement = null;
     console.log("ViewManager destroyed");
   }
 }

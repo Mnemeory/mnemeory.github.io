@@ -16,10 +16,20 @@
   height: 100%;
   min-height: 400px;
   box-sizing: border-box;
-  background:
-    var(--gradient-neural-primary), var(--gradient-neural-secondary),
-    var(--gradient-consciousness-flow);
-  overflow: hidden;
+  background: transparent; /* Made transparent to allow atmospheric effects to show through */
+  /* overflow: hidden; - Removed to allow atmospheric effects to extend beyond container */
+}
+
+/* Only show liquid space background when starfield is active */
+.starfield-view.active .liquid-space {
+  background: 
+    /* Gentle cosmic depth - single gradient to avoid artifacts */
+    radial-gradient(
+      ellipse at center, 
+      var(--color-midnight-indigo) 0%, 
+      var(--color-abyss) 60%, 
+      var(--color-bg) 100%
+    );
 }
 
 /* Hide scrollbars specifically for liquid space - using utility class */
@@ -32,101 +42,4 @@
   z-index: var(--z-raised);
 }
 
-/* Flowing Clusters */
-.liquid-clusters {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: var(--z-raised);
-  overflow: hidden;
-}
 
-/* Hide scrollbars in liquid clusters - using utility class */
-
-.floating-nodes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-20);
-  align-items: center;
-  justify-content: center;
-  max-width: 90vw;
-  animation: nodes-drift 60s ease-in-out infinite;
-}
-
-@keyframes nodes-drift {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-10px) rotate(1deg);
-  }
-  50% {
-    transform: translateY(5px) rotate(-0.5deg);
-  }
-  75% {
-    transform: translateY(-5px) rotate(0.3deg);
-  }
-}
-
-.liquid-node {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-5);
-  padding: var(--space-8);
-  transition: all var(--duration-slower) var(--ease-neural);
-  animation: base-floating var(--duration-float) ease-in-out infinite;
-  position: relative;
-}
-
-/* Animation delays moved to unified utility system: .stagger-delay */
-
-.node-bubble {
-  width: 120px;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
-
-.node-bubble img {
-  width: 50px;
-  height: 50px;
-  filter: drop-shadow(var(--drop-shadow-medium));
-  z-index: var(--z-raised);
-  transition: all var(--duration-slow) var(--ease-organic);
-}
-
-.flowing-label {
-  font-family: var(--font-primary);
-  font-size: var(--text-lg);
-  font-weight: 400;
-  color: var(--color-cyan);
-  text-align: center;
-  text-shadow: 0 0 8px var(--glow-cyan-bright);
-  transition: all var(--duration-slow) var(--ease-organic);
-}
-
-.liquid-node:hover .node-bubble {
-  transform: scale(1.1);
-  border-radius: var(--radius-morph-4);
-  box-shadow:
-    0 0 30px var(--glow-cyan-medium),
-    inset 0 0 30px var(--glow-cyan-faint);
-}
-
-
-.liquid-node:hover .flowing-label {
-  transform: translateY(-5px);
-  text-shadow:
-    0 0 12px var(--glow-cyan-bright),
-    0 0 24px var(--glow-cyan-medium);
-}

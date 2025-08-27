@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   z-index: var(--z-raised);
-  overflow: hidden;
+  /* overflow: hidden; - Removed to allow atmospheric effects to extend beyond container */
 }
 
 /* Hide scrollbars in starfield view - using utility class */
@@ -58,25 +58,8 @@
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
-  background:
-    radial-gradient(
-      ellipse at center,
-      var(--glass-bg-neural) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      ellipse at top left,
-      var(--glass-bg-cosmic) 0%,
-      transparent 40%
-    ),
-    radial-gradient(
-      ellipse at bottom right,
-      var(--glass-bg-accent) 0%,
-      transparent 40%
-    ),
-    var(--color-bg);
-  box-shadow: inset 0 0 100px var(--glass-shadow-base);
+  /* overflow: hidden; - Removed to allow atmospheric effects to extend beyond container */
+  background: transparent;
 }
 
 /* Hide scrollbars specifically for constellation map - using utility class */
@@ -89,112 +72,7 @@
   background: transparent;
 }
 
-/* 2D Fallback */
-.starfield-2d {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: inherit;
-}
 
-.starfield-2d.hidden {
-  display: none !important;
-}
-
-.starfield-2d:not(.hidden) {
-  display: flex !important;
-}
-
-.constellation-clusters {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: var(--space-8);
-  max-width: 800px;
-  width: 100%;
-  padding: var(--space-6);
-  margin: 0 auto;
-  justify-items: center;
-  align-items: center;
-  min-height: 400px;
-}
-
-/* Central Nlom node positioning */
-.cluster-node:first-child {
-  grid-column: 3;
-  grid-row: 1;
-  transform: scale(1.1);
-}
-
-/* Arrange constellation points symmetrically around the center */
-.cluster-node:nth-child(2) {
-  grid-column: 1;
-  grid-row: 1;
-}
-.cluster-node:nth-child(3) {
-  grid-column: 2;
-  grid-row: 2;
-}
-.cluster-node:nth-child(4) {
-  grid-column: 4;
-  grid-row: 2;
-}
-.cluster-node:nth-child(5) {
-  grid-column: 5;
-  grid-row: 1;
-}
-.cluster-node:nth-child(6) {
-  grid-column: 3;
-  grid-row: 2;
-}
-
-.cluster-node {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-6);
-  background: var(--glass-bg-light);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-xl);
-  color: var(--color-text);
-  text-decoration: none;
-  cursor: pointer;
-  transition: all var(--duration-base) var(--ease-organic);
-  min-height: 140px;
-}
-
-.cluster-node:hover {
-  background: var(--glass-bg-medium);
-  border-color: var(--color-accent);
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-glow);
-}
-
-.cluster-node:focus-visible {
-  border-color: var(--color-accent);
-  box-shadow: var(--shadow-glow);
-}
-
-.cluster-node img {
-  width: 32px;
-  height: 32px;
-  filter: drop-shadow(var(--shadow-glow));
-  transition: transform var(--duration-base) var(--ease-organic);
-}
-
-.cluster-node:hover img {
-  transform: scale(1.1);
-}
-
-.cluster-label {
-  font-size: var(--text-sm);
-  font-weight: 600;
-  text-align: center;
-  color: var(--color-text);
-}
 
 /* Constellation Tooltips */
 .constellation-tooltip {

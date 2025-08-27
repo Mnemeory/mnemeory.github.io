@@ -67,27 +67,26 @@
 }
 
 /* Neural Interface Layout System */
-.fluid-consciousness {
+.nlom-interface-app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   position: relative;
+  z-index: var(--z-base);
+  background: transparent;
 }
 
 .neural-command-interface {
   position: sticky;
   top: 0;
   z-index: var(--z-overlay);
-  background: radial-gradient(
-    ellipse 800px 200px at center,
-    rgba(175, 238, 238, 0.08) 0%,
-    rgba(46, 27, 73, 0.04) 40%,
-    transparent 70%
-  );
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(175, 238, 238, 0.1);
+  background: transparent;
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  border-bottom: 1px solid var(--glow-cyan-gentle);
   padding: var(--space-4) var(--space-6);
+  /* Ensure atmospheric effects show through while maintaining glass effect */
+  /* isolation: isolate; - Removed to prevent isolation of atmospheric effects */
 }
 
 .neural-flow-grid {
@@ -140,8 +139,8 @@
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-full);
   box-shadow:
-    0 4px 16px rgba(175, 238, 238, 0.15),
-    inset 0 0 10px rgba(175, 238, 238, 0.1);
+    0 4px 16px var(--shadow-neural-sm),
+    inset 0 0 10px var(--glow-cyan-gentle);
   position: relative;
   overflow: hidden;
 }
@@ -182,8 +181,8 @@
   position: relative;
   overflow: hidden;
   box-shadow:
-    0 8px 32px rgba(175, 238, 238, 0.15),
-    inset 0 0 20px rgba(175, 238, 238, 0.1);
+    0 8px 32px var(--shadow-neural-md),
+    inset 0 0 20px var(--glow-cyan-gentle);
 }
 
 .emblem-nexus .fluid-emblem {
@@ -312,8 +311,10 @@
   position: relative;
   min-height: 0; /* Allow flex shrinking */
   padding: 0; /* Remove padding to fill screen */
-  /* Full screen height for constellation map */
-  height: calc(100vh - 100px); /* Full height minus header */
+  /* Full screen height for constellation map - removed height constraint to allow atmospheric effects */
+  /* height: calc(100vh - 100px); - Removed to prevent clipping atmospheric effects */
+  min-height: calc(100vh - 100px); /* Use min-height instead to maintain layout but allow extension */
+  background: transparent;
 }
 
 /* Neural Navigation Footer */

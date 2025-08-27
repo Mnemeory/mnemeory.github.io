@@ -12,20 +12,12 @@
   transition: all var(--duration-slower) var(--ease-neural);
   pointer-events: none;
   padding: var(--space-8) var(--space-6);
-  overflow: hidden;
+  /* overflow: hidden; - Removed to allow atmospheric effects to extend beyond container */
   z-index: var(--z-base);
   box-sizing: border-box;
-  background:
-    /* Thought-specific nebula */
-    var(--gradient-interface-light),
-    var(--gradient-interface-accent),
-    /* Consciousness flow */
-      linear-gradient(
-        135deg,
-        transparent 40%,
-        var(--glass-bg-cosmic) 60%,
-        transparent 80%
-      );
+  
+  /* Minimal base styling - atmospheric effects handled by atmospheric-system.css */
+  background: transparent;
   backdrop-filter: blur(1px);
   -webkit-backdrop-filter: blur(1px);
 }
@@ -643,87 +635,19 @@
   color: var(--color-text-dim);
 }
 
-/* Constellation-Specific View Theming */
+/* Constellation-Specific View Theming - Now handled by atmospheric-system.css */
 
-/* Gnarled Tree - Age, Wisdom, Tradition */
-#gnarled-tree-view.constellation-view {
-  background:
-    radial-gradient(
-      ellipse 600px 400px at center top,
-      var(--constellation-tree-bg) 0%,
-      transparent 70%
-    ),
-    radial-gradient(
-      ellipse 400px 300px at 80% 60%,
-      var(--glow-purple-whisper) 0%,
-      transparent 60%
-    ),
-    var(--gradient-theme-tree);
-}
-
-/* Qu'Poxii - Love, Friendship, Support */
-#qu-poxii-view.constellation-view {
-  background:
-    radial-gradient(
-      ellipse 600px 400px at center top,
-      var(--constellation-bond-bg) 0%,
-      transparent 70%
-    ),
-    radial-gradient(
-      ellipse 400px 300px at 80% 60%,
-      var(--glow-pink-gentle) 0%,
-      transparent 60%
-    ),
-    var(--gradient-theme-bond);
-}
-
-/* Star Chanter - Wisdom, Science, Connection */
-#star-chanter-view.constellation-view {
-  background:
-    radial-gradient(
-      ellipse 600px 400px at center top,
-      var(--constellation-chant-bg) 0%,
-      transparent 70%
-    ),
-    radial-gradient(
-      ellipse 400px 300px at 80% 60%,
-      var(--glow-cyan-faint) 0%,
-      transparent 60%
-    ),
-    var(--gradient-theme-chant);
-}
-
-/* Hatching Egg - New Beginnings, Progress */
-#hatching-egg-view.constellation-view {
-  background:
-    radial-gradient(
-      ellipse 600px 400px at center top,
-      var(--constellation-egg-bg) 0%,
-      transparent 70%
-    ),
-    radial-gradient(
-      ellipse 400px 300px at 80% 60%,
-      var(--glow-cyan-ultra) 0%,
-      transparent 60%
-    ),
-    var(--gradient-theme-egg);
-}
-
-/* Void - Mystery, Restriction, Death */
-#void-view.constellation-view {
-  background:
-    radial-gradient(
-      ellipse 600px 400px at center top,
-      var(--constellation-void-bg) 0%,
-      transparent 70%
-    ),
-    radial-gradient(
-      ellipse 400px 300px at 80% 60%,
-      var(--glow-purple-soft) 0%,
-      transparent 60%
-    ),
-    var(--gradient-theme-void);
-}
+/* Constellation views will receive atmospheric theming through:
+ * - .constellation-atmosphere with appropriate theme class
+ * - .constellation-content-overlay for subtle content enhancement
+ * 
+ * Theme classes applied via JavaScript:
+ * - .tree-theme for Gnarled Tree
+ * - .bond-theme for Qu'Poxii  
+ * - .chant-theme for Star Chanter
+ * - .egg-theme for Hatching Egg
+ * - .void-theme for Void
+ */
 
 /* Constellation-specific component styling now uses direct design tokens */
 /* Each constellation view can override these with specific constellation colors as needed */

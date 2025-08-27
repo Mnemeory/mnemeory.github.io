@@ -1,11 +1,10 @@
 /**
- * Starfield Manager - Main Orchestrator for 3D/2D Starfield System
- * Coordinates scene, interactions, and fallback systems
+ * Starfield Manager - Main Orchestrator for 3D Starfield System
+ * Coordinates scene and interactions
  */
 
 import { StarfieldScene } from "./starfield-scene.js";
 import { StarfieldInteractions } from "./starfield-interactions.js";
-import { StarfieldFallback } from "./starfield-fallback.js";
 import {
   ENHANCED_STARFIELD_CONFIG,
   CONSTANTS,
@@ -23,10 +22,8 @@ export class StarfieldManager {
   constructor() {
     this.scene = null;
     this.interactions = null;
-    this.fallback = null;
     this.canvas = null;
     this.container = null;
-    this.fallback2D = null;
 
     // State
     this.isInitialized = false;
@@ -43,11 +40,23 @@ export class StarfieldManager {
     this.onVisibilityChange = this.handleVisibilityChange.bind(this);
 
     // Check WebGL support
-    this.is3DEnabled = StarfieldFallback.checkWebGLSupport();
+    this.is3DEnabled = this.checkWebGLSupport();
     console.log("WebGL support check:", {
       is3DEnabled: this.is3DEnabled,
-      webglSupported: StarfieldFallback.checkWebGLSupport(),
     });
+  }
+
+  /**
+   * Check WebGL support
+   */
+  checkWebGLSupport() {
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      return !!gl;
+    } catch (e) {
+      return false;
+    }
   }
 
   /**
@@ -59,15 +68,12 @@ export class StarfieldManager {
 
       this.container = document.querySelector(containerSelector);
       this.canvas = document.querySelector(getSelector("starfieldCanvas"));
-      this.fallback2D = document.querySelector(getSelector("starfield2D"));
 
       console.log("Starfield elements found:", {
         container: !!this.container,
         canvas: !!this.canvas,
-        fallback2D: !!this.fallback2D,
         containerSelector,
-        canvasSelector: getSelector("starfieldCanvas"),
-        fallback2DSelector: getSelector("starfield2D")
+        canvasSelector: getSelector("starfieldCanvas")
       });
 
       if (!this.container) {
@@ -97,7 +103,7 @@ export class StarfieldManager {
         "STARFIELD_INIT_ERROR"
       );
       logError(standardError, "StarfieldManager");
-      return this.initFallback2D();
+      return false;
     }
   }
 
@@ -150,46 +156,11 @@ export class StarfieldManager {
         "STARFIELD_3D_ERROR"
       );
       logError(standardError, "StarfieldManager");
-      return this.initFallback2D();
-    }
-  }
-
-  /**
-   * Initialize 2D fallback interface
-   */
-  initFallback2D() {
-    console.log("🔄 Initializing 2D fallback starfield...");
-
-    if (!this.fallback2D) {
-      console.warn("❌ 2D fallback element not found");
-      console.log("Available elements:", {
-        starfieldContainer: !!document.querySelector("#starfield-container"),
-        starfield2D: !!document.querySelector("#starfield-2d"),
-        liquidClusters: !!document.querySelector(".liquid-clusters"),
-        floatingNodes: !!document.querySelector(".floating-nodes")
-      });
       return false;
     }
-
-    // Hide 3D canvas and show 2D fallback
-    if (this.canvas) {
-      this.canvas.style.display = "none";
-      console.log("✅ Hidden 3D canvas");
-    }
-
-    this.fallback = new StarfieldFallback(this.fallback2D);
-    const fallbackInitialized = this.fallback.init();
-
-    if (fallbackInitialized) {
-      this.isInitialized = true;
-      this.is3DEnabled = false;
-      console.log("✅ 2D Fallback starfield initialized successfully");
-      return true;
-    }
-
-    console.warn("❌ 2D fallback initialization failed");
-    return false;
   }
+
+
 
   /**
    * Setup event listeners
@@ -309,9 +280,7 @@ export class StarfieldManager {
       this.interactions.setClusterActivationCallback(callback);
     }
 
-    if (this.fallback) {
-      this.fallback.setClusterActivationCallback(callback);
-    }
+
   }
 
   /**
@@ -320,10 +289,6 @@ export class StarfieldManager {
   getCurrentHover() {
     if (this.interactions) {
       return this.interactions.getCurrentHover();
-    }
-
-    if (this.fallback) {
-      return this.fallback.getCurrentHover();
     }
 
     return null;
@@ -384,15 +349,9 @@ export class StarfieldManager {
       this.scene = null;
     }
 
-    if (this.fallback) {
-      this.fallback.destroy();
-      this.fallback = null;
-    }
-
     // Clear references
     this.canvas = null;
     this.container = null;
-    this.fallback2D = null;
 
     console.log("Starfield destroyed");
   }

@@ -80,8 +80,13 @@
       </div>
     </div>
 
-    <!-- Fluid Consciousness Stream -->
-    <div id="app" class="fluid-consciousness">
+    <!-- Atmospheric Layers -->
+    <div class="atmospheric-base"></div>
+    <div class="atmospheric-overlay"></div>
+    <div class="constellation-atmosphere" id="constellation-atmosphere"></div>
+
+    <!-- Neural Interface App -->
+    <div id="app" class="nlom-interface-app">
       <!-- Neural Interface Header -->
       <header class="neural-command-interface" role="banner">
         <div class="neural-flow-grid">
@@ -152,107 +157,7 @@
               </div>
             </div>
 
-            <!-- Flowing Clusters -->
-            <div
-              id="starfield-2d"
-              class="liquid-clusters hidden"
-              role="img"
-              aria-label="Diplomatic Mission Psionic Wake Constellation Map"
-            >
-              <div class="floating-nodes">
-                <button
-                  type="button"
-                  class="liquid-node"
-                  data-cluster="gnarled-tree"
-                  aria-describedby="tree-desc"
-                >
-                  <div class="node-bubble">
-                    <img
-                      src="assets/images/tree.svg"
-                      alt=""
-                      aria-hidden="true"
-                    />
-                    <div class="bubble-ripples"></div>
-                  </div>
-                  <span class="flowing-label">The Gnarled Tree</span>
-                </button>
-                <button
-                  type="button"
-                  class="liquid-node"
-                  data-cluster="qu-poxii"
-                  aria-describedby="bond-desc"
-                >
-                  <div class="node-bubble">
-                    <img
-                      src="assets/images/bond.svg"
-                      alt=""
-                      aria-hidden="true"
-                    />
-                    <div class="bubble-ripples"></div>
-                  </div>
-                  <span class="flowing-label">The Qu'Poxii</span>
-                </button>
-                <button
-                  type="button"
-                  class="liquid-node"
-                  data-cluster="star-chanter"
-                  aria-describedby="chant-desc"
-                >
-                  <div class="node-bubble">
-                    <img
-                      src="assets/images/chant.svg"
-                      alt=""
-                      aria-hidden="true"
-                    />
-                    <div class="bubble-ripples"></div>
-                  </div>
-                  <span class="flowing-label">The Star Chanter</span>
-                </button>
-                <button
-                  type="button"
-                  class="liquid-node"
-                  data-cluster="hatching-egg"
-                  aria-describedby="egg-desc"
-                >
-                  <div class="node-bubble">
-                    <img
-                      src="assets/images/egg.svg"
-                      alt=""
-                      aria-hidden="true"
-                    />
-                    <div class="bubble-ripples"></div>
-                  </div>
-                  <span class="flowing-label">The Hatching Egg</span>
-                </button>
-                <button
-                  type="button"
-                  class="liquid-node"
-                  data-cluster="void"
-                  aria-describedby="void-desc"
-                >
-                  <div class="node-bubble">
-                    <img
-                      src="assets/images/void.svg"
-                      alt=""
-                      aria-hidden="true"
-                    />
-                    <div class="bubble-ripples"></div>
-                  </div>
-                  <span class="flowing-label">The Void</span>
-                </button>
-              </div>
 
-              <!-- 2D Tooltip -->
-              <div
-                id="constellation-tooltip-2d"
-                class="constellation-tooltip constellation-tooltip--2d"
-                aria-hidden="true"
-              >
-                <div class="tooltip-content">
-                  <span class="tooltip-text"></span>
-                </div>
-              </div>
-            </div>
 
             <!-- Flowing Descriptions - populated dynamically -->
             <div class="sr-only">
@@ -271,6 +176,7 @@
           class="constellation-view"
           aria-hidden="true"
         >
+          <div class="constellation-content-overlay"></div>
           <!-- Stream Header -->
           <div class="stream-essence">
             <div class="essence-icon">
@@ -298,6 +204,7 @@
         </div>
 
         <div id="qu-poxii-view" class="constellation-view" aria-hidden="true">
+          <div class="constellation-content-overlay"></div>
           <div class="stream-essence">
             <div class="essence-icon">
               <div class="icon-droplet">
@@ -326,6 +233,7 @@
           class="constellation-view"
           aria-hidden="true"
         >
+          <div class="constellation-content-overlay"></div>
           <div class="stream-essence">
             <div class="essence-icon">
               <div class="icon-droplet">
@@ -354,6 +262,7 @@
           class="constellation-view"
           aria-hidden="true"
         >
+          <div class="constellation-content-overlay"></div>
           <div class="stream-essence">
             <div class="essence-icon">
               <div class="icon-droplet">
@@ -378,6 +287,7 @@
         </div>
 
         <div id="void-view" class="constellation-view" aria-hidden="true">
+          <div class="constellation-content-overlay"></div>
           <div class="stream-essence">
             <div class="essence-icon">
               <div class="icon-droplet">

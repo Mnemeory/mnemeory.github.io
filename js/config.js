@@ -498,9 +498,7 @@ export const SITE_CONFIG = {
     starfieldView: "#starfield-view",
     starfieldContainer: "#starfield-container",
     starfieldCanvas: "#starfield-canvas",
-    starfield2D: "#starfield-2d",
     constellationTooltip: "#constellation-tooltip",
-    constellationTooltip2D: "#constellation-tooltip-2d",
 
     // Views
     gnarledTreeView: "#gnarled-tree-view",
@@ -508,6 +506,9 @@ export const SITE_CONFIG = {
     starChanterView: "#star-chanter-view",
     hatchingEggView: "#hatching-egg-view",
     voidView: "#void-view",
+    
+    // Atmospheric system
+    constellationAtmosphere: "#constellation-atmosphere",
 
     // Node containers
     gnarledTreeNodes: "#gnarled-tree-nodes",
