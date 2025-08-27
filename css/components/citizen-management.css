@@ -91,8 +91,6 @@
   padding: var(--space-4);
 }
 
-
-
 /* Files Panel */
 .files-panel {
   background: var(--bg-overlay-white-subtle);
@@ -126,10 +124,6 @@
   padding: var(--space-1);
 }
 
-
-
-
-
 /* Overview Grid */
 .overview-grid {
   display: grid;
@@ -137,8 +131,6 @@
   gap: var(--space-6);
   height: fit-content;
 }
-
-
 
 .stats-panel,
 .citizens-panel,
@@ -364,8 +356,6 @@
   margin-bottom: var(--space-6);
 }
 
-
-
 .form-group {
   display: flex;
   flex-direction: column;
@@ -465,7 +455,7 @@
 }
 
 .session-gate-content::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -511,12 +501,12 @@
   border: 2px solid var(--color-kelpie);
   border-radius: 50%;
   opacity: 0.3;
-  animation: ripple var(--duration-ripple) ease-out infinite;
+  animation: ripple var(--duration-ripples) ease-out infinite;
 }
 
 .gate-ripples::before,
 .gate-ripples::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -529,13 +519,13 @@
 .gate-ripples::before {
   width: 160px;
   height: 160px;
-  animation: ripple var(--duration-ripple) ease-out infinite 1s;
+  animation: ripple var(--duration-ripples) ease-out infinite 1s;
 }
 
 .gate-ripples::after {
   width: 200px;
   height: 200px;
-  animation: ripple var(--duration-ripple) ease-out infinite 2s;
+  animation: ripple var(--duration-ripples) ease-out infinite 2s;
 }
 
 @keyframes ripple {
@@ -550,7 +540,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {

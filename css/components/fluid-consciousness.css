@@ -52,7 +52,7 @@
     /* Consciousness droplets */
       radial-gradient(
         circle 300px at 15% 60%,
-        var(--glow-subtle) 0%,
+        var(--glow-cyan-faint) 0%,
         transparent 95%
       ),
     radial-gradient(

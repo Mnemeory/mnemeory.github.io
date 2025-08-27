@@ -36,7 +36,8 @@
   height: 2px;
   background: var(--gradient-energy-horizontal);
   opacity: 0.6;
-  animation: neural-energy-flow var(--duration-neural-pulse) ease-in-out infinite;
+  animation: neural-energy-flow var(--duration-neural-pulse) ease-in-out
+    infinite;
 }
 
 .neural-document.focused {
@@ -439,7 +440,8 @@
 /* === ANIMATIONS === */
 
 @keyframes document-float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) scale(1);
   }
   50% {
@@ -448,7 +450,8 @@
 }
 
 @keyframes neural-energy-flow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.4;
   }
   50% {
@@ -457,7 +460,8 @@
 }
 
 @keyframes neural-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.7;
     transform: scale(1);
   }
@@ -468,7 +472,8 @@
 }
 
 @keyframes neural-marker-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
   }
   50% {
@@ -477,7 +482,8 @@
 }
 
 @keyframes divider-glow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: var(--shadow-neural-sm);
   }
   50% {
@@ -486,7 +492,8 @@
 }
 
 @keyframes field-breath {
-  0%, 100% {
+  0%,
+  100% {
     background: var(--glow-cyan-faint);
   }
   50% {
@@ -495,7 +502,8 @@
 }
 
 @keyframes tag-float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -504,7 +512,8 @@
 }
 
 @keyframes tag-editing {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: var(--shadow-neural-sm);
   }
   50% {
@@ -513,7 +522,8 @@
 }
 
 @keyframes stamp-float {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(-5deg) translateY(0);
   }
   50% {

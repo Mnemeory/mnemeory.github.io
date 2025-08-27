@@ -48,16 +48,16 @@
   /* === GLASS SYSTEM - Unified Glassmorphism Background Hierarchy === */
 
   /* Base Glass Backgrounds - Primary Interface Elements */
-  --glass-bg-subtle: rgba(14, 55, 87, 0.08);   /* Minimal glass effect */
-  --glass-bg-light: rgba(14, 55, 87, 0.15);    /* Light glassmorphism */
-  --glass-bg-medium: rgba(14, 55, 87, 0.25);   /* Standard glassmorphism */
-  --glass-bg-heavy: rgba(14, 55, 87, 0.4);     /* Strong glassmorphism */
-  --glass-bg-dark: rgba(14, 55, 87, 0.6);      /* Dense glassmorphism */
+  --glass-bg-subtle: rgba(14, 55, 87, 0.08); /* Minimal glass effect */
+  --glass-bg-light: rgba(14, 55, 87, 0.15); /* Light glassmorphism */
+  --glass-bg-medium: rgba(14, 55, 87, 0.25); /* Standard glassmorphism */
+  --glass-bg-heavy: rgba(14, 55, 87, 0.4); /* Strong glassmorphism */
+  --glass-bg-dark: rgba(14, 55, 87, 0.6); /* Dense glassmorphism */
 
   /* Specialized Glass Backgrounds - Context-Specific */
   --glass-bg-neural: rgba(175, 238, 238, 0.08); /* Neural interface elements */
-  --glass-bg-cosmic: rgba(46, 27, 73, 0.15);    /* Cosmic/void elements */
-  --glass-bg-accent: rgba(92, 231, 231, 0.12);  /* Accent/highlight elements */
+  --glass-bg-cosmic: rgba(46, 27, 73, 0.15); /* Cosmic/void elements */
+  --glass-bg-accent: rgba(92, 231, 231, 0.12); /* Accent/highlight elements */
 
   /* Glass Borders and Effects */
   --glass-border: rgba(92, 231, 231, 0.2);
@@ -133,16 +133,6 @@
   --shadow-glow: 0 0 20px rgba(92, 231, 231, 0.3);
   --shadow-glow-intense: 0 0 40px rgba(92, 231, 231, 0.5);
 
-  /* Motion & Animation */
-  --motion-fast: 150ms;
-  --motion-base: 300ms;
-  --motion-slow: 500ms;
-  --motion-slower: 800ms;
-  --ease-in: cubic-bezier(0.4, 0, 1, 1);
-  --ease-out: cubic-bezier(0, 0, 0.2, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-organic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-
   /* Z-Index Scale - CSS-10 Standard Implementation */
   --z-base: 0;
   --z-raised: 10;
@@ -160,10 +150,6 @@
 
   /* Shimmer Effect (disabled under reduced motion) */
   --shimmer-subtle: 0 0 1px rgba(92, 231, 231, 0.3);
-
-
-
-
 
   /* Cyan Glow System - Intensity Levels */
   --glow-cyan-whisper: rgba(175, 238, 238, 0.02);
@@ -310,15 +296,43 @@
   );
 
   /* Consolidated Theme Gradients - Constellation Backgrounds */
-  --gradient-theme-tree: linear-gradient(135deg, rgba(34, 139, 34, 0.02) 0%, transparent 50%);
-  --gradient-theme-bond: linear-gradient(135deg, rgba(255, 105, 180, 0.02) 0%, transparent 50%);
-  --gradient-theme-chant: linear-gradient(135deg, rgba(0, 191, 255, 0.02) 0%, transparent 50%);
-  --gradient-theme-egg: linear-gradient(135deg, rgba(173, 255, 47, 0.02) 0%, transparent 50%);
-  --gradient-theme-void: linear-gradient(135deg, rgba(148, 0, 211, 0.03) 0%, transparent 50%);
+  --gradient-theme-tree: linear-gradient(
+    135deg,
+    rgba(34, 139, 34, 0.02) 0%,
+    transparent 50%
+  );
+  --gradient-theme-bond: linear-gradient(
+    135deg,
+    rgba(255, 105, 180, 0.02) 0%,
+    transparent 50%
+  );
+  --gradient-theme-chant: linear-gradient(
+    135deg,
+    rgba(0, 191, 255, 0.02) 0%,
+    transparent 50%
+  );
+  --gradient-theme-egg: linear-gradient(
+    135deg,
+    rgba(173, 255, 47, 0.02) 0%,
+    transparent 50%
+  );
+  --gradient-theme-void: linear-gradient(
+    135deg,
+    rgba(148, 0, 211, 0.03) 0%,
+    transparent 50%
+  );
 
   /* Loading and Status Gradients */
-  --gradient-pulse-core: radial-gradient(circle, var(--color-cyan) 0%, transparent 70%);
-  --gradient-pulse-small: radial-gradient(circle, var(--color-cyan) 0%, transparent 50%);
+  --gradient-pulse-core: radial-gradient(
+    circle,
+    var(--color-cyan) 0%,
+    transparent 70%
+  );
+  --gradient-pulse-small: radial-gradient(
+    circle,
+    var(--color-cyan) 0%,
+    transparent 50%
+  );
 
   /* Interface Background Patterns */
   --gradient-interface-light: radial-gradient(
@@ -331,8 +345,6 @@
     rgba(254, 221, 216, 0.02) 0%,
     transparent 60%
   );
-
-
 
   /* Animation timing functions - Expanded beyond basic easing */
   --ease-neural: cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -404,8 +416,6 @@
   /* Gold Glow System - Intensity Levels */
   --glow-gold-soft: rgba(229, 199, 107, 0.4);
 
-
-
   /* Toast/Notification Glow Variants */
   --glow-toast-base: rgba(175, 238, 238, 0.15);
   --glow-toast-inner: rgba(175, 238, 238, 0.05);
@@ -418,10 +428,6 @@
   --glow-gold-error-bg-inner: rgba(229, 199, 107, 0.1);
   --glow-gold-error-border: rgba(229, 199, 107, 0.4);
   --glow-gold-error-text: rgba(229, 199, 107, 0.4);
-
-
-
-
 
   /* Cultural Interface Glass Effects */
   --glass-cultural-border: rgba(175, 238, 238, 0.2);

@@ -14,25 +14,25 @@
   border-radius: var(--radius-sm);
   font-size: var(--text-sm);
   font-weight: 500;
-  transition: all var(--motion-base) var(--ease-organic);
+  transition: all var(--duration-base) var(--ease-organic);
 }
 
 .github-export-status.success {
-  background: var(--glass-bg-starfield-accent);
+  background: var(--glass-bg-accent);
   color: var(--color-success);
   border: 1px solid var(--glass-cultural-border);
   box-shadow: var(--shadow-neural-sm);
 }
 
 .github-export-status.warning {
-  background: var(--glass-bg-starfield-void);
+  background: var(--glass-bg-dark);
   color: var(--color-warning);
   border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-neural-sm);
 }
 
 .github-export-status.error {
-  background: var(--glass-bg-starfield-void);
+  background: var(--glass-bg-dark);
   color: var(--color-error);
   border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-neural-sm);
@@ -244,8 +244,6 @@
   transform: scale(1.15);
 }
 
-
-
 /* === UNIFIED RIPPLE EFFECT SYSTEM === */
 
 /* Base Ripple Component */
@@ -374,7 +372,8 @@
 
 /* Gentle floating ripple for close buttons */
 @keyframes ripple-float {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(0deg);
     border-radius: 50% 30% 50% 30% / 30% 50% 30% 50%;
     opacity: 0.3;
@@ -404,7 +403,8 @@
 
 /* Pulse ripple for continuous effects */
 @keyframes ripple-pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.4;
   }
@@ -416,7 +416,8 @@
 
 /* Outer layer ripple for complex effects */
 @keyframes ripple-outer {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(0.9);
     opacity: 0.2;
   }
@@ -701,30 +702,66 @@
 /* === ANIMATION DELAY UTILITY SYSTEM === */
 
 /* Base staggered animation delays for nth-child elements */
-.stagger-delay:nth-child(1) { animation-delay: 0s; }
-.stagger-delay:nth-child(2) { animation-delay: -3s; }
-.stagger-delay:nth-child(3) { animation-delay: -6s; }
-.stagger-delay:nth-child(4) { animation-delay: -9s; }
-.stagger-delay:nth-child(5) { animation-delay: -12s; }
+.stagger-delay:nth-child(1) {
+  animation-delay: 0s;
+}
+.stagger-delay:nth-child(2) {
+  animation-delay: -3s;
+}
+.stagger-delay:nth-child(3) {
+  animation-delay: -6s;
+}
+.stagger-delay:nth-child(4) {
+  animation-delay: -9s;
+}
+.stagger-delay:nth-child(5) {
+  animation-delay: -12s;
+}
 
 /* Fast stagger for quick sequences */
-.stagger-delay--fast:nth-child(1) { animation-delay: 0s; }
-.stagger-delay--fast:nth-child(2) { animation-delay: -1s; }
-.stagger-delay--fast:nth-child(3) { animation-delay: -2s; }
-.stagger-delay--fast:nth-child(4) { animation-delay: -3s; }
-.stagger-delay--fast:nth-child(5) { animation-delay: -4s; }
+.stagger-delay--fast:nth-child(1) {
+  animation-delay: 0s;
+}
+.stagger-delay--fast:nth-child(2) {
+  animation-delay: -1s;
+}
+.stagger-delay--fast:nth-child(3) {
+  animation-delay: -2s;
+}
+.stagger-delay--fast:nth-child(4) {
+  animation-delay: -3s;
+}
+.stagger-delay--fast:nth-child(5) {
+  animation-delay: -4s;
+}
 
 /* Long stagger for flowing elements */
-.stagger-delay--flow:nth-child(1) { animation-delay: 0s; }
-.stagger-delay--flow:nth-child(2) { animation-delay: -4s; }
-.stagger-delay--flow:nth-child(3) { animation-delay: -8s; }
-.stagger-delay--flow:nth-child(4) { animation-delay: -12s; }
-.stagger-delay--flow:nth-child(5) { animation-delay: -16s; }
+.stagger-delay--flow:nth-child(1) {
+  animation-delay: 0s;
+}
+.stagger-delay--flow:nth-child(2) {
+  animation-delay: -4s;
+}
+.stagger-delay--flow:nth-child(3) {
+  animation-delay: -8s;
+}
+.stagger-delay--flow:nth-child(4) {
+  animation-delay: -12s;
+}
+.stagger-delay--flow:nth-child(5) {
+  animation-delay: -16s;
+}
 
 /* Alternating delays for odd/even patterns */
-.stagger-delay--alt:nth-child(odd) { animation-delay: -1s; }
-.stagger-delay--alt:nth-child(3n) { animation-delay: -2s; }
-.stagger-delay--alt:nth-child(5n) { animation-delay: -3s; }
+.stagger-delay--alt:nth-child(odd) {
+  animation-delay: -1s;
+}
+.stagger-delay--alt:nth-child(3n) {
+  animation-delay: -2s;
+}
+.stagger-delay--alt:nth-child(5n) {
+  animation-delay: -3s;
+}
 
 /* Legacy aliases - use .base-ripples .base-ripples--button classes in HTML */
 
