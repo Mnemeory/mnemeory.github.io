@@ -29,7 +29,6 @@
   inset: 0;
   background: var(--gradient-modal-backdrop), var(--bg-overlay-void);
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   cursor: pointer;
   animation: ocean-flow 60s ease-in-out infinite;
 }
@@ -43,7 +42,6 @@
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-2xl);
   backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
   box-shadow: var(--shadow-neural-xl), var(--shadow-inset-glow);
   overflow: hidden;
   transform: scale(0.95);

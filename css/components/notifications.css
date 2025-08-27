@@ -17,7 +17,6 @@
 .toast {
   padding: var(--space-5) var(--space-6);
   backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
   box-shadow:
     0 10px 25px var(--glow-toast-base),
     inset 0 0 25px var(--glow-toast-inner);

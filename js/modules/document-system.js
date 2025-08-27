@@ -526,7 +526,6 @@ export class DocumentInstance {
       padding: var(--space-4);
       z-index: 10;
       backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
     `;
 
     const header = document.createElement('div');
