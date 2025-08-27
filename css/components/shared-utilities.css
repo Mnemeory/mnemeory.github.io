@@ -4,19 +4,16 @@
  */
 
 /* Toast and tooltip positioning */
-.neural-tooltip {
+.tooltip {
   position: fixed;
   z-index: var(--z-tooltip);
   pointer-events: none;
-}
-
-.tooltip-initial {
   opacity: 0;
   transform: translateY(-5px);
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.tooltip-visible {
+.tooltip.is-visible {
   opacity: 1;
   transform: translateY(0);
 }

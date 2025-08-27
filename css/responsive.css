@@ -29,21 +29,21 @@
   }
 
   /* Disable complex background animations */
-  .fluid-consciousness {
+  [data-component="consciousness-ocean"] {
     animation: none !important;
     background: transparent !important;
   }
 
-  .fluid-consciousness::before {
+  [data-component="consciousness-ocean"]::before {
     animation: none !important;
     opacity: 0.2 !important;
   }
 
     /* Disable morphing animations */
-    .liquid-bubble,
-  .node-bubble,
-  .data-bubble,
-  .return-bubble,
+    [data-component="liquid-bubble"],
+  [data-component="node-bubble"],
+  [data-component="data-bubble"],
+  [data-component="return-bubble"],
   [data-component="action-bubble"] {
     border-radius: var(--radius-lg) !important;
     animation: none !important;
@@ -54,14 +54,14 @@
 
 
     /* Disable morphing transitions */
-    .input-morph {
+    [data-component="input-morph"] {
       border-radius: var(--radius-md) !important;
       animation: none !important;
     }
 
   /* Simplify hover effects */
-    .neural-button:hover,
-    .data-node:hover {
+    [data-component="neural-button"]:hover,
+    .card:hover {
       transform: none !important;
     }
 }
@@ -80,18 +80,18 @@
     border-color: var(--glass-border-strong);
   }
 
-  .data-node:hover {
+  .card:hover {
     background: var(--bg-overlay-white-medium);
   }
 
   /* Improve button contrast */
-    .neural-button {
+    [data-component="neural-button"] {
       border-color: currentColor;
       background: var(--bg-overlay-white-subtle);
     }
 
-    .neural-button:hover,
-    .neural-button:focus-visible {
+    [data-component="neural-button"]:hover,
+    [data-component="neural-button"]:focus-visible {
       background: var(--bg-overlay-white-medium);
       border-color: currentColor;
     }
@@ -130,7 +130,7 @@
   }
 
   [data-component="constellation-header"],
-  .data-node {
+  .card {
     background: white !important;
     border: 1px solid var(--color-border) !important;
     box-shadow: none !important;

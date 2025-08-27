@@ -114,7 +114,7 @@
   gap: var(--space-2);
 }
 
-[data-component="protocol-home-button"] {
+[data-component="home-button"] {
   background: none;
   border: none;
   cursor: pointer;
@@ -123,7 +123,7 @@
   border-radius: var(--radius-full);
 }
 
-[data-component="protocol-home-button"]:focus {
+[data-component="home-button"]:focus {
   outline: 2px solid var(--color-accent);
   outline-offset: 4px;
 }
@@ -168,27 +168,6 @@
   /* No fixed width needed - flexbox will handle centering */
 }
 
-[data-component="emblem-nexus"] [data-component="liquid-bubble"] {
-  width: 64px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--glass-bg-medium);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-full);
-  position: relative;
-  overflow: hidden;
-  box-shadow:
-    0 8px 32px var(--shadow-neural-md),
-    inset 0 0 20px var(--glow-cyan-gentle);
-}
-
-[data-component="emblem-nexus"] [data-component="fluid-emblem"] {
-  width: 32px;
-  height: 32px;
-  filter: drop-shadow(0 0 8px rgba(175, 238, 238, 0.4));
-}
 
 [data-component="protocol-whisper"] {
   display: flex;

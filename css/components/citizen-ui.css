@@ -3,11 +3,11 @@
  * Replaces inline styles used in citizen-ui.js
  */
 
-/* Card visibility classes */
-.citizen-card.visible {
+/* Card visibility states */
+.citizen-card[data-visibility="visible"] {
   display: block;
 }
 
-.citizen-card.hidden {
+.citizen-card[data-visibility="hidden"] {
   display: none;
 }
