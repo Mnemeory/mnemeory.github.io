@@ -145,8 +145,8 @@
 }
 
 .protocol-emblem-icon {
-  width: 20px;
-  height: 20px;
+  width: var(--space-5);
+  height: var(--space-5);
   filter: drop-shadow(0 0 4px rgba(175, 238, 238, 0.4));
 }
 

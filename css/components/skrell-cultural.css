@@ -71,22 +71,6 @@
     calc(var(--radius-md) * 0.9) calc(var(--radius-lg) * 1.4);
 }
 
-/* Grand Council Authority Elements */
-.authority-element {
-  position: relative;
-  color: var(--color-grand-council);
-  font-weight: 600;
-}
-
-.authority-element::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: inherit;
-  border-radius: inherit;
-  opacity: 0.1;
-  z-index: -1;
-}
 
 /* Astronomical Reverence Patterns */
 .star-pattern {
@@ -278,10 +262,6 @@
 
   .nlom-resonance {
     animation-duration: var(--duration-neural-pulse);
-  }
-
-  .authority-element::before {
-    opacity: 0.2;
   }
 }
 
