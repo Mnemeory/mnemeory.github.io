@@ -530,7 +530,7 @@
 .neural-button:hover {
   background: var(--glass-bg-accent);
   border-color: var(--glow-cyan-border);
-  color: var(--color-pale-turquoise);
+  color: var(--color-cyan);
   text-shadow: 0 0 8px var(--glow-cyan-gentle);
   transform: translateY(-1px);
   box-shadow: var(--shadow-neural-sm);
@@ -556,7 +556,7 @@
 .neural-button.active {
   background: var(--glow-gold-error-bg-outer);
   border-color: var(--glow-gold-error-border);
-  color: var(--color-gold);
+  color: var(--color-warning);
   text-shadow: 0 0 5px var(--glow-gold-error-text);
 }
 
@@ -630,7 +630,7 @@
 .neural-button--gold {
   background: var(--glow-gold-error-bg-outer);
   border-color: var(--glow-gold-error-border);
-  color: var(--color-gold);
+  color: var(--color-warning);
   text-shadow: 0 0 5px var(--glow-gold-error-text);
 }
 
@@ -665,7 +665,7 @@
   background: var(--glass-bg-light);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-organic-1);
-  color: var(--color-pale-turquoise);
+  color: var(--color-cyan);
   font-family: var(--font-ui);
   font-size: var(--text-sm);
   font-weight: 500;
@@ -691,7 +691,7 @@
 .base-action-btn--gold {
   background: var(--glow-gold-error-bg-outer);
   border-color: var(--glow-gold-error-border);
-  color: var(--color-gold);
+  color: var(--color-warning);
   text-shadow: 0 0 5px var(--glow-gold-error-text);
 }
 

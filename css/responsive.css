@@ -31,7 +31,7 @@
   /* Disable complex background animations */
   .fluid-consciousness {
     animation: none !important;
-    background: var(--color-midnight-indigo) !important;
+    background: var(--color-abyss) !important;
   }
 
   .fluid-consciousness::before {

@@ -170,7 +170,7 @@
 
 .constellation-meaning {
   font-size: var(--text-sm);
-  color: var(--color-gold);
+  color: var(--color-warning);
   font-weight: 600;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -299,7 +299,7 @@
   font-family: var(--font-primary);
   font-size: var(--text-sm);
   font-weight: 400;
-  color: var(--color-pale-turquoise);
+  color: var(--color-cyan);
   text-align: center;
   text-shadow: 0 0 8px var(--glow-cyan-strong);
   transition: all var(--duration-base) ease;
@@ -464,8 +464,8 @@
 
 .thought-bubble-document .document-seal.consular {
   background: var(--glass-cultural-gradient-start);
-  border: 1px solid var(--color-gold);
-  color: var(--color-gold);
+  border: 1px solid var(--color-warning);
+  color: var(--color-warning);
   box-shadow: var(--shadow-authority);
 }
 
@@ -594,8 +594,8 @@
 
 .node-seal.filed {
   background: var(--glow-gold-error-bg-outer);
-  color: var(--color-gold);
-  border: 1px solid var(--color-gold);
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning);
 }
 
 .node-seal.black-star {

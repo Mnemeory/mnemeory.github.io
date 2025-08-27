@@ -131,26 +131,26 @@ p {
 
 .text-shadow-neural {
   text-shadow:
-    0 0 5px var(--color-pale-turquoise),
+    0 0 5px var(--color-cyan),
     0 0 15px var(--glow-cyan-medium);
 }
 
 .text-shadow-neural-strong {
   text-shadow:
-    0 0 8px var(--color-pale-turquoise),
+    0 0 8px var(--color-cyan),
     0 0 20px var(--glow-cyan-bright),
     0 0 35px var(--glow-cyan-medium);
 }
 
 .text-shadow-authority {
   text-shadow:
-    0 0 5px var(--color-gold),
+    0 0 5px var(--color-warning),
     0 0 15px var(--glow-gold-soft);
 }
 
 .text-shadow-consciousness {
   text-shadow:
-    0 0 3px var(--color-soft-pink),
+    0 0 3px var(--color-mist),
     0 0 8px var(--glow-pink-gentle);
 }
 
@@ -160,29 +160,29 @@ p {
 }
 
 .text-neural-glow {
-  color: var(--color-pale-turquoise);
+  color: var(--color-cyan);
   text-shadow:
-    0 0 10px var(--color-pale-turquoise),
+    0 0 10px var(--color-cyan),
     0 0 20px var(--glow-cyan-medium);
 }
 
 .text-cosmic {
-  color: var(--color-pale-turquoise);
+  color: var(--color-cyan);
   text-shadow:
-    0 0 5px var(--color-pale-turquoise),
+    0 0 5px var(--color-cyan),
     0 0 15px var(--glow-cyan-bright),
     0 0 25px var(--glow-cyan-medium);
 }
 
 .text-consciousness {
-  color: var(--color-soft-pink);
-  text-shadow: 0 0 8px var(--color-soft-pink);
+  color: var(--color-mist);
+  text-shadow: 0 0 8px var(--color-mist);
 }
 
 .text-authority {
-  color: var(--color-gold);
+  color: var(--color-warning);
   font-weight: 600;
-  text-shadow: 0 0 4px var(--color-gold);
+  text-shadow: 0 0 4px var(--color-warning);
 }
 
 /* === FONT FAMILY UTILITIES === */
