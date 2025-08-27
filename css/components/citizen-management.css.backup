@@ -22,7 +22,7 @@
   border-left: var(--space-1) solid var(--color-kelpie);
 }
 
-[data-component="constellation-description"] {
+.constellation-description {
   margin: 0;
   color: var(--color-text);
   font-style: italic;

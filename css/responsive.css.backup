@@ -44,7 +44,7 @@
   .node-bubble,
   .data-bubble,
   .return-bubble,
-  [data-component="action-bubble"] {
+  .action-bubble {
     border-radius: var(--radius-lg) !important;
     animation: none !important;
   }
@@ -118,7 +118,7 @@
 /* Print Styles */
 @media print {
     /* Starfield not needed in print */
-    [data-view="starfield-view"] {
+    .starfield-view {
       display: none !important;
     }
 
@@ -129,7 +129,7 @@
     pointer-events: auto !important;
   }
 
-  [data-component="constellation-header"],
+  .constellation-header,
   .data-node {
     background: white !important;
     border: 1px solid var(--color-border) !important;
@@ -148,7 +148,7 @@
 
 /* Large text preferences */
 @media (prefers-reduced-data: reduce) {
-  [data-component="starfield-container"] {
+  .starfield-container {
     background: transparent;
   }
 }

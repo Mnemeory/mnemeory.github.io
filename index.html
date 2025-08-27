@@ -63,77 +63,76 @@
     <link href="css/style.css" rel="stylesheet" />
   </head>
 
-  <body class="nlom-interface">
-    <!-- Skip Navigation for Accessibility -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+  <body data-component="nlom-interface">
+
 
     <!-- Loading Screen -->
-    <div id="loading-veil" class="loading-veil" data-js="loading-veil" aria-hidden="true">
-      <div class="loading-content">
-        <div class="nlom-pulse"></div>
+    <div id="loading-veil" data-js="loading-veil" aria-hidden="true">
+      <div data-component="loading-content">
+        <div data-component="nlom-pulse"></div>
         <p>
           Establishing psionic resonance with Federation Nlom network via SCCV
           Horizon...
         </p>
-        <p class="loading-subtitle" id="loading-clearance"></p>
+        <p data-component="loading-subtitle" id="loading-clearance"></p>
       </div>
     </div>
 
     <!-- Error Container for Application Initialization Errors -->
-    <div data-js="app-error" class="app-error" aria-hidden="true" role="alert">
-      <div class="error-content">
-        <div class="error-icon">⚠️</div>
+    <div data-js="app-error" aria-hidden="true" role="alert">
+      <div data-component="error-content">
+        <div data-component="error-icon">⚠️</div>
         <h2>Psionic Link Disrupted</h2>
         <p data-js="error-message">Neural pathway initialization failed</p>
-        <button type="button" onclick="window.location.reload()" class="error-retry">
+        <button type="button" onclick="window.location.reload()" data-component="error-retry">
           Re-establish Connection
         </button>
       </div>
     </div>
 
     <!-- Atmospheric Layers -->
-    <div class="atmospheric-base"></div>
-    <div class="atmospheric-overlay"></div>
-    <div class="constellation-atmosphere" id="constellation-atmosphere"></div>
+    <div data-component="atmospheric-base"></div>
+    <div data-component="atmospheric-overlay"></div>
+    <div data-component="constellation-atmosphere" id="constellation-atmosphere"></div>
     
     <!-- Atmospheric System for View Manager -->
-    <div data-js="atmospheric-system" class="atmospheric-system" aria-hidden="true"></div>
+    <div data-js="atmospheric-system" aria-hidden="true"></div>
 
     <!-- Neural Interface App -->
-    <div id="app" class="nlom-interface-app">
+    <div id="app" data-component="nlom-interface-app">
       <!-- Neural Interface Header -->
-      <header class="neural-command-interface" role="banner">
-        <div class="neural-flow-grid">
+      <header data-component="neural-command-interface" role="banner">
+        <div data-component="neural-flow-grid">
           <!-- Protocol Status with Home Navigation (Far Left) -->
-          <div class="protocol-status-left" data-flow="primary">
-            <div class="protocol-home-stack">
+          <div data-component="protocol-status-left" data-flow="primary">
+            <div data-component="protocol-home-stack">
               <button
                 type="button"
                 data-component="home-button"
                 aria-label="Return to diplomatic mission data constellation overview"
               >
-                <div class="protocol-emblem">
+                <div data-component="protocol-emblem">
                   <img
                     src="assets/images/tree.svg"
                     alt="Nralakk Federation Emblem"
-                    class="protocol-emblem-icon"
+                    data-component="protocol-emblem-icon"
                   />
                 </div>
               </button>
-              <div class="protocol-text">
-                <span class="protocol-label">Diplomatic Protocol</span>
+              <div data-component="protocol-text">
+                <span data-component="protocol-label">Diplomatic Protocol</span>
                 <span data-state="active">Neural Link Stable</span>
               </div>
             </div>
           </div>
 
           <!-- Neural Interface Title (Centered) -->
-          <div class="interface-identity-center" data-flow="secondary">
-            <div class="interface-title-display">
-              <div class="liquid-text">
-                <span class="flowing-word" data-word="nlom">Nlom</span>
-                <span class="flowing-word" data-word="neural">Neural</span>
-                <span class="flowing-word" data-word="interface"
+          <div data-component="interface-identity-center" data-flow="secondary">
+            <div data-component="interface-title-display">
+              <div data-component="liquid-text">
+                <span data-component="flowing-word" data-word="nlom">Nlom</span>
+                <span data-component="flowing-word" data-word="neural">Neural</span>
+                <span data-component="flowing-word" data-word="interface"
                   >Interface</span
                 >
               </div>
@@ -142,31 +141,29 @@
           </div>
 
           <!-- Right Spacer for Balance -->
-          <div class="header-balance-spacer"></div>
+          <div data-component="header-balance-spacer"></div>
         </div>
       </header>
 
       <!-- Fluid Consciousness Field -->
-      <main id="main-content" class="consciousness-ocean" role="main">
+      <main id="main-content" data-component="consciousness-ocean" role="main">
         <!-- Central Flow States -->
-        <div data-view="starfield-view" data-state="active" aria-hidden="false">
+        <div data-view="starfield-view" data-state="active">
           <!-- Fluid Starfield -->
           <div
             data-component="starfield-container"
-            class="liquid-space"
             role="application"
             aria-label="Interactive Psionic Wake Data Constellations"
           >
-            <canvas data-component="starfield-canvas" class="consciousness-canvas"></canvas>
+            <canvas data-component="starfield-canvas"></canvas>
 
             <!-- 3D Tooltip -->
             <div
               data-component="constellation-tooltip"
               data-state="hidden"
-              aria-hidden="true"
             >
-              <div class="tooltip-content">
-                <span class="tooltip-text"></span>
+              <div data-component="tooltip-content">
+                <span data-component="tooltip-text"></span>
               </div>
             </div>
 
@@ -187,27 +184,25 @@
         <div
           data-view="gnarled-tree-view"
           data-state="hidden"
-          aria-hidden="true"
         >
-          <div class="constellation-content-overlay"></div>
+          <div data-component="constellation-content-overlay"></div>
           <!-- Stream Header -->
-          <div class="stream-essence">
-            <div class="essence-icon">
-              <div class="icon-droplet">
+          <div data-component="stream-essence">
+            <div data-component="essence-icon">
+              <div data-component="icon-droplet">
                 <img src="assets/images/tree.svg" alt="" aria-hidden="true" />
-                <div class="icon-waves"></div>
+                <div data-component="icon-waves"></div>
               </div>
             </div>
-            <div class="essence-flow">
-              <h2 class="stream-title"></h2>
-              <div class="essence-meaning"></div>
-              <p class="stream-description"></p>
+            <div data-component="essence-flow">
+              <h2 data-component="stream-title"></h2>
+              <div data-component="essence-meaning"></div>
+              <p data-component="stream-description"></p>
             </div>
           </div>
 
           <!-- Flowing Data Nodes -->
           <div
-            class="data-stream"
             id="gnarled-tree-nodes"
             data-component="gnarled-tree-nodes"
             role="region"
@@ -217,23 +212,22 @@
           </div>
         </div>
 
-        <div data-view="qu-poxii-view" data-state="hidden" aria-hidden="true">
-          <div class="constellation-content-overlay"></div>
-          <div class="stream-essence">
-            <div class="essence-icon">
-              <div class="icon-droplet">
+        <div data-view="qu-poxii-view" data-state="hidden">
+          <div data-component="constellation-content-overlay"></div>
+          <div data-component="stream-essence">
+            <div data-component="essence-icon">
+              <div data-component="icon-droplet">
                 <img src="assets/images/bond.svg" alt="" aria-hidden="true" />
-                <div class="icon-waves"></div>
+                <div data-component="icon-waves"></div>
               </div>
             </div>
-            <div class="essence-flow">
-              <h2 class="stream-title"></h2>
-              <div class="essence-meaning"></div>
-              <p class="stream-description"></p>
+            <div data-component="essence-flow">
+              <h2 data-component="stream-title"></h2>
+              <div data-component="essence-meaning"></div>
+              <p data-component="stream-description"></p>
             </div>
           </div>
           <div
-            class="data-stream"
             id="qu-poxii-nodes"
             data-component="qu-poxii-nodes"
             role="region"
@@ -246,24 +240,22 @@
         <div
           data-view="star-chanter-view"
           data-state="hidden"
-          aria-hidden="true"
         >
-          <div class="constellation-content-overlay"></div>
-          <div class="stream-essence">
-            <div class="essence-icon">
-              <div class="icon-droplet">
+          <div data-component="constellation-content-overlay"></div>
+          <div data-component="stream-essence">
+            <div data-component="essence-icon">
+              <div data-component="icon-droplet">
                 <img src="assets/images/chant.svg" alt="" aria-hidden="true" />
-                <div class="icon-waves"></div>
+                <div data-component="icon-waves"></div>
               </div>
             </div>
-            <div class="essence-flow">
-              <h2 class="stream-title"></h2>
-              <div class="essence-meaning"></div>
-              <p class="stream-description"></p>
+            <div data-component="essence-flow">
+              <h2 data-component="stream-title"></h2>
+              <div data-component="essence-meaning"></div>
+              <p data-component="stream-description"></p>
             </div>
           </div>
           <div
-            class="data-stream"
             id="star-chanter-nodes"
             data-component="star-chanter-nodes"
             role="region"
@@ -276,24 +268,22 @@
         <div
           data-view="hatching-egg-view"
           data-state="hidden"
-          aria-hidden="true"
         >
-          <div class="constellation-content-overlay"></div>
-          <div class="stream-essence">
-            <div class="essence-icon">
-              <div class="icon-droplet">
+          <div data-component="constellation-content-overlay"></div>
+          <div data-component="stream-essence">
+            <div data-component="essence-icon">
+              <div data-component="icon-droplet">
                 <img src="assets/images/egg.svg" alt="" aria-hidden="true" />
-                <div class="icon-waves"></div>
+                <div data-component="icon-waves"></div>
               </div>
             </div>
-            <div class="essence-flow">
-              <h2 class="stream-title"></h2>
-              <div class="essence-meaning"></div>
-              <p class="stream-description"></p>
+            <div data-component="essence-flow">
+              <h2 data-component="stream-title"></h2>
+              <div data-component="essence-meaning"></div>
+              <p data-component="stream-description"></p>
             </div>
           </div>
           <div
-            class="data-stream"
             id="hatching-egg-nodes"
             data-component="hatching-egg-nodes"
             role="region"
@@ -303,20 +293,20 @@
           </div>
         </div>
 
-        <div data-view="void-view" data-state="hidden" aria-hidden="true">
-          <div class="constellation-content-overlay"></div>
-          <div class="stream-essence">
-            <div class="essence-icon">
-              <div class="icon-droplet">
+        <div data-view="void-view" data-state="hidden">
+          <div data-component="constellation-content-overlay"></div>
+          <div data-component="stream-essence">
+            <div data-component="essence-icon">
+              <div data-component="icon-droplet">
                 <img src="assets/images/void.svg" alt="" aria-hidden="true" />
-                <div class="icon-waves"></div>
+                <div data-component="icon-waves"></div>
               </div>
             </div>
-            <div class="essence-flow">
-              <h2 class="stream-title"></h2>
-              <div class="essence-meaning"></div>
-              <p class="stream-description"></p>
-              <div class="clearance-bubbles">
+            <div data-component="essence-flow">
+              <h2 data-component="stream-title"></h2>
+              <div data-component="essence-meaning"></div>
+              <p data-component="stream-description"></p>
+              <div data-component="clearance-bubbles">
                 <span data-clearance="consular"
                   >Consular Officer Access Granted</span
                 >
@@ -327,7 +317,6 @@
             </div>
           </div>
           <div
-            class="data-stream"
             id="void-nodes"
             data-component="void-nodes"
             role="region"
@@ -341,33 +330,31 @@
       <!-- Flowing Data Detail -->
       <div
         data-component="node-modal"
-        class="modal"
         role="dialog"
         aria-modal="true"
         aria-hidden="true"
       >
-        <div class="modal__backdrop"></div>
-        <div class="modal__container">
-          <div class="modal__header">
-            <h3 data-component="modal-title" class="modal__title"></h3>
+        <div data-component="modal-backdrop"></div>
+        <div data-component="modal-container">
+          <div data-component="modal-header">
+            <h3 data-component="modal-title"></h3>
             <button
               type="button"
               data-action="modal-close"
               aria-label="Close dialog"
             >
-              <div class="close-ripple">×</div>
+              <div data-component="close-ripple">×</div>
             </button>
           </div>
-          <div data-component="modal-body" class="modal__body">
+          <div data-component="modal-body">
             <!-- Document editor integrated here -->
             <div
-              class="neural-document document-container"
               data-theme="neural"
               data-component="document-container"
               data-document-container="modal-document"
               aria-label="Document Viewer"
             >
-              <div class="document-toolbar">
+              <div data-component="document-toolbar">
                 <button
                   data-action="toggle-view"
                   title="Toggle psionic script encoding view"
@@ -377,7 +364,7 @@
                   ¶
                 </button>
 
-                <div class="toolbar-spacer" aria-hidden="true"></div>
+                <div data-component="toolbar-spacer" aria-hidden="true"></div>
 
                 <button
                   data-action="copy-content"
@@ -398,7 +385,6 @@
 
               <div
                 id="document-editor"
-                class="document-editor"
                 data-component="document-editor"
                 data-theme="neural"
                 contenteditable="false"
@@ -413,18 +399,18 @@
               <div data-component="document-status" data-state="preview">Preview Mode</div>
             </div>
           </div>
-          <div class="modal__footer">
+          <div data-component="modal-footer">
             <button
               type="button"
               data-action="inscribe"
             >
-              <div class="action-bubble">Inscribe Psionic Memory (.md)</div>
+              <div data-component="action-bubble">Inscribe Psionic Memory (.md)</div>
             </button>
             <button
               type="button"
               data-action="transmit"
             >
-              <div class="action-bubble">
+              <div data-component="action-bubble">
                 Encode for Psionic Wake Transmission (.json)
               </div>
             </button>
@@ -435,7 +421,6 @@
       <!-- Floating Notifications -->
       <div
         data-component="toast-container"
-        class="notification-container"
         aria-live="polite"
         aria-atomic="true"
       >
@@ -444,12 +429,12 @@
 
       <!-- Invisible Navigation Footer -->
       <footer
-        class="neural-navigation-anchor hidden"
+        data-component="neural-navigation-anchor"
         role="contentinfo"
         aria-hidden="true"
         style="display: none;"
       >
-        <div class="navigation-essence">
+        <div data-component="navigation-essence">
           Navigate through diplomatic mission Psionic Wake data constellations
         </div>
       </footer>

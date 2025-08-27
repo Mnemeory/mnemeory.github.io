@@ -488,7 +488,7 @@
     animation: none;
   }
   
-  [data-component="constellation-header"] {
+  .constellation-header {
     animation: none;
   }
   
@@ -505,7 +505,7 @@
     border-width: 2px;
   }
   
-  [data-component="constellation-header"] {
+  .constellation-header {
     border-width: 2px;
   }
 }

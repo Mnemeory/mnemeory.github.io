@@ -34,11 +34,19 @@ export class ViewManager {
       // Setup atmospheric system for view transitions
       this.initializeAtmosphericSystem();
       
-      // Set initial view state and activate starfield by default
+      // Set initial view state
       this.state.set("viewManagerReady", true);
       
-      // Activate the starfield view initially (should match HTML default)
-      this.transitionToView("starfield-view");
+      // Set the initial view based on what's already active in the HTML
+      const activeView = Array.from(this.views.values()).find(view => view.isActive);
+      if (activeView) {
+        this.currentViewId = activeView.id;
+        this.state.set("currentView", activeView.id);
+        this.logger.info(`Initial view set to: ${activeView.id}`);
+      } else {
+        // Fallback: activate starfield view if no view is active
+        this.transitionToView("starfield-view");
+      }
       
       this.logger.info("ViewManager initialized");
       
@@ -60,15 +68,28 @@ export class ViewManager {
     viewElements.forEach(element => {
       const viewId = element.getAttribute("data-view");
       if (viewId) {
+        // Check initial state from data-state attribute
+        const initialState = element.getAttribute("data-state");
+        const isInitiallyActive = initialState === "active";
+        
         // Register view
         this.views.set(viewId, {
           id: viewId,
           element,
-          isActive: false,
+          isActive: isInitiallyActive,
           type: element.getAttribute("data-view-type") || "standard"
         });
         
-        this.logger.info(`Registered view: ${viewId}`);
+        // Apply initial CSS classes based on data-state
+        if (isInitiallyActive) {
+          element.classList.add("active");
+          element.setAttribute("aria-hidden", "false");
+        } else {
+          element.classList.remove("active");
+          element.setAttribute("aria-hidden", "true");
+        }
+        
+        this.logger.info(`Registered view: ${viewId} (initially ${isInitiallyActive ? 'active' : 'hidden'})`);
       }
     });
     
@@ -110,7 +131,7 @@ export class ViewManager {
     const atmosphere = document.querySelector(`[data-atmosphere="${constellation}"]`);
     if (atmosphere) {
       // Toggle class to activate (no direct style manipulation)
-      atmosphere.classList.add("is-active");
+      atmosphere.classList.add("active");
       
       // Set atmospheric data attributes
       const atmosphericSystem = document.querySelector("[data-js='atmospheric-system']");
@@ -129,9 +150,9 @@ export class ViewManager {
    */
   deactivateConstellationAtmosphere() {
     // Remove active class from all atmospheres
-    const activeAtmospheres = document.querySelectorAll("[data-atmosphere].is-active");
+    const activeAtmospheres = document.querySelectorAll("[data-atmosphere].active");
     activeAtmospheres.forEach(element => {
-      element.classList.remove("is-active");
+      element.classList.remove("active");
     });
     
     // Clear atmospheric data attributes
@@ -224,13 +245,13 @@ export class ViewManager {
       if (previousView) {
         this.removeFocusFromView(previousView);
         previousView.isActive = false;
-        previousView.element.classList.remove("is-active");
+        previousView.element.classList.remove("active");
         previousView.element.setAttribute("aria-hidden", "true");
       }
       
       // Show new view
       newView.isActive = true;
-      newView.element.classList.add("is-active");
+      newView.element.classList.add("active");
       newView.element.setAttribute("aria-hidden", "false");
       
       // Set current view

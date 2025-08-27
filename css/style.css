@@ -2,63 +2,49 @@
  * Nralakk Federation Nlom Interface - Main Stylesheet
  *
  * Entry point for the modular CSS architecture.
- * Follows CSS cascade layers for optimal specificity management.
+ * Organized for optimal specificity management without cascade layers.
  */
 
-/* Establish cascade layer order */
-@layer reset, base, layout, components, utilities;
+/* Import modular stylesheets in dependency order */
 
-/* Import modular stylesheets in correct layer order */
+/* 1) Reset and Base */
+@import url("./reset.css");
+@import url("./design-tokens.css");
+@import url("./typography.css");
 
-/* 1) Reset */
-@import url("./reset.css") layer(reset);
+/* 2) Layout and Structure */
+@import url("./layout.css");
 
-/* 2) Design Tokens */
-@import url("./design-tokens.css") layer(base);
+/* 3) Component System - Ordered by dependency hierarchy */
+/* Core UI components */
+@import url("./components/shared-utilities.css");
+@import url("./components/view-manager.css");
 
-/* 3) Typography */
-@import url("./typography.css") layer(base);
+/* Navigation and interaction components */
+@import url("./components/navigation.css");
+@import url("./components/starfield-interactions.css");
 
-/* 4) Layout */
-@import url("./layout.css") layer(layout);
-
-/* 5) Utilities */
-@import url("./utilities.css") layer(utilities);
-
-/* 6) Components - Ordered by dependency hierarchy */
-/* Navigation components */
-@import url("./components/navigation.css") layer(components);
-
-/* Modal system */
-@import url("./components/modals.css") layer(components);
-
-/* Notification system */
-@import url("./components/notifications.css") layer(components);
+/* Modal and notification system */
+@import url("./components/modals.css");
+@import url("./components/notifications.css");
 
 /* Form controls and neural documents */
-@import url("./components/neural-documents.css") layer(components);
+@import url("./components/neural-documents.css");
 
-/* UI components */
-@import url("./components/flowing-states.css") layer(components);
-@import url("./components/constellation-views.css") layer(components);
+/* UI state components */
+@import url("./components/flowing-states.css");
+@import url("./components/constellation-views.css");
 
 /* Domain-specific components */
-@import url("./components/citizen-management.css") layer(components);
-@import url("./components/citizen-ui.css") layer(components);
-@import url("./components/node-manager.css") layer(components);
-
-/* Utility components */
-@import url("./components/shared-utilities.css") layer(components);
-@import url("./components/view-manager.css") layer(components);
-@import url("./components/starfield-interactions.css") layer(components);
+@import url("./components/citizen-management.css");
+@import url("./components/citizen-ui.css");
+@import url("./components/node-manager.css");
 
 /* Visual effects and theming */
-@import url("./components/atmospheric-system.css") layer(components);
-@import url("./components/starfield.css") layer(components);
-@import url("./components/skrell-cultural.css") layer(components);
+@import url("./components/atmospheric-system.css");
+@import url("./components/starfield.css");
+@import url("./components/skrell-cultural.css");
 
-/* 7) Global styles */
-/* Currently all styles are in component files, no additional global style needed */
-
-/* 8) Responsive */
-@import url("./responsive.css") layer(utilities);
+/* 4) Utilities and Responsive */
+@import url("./utilities.css");
+@import url("./responsive.css");

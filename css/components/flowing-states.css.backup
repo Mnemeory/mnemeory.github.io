@@ -9,7 +9,7 @@
  */
 
 /* === LIQUID SPACE CONTAINER (Legacy container - kept for backwards compatibility) === */
-[data-component="liquid-space"] {
+.liquid-space {
   position: relative;
   width: 100%;
   height: 100%;
@@ -19,11 +19,11 @@
 }
 
 /* Only show liquid space background when starfield is active */
-[data-view="starfield-view"].active [data-component="liquid-space"] {
+.starfield-view.active .liquid-space {
   background: transparent; /* Removed blue background to allow atmospheric effects to show through */
 }
 
-[data-component="consciousness-canvas"] {
+.consciousness-canvas {
   width: 100%;
   height: 100%;
   display: block;
@@ -226,7 +226,7 @@
   box-shadow: var(--shadow-neural-md);
 }
 
-[data-component="action-bubble"] {
+.action-bubble {
   text-align: center;
   font-size: var(--text-sm);
   text-shadow: 0 0 4px var(--glow-cyan-gentle);

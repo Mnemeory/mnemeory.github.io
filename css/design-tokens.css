@@ -358,6 +358,7 @@
   --duration-quick: 150ms;
   --duration-fast: 250ms;
   --duration-base: 300ms;
+  --duration-standard: 400ms;
   --duration-slow: 500ms;
   --duration-slower: 800ms;
   --duration-ultra: 1200ms;

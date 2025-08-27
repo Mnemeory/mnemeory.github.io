@@ -3,15 +3,15 @@
  * Standardized modal components with consistent structure
  *
  * MIGRATION GUIDE:
- * - Previous classes: .base-modal and .bubble-modal => Now use [data-component="modal"]
- * - Previous classes: [data-component="modal"]-content and .bubble-content => Now use [data-component="modal"]__container
- * - Previous classes: [data-component="modal"]-header and .bubble-header => Now use [data-component="modal"]__header
- * - Previous classes: [data-component="modal"]-body and .bubble-content => Now use [data-component="modal"]__body
- * - Previous classes: [data-component="modal"]-footer and .bubble-actions => Now use [data-component="modal"]__footer
+ * - Previous classes: .base-modal and .bubble-modal => Now use .modal
+ * - Previous classes: .modal-content and .bubble-content => Now use .modal__container
+ * - Previous classes: .modal-header and .bubble-header => Now use .modal__header
+ * - Previous classes: .modal-body and .bubble-content => Now use .modal__body
+ * - Previous classes: .modal-footer and .bubble-actions => Now use .modal__footer
  */
 
 /* === MODAL CONTAINER === */
-[data-component="modal"],
+.modal,
 .base-modal {
   /* Positioning */
   position: fixed;
@@ -33,15 +33,15 @@
 }
 
 /* Active state */
-[data-component="modal"].is-open,
-[data-component="modal"][aria-hidden="false"],
+.modal.is-open,
+.modal[aria-hidden="false"],
 .base-modal[aria-hidden="false"] {
   opacity: 1;
   visibility: visible;
 }
 
 /* === MODAL BACKDROP === */
-[data-component="modal"]__backdrop,
+.modal__backdrop,
 .bubble-ocean {
   position: absolute;
   inset: 0;
@@ -65,7 +65,7 @@
 }
 
 /* === MODAL CONTAINER === */
-[data-component="modal"]__container {
+.modal__container {
   position: relative;
   width: 100%;
   max-width: 920px;
@@ -84,7 +84,7 @@
 }
 
 /* Energy flow effect on top of modal */
-[data-component="modal"]__container::before {
+.modal__container::before {
   content: "";
   position: absolute;
   top: 0;
@@ -120,15 +120,15 @@
 }
 
 /* Show content when modal is active */
-[data-component="modal"].is-open [data-component="modal"]__container,
-[data-component="modal"][aria-hidden="false"] [data-component="modal"]__container,
-.base-modal.is-open [data-component="modal"]__container,
-.base-modal[aria-hidden="false"] [data-component="modal"]__container {
+.modal.is-open .modal__container,
+.modal[aria-hidden="false"] .modal__container,
+.base-modal.is-open .modal__container,
+.base-modal[aria-hidden="false"] .modal__container {
   transform: scale(1);
 }
 
 /* === MODAL HEADER === */
-[data-component="modal"]__header {
+.modal__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -137,7 +137,7 @@
   background: var(--glass-bg-light);
 }
 
-[data-component="modal"]__title {
+.modal__title {
   flex: 1;
   margin: 0;
   color: var(--color-cyan);
@@ -148,7 +148,7 @@
 }
 
 /* === MODAL CLOSE BUTTON === */
-[data-component="modal"]__close {
+.modal__close {
   width: 40px;
   height: 40px;
   background: none;
@@ -166,16 +166,16 @@
   animation: close-float 4s ease-in-out infinite;
 }
 
-[data-component="modal"]__close-icon {
+.modal__close-icon {
   transition: all var(--duration-base) var(--ease-organic);
 }
 
-[data-component="modal"]__close:hover [data-component="modal"]__close-icon {
+.modal__close:hover .modal__close-icon {
   transform: scale(1.2);
   text-shadow: 0 0 6px var(--glow-cyan-medium);
 }
 
-[data-component="modal"]__close:hover {
+.modal__close:hover {
   background: var(--gradient-bubble-base);
   border-radius: 50% 50% 50% 50%;
   transform: scale(1.1);
@@ -194,7 +194,7 @@
 }
 
 /* === MODAL BODY === */
-[data-component="modal"]__body {
+.modal__body {
   padding: var(--space-6);
   max-height: 60vh;
   overflow-y: auto;
@@ -205,7 +205,7 @@
 }
 
 /* === MODAL FOOTER === */
-[data-component="modal"]__footer {
+.modal__footer {
   display: flex;
   gap: var(--space-4);
   padding: var(--space-6);
@@ -216,15 +216,15 @@
 }
 
 /* === SIZE VARIANTS === */
-[data-component="modal"]--small [data-component="modal"]__container {
+.modal--small .modal__container {
   max-width: 480px;
 }
 
-[data-component="modal"]--large [data-component="modal"]__container {
+.modal--large .modal__container {
   max-width: 1200px;
 }
 
-[data-component="modal"]--fullscreen [data-component="modal"]__container {
+.modal--fullscreen .modal__container {
   max-width: 95vw;
   max-height: 95vh;
   height: 95vh;
@@ -232,28 +232,28 @@
 
 /* === DIALOG POLYFILL === */
 /* For browsers that don't support <dialog> element */
-[data-component="modal"][role="dialog"] {
-  /* Same styles as [data-component="modal"] */
+.modal[role="dialog"] {
+  /* Same styles as .modal */
 }
 
 /* === ACCESSIBILITY === */
 
 /* Focus trap - keep focus within modal */
-[data-component="modal"]:focus-within {
+.modal:focus-within {
   outline: none;
 }
 
 /* Reduce motion */
 @media (prefers-reduced-motion: reduce) {
-  [data-component="modal"]__container {
+  .modal__container {
     animation: none;
   }
   
-  [data-component="modal"]__close {
+  .modal__close {
     animation: none;
   }
   
-  [data-component="modal"]__backdrop {
+  .modal__backdrop {
     animation: none;
   }
 }

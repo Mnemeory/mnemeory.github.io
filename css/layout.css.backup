@@ -168,7 +168,7 @@
   /* No fixed width needed - flexbox will handle centering */
 }
 
-[data-component="emblem-nexus"] [data-component="liquid-bubble"] {
+.emblem-nexus .liquid-bubble {
   width: 64px;
   height: 64px;
   display: flex;
@@ -184,13 +184,13 @@
     inset 0 0 20px var(--glow-cyan-gentle);
 }
 
-[data-component="emblem-nexus"] [data-component="fluid-emblem"] {
+.emblem-nexus .fluid-emblem {
   width: 32px;
   height: 32px;
   filter: drop-shadow(0 0 8px rgba(175, 238, 238, 0.4));
 }
 
-[data-component="protocol-whisper"] {
+.protocol-whisper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -200,12 +200,12 @@
   letter-spacing: 0.5px;
 }
 
-[data-component="protocol-indicator"] {
+.protocol-indicator {
   color: var(--color-text-muted);
   font-weight: 500;
 }
 
-[data-component="status-pulse"] {
+.status-pulse {
   color: var(--color-accent);
   font-weight: 600;
   animation: status-glow 2s ease-in-out infinite alternate;
@@ -270,16 +270,16 @@
 }
 
 /* Search Nexus */
-[data-component="search-nexus"] {
+.search-nexus {
   position: relative;
   min-width: 280px;
 }
 
-[data-component="search-nexus"] .fluid-input-container {
+.search-nexus .fluid-input-container {
   position: relative;
 }
 
-[data-component="search-nexus"] .liquid-input {
+.search-nexus .liquid-input {
   width: 100%;
   padding: var(--space-3) var(--space-4);
   background: rgba(0, 0, 0, 0.3);
@@ -291,14 +291,14 @@
   transition: all var(--duration-base) var(--ease-organic);
 }
 
-[data-component="search-nexus"] .liquid-input:focus {
+.search-nexus .liquid-input:focus {
   outline: none;
   border-color: var(--color-accent);
   box-shadow: var(--shadow-neural-sm);
   background: rgba(0, 0, 0, 0.4);
 }
 
-[data-component="search-nexus"] .liquid-input::placeholder {
+.search-nexus .liquid-input::placeholder {
   color: var(--color-text-muted);
   font-style: italic;
 }
@@ -316,7 +316,7 @@
 }
 
 /* Neural Navigation Footer */
-[data-component="neural-navigation-anchor"] {
+.neural-navigation-anchor {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -327,7 +327,7 @@
   visibility: hidden;
 }
 
-[data-component="navigation-essence"] {
+.navigation-essence {
   position: absolute;
   bottom: var(--space-2);
   left: 50%;

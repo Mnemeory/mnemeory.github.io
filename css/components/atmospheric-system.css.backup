@@ -6,7 +6,7 @@
 
 /* === ATMOSPHERIC BASE LAYER === */
 
-[data-component="atmospheric-base"] {
+.atmospheric-base {
   position: fixed;
   top: -20vh;
   left: -20vw;
@@ -21,7 +21,7 @@
 
 /* === ATMOSPHERIC OVERLAY === */
 
-[data-component="atmospheric-overlay"] {
+.atmospheric-overlay {
   position: fixed;
   top: -20vh;
   left: -20vw;
@@ -57,7 +57,7 @@
 /* === CONSTELLATION-SPECIFIC ATMOSPHERIC THEMES === */
 
 /* Base atmospheric transition system */
-[data-component="constellation-atmosphere"] {
+.constellation-atmosphere {
   position: fixed;
   top: -20vh;
   left: -20vw;
@@ -96,42 +96,42 @@
 }
 
 /* Active constellation atmosphere */
-[data-component="constellation-atmosphere"].active {
+.constellation-atmosphere.active {
   opacity: 0.5;
 }
 
 /* === CONSTELLATION-SPECIFIC THEMES === */
 
 /* Gnarled Tree - Ancient Wisdom Atmosphere */
-[data-component="constellation-atmosphere"].tree-theme {
+.constellation-atmosphere.tree-theme {
   --constellation-primary-glow: var(--constellation-tree-glow);
   --constellation-secondary-glow: var(--constellation-tree-bg);
   --constellation-accent-glow: var(--constellation-tree-glow);
 }
 
 /* Qu'Poxii - Love & Bond Atmosphere */
-[data-component="constellation-atmosphere"].bond-theme {
+.constellation-atmosphere.bond-theme {
   --constellation-primary-glow: var(--constellation-bond-glow);
   --constellation-secondary-glow: var(--constellation-bond-bg);
   --constellation-accent-glow: var(--constellation-bond-glow);
 }
 
 /* Star Chanter - Wisdom Atmosphere */
-[data-component="constellation-atmosphere"].chant-theme {
+.constellation-atmosphere.chant-theme {
   --constellation-primary-glow: var(--constellation-chant-glow);
   --constellation-secondary-glow: var(--constellation-chant-bg);
   --constellation-accent-glow: var(--constellation-chant-glow);
 }
 
 /* Hatching Egg - Growth Atmosphere */
-[data-component="constellation-atmosphere"].egg-theme {
+.constellation-atmosphere.egg-theme {
   --constellation-primary-glow: var(--constellation-egg-glow);
   --constellation-secondary-glow: var(--constellation-egg-bg);
   --constellation-accent-glow: var(--constellation-egg-glow);
 }
 
 /* Void - Mystery Atmosphere */
-[data-component="constellation-atmosphere"].void-theme {
+.constellation-atmosphere.void-theme {
   --constellation-primary-glow: var(--constellation-void-glow);
   --constellation-secondary-glow: var(--constellation-void-bg);
   --constellation-accent-glow: var(--constellation-void-glow);
@@ -192,7 +192,7 @@
 
 /* === CONTENT OVERLAY ENHANCEMENT === */
 
-[data-component="constellation-content-overlay"] {
+.constellation-content-overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -210,29 +210,29 @@
   transition: opacity var(--duration-slower) var(--ease-neural);
 }
 
-[data-view*="-view"].active [data-component="constellation-content-overlay"] {
+[data-view*="-view"].active .constellation-content-overlay {
   opacity: 0.3;
 }
 
 /* === REDUCED MOTION SUPPORT === */
 
 @media (prefers-reduced-motion: reduce) {
-  [data-component="atmospheric-base"],
-  [data-component="atmospheric-overlay"],
-  [data-component="constellation-atmosphere"] {
+  .atmospheric-base,
+  .atmospheric-overlay,
+  .constellation-atmosphere {
     animation: none;
     transform: none;
   }
   
-  [data-component="atmospheric-base"] {
+  .atmospheric-base {
     opacity: 0.6;
   }
   
-  [data-component="atmospheric-overlay"] {
+  .atmospheric-overlay {
     opacity: 0.3;
   }
   
-  [data-component="constellation-atmosphere"].active {
+  .constellation-atmosphere.active {
     opacity: 0.2;
   }
 }
@@ -240,12 +240,12 @@
 /* === HIGH CONTRAST MODE === */
 
 @media (prefers-contrast: high) {
-  [data-component="atmospheric-base"],
-  [data-component="atmospheric-overlay"] {
+  .atmospheric-base,
+  .atmospheric-overlay {
     opacity: 0.1;
   }
   
-  [data-component="constellation-atmosphere"].active {
+  .constellation-atmosphere.active {
     opacity: 0.1;
   }
 }

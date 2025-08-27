@@ -76,7 +76,7 @@
 
 
 /* Constellation Tooltips */
-[data-component="constellation-tooltip"] {
+.constellation-tooltip {
   position: absolute;
   z-index: var(--z-tooltip);
   background: var(--glass-bg-dark);
@@ -91,24 +91,24 @@
   backdrop-filter: blur(10px);
 }
 
-[data-component="constellation-tooltip"].is-visible {
+.constellation-tooltip.is-visible {
   opacity: 1;
 }
 
 /* Consolidated tooltip positioning - both 3d and 2d use same positioning */
-[data-component="constellation-tooltip"]--positioned {
+.constellation-tooltip--positioned {
   transform: translate(-50%, -100%);
   margin-top: -8px;
   z-index: var(--z-tooltip);
 }
 
-[data-component="tooltip-content"] {
+.tooltip-content {
   color: var(--color-text);
   font-size: var(--text-sm);
   line-height: 1.4;
 }
 
-[data-component="tooltip-text"] {
+.tooltip-text {
   display: block;
   white-space: nowrap;
   overflow: hidden;
