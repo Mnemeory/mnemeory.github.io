@@ -1,24 +1,28 @@
 /**
  * Nralakk Federation Nlom Interface - Main Entry Point
- *
- * Entry point for the modular ES6 application following JS standards.
- * Initializes the application when DOM is ready and handles global lifecycle.
+ * 
+ * Bootstraps the application by importing and initializing the app controller.
+ * No direct DOM manipulation, styling, or business logic present.
  */
 
-import { NlomInterface } from "./modules/app-controller.js";
+import { AppController } from "./modules/app-controller.js";
 
 // Initialize application when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
-  window.nlomInterface = new NlomInterface();
-  window.nlomInterface.init();
+  // Create the main application controller
+  window.appInstance = new AppController();
+  // Back-compat alias used by legacy UI modules
+  window.nlomInterface = window.appInstance;
+  
+  // Initialize the application
+  window.appInstance.init().catch(error => {
+    console.error("Application initialization failed:", error);
+    
+    // Show error message via class toggle only - no inline styles
+    const errorContainer = document.querySelector("[data-js='app-error']");
+    if (errorContainer) {
+      errorContainer.classList.add("is-visible");
+      errorContainer.setAttribute("data-state", "error");
+    }
+  });
 });
-
-// Handle page unload
-window.addEventListener("beforeunload", () => {
-  if (window.nlomInterface) {
-    window.nlomInterface.destroy();
-  }
-});
-
-// Export for debugging and testing
-export { NlomInterface };

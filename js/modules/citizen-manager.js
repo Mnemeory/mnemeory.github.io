@@ -1,6 +1,7 @@
 /**
  * Citizen Management System for Qu'Poxii Constellation
  * Handles Skrell citizen records, SCI tracking, and log management
+ * Standardized version with CSS-driven styling
  */
 
 import { ToastManager, FileUtils, IDUtils } from "./shared-utilities.js";
@@ -497,13 +498,6 @@ export class CitizenManager {
     console.log(
       `Citizen Manager: Loaded ${files.length} citizen files from file system`
     );
-
-    // Log the available files
-    files.forEach((file) => {
-      console.log(
-        `Citizen file available: ${file.name} (${file.metadata?.category || "CITIZEN"})`
-      );
-    });
   }
 
   /**

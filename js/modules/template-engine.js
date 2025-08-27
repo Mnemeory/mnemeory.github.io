@@ -4,6 +4,8 @@
  * Centralized template management system with inheritance, caching,
  * and validation. Eliminates template duplication and provides
  * maintainable template architecture.
+ * 
+ * Standardized version with CSS-driven styling
  */
 
 import { SITE_CONFIG } from "../config.js";

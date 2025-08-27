@@ -1,32 +1,25 @@
 /**
- * Node Management System for Data Cards
+ * Node Management System
  * Handles data node interactions, modal system, and export functionality
+ * 
+ * Responsible for node presentation and interaction without any styling manipulation
  */
 
-import {
-  CONSTELLATIONS,
-  ANIMATION_CONFIG,
-  CONSTANTS,
-  SITE_CONFIG,
-  getSelector,
-  getAssetPath,
-  getInterfaceText,
-  getClearanceInfo,
-  formatClearanceLevel,
-  createStandardError,
-  logError,
-} from "../config.js";
-import { ToastManager, FileUtils, IDUtils, EventUtils } from "./shared-utilities.js";
-import { CitizenUI } from "./citizen-ui.js";
-import { documentSystem } from "./document-system.js";
+import { CONFIG } from "../config.js";
+import { Logger, ToastManager, EventUtils, FileUtils, IDUtils } from "./shared-utilities.js";
+import { DocumentSystem } from "./document-system.js";
 
 export class NodeManager {
+  /**
+   * @param {Object} state - Application state manager
+   */
   constructor(state) {
     this.state = state;
-    this.modal = null;
-    this.modalDocument = null;
+    this.logger = new Logger("NodeManager");
     this.currentNode = null;
-    this.citizenUI = new CitizenUI();
+    this.documentSystem = null;
+    
+    // Initialize modal once DOM is ready
     this.setupModal();
   }
 
@@ -34,153 +27,218 @@ export class NodeManager {
    * Setup modal system
    */
   setupModal() {
-    this.modal = document.querySelector(getSelector("nodeModal"));
-    if (!this.modal) return;
+    // Find modal element
+    this.modal = document.querySelector("[data-component='node-modal']");
+    if (!this.modal) {
+      this.logger.warn("Node modal not found in DOM");
+      return;
+    }
     
-    // Ensure proper modal class
-    this.modal.classList.remove('base-modal');
-    this.modal.classList.add('modal');
-
-    // Initialize document system for modal
-    this.modalDocument = documentSystem.instance.createDocument("modal-paper-container", {
+    // Initialize document system for modal content
+    this.documentSystem = new DocumentSystem();
+    // Target the modal's document container wrapper, not the editor element itself
+    this.modalDocument = this.documentSystem.createDocument("modal-document", {
       readOnly: false,
       theme: 'neural',
-      templateCategory: 'constellations',
-      fileName: "document.txt",
-      enableValidation: true,
+      templateCategory: 'constellations'
     });
+    
+    // Set up event listeners
+    this.setupModalEvents();
+    
+    this.logger.info("Modal system initialized");
+  }
 
+  /**
+   * Setup modal event listeners
+   */
+  setupModalEvents() {
+    if (!this.modal) return;
+    
     // Close button
-    const closeBtn = document.querySelector(getSelector("modalClose"));
+    const closeBtn = this.modal.querySelector("[data-action='modal-close']");
     if (closeBtn) {
       closeBtn.addEventListener("click", () => this.closeModal());
     }
-
+    
     // Backdrop click
     const backdrop = this.modal.querySelector(".bubble-ocean");
     if (backdrop) {
-      backdrop.addEventListener("click", () => this.closeModal());
+      backdrop.addEventListener("click", (event) => {
+        // Only close if clicking directly on backdrop (not its children)
+        if (event.target === backdrop) {
+          this.closeModal();
+        }
+      });
     }
-
+    
     // Escape key
     document.addEventListener("keydown", (event) => {
-      if (
-        EventUtils.isEscapeKey(event) &&
-        this.modal.getAttribute("aria-hidden") === "false"
-      ) {
+      if (EventUtils.isEscapeKey(event) && this.isModalOpen()) {
         this.closeModal();
       }
     });
-
+    
     // Export buttons
-    const inscribeBtn = document.querySelector(getSelector("modalInscribe"));
-    const transmitBtn = document.querySelector(getSelector("modalTransmit"));
-
+    const inscribeBtn = this.modal.querySelector("[data-action='inscribe']");
+    const transmitBtn = this.modal.querySelector("[data-action='transmit']");
+    
     if (inscribeBtn) {
       inscribeBtn.addEventListener("click", () => this.exportNode("md"));
     }
-
+    
     if (transmitBtn) {
       transmitBtn.addEventListener("click", () => this.exportNode("json"));
     }
   }
 
   /**
-   * Populate constellation with data nodes - FIXED to use filtered nodes
+   * Populate constellation with data nodes
+   * @param {string} constellation - Constellation ID
+   * @param {Array} nodes - Array of node data
    */
   populateConstellation(constellation, nodes) {
+    // Find container for this constellation's nodes
     const container = document.getElementById(`${constellation}-nodes`);
-    if (!container) return;
-
+    if (!container) {
+      this.logger.warn(`Container not found for constellation: ${constellation}`);
+      return;
+    }
+    
+    // Clear container
     container.innerHTML = "";
-
-    // Special handling for Qu'Poxii constellation - show citizen management interface
+    
+    // Special handling for Qu'Poxii constellation with citizen management
     if (constellation === "qu-poxii") {
-      const citizenInterfaceId = "citizen-interface";
-      container.innerHTML = `
-        <div class="citizen-management-container">
-          <div id="${citizenInterfaceId}" class="citizen-interface-wrapper"></div>
-        </div>
-      `;
-
-      // Initialize citizen UI
-      setTimeout(() => {
-        this.citizenUI.init(`#${citizenInterfaceId}`);
-
-        // Pass citizen files to the citizen manager if available
-        const citizenFiles = this.state.get("citizenFiles");
-        if (citizenFiles && citizenFiles.length > 0) {
-          this.citizenUI.citizenManager.setCitizenFiles(citizenFiles);
-          console.log(
-            `Node Manager: Passed ${citizenFiles.length} citizen files to Citizen Manager`
-          );
-        }
-
-        // Populate citizen files as thought bubble documents (exclude session files)
-        const citizenFilesOnly = nodes.filter(node => node.metadata?.type === "citizen");
-        if (citizenFilesOnly.length > 0) {
-          this.populateCitizenFileBubbles(citizenFilesOnly, constellation);
-        }
-
-        // Populate session files if available (only from qu-poxii constellation)
-        const sessionFilesOnly = nodes.filter(node => node.metadata?.type === "session");
-        if (sessionFilesOnly.length > 0) {
-          this.populateSessionFileBubbles(sessionFilesOnly, constellation);
-        }
-      }, CONSTANTS.SHORT_DELAY);
-
+      this.populateQuPoxiiConstellation(container, nodes, constellation);
       return;
     }
-
+    
     // Special handling for constellations with shell configurations
-    const constellationData = CONSTELLATIONS[constellation];
+    const constellationData = CONFIG.constellations[constellation];
     if (constellationData?.descriptions?.shell) {
-      const shell = constellationData.descriptions.shell;
-      container.innerHTML = `
-        <div class="constellation-shell">
-          <div class="shell-header">
-            <h3>${constellationData.name}</h3>
-            <p class="shell-subtitle">${shell.subtitle}</p>
-          </div>
-          <div class="shell-content">
-            <div class="shell-icon">${shell.icon}</div>
-            <p class="shell-description">${shell.description}</p>
-            <div class="shell-features">
-              <h4>Planned Features:</h4>
-              <ul>
-                ${shell.features.map((feature) => `<li>${feature}</li>`).join("")}
-              </ul>
-            </div>
-            ${
-              shell.securityNotice
-                ? `
-              <div class="security-notice">
-                <p><strong>${shell.securityNotice}</strong></p>
-              </div>
-            `
-                : ""
-            }
-            <div class="shell-status">
-              <span class="status-indicator ${shell.statusClass || ""}">${shell.status}</span>
-            </div>
-          </div>
-        </div>
-      `;
+      this.populateShellConstellation(container, constellationData);
       return;
     }
-
+    
     // For other constellations, show the actual nodes
     if (nodes.length === 0) {
-      container.innerHTML = `
-        <div class="empty-constellation">
-          <p>No psionic data streams available in this constellation.</p>
-          <p class="text-shimmer">The Nlom-linked stars are dormant here, for now.</p>
-        </div>
-      `;
+      this.renderEmptyConstellation(container);
       return;
     }
-
+    
     // Create thought bubble document layout
+    this.renderThoughtBubbleLayout(container, nodes, constellation);
+  }
+
+  /**
+   * Populate Qu'Poxii constellation with citizen management interface
+   * @param {Element} container - Container element
+   * @param {Array} nodes - Array of node data
+   * @param {string} constellation - Constellation ID
+   */
+  populateQuPoxiiConstellation(container, nodes, constellation) {
+    // Create citizen interface container
+    const citizenInterfaceId = "citizen-interface";
+    container.innerHTML = `
+      <div class="citizen-management-container">
+        <div id="${citizenInterfaceId}" class="citizen-interface-wrapper"></div>
+      </div>
+    `;
+    
+    // Dispatch event for citizen UI initialization
+    // This avoids direct import dependency on CitizenUI
+    setTimeout(() => {
+      EventUtils.dispatch("app:initialize:citizenUI", {
+        containerId: citizenInterfaceId,
+        nodes
+      });
+      
+      // Separate citizen and session files
+      const citizenFilesOnly = nodes.filter(node => node.metadata?.type === "citizen");
+      const sessionFilesOnly = nodes.filter(node => node.metadata?.type === "session");
+      
+      if (citizenFilesOnly.length > 0) {
+        this.populateCitizenFileBubbles(citizenFilesOnly, constellation);
+      }
+      
+      if (sessionFilesOnly.length > 0) {
+        this.populateSessionFileBubbles(sessionFilesOnly, constellation);
+      }
+    }, 100);
+  }
+
+  /**
+   * Populate shell constellation (void, etc.)
+   * @param {Element} container - Container element
+   * @param {Object} constellationData - Constellation configuration
+   */
+  populateShellConstellation(container, constellationData) {
+    const shell = constellationData.descriptions.shell;
+    
+    // Create shell container with appropriate class
+    const shellContainer = document.createElement("div");
+    shellContainer.className = "constellation-shell";
+    
+    // Populate shell content - no inline styles, all class-based
+    shellContainer.innerHTML = `
+      <div class="shell-header">
+        <h3>${constellationData.name}</h3>
+        <p class="shell-subtitle">${shell.subtitle}</p>
+      </div>
+      <div class="shell-content">
+        <div class="shell-icon">${shell.icon}</div>
+        <p class="shell-description">${shell.description}</p>
+        <div class="shell-features">
+          <h4>Planned Features:</h4>
+          <ul>
+            ${shell.features.map((feature) => `<li>${feature}</li>`).join("")}
+          </ul>
+        </div>
+        ${
+          shell.securityNotice
+            ? `
+          <div class="security-notice">
+            <p><strong>${shell.securityNotice}</strong></p>
+          </div>
+        `
+            : ""
+        }
+        <div class="shell-status">
+          <span class="status-indicator ${shell.statusClass || ""}">${shell.status}</span>
+        </div>
+      </div>
+    `;
+    
+    // Append to container
+    container.appendChild(shellContainer);
+  }
+
+  /**
+   * Render empty constellation message
+   * @param {Element} container - Container element
+   */
+  renderEmptyConstellation(container) {
+    const emptyContainer = document.createElement("div");
+    emptyContainer.className = "empty-constellation";
+    emptyContainer.innerHTML = `
+      <p>No psionic data streams available in this constellation.</p>
+      <p class="text-shimmer">The Nlom-linked stars are dormant here, for now.</p>
+    `;
+    
+    container.appendChild(emptyContainer);
+  }
+
+  /**
+   * Render thought bubble layout for nodes
+   * @param {Element} container - Container element
+   * @param {Array} nodes - Array of node data
+   * @param {string} constellation - Constellation ID
+   */
+  renderThoughtBubbleLayout(container, nodes, constellation) {
+    const constellationData = CONFIG.constellations[constellation];
+    
+    // Create thought bubble container
     const thoughtBubbleContainer = document.createElement("div");
     thoughtBubbleContainer.className = "thought-bubble-documents";
     thoughtBubbleContainer.setAttribute("data-constellation", constellation);
@@ -189,157 +247,131 @@ export class NodeManager {
       "aria-label",
       `${constellationData?.name || constellation} document collection`
     );
-
+    
     // Create thought bubble documents
     nodes.forEach((node, index) => {
-      const thoughtBubble = this.createThoughtBubbleDocument(
-        node,
-        constellation
-      );
-
-      // Stagger animations
-      setTimeout(() => {
-        thoughtBubble.classList.add('animate-in');
-        
-        setTimeout(() => {
-          thoughtBubble.classList.add('animation-complete');
-        }, ANIMATION_CONFIG.nodeBloom);
-      }, index * CONSTANTS.SHORT_DELAY);
-
+      const thoughtBubble = this.createThoughtBubbleDocument(node, constellation);
+      
+      // Set data attribute for staggered animation via CSS
+      thoughtBubble.setAttribute("data-index", index);
+      thoughtBubble.classList.add("animate-in");
+      
       thoughtBubbleContainer.appendChild(thoughtBubble);
     });
-
+    
     container.appendChild(thoughtBubbleContainer);
   }
 
   /**
-   * Populate citizen file bubbles in the citizen management interface
+   * Populate citizen file bubbles
+   * @param {Array} nodes - Array of citizen node data
+   * @param {string} constellation - Constellation ID
    */
   populateCitizenFileBubbles(nodes, constellation) {
-    // Wait for the citizen UI to be fully rendered
     setTimeout(() => {
       const bubblesContainer = document.getElementById("citizen-files-bubbles");
       if (!bubblesContainer) {
-        console.warn("Citizen files bubbles container not found");
+        this.logger.warn("Citizen files bubbles container not found");
         return;
       }
-
-      // Clear the placeholder content
+      
+      // Clear container
       bubblesContainer.innerHTML = "";
-
-      // Create thought bubble container with grid layout
+      
+      // Create thought bubble container
       const thoughtBubbleContainer = document.createElement("div");
       thoughtBubbleContainer.className = "thought-bubble-documents citizen-files-grid";
-      thoughtBubbleContainer.setAttribute(
-        "data-constellation",
-        constellation
-      );
+      thoughtBubbleContainer.setAttribute("data-constellation", constellation);
       thoughtBubbleContainer.setAttribute("role", "region");
       thoughtBubbleContainer.setAttribute(
         "aria-label",
-        `${CONSTELLATIONS[constellation]?.name || constellation} citizen files collection`
+        `${CONFIG.constellations[constellation]?.name || constellation} citizen files collection`
       );
-
-      // Create thought bubble documents for citizen files
+      
+      // Create thought bubble documents
       nodes.forEach((node, index) => {
-        const thoughtBubble = this.createThoughtBubbleDocument(
-          node,
-          constellation
-        );
-
-        // Stagger animations
-        // Animation handled by CSS classes
-
-        setTimeout(() => {
-          thoughtBubble.classList.add('animate-in');
-          
-          setTimeout(() => {
-            thoughtBubble.classList.add('animation-complete');
-          }, ANIMATION_CONFIG.nodeBloom);
-        }, index * CONSTANTS.SHORT_DELAY);
-
+        const thoughtBubble = this.createThoughtBubbleDocument(node, constellation);
+        
+        // Set data attribute for staggered animation via CSS
+        thoughtBubble.setAttribute("data-index", index);
+        thoughtBubble.classList.add("animate-in");
+        
         thoughtBubbleContainer.appendChild(thoughtBubble);
       });
-
+      
       bubblesContainer.appendChild(thoughtBubbleContainer);
-    }, CONSTANTS.SHORT_DELAY * 2); // Extra delay to ensure citizen UI is fully rendered
+    }, 200);
   }
 
   /**
-   * Populate session file bubbles in the citizen management interface
+   * Populate session file bubbles
+   * @param {Array} nodes - Array of session node data
+   * @param {string} constellation - Constellation ID
    */
-  populateSessionFileBubbles(sessionFiles, constellation) {
-    // Wait for the citizen UI to be fully rendered
+  populateSessionFileBubbles(nodes, constellation) {
     setTimeout(() => {
       const bubblesContainer = document.getElementById("session-files-bubbles");
       if (!bubblesContainer) {
-        console.warn("Session files bubbles container not found");
+        this.logger.warn("Session files bubbles container not found");
         return;
       }
-
-      // Clear the placeholder content
+      
+      // Clear container
       bubblesContainer.innerHTML = "";
-
-      // Create thought bubble container with grid layout
+      
+      // Create thought bubble container
       const thoughtBubbleContainer = document.createElement("div");
       thoughtBubbleContainer.className = "thought-bubble-documents session-files-grid";
-      thoughtBubbleContainer.setAttribute(
-        "data-constellation",
-        constellation
-      );
+      thoughtBubbleContainer.setAttribute("data-constellation", constellation);
       thoughtBubbleContainer.setAttribute("role", "region");
       thoughtBubbleContainer.setAttribute(
         "aria-label",
         "Available session files collection"
       );
-
-      // Create thought bubble documents for session files
-      sessionFiles.forEach((node, index) => {
-        const thoughtBubble = this.createThoughtBubbleDocument(
-          node,
-          constellation
-        );
-
-        // Stagger animations
-        // Animation handled by CSS classes
-
-        setTimeout(() => {
-          thoughtBubble.classList.add('animate-in');
-          
-          setTimeout(() => {
-            thoughtBubble.classList.add('animation-complete');
-          }, ANIMATION_CONFIG.nodeBloom);
-        }, index * CONSTANTS.SHORT_DELAY);
-
+      
+      // Create thought bubble documents
+      nodes.forEach((node, index) => {
+        const thoughtBubble = this.createThoughtBubbleDocument(node, constellation);
+        
+        // Set data attribute for staggered animation via CSS
+        thoughtBubble.setAttribute("data-index", index);
+        thoughtBubble.classList.add("animate-in");
+        
         thoughtBubbleContainer.appendChild(thoughtBubble);
       });
-
+      
       bubblesContainer.appendChild(thoughtBubbleContainer);
-    }, CONSTANTS.SHORT_DELAY * 3); // Extra delay to ensure citizen UI is fully rendered
+    }, 300);
   }
 
   /**
    * Create individual thought bubble document
+   * @param {Object} node - Node data
+   * @param {string} constellation - Constellation ID
+   * @returns {Element} Thought bubble element
    */
   createThoughtBubbleDocument(node, constellation) {
+    // Create bubble button
     const bubble = document.createElement("button");
     bubble.className = "thought-bubble-document";
     bubble.setAttribute("type", "button");
     bubble.setAttribute("role", "button");
     bubble.setAttribute("tabindex", "0");
     bubble.setAttribute("aria-label", `Open ${node.name}`);
-
-    // Determine clearance styling using centralized config
-    const clearanceInfo = getClearanceInfo(node.seal);
+    bubble.setAttribute("data-node-id", node.id);
+    
+    // Get clearance information
+    const clearanceInfo = this.getClearanceInfo(node.seal);
     const clearanceClass = clearanceInfo.class;
     const clearanceText = clearanceInfo.label;
-
-    // Get constellation icon for the document
-    const constellationData = CONSTELLATIONS[constellation];
+    
+    // Get constellation icon
+    const constellationData = CONFIG.constellations[constellation];
     const iconPath = constellationData?.icon
       ? `assets/images/${constellationData.icon}.svg`
       : "assets/images/tree.svg";
-
+    
+    // Create bubble content - no inline styles, pure HTML structure
     bubble.innerHTML = `
       <div class="document-bubble">
         <img src="${iconPath}" alt="" class="document-icon" aria-hidden="true" />
@@ -348,172 +380,173 @@ export class NodeManager {
       </div>
       <span class="document-label">${node.name}</span>
     `;
-
-    // Add interaction handlers
-    const activate = () => this.openNode(node);
-
-    bubble.addEventListener("click", activate);
+    
+    // Add click handler to open node
+    bubble.addEventListener("click", () => this.openNode(node));
+    
+    // Add keyboard handler
     bubble.addEventListener("keydown", (event) => {
       if (EventUtils.isActivationKey(event)) {
         event.preventDefault();
-        activate();
+        this.openNode(node);
       }
     });
-
+    
     return bubble;
   }
 
   /**
-   * Create individual node card
+   * Get clearance information for styling
+   * @param {string} seal - Clearance seal
+   * @returns {Object} Clearance info with class and label
    */
-  createNodeCard(node) {
-    const card = document.createElement("div");
-    card.className = "data-node";
-    card.setAttribute("role", "button");
-    card.setAttribute("tabindex", "0");
-    card.setAttribute("aria-label", `Open ${node.name}`);
-
-    // Determine clearance styling using centralized config
-    const clearanceInfo = getClearanceInfo(node.seal);
-    const clearanceClass = clearanceInfo.class;
-    const clearanceText = clearanceInfo.label;
-
-    // Generate tags from metadata if available
-    const tags = node.tags || [];
-    if (node.metadata && node.metadata.type) {
-      tags.push(node.metadata.type);
-    }
-    if (node.metadata && node.metadata.category) {
-      tags.push(node.metadata.category);
-    }
-
-    card.innerHTML = `
-      <div class="node-header">
-        <span class="node-seal ${clearanceClass}">${clearanceText}</span>
-      </div>
-      <h3 class="node-title">${node.name}</h3>
-      <p class="node-description">${
-        node.metadata?.description ||
-        "Psionic data stream available for diplomatic access."
-      }</p>
-      <div class="node-tags">
-        ${tags.map((tag) => `<span class="node-tag">${tag}</span>`).join("")}
-      </div>
-    `;
-
-    // Add interaction handlers
-    const activate = () => this.openNode(node);
-
-    card.addEventListener("click", activate);
-    card.addEventListener("keydown", (event) => {
-      if (EventUtils.isActivationKey(event)) {
-        event.preventDefault();
-        activate();
+  getClearanceInfo(seal) {
+    const clearanceMap = {
+      "open": {
+        class: "clearance-open",
+        label: "Open"
+      },
+      "filed": {
+        class: "clearance-filed",
+        label: "Filed"
+      },
+      "black-star": {
+        class: "clearance-diplomatic",
+        label: "Diplomatic"
       }
-    });
-
-    return card;
+    };
+    
+    return clearanceMap[seal] || clearanceMap.open;
   }
 
   /**
    * Open node in modal
+   * @param {Object} node - Node data
    */
   async openNode(node) {
-    if (!this.modal) return;
-
-    // Set modal title
-    const title = document.getElementById("modal-title");
-    if (title) {
-      title.textContent = node.name;
+    if (!this.modal || !this.modalDocument) {
+      this.logger.error("Modal or document system not initialized");
+      return;
     }
     
-    // Ensure modal has correct classes
-    this.modal.classList.add('is-open');
-
     try {
+      // Set modal title
+      const title = this.modal.querySelector("[data-component='modal-title']");
+      if (title) {
+        title.textContent = node.name;
+      }
+      
+      // Show modal via class toggle
+      this.modal.classList.add("is-open");
+      this.modal.setAttribute("aria-hidden", "false");
+      
       // Load document content
       const content = await this.loadNodeContent(node);
-
-      // Load content into document system
+      
+      // Set content in document system
       this.modalDocument.setContent(content, node.name);
+      
+      // Store current node
       this.currentNode = node;
-    } catch (error) {
-      const standardError = createStandardError(
-        "Data stream temporarily inaccessible.",
-        error,
-        "DATA_LOAD_ERROR"
+      
+      // Focus management
+      const closeBtn = this.modal.querySelector("[data-action='modal-close']");
+      if (closeBtn) {
+        closeBtn.focus();
+      }
+      
+      // Update state
+      this.state.set("currentNode", node);
+      
+      // Show notification
+      ToastManager.success(
+        `Diplomatic access granted: "${node.name}" • Data stream connected`
       );
-      logError(standardError, "NodeModal");
-
-      // Load error message into document system
-      const errorContent = `[h1]⚠️ PSIONIC DATA STREAM DISRUPTED[/h1]\n\n${standardError.message}\n\nNlom resonance error: ${error.message}\n\nAttempting automatic psionic pathway re-establishment...`;
-
+    } catch (error) {
+      this.logger.error("Failed to open node", error);
+      
+      // Load error message into document
+      const errorContent = this.generateErrorContent(error);
       this.modalDocument.setContent(errorContent, "Psionic Error");
+      
+      // Show error notification
+      ToastManager.error("Data stream temporarily inaccessible");
     }
-
-    // Show modal
-    this.modal.setAttribute("aria-hidden", "false");
-
-    // Focus management
-    const closeBtn = document.getElementById("modal-close");
-    if (closeBtn) {
-      closeBtn.focus();
-    }
-
-    // Add toast notification
-    this.showToast(
-      `Diplomatic access granted: "${node.name}" • Data stream connected`,
-      "success"
-    );
   }
 
   /**
-   * Load node content - for dynamic files, load directly; fallback to templates
+   * Generate error content
+   * @param {Error} error - Error object
+   * @returns {string} Error content in pencode format
+   */
+  generateErrorContent(error) {
+    return `[h1]⚠️ PSIONIC DATA STREAM DISRUPTED[/h1]
+
+Data stream temporarily inaccessible.
+
+Nlom resonance error: ${error.message}
+
+Attempting automatic psionic pathway re-establishment...`;
+  }
+
+  /**
+   * Load node content
+   * @param {Object} node - Node data
+   * @returns {Promise<string>} Node content
    */
   async loadNodeContent(node) {
-    // If this is a dynamically generated node with actual file, try to load it
-    if (node._dynamicallyGenerated) {
+    // If this is a dynamically generated node with content, return it
+    if (node._dynamicallyGenerated && node.content) {
+      return node.content;
+    }
+    
+    // If node has URL, try to load from URL
+    if (node.url) {
       try {
         const response = await fetch(node.url);
         if (response.ok) {
           return await response.text();
+        } else {
+          throw new Error(`Failed to load node content: ${response.status}`);
         }
       } catch (error) {
-        console.warn(`Could not load file ${node.url}, using template:`, error);
+        this.logger.warn(`Could not load file ${node.url}, using template:`, error);
       }
     }
-
+    
     // Fall back to generated template content
     return this.generateDocumentTemplate(node);
   }
 
   /**
-   * Generate document template content in pencode format
+   * Generate document template
+   * @param {Object} node - Node data
+   * @returns {string} Template content
    */
   generateDocumentTemplate(node) {
     const cluster = node.constellation;
-
-    // Use new template engine for constellation-specific templates
-    const templateEngine = documentSystem.instance.templateEngine;
-
+    const templateEngine = this.documentSystem.templateEngine;
+    
     // Try constellation-specific template first, then fallback to generic
     let content;
     try {
       content = templateEngine.getTemplate('constellations', cluster, this.getTemplateData(node));
     } catch (error) {
-      console.warn(`No constellation template for ${cluster}, using generic`);
+      this.logger.warn(`No constellation template for ${cluster}, using generic`);
       content = templateEngine.getTemplate('constellations', 'generic', this.getTemplateData(node));
     }
-
+    
     return content;
   }
 
   /**
-   * Prepare template data for constellation documents
+   * Get template data for document
+   * @param {Object} node - Node data
+   * @returns {Object} Template data
    */
   getTemplateData(node) {
     const cluster = node.constellation;
-
+    
     // Generate tags from metadata if available
     const tags = node.tags || [];
     if (node.metadata && node.metadata.type) {
@@ -522,32 +555,51 @@ export class NodeManager {
     if (node.metadata && node.metadata.category) {
       tags.push(node.metadata.category);
     }
-
+    
     return {
       // Common data for all templates
       documentId: node.id.toUpperCase(),
       date: `2467-${new Date().toISOString().split("T")[0].substring(5)}`, // Federation year format
-
+      
       // Cluster-specific data
-      clearanceLevel: formatClearanceLevel(node.seal, cluster),
+      clearanceLevel: this.formatClearanceLevel(node.seal, cluster),
       templateId: `DIPL-${IDUtils.generateId("DIPL").split("-")[1]}`, // For hatching-egg
       reportPeriod: "2465.140 - 2465.147", // For star-chanter
-
+      
       // Generic fallback data
       title: node.name,
-      constellationName: CONSTELLATIONS[cluster]?.name || "Unknown",
+      constellationName: CONFIG.constellations[cluster]?.name || "Unknown",
       url: node.url,
       id: node.id,
       cluster: cluster,
       seal: node.seal,
       tags: tags.join(", "),
-
+      
       // Additional required data for templates
       content: node.metadata?.description || "This data stream contains archived Federation diplomatic information accessed via the Nlom neural interface.",
-      classification: formatClearanceLevel(node.seal, cluster),
+      classification: this.formatClearanceLevel(node.seal, cluster),
       authority: "Nralakk Federation Diplomatic Mission",
       location: "SCCV Horizon, Stellar Corporate Conglomerate",
     };
+  }
+
+  /**
+   * Format clearance level for display
+   * @param {string} seal - Clearance seal
+   * @param {string} cluster - Cluster name
+   * @returns {string} Formatted clearance level
+   */
+  formatClearanceLevel(seal, cluster) {
+    switch (seal) {
+      case "open":
+        return "GENERAL ACCESS";
+      case "filed":
+        return "RESTRICTED ARCHIVES";
+      case "black-star":
+        return "DIPLOMATIC CLEARANCE";
+      default:
+        return "UNCLASSIFIED";
+    }
   }
 
   /**
@@ -555,48 +607,55 @@ export class NodeManager {
    */
   closeModal() {
     if (!this.modal) return;
-
+    
+    // Hide modal via class toggle
+    this.modal.classList.remove("is-open");
     this.modal.setAttribute("aria-hidden", "true");
-    this.modal.classList.remove('is-open');
+    
+    // Clear current node
     this.currentNode = null;
+    
+    // Update state
+    this.state.set("currentNode", null);
   }
 
   /**
    * Export node content
+   * @param {string} format - Export format (md or json)
    */
   exportNode(format) {
     if (!this.currentNode) return;
-
+    
     const node = this.currentNode;
     let content, filename, mimeType;
-
+    
     if (format === "md") {
       content = this.nodeToMarkdown(node);
       filename = `${node.id}.md`;
       mimeType = "text/markdown";
-      this.showToast(
-        "Psionic echo successfully inscribed to personal memory engrams (.md)",
-        "success"
+      ToastManager.success(
+        "Psionic echo successfully inscribed to personal memory engrams (.md)"
       );
     } else if (format === "json") {
       content = JSON.stringify(node, null, 2);
       filename = `${node.id}.json`;
       mimeType = "application/json";
-      this.showToast(
-        "Data stream encoded for Psionic Wake transmission (.json)",
-        "success"
+      ToastManager.success(
+        "Data stream encoded for Psionic Wake transmission (.json)"
       );
     }
-
+    
     FileUtils.downloadFile(content, filename, mimeType);
   }
 
   /**
    * Convert node to Markdown format
+   * @param {Object} node - Node data
+   * @returns {string} Markdown content
    */
   nodeToMarkdown(node) {
-    const constellation = CONSTELLATIONS[node.constellation];
-
+    const constellation = CONFIG.constellations[node.constellation];
+    
     // Generate tags from metadata if available
     const tags = node.tags || [];
     if (node.metadata && node.metadata.type) {
@@ -605,7 +664,7 @@ export class NodeManager {
     if (node.metadata && node.metadata.category) {
       tags.push(node.metadata.category);
     }
-
+    
     return `# ${node.name}
 
 **Constellation:** ${constellation?.name || node.constellation}
@@ -630,29 +689,23 @@ ${node.metadata?.description || "No description available."}
 *By: Diplomatic Mission Staff*
 
 > "In the constellation of psionic data, every node is a star that guides the way to understanding through Nlom resonance."
-> — Traditional Skrellian Diplomatic Wisdom
-`;
-  }
-
-  /**
-   * Show toast notification
-   */
-  showToast(message, type = "info") {
-    ToastManager.show(message, type);
-  }
-
-  /**
-   * Get current node
-   */
-  getCurrentNode() {
-    return this.currentNode;
+> — Traditional Skrellian Diplomatic Wisdom`;
   }
 
   /**
    * Check if modal is open
+   * @returns {boolean} Whether modal is open
    */
   isModalOpen() {
-    return this.modal && this.modal.getAttribute("aria-hidden") === "false";
+    return this.modal && this.modal.classList.contains("is-open");
+  }
+
+  /**
+   * Get current node
+   * @returns {Object|null} Current node
+   */
+  getCurrentNode() {
+    return this.currentNode;
   }
 
   /**
@@ -663,6 +716,7 @@ ${node.metadata?.description || "No description available."}
     this.currentNode = null;
     this.modal = null;
     this.modalDocument = null;
-    console.log("NodeManager destroyed");
+    
+    this.logger.info("NodeManager destroyed");
   }
 }

@@ -212,5 +212,454 @@
   margin-bottom: var(--space-4);
   font-size: var(--text-xl);
   font-weight: 600;
+<<<<<<< HEAD
   text-shadow: 0 0 10px var(--glow-cyan-gentle);
 }
+=======
+  text-shadow: 0 0 4px var(--glow-gold-soft);
+}
+
+.neural-italic {
+  color: var(--color-cyan);
+  font-style: italic;
+  text-shadow: 0 0 3px var(--glow-cyan-gentle);
+}
+
+.neural-underline {
+  text-decoration: underline;
+  text-decoration-color: var(--glow-cyan-border);
+  text-underline-offset: 3px;
+}
+
+.neural-text-small {
+  font-size: var(--text-sm);
+  opacity: 0.85;
+}
+
+.neural-text-large {
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--color-cyan);
+  text-shadow: 0 0 6px var(--glow-cyan-gentle);
+}
+
+.neural-center {
+  text-align: center;
+  margin: var(--space-4) 0;
+}
+
+/* === NEURAL LISTS === */
+
+.neural-list {
+  margin: var(--space-4) 0;
+  padding-left: var(--space-6);
+  list-style: none;
+}
+
+.neural-list-item {
+  position: relative;
+  margin: var(--space-2) 0;
+  padding-left: var(--space-3);
+  transition: all var(--duration-base) var(--ease-neural);
+}
+
+.neural-list-item::before,
+.neural-list-item[data-neural-marker]::before {
+  content: attr(data-neural-marker, "▸");
+  position: absolute;
+  left: -16px;
+  color: var(--color-cyan);
+  text-shadow: 0 0 4px var(--glow-cyan-gentle);
+  animation: neural-marker-pulse var(--duration-pulse) ease-in-out infinite;
+}
+
+.neural-list-item:hover::before {
+  color: var(--color-warning);
+  text-shadow: 0 0 6px var(--glow-gold-soft);
+  transform: scale(1.2);
+}
+
+/* === NEURAL TABLES === */
+
+.neural-table,
+.neural-grid {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--glass-border);
+}
+
+.neural-table td,
+.neural-table th,
+.neural-grid td,
+.neural-grid th {
+  border: 1px solid var(--glass-border);
+  padding: var(--space-1);
+}
+
+/* === NEURAL IMAGES === */
+
+.neural-document-image {
+  display: block;
+  width: 90%;
+  margin: 0 auto;
+}
+
+/* === NEURAL CODE BLOCKS === */
+
+.neural-code-block {
+  background: var(--glass-bg-light);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+/* === NEURAL DIVIDERS === */
+
+.neural-divider {
+  border: none;
+  height: 1px;
+  background: var(--gradient-highlight-cyan);
+  margin: var(--space-6) 0;
+  box-shadow: var(--shadow-neural-sm);
+  animation: divider-glow var(--duration-pulse) ease-in-out infinite;
+}
+
+/* === NEURAL FIELDS === */
+
+.neural-field {
+  display: inline-block;
+  background: var(--glow-cyan-faint);
+  border-bottom: 1px dotted var(--glow-cyan-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-2);
+  min-width: 120px;
+  color: var(--color-cyan);
+  text-align: center;
+  transition: all var(--duration-base) var(--ease-neural);
+  animation: field-breath var(--duration-pulse) ease-in-out infinite;
+}
+
+.neural-field:hover {
+  background: var(--glow-cyan-gentle);
+  box-shadow: var(--shadow-neural-sm);
+  transform: scale(1.05);
+}
+
+/* === NEURAL FLAGS === */
+
+.neural-flag {
+  vertical-align: middle;
+  transition: all var(--duration-base) var(--ease-neural);
+  filter: drop-shadow(0 0 4px var(--glow-cyan-gentle));
+}
+
+.neural-flag--small {
+  width: 18px;
+  height: 18px;
+  margin: 0 var(--space-1);
+}
+
+.neural-flag:hover {
+  filter: drop-shadow(0 0 8px var(--glow-cyan-medium));
+  transform: scale(1.1);
+}
+
+/* === EDIT MODE STYLING === */
+
+.neural-edit-mode .pencode-tag {
+  display: inline-block;
+  background: var(--glow-gold-error-bg-outer);
+  border: 1px solid var(--glow-gold-error-border);
+  border-radius: var(--radius-organic-subtle);
+  padding: var(--space-1) var(--space-2);
+  margin: 0 var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--color-warning);
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: all var(--duration-base) var(--ease-organic);
+  text-shadow: 0 0 3px var(--glow-gold-error-text);
+  animation: tag-float var(--duration-float) ease-in-out infinite;
+}
+
+.neural-edit-mode .pencode-tag:hover {
+  background: var(--glow-gold-error-bg-inner);
+  border-color: var(--color-warning);
+  transform: scale(1.1) translateY(-1px);
+  box-shadow: var(--shadow-neural-sm);
+}
+
+.neural-edit-mode .pencode-tag:focus {
+  background: var(--glow-gold-error-bg-inner);
+  border-color: var(--color-warning);
+  outline: 2px solid var(--glow-gold-error-text);
+  outline-offset: 2px;
+  transform: scale(1.05);
+}
+
+.neural-edit-mode .pencode-tag.editing {
+  background: var(--glow-gold-error-bg-inner);
+  border-color: var(--color-warning);
+  outline: 2px solid var(--glow-gold-error-text);
+  outline-offset: 2px;
+  animation: tag-editing var(--duration-base) ease-in-out infinite;
+}
+
+/* === DOCUMENT STAMPS === */
+
+.neural-stamp {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-5);
+  width: 140px;
+  padding: var(--space-3);
+  background: var(--glow-gold-error-bg-outer);
+  border: 2px solid var(--glow-gold-error-border);
+  border-radius: var(--radius-organic-dynamic);
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--color-warning);
+  text-shadow: 0 0 4px var(--glow-gold-error-text);
+  opacity: 0.9;
+  backdrop-filter: blur(10px);
+  box-shadow:
+    var(--shadow-neural-sm),
+    inset 0 0 10px var(--glow-gold-soft);
+  transform: rotate(-5deg);
+  animation: stamp-float var(--duration-float) ease-in-out infinite;
+}
+
+.neural-stamp .stamp-header {
+  font-weight: bold;
+  font-size: 0.65rem;
+  margin-bottom: var(--space-1);
+  text-shadow: 0 0 6px var(--glow-gold-error-text);
+}
+
+.neural-stamp .stamp-certification {
+  font-size: 0.6rem;
+  margin-bottom: var(--space-2);
+  color: var(--color-cyan);
+  text-shadow: 0 0 4px var(--glow-cyan-gentle);
+}
+
+.neural-stamp .stamp-details {
+  border-top: 1px solid var(--glow-gold-error-text);
+  padding-top: var(--space-2);
+  margin-top: var(--space-2);
+  font-size: 0.55rem;
+  line-height: 1.3;
+}
+
+.neural-stamp .stamp-round.exec-override {
+  color: var(--color-error);
+  font-weight: bold;
+  text-shadow: 0 0 6px var(--glow-gold-error-text);
+}
+
+/* === STATUS BAR === */
+
+.document-status {
+  padding: var(--space-2) var(--space-4);
+  background: var(--glass-bg-dark);
+  border-top: 1px solid var(--glass-border);
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  text-align: right;
+}
+
+/* === THEME VARIATIONS === */
+
+.theme-diplomatic {
+  --document-glow: var(--glow-gold-soft);
+}
+
+.theme-diplomatic .neural-heading {
+  color: var(--color-warning);
+  text-shadow: 0 0 8px var(--glow-gold-soft);
+}
+
+.theme-diplomatic .neural-list-item::before {
+  color: var(--color-warning);
+  text-shadow: 0 0 4px var(--glow-gold-soft);
+}
+
+.theme-federation {
+  --document-glow: var(--glow-pink-gentle);
+}
+
+.theme-federation .neural-heading--primary {
+  border-bottom-color: var(--color-mist);
+}
+
+/* === ERROR STATES === */
+
+.neural-document.error-state {
+  border-color: var(--color-error);
+  background: var(--glow-gold-error-bg-outer);
+}
+
+.neural-document.error-state .neural-content {
+  color: var(--color-error);
+}
+
+/* === RESPONSIVE DESIGN === */
+
+@media (max-width: 768px) {
+  .neural-document {
+    border-radius: var(--radius-md);
+  }
+
+  .document-editor {
+    padding: var(--space-3);
+    min-height: 300px;
+  }
+
+  .neural-stamp {
+    width: 100px;
+    font-size: 0.7rem;
+    padding: var(--space-2);
+  }
+
+  .document-toolbar {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+}
+
+/* === ANIMATIONS === */
+
+@keyframes document-float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-2px) scale(1.001);
+  }
+}
+
+@keyframes neural-energy-flow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes neural-pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes neural-marker-pulse {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes divider-glow {
+  0%,
+  100% {
+    box-shadow: var(--shadow-neural-sm);
+  }
+  50% {
+    box-shadow: var(--shadow-neural-md);
+  }
+}
+
+@keyframes field-breath {
+  0%,
+  100% {
+    background: var(--glow-cyan-faint);
+  }
+  50% {
+    background: var(--glow-cyan-gentle);
+  }
+}
+
+@keyframes tag-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes tag-editing {
+  0%,
+  100% {
+    box-shadow: var(--shadow-neural-sm);
+  }
+  50% {
+    box-shadow: var(--shadow-neural-md);
+  }
+}
+
+@keyframes stamp-float {
+  0%,
+  100% {
+    transform: rotate(-5deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-4deg) translateY(-1px);
+  }
+}
+
+/* Neural button variants moved to unified system in utilities.css */
+
+/* === ACCESSIBILITY === */
+
+.neural-document:focus-within {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Neural button focus styles moved to unified system in utilities.css */
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .neural-document,
+  .neural-stamp,
+  .pencode-tag,
+  .neural-list-item::before {
+    animation: none;
+  }
+
+  .neural-document {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .neural-document {
+    border-width: 2px;
+  }
+
+  .neural-heading {
+    text-shadow: none;
+    font-weight: 600;
+  }
+
+  .neural-field {
+    border-width: 2px;
+    border-style: solid;
+  }
+}
+>>>>>>> 8a65fcdd141fdc6dd8eff4342ce116423f4121b4

@@ -1,388 +1,449 @@
 /**
- * Main Application Controller - NlomInterface
- * Central orchestration system for the constellation-based interface
+ * Application Controller
+ * Central orchestration system for the Nralakk Federation Interface
+ * 
  * Coordinates all subsystems and manages application lifecycle
+ * with strict separation between business logic and presentation.
  */
 
-import { StarfieldManager } from "./starfield-manager.js";
-import { documentSystem } from "./document-system.js";
-import { AppState } from "./state-manager.js";
+import { StateManager } from "./state-manager.js";
 import { Router } from "./router.js";
 import { ViewManager } from "./view-manager.js";
 import { NodeManager } from "./node-manager.js";
 import { ClearanceManager } from "./clearance-manager.js";
-import {
-  CONSTELLATIONS,
-  SITE_CONFIG,
-  getSiteTitle,
-  getSiteDescription,
-  getAssetPath,
-  getInterfaceText,
-  getThreeJSImportMap,
-  getConstellationDescription,
-  createStandardError,
-  logError,
-  getLoadingSubtitle,
-  getClearanceMatrix,
-  getErrorMessage,
-  getErrorTemplate,
-  getSelector,
-} from "../config.js";
+import { DocumentSystem } from "./document-system.js";
+import { StarfieldManager } from "./starfield-manager.js";
+import { Logger } from "./shared-utilities.js";
+import { CONFIG } from "../config.js";
 
-export class NlomInterface {
+export class AppController {
   constructor() {
-    this.state = new AppState();
-    this.starfieldManager = null;
-
-    this.viewManager = null;
+    // Core systems
+    this.state = new StateManager();
+    this.logger = new Logger("AppController");
+    
+    // Initialize with uninitialized subsystems
     this.router = null;
+    this.viewManager = null;
     this.nodeManager = null;
     this.clearanceManager = null;
-
-
+    this.documentSystem = null;
+    this.starfieldManager = null;
+    
+    // Track initialization status
     this.isInitialized = false;
   }
 
   /**
    * Initialize the application
+   * Follows dependency order for subsystem initialization
    */
   async init() {
     try {
-      console.log("Initializing Nlom Interface...");
-
-      // First populate HTML with configuration values
-      this.populateHTMLConfiguration();
-
-      this.setDynamicText();
-
-      // Show loading screen
-      this.showLoading();
-
-      // Initialize core systems
+      this.logger.info("Initializing application");
+      
+      // Set up HTML configuration from centralized config
+      this.setupHTMLConfiguration();
+      
+      // Update loading state
+      this.state.set("appState", "loading");
+      
+      // Initialize core systems in dependency order
+      // 1. State and view manager first
       this.viewManager = new ViewManager(this.state);
-      this.nodeManager = new NodeManager(this.state);
+      await this.viewManager.init();
+      
+      // 2. Domain services
       this.clearanceManager = new ClearanceManager(this.state);
-
-      // Initialize document system (replaces old paper editor)
-      // No need to explicitly init modal - NodeManager handles it
-
-      // Initialize starfield
-      this.starfieldManager = new StarfieldManager();
+      this.nodeManager = new NodeManager(this.state);
+      this.documentSystem = new DocumentSystem(this.state);
+      
+      // 3. Starfield visualization
+      this.starfieldManager = new StarfieldManager(this.state);
       await this.starfieldManager.init();
-
-      // Set up starfield cluster activation
-      this.starfieldManager.setClusterActivationCallback((cluster) => {
-        this.router.navigate(`#/${cluster}`);
+      
+      // Connect starfield to navigation
+      this.starfieldManager.setClusterActivationCallback((constellation) => {
+        if (this.router) {
+          this.router.navigate(`#/${constellation}`);
+        }
       });
-
-      // Load data
+      
+      // 4. Load content data
       await this.loadData();
-
-      // Initialize router (must be last to handle initial route)
+      
+      // 5. Initialize router (must be last to handle initial route)
       this.router = new Router(this.state, this.viewManager);
-
+      
       // Setup accessibility features
       this.setupAccessibility();
-
-      // Hide loading screen
-      this.hideLoading();
-
+      
+      // Mark initialization complete
       this.isInitialized = true;
-      console.log("Nlom Interface initialized successfully");
+      this.state.set("appState", "ready");
+      
+      // Hide loading screen now that initialization is complete
+      this.hideLoadingScreen();
+      
+      this.logger.info("Application initialized successfully");
+      
+      return true;
     } catch (error) {
-      console.error("Failed to initialize Nlom Interface:", error);
-      this.showError(getErrorMessage("psionicFailure"));
+      this.logger.error("Application initialization failed", error);
+      this.state.set("appState", "error");
+      this.state.set("lastError", {
+        message: error.message,
+        stack: error.stack,
+        time: new Date().toISOString()
+      });
+      
+      // Update UI with error state via class toggle
+      this.setErrorState(error);
+      
+      throw error;
     }
   }
 
   /**
-   * Populate HTML elements with configuration values
+   * Set up HTML configuration from centralized config
    */
-  populateHTMLConfiguration() {
+  setupHTMLConfiguration() {
     try {
-      const { meta, assets, cdn } = SITE_CONFIG;
-
-      // Meta information
-      const pageTitle = document.getElementById("page-title");
-      const metaDescription = document.getElementById("meta-description");
-      const metaAuthor = document.getElementById("meta-author");
-      const canonicalLink = document.getElementById("canonical-link");
-
-      if (pageTitle) pageTitle.textContent = meta.siteName;
-      if (metaDescription)
-        metaDescription.setAttribute("content", meta.description);
-      if (metaAuthor) metaAuthor.setAttribute("content", meta.author);
-      if (canonicalLink) canonicalLink.setAttribute("href", meta.canonicalUrl);
-
-      // Open Graph
-      const ogTitle = document.getElementById("og-title");
-      const ogDescription = document.getElementById("og-description");
-      const ogUrl = document.getElementById("og-url");
-
-      if (ogTitle) ogTitle.setAttribute("content", meta.ogTitle);
-      if (ogDescription)
-        ogDescription.setAttribute("content", meta.ogDescription);
-      if (ogUrl) ogUrl.setAttribute("content", meta.canonicalUrl);
-
-      // Assets
-      const faviconLink = document.getElementById("favicon-link");
-      if (faviconLink) faviconLink.setAttribute("href", assets.favicon);
-
-      // Fonts
-      const fontPreconnect1 = document.getElementById("font-preconnect-1");
-      const fontPreconnect2 = document.getElementById("font-preconnect-2");
-      const fontStylesheet = document.getElementById("font-stylesheet");
-
-      if (fontPreconnect1)
-        fontPreconnect1.setAttribute("href", cdn.fonts.google);
-      if (fontPreconnect2)
-        fontPreconnect2.setAttribute("href", cdn.fonts.googleStatic);
-      if (fontStylesheet) {
-        fontStylesheet.setAttribute(
-          "href",
-          `${cdn.fonts.google}/css2?family=${cdn.fonts.fontFamilies}`
-        );
-      }
-
-      // Import map for Three.js
-      const importMapScript = document.getElementById("importmap-script");
-      if (importMapScript) {
-        const importMap = getThreeJSImportMap();
-        importMapScript.textContent = JSON.stringify(importMap, null, 2);
-      }
-
-      // Populate constellation descriptions
-      this.populateConstellationDescriptions();
+      // Configure document metadata
+      this.setMetadata();
+      
+      // Configure Open Graph tags
+      this.setOpenGraphTags();
+      
+      // Configure assets and resources
+      this.setAssetLinks();
+      
+      // Set dynamic texts
+      this.setDynamicText();
     } catch (error) {
-      console.warn("Failed to populate HTML configuration:", error);
+      this.logger.warn("Failed to set up HTML configuration", error);
     }
   }
 
   /**
-   * Populate constellation descriptions from centralized configuration
+   * Set document metadata
    */
-  populateConstellationDescriptions() {
+  setMetadata() {
+    const { meta } = CONFIG.site;
+    
+    const selectors = {
+      title: document.getElementById("page-title"),
+      description: document.getElementById("meta-description"),
+      author: document.getElementById("meta-author"),
+      canonical: document.getElementById("canonical-link")
+    };
+    
+    if (selectors.title) selectors.title.textContent = meta.siteName;
+    if (selectors.description) selectors.description.setAttribute("content", meta.description);
+    if (selectors.author) selectors.author.setAttribute("content", meta.author);
+    if (selectors.canonical) selectors.canonical.setAttribute("href", meta.canonicalUrl);
+  }
+
+  /**
+   * Set Open Graph tags
+   */
+  setOpenGraphTags() {
+    const { meta } = CONFIG.site;
+    
+    const selectors = {
+      ogTitle: document.getElementById("og-title"),
+      ogDescription: document.getElementById("og-description"),
+      ogUrl: document.getElementById("og-url")
+    };
+    
+    if (selectors.ogTitle) selectors.ogTitle.setAttribute("content", meta.ogTitle);
+    if (selectors.ogDescription) selectors.ogDescription.setAttribute("content", meta.ogDescription);
+    if (selectors.ogUrl) selectors.ogUrl.setAttribute("content", meta.canonicalUrl);
+  }
+
+  /**
+   * Set asset links
+   */
+  setAssetLinks() {
+    const { assets, cdn } = CONFIG.site;
+    
+    // Favicon
+    const favicon = document.getElementById("favicon-link");
+    if (favicon) favicon.setAttribute("href", assets.favicon);
+    
+    // Fonts
+    const fontPreconnect1 = document.getElementById("font-preconnect-1");
+    const fontPreconnect2 = document.getElementById("font-preconnect-2");
+    const fontStylesheet = document.getElementById("font-stylesheet");
+    
+    if (fontPreconnect1) fontPreconnect1.setAttribute("href", cdn.fonts.google);
+    if (fontPreconnect2) fontPreconnect2.setAttribute("href", cdn.fonts.googleStatic);
+    if (fontStylesheet) {
+      fontStylesheet.setAttribute("href", 
+        `${cdn.fonts.google}/css2?family=${cdn.fonts.fontFamilies}`);
+    }
+    
+
+  }
+
+  /**
+   * Set dynamic text content
+   */
+  setDynamicText() {
+    // Apply text from configuration
+    const textElements = document.querySelectorAll("[data-text-key]");
+    textElements.forEach(element => {
+      const key = element.getAttribute("data-text-key");
+      const section = element.getAttribute("data-text-section") || "general";
+      
+      const text = this.getTextFromConfig(section, key);
+      if (text) element.textContent = text;
+    });
+    
+    // Apply constellation descriptions
+    this.setConstellationDescriptions();
+  }
+
+  /**
+   * Get text from configuration
+   */
+  getTextFromConfig(section, key) {
     try {
-      // Map constellation IDs to their accessibility description element IDs
-      const accessibilityIdMap = {
+      return CONFIG.text[section]?.[key] || key;
+    } catch (error) {
+      return key;
+    }
+  }
+
+  /**
+   * Set constellation descriptions from configuration
+   */
+  setConstellationDescriptions() {
+    try {
+      // Map constellation IDs to their description element IDs
+      const descriptionMap = {
         "gnarled-tree": "tree-desc",
         "qu-poxii": "bond-desc",
         "star-chanter": "chant-desc",
         "hatching-egg": "egg-desc",
-        void: "void-desc",
+        "void": "void-desc"
       };
-
-      Object.keys(CONSTELLATIONS).forEach((constellationId) => {
-        const constellation = CONSTELLATIONS[constellationId];
-
-        // Populate accessibility descriptions
-        const accessibilityId = accessibilityIdMap[constellationId];
-        if (accessibilityId) {
-          const accessibilityDesc = document.getElementById(accessibilityId);
-          if (accessibilityDesc) {
-            accessibilityDesc.textContent =
-              constellation.descriptions.accessibility;
-          }
+      
+      Object.entries(CONFIG.constellations).forEach(([id, data]) => {
+        const descriptionId = descriptionMap[id];
+        if (descriptionId) {
+          const element = document.getElementById(descriptionId);
+          if (element) element.textContent = data.descriptions.accessibility;
         }
-
-        // Populate stream views
-        const streamView = document.getElementById(`${constellationId}-view`);
+        
+        // Update stream views
+        const streamView = document.getElementById(`${id}-view`);
         if (streamView) {
-          const titleElement = streamView.querySelector(".stream-title");
-          const meaningElement = streamView.querySelector(".essence-meaning");
-          const descriptionElement = streamView.querySelector(
-            ".stream-description"
-          );
-
-          if (titleElement) titleElement.textContent = constellation.name;
-          if (meaningElement)
-            meaningElement.textContent = constellation.meaning;
-          if (descriptionElement)
-            descriptionElement.textContent = constellation.descriptions.stream;
+          const titleEl = streamView.querySelector(".stream-title");
+          const meaningEl = streamView.querySelector(".essence-meaning");
+          const descriptionEl = streamView.querySelector(".stream-description");
+          
+          if (titleEl) titleEl.textContent = data.name;
+          if (meaningEl) meaningEl.textContent = data.meaning;
+          if (descriptionEl) descriptionEl.textContent = data.descriptions.stream;
         }
       });
     } catch (error) {
-      console.warn("Failed to populate constellation descriptions:", error);
+      this.logger.warn("Failed to set constellation descriptions", error);
     }
   }
 
-  setDynamicText() {
-    const loading = document.querySelector(getSelector("loadingClearance"));
-    if (loading) loading.textContent = getLoadingSubtitle();
-    const matrix = document.querySelector(getSelector("clearanceMatrix"));
-    if (matrix) matrix.textContent = getClearanceMatrix();
-  }
-
   /**
-   * Load data from file system
+   * Load data from external sources
    */
   async loadData() {
     try {
-      // Import the file scanner
+      this.logger.info("Loading application data");
+      this.state.set("dataState", "loading");
+      
+      // Skip GitHub API in development mode (localhost)
+      const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      
+      if (isDevelopment) {
+        this.logger.info("Development mode detected - skipping GitHub API and using empty data");
+        this.state.set("dataState", "ready");
+        this.logger.info("Application initialized in development mode");
+        return [];
+      }
+      
+      // Import the file scanner dynamically
       const { FileScanner } = await import("./file-scanner.js");
       const scanner = new FileScanner();
-
-      // Configure GitHub repository settings
-      // These should match your actual GitHub repository
-      scanner.setGitHubConfig("Mnemeory", "mnemeory.github.io");
-
-      // Log repository configuration
-      const repoInfo = scanner.getRepositoryInfo();
-      console.log("GitHub repository configuration:", repoInfo);
-
-      // Test GitHub API connection first
-      console.log("Testing GitHub API connection...");
-      const connectionTest = await scanner.testGitHubConnection();
+      
+      // Configure repository
+      scanner.setRepositoryConfig("Mnemeory", "mnemeory.github.io");
+      
+      // Test connection - but don't fail if GitHub API is unavailable
+      const connectionTest = await scanner.testConnection();
       if (!connectionTest) {
-        throw new Error(
-          "Failed to connect to GitHub API. Please check your repository configuration and internet connection."
-        );
+        this.logger.warn("GitHub API not accessible - continuing with empty data");
+        this.state.set("dataState", "ready");
+        this.logger.info("Application initialized with empty data state");
+        return [];
       }
-
-      // FIXED: Proper directory to constellation mapping
+      
+      // Define scan paths mapped to constellations
       const scanPaths = [
-        { path: "filed", constellation: "gnarled-tree", seal: "filed" },      // Filed docs go to Gnarled Tree
-        { path: "templates", constellation: "hatching-egg", seal: "open" },  // Templates go to Hatching Egg
-        { path: "citizen", constellation: "qu-poxii", seal: "open" },        // Citizen docs go to Qu'Poxii
+        { path: "templates", constellation: "hatching-egg", seal: "open" },
+        { path: "citizen", constellation: "qu-poxii", seal: "open" }
       ];
-
+      
+      // Scan each directory
       const allNodes = [];
-
-      // Scan each directory for files
       for (const pathConfig of scanPaths) {
         try {
-          console.log(`\n--- Scanning ${pathConfig.path} directory for ${pathConfig.constellation} ---`);
+          this.logger.info(`Scanning ${pathConfig.path} for ${pathConfig.constellation}`);
           const nodes = await scanner.scanDirectory(
-            pathConfig.path,
-            pathConfig.constellation,
+            pathConfig.path, 
+            pathConfig.constellation, 
             pathConfig.seal
           );
           allNodes.push(...nodes);
-          console.log(
-            `✅ Scanned ${pathConfig.path}: found ${nodes.length} files for ${pathConfig.constellation}`
-          );
+          this.logger.info(`Found ${nodes.length} files in ${pathConfig.path}`);
         } catch (error) {
-          console.warn(
-            `❌ Could not scan directory ${pathConfig.path}:`,
-            error
-          );
-          // Continue with other directories even if one fails
+          this.logger.warn(`Failed to scan ${pathConfig.path}`, error);
+          // Continue with other directories
         }
       }
-
-      // Sort and group nodes appropriately
+      
+      // Process nodes
       const sortedNodes = scanner.sortNodes(allNodes);
       this.state.set("nodes", sortedNodes);
-
-      // Populate each constellation with its specific data
-      Object.keys(CONSTELLATIONS).forEach((constellation) => {
-        // Get only the nodes for this specific constellation
+      
+      // Populate constellations
+      Object.keys(CONFIG.constellations).forEach(constellation => {
         const constellationNodes = sortedNodes.filter(
           node => node.constellation === constellation
         );
-
-        console.log(`Populating ${constellation} with ${constellationNodes.length} nodes`);
+        
+        this.logger.info(`Populating ${constellation} with ${constellationNodes.length} nodes`);
         this.nodeManager.populateConstellation(constellation, constellationNodes);
       });
-
-      // Pass citizen files specifically to the citizen manager
-      const citizenNodes = sortedNodes.filter(
-        (node) => node.constellation === "qu-poxii" && node.metadata?.type === "citizen"
-      );
-      if (citizenNodes.length > 0) {
-        console.log(
-          `Found ${citizenNodes.length} citizen files for Qu'Poxii constellation`
-        );
-        this.state.set("citizenFiles", citizenNodes);
-      } else {
-        console.log("No citizen files found in the repository");
-      }
-
-      // Handle session files - they can be found in any directory
-      const sessionNodes = sortedNodes.filter(
-        (node) => node.metadata?.type === "session"
-      );
-      if (sessionNodes.length > 0) {
-        console.log(
-          `Found ${sessionNodes.length} session files`
-        );
-        this.state.set("sessionFiles", sessionNodes);
-      } else {
-        console.log("No session files found in the repository");
-      }
-
-      console.log(
-        `\n🎉 Successfully loaded ${sortedNodes.length} nodes from GitHub repository`
-      );
-
-      // Log distribution
-      const distribution = {};
-      sortedNodes.forEach(node => {
-        distribution[node.constellation] = (distribution[node.constellation] || 0) + 1;
-      });
-      console.log("Node distribution by constellation:", distribution);
+      
+      // Process specific node types
+      this.processCitizenNodes(sortedNodes);
+      this.processSessionNodes(sortedNodes);
+      
+      // Update data state
+      this.state.set("dataState", "ready");
+      this.logger.info(`Successfully loaded ${sortedNodes.length} nodes`);
+      
+      return sortedNodes;
     } catch (error) {
-      console.error("❌ Data loading failed:", error);
-      const standardError = createStandardError(
-        getErrorMessage("dataLoadError"),
-        error,
-        error.status || "DATA_LOAD_ERROR"
-      );
-      logError(standardError, "DataLoader");
-      this.showError(standardError.message);
+      this.logger.warn("Data loading failed - continuing with empty data", error);
+      this.state.set("dataState", "ready");
+      this.state.set("dataError", {
+        message: error.message,
+        stack: error.stack,
+        time: new Date().toISOString()
+      });
+      
+      // Return empty array instead of throwing - app can continue without external data
+      return [];
     }
   }
 
   /**
-   * Setup accessibility features
+   * Process citizen nodes
+   */
+  processCitizenNodes(allNodes) {
+    const citizenNodes = allNodes.filter(
+      node => node.constellation === "qu-poxii" && node.metadata?.type === "citizen"
+    );
+    
+    if (citizenNodes.length > 0) {
+      this.logger.info(`Found ${citizenNodes.length} citizen files`);
+      this.state.set("citizenFiles", citizenNodes);
+    } else {
+      this.logger.info("No citizen files found");
+    }
+  }
+
+  /**
+   * Process session nodes
+   */
+  processSessionNodes(allNodes) {
+    const sessionNodes = allNodes.filter(
+      node => node.metadata?.type === "session"
+    );
+    
+    if (sessionNodes.length > 0) {
+      this.logger.info(`Found ${sessionNodes.length} session files`);
+      this.state.set("sessionFiles", sessionNodes);
+    } else {
+      this.logger.info("No session files found");
+    }
+  }
+
+  /**
+   * Set up accessibility features
    */
   setupAccessibility() {
-    // Focus management for single-page app
-    this.state.subscribe("currentView", (newView) => {
+    // Focus management for view changes
+    this.state.subscribe("currentView", newView => {
       // Announce view changes to screen readers
       const announcement = document.createElement("div");
       announcement.setAttribute("aria-live", "polite");
       announcement.setAttribute("aria-atomic", "true");
       announcement.className = "sr-only";
-      announcement.textContent = `Navigated to ${newView
-        .replace("-view", "")
-        .replace("-", " ")} section`;
-
+      announcement.textContent = `Navigated to ${newView.replace("-view", "").replace("-", " ")} section`;
+      
       document.body.appendChild(announcement);
-      setTimeout(() => document.body.removeChild(announcement), 1000);
+      setTimeout(() => {
+        if (document.body.contains(announcement)) {
+          document.body.removeChild(announcement);
+        }
+      }, 1000);
     });
   }
 
   /**
-   * Show loading screen
+   * Hide loading screen when initialization is complete
    */
-  showLoading() {
-    const loadingVeil = document.querySelector(getSelector("loadingVeil"));
+  hideLoadingScreen() {
+    const loadingVeil = document.querySelector("[data-js='loading-veil']");
     if (loadingVeil) {
-      loadingVeil.classList.remove("hidden");
-    }
-  }
-
-  /**
-   * Hide loading screen
-   */
-  hideLoading() {
-    const loadingVeil = document.querySelector(getSelector("loadingVeil"));
-    if (loadingVeil) {
+      // Add hidden class for CSS transition
       loadingVeil.classList.add("hidden");
+      loadingVeil.setAttribute("aria-hidden", "true");
+      
+      // Remove from DOM after transition completes
+      setTimeout(() => {
+        if (loadingVeil.parentNode) {
+          loadingVeil.parentNode.removeChild(loadingVeil);
+        }
+      }, 1000); // Match CSS transition duration
+      
+      this.logger.info("Loading screen hidden");
+    } else {
+      this.logger.warn("Loading screen element not found");
     }
   }
 
   /**
-   * Show error message
+   * Set error state on UI via class toggles
    */
-  showError(message) {
-    // Replace loading content with error
-    const loadingContent = document.querySelector(".loading-content");
-    if (loadingContent) {
-      loadingContent.innerHTML = getErrorTemplate("psionicFailure", {
-        message,
-      });
+  setErrorState(error) {
+    const errorMessage = error?.message || "Application error";
+    
+    // Hide loading screen and show error instead
+    this.hideLoadingScreen();
+    
+    // Find error container
+    const errorContainer = document.querySelector("[data-js='app-error']");
+    if (errorContainer) {
+      // Update error state via class and attributes
+      errorContainer.classList.add("is-visible");
+      errorContainer.setAttribute("data-state", "error");
+      
+      // Set message via text content
+      const messageEl = errorContainer.querySelector("[data-js='error-message']");
+      if (messageEl) messageEl.textContent = errorMessage;
     }
   }
 
@@ -394,44 +455,24 @@ export class NlomInterface {
   }
 
   /**
-   * Get specific subsystem
+   * Get subsystem by name
    */
   getSubsystem(name) {
     const subsystems = {
       state: this.state,
-      starfield: this.starfieldManager,
-      view: this.viewManager,
       router: this.router,
+      view: this.viewManager,
       nodes: this.nodeManager,
+      starfield: this.starfieldManager,
       clearance: this.clearanceManager,
-      documents: documentSystem.instance,
+      documents: this.documentSystem
     };
-
+    
     return subsystems[name];
   }
 
   /**
-   * Check if application is ready
-   */
-  isReady() {
-    return this.isInitialized;
-  }
-
-  /**
-   * Get performance information
-   */
-  getPerformanceInfo() {
-    return {
-      isInitialized: this.isInitialized,
-      starfield: this.starfieldManager?.getPerformanceStats(),
-      currentView: this.state.get("currentView"),
-      currentRoute: this.state.get("currentRoute"),
-      nodeCount: this.state.get("nodes")?.length || 0,
-    };
-  }
-
-  /**
-   * Navigate to a specific route
+   * Navigate to route
    */
   navigateTo(route) {
     if (this.router) {
@@ -440,42 +481,43 @@ export class NlomInterface {
   }
 
   /**
-   * Open a specific node by ID
+   * Open node by ID
    */
   openNode(nodeId) {
     const nodes = this.state.get("nodes");
     if (!nodes) return;
-
-    const node = nodes.find((n) => n.id === nodeId);
+    
+    const node = nodes.find(n => n.id === nodeId);
     if (node && this.nodeManager) {
       this.nodeManager.openNode(node);
     }
   }
 
   /**
-   * Cleanup resources
+   * Get performance information
+   */
+  getPerformanceInfo() {
+    return {
+      isInitialized: this.isInitialized,
+      currentView: this.state.get("currentView"),
+      currentRoute: this.state.get("currentRoute"),
+      nodeCount: this.state.get("nodes")?.length || 0,
+      starfield: this.starfieldManager?.getPerformanceStats()
+    };
+  }
+
+  /**
+   * Clean up resources
    */
   destroy() {
-    if (this.starfieldManager) {
-      this.starfieldManager.destroy();
-    }
-
-    if (this.nodeManager) {
-      this.nodeManager.destroy();
-    }
-
-    if (this.viewManager) {
-      this.viewManager.destroy();
-    }
-
-    if (this.router) {
-      this.router.destroy();
-    }
-
-    if (this.clearanceManager) {
-      this.clearanceManager.destroy();
-    }
-
-    console.log("Nlom Interface destroyed");
+    // Clean up subsystems in reverse order
+    if (this.router) this.router.destroy();
+    if (this.viewManager) this.viewManager.destroy();
+    if (this.starfieldManager) this.starfieldManager.destroy();
+    if (this.nodeManager) this.nodeManager.destroy();
+    if (this.documentSystem) this.documentSystem.destroy();
+    if (this.clearanceManager) this.clearanceManager.destroy();
+    
+    this.logger.info("Application destroyed");
   }
 }

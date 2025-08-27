@@ -1,19 +1,30 @@
 /**
- * Router System for SPA Navigation
+ * Router System
  * Handles route changes, navigation, and view transitions
+ * 
+ * Provides centralized navigation control with no direct DOM styling
  */
 
-import { ROUTES, getSelector } from "../config.js";
-import { EventUtils } from "./shared-utilities.js";
+import { CONFIG } from "../config.js";
+import { Logger, EventUtils } from "./shared-utilities.js";
 
 export class Router {
+  /**
+   * @param {Object} state - Application state manager
+   * @param {Object} viewManager - View orchestration system
+   */
   constructor(state, viewManager) {
     this.state = state;
     this.viewManager = viewManager;
+    this.logger = new Logger("Router");
+    
+    // Setup event listeners
     this.setupEventListeners();
-
-    // Handle initial route
-    this.handleRouteChange();
+    
+    // Handle initial route after a brief delay to ensure everything is ready
+    setTimeout(() => {
+      this.handleRouteChange();
+    }, 100);
   }
 
   /**
@@ -25,61 +36,58 @@ export class Router {
       this.handleRouteChange();
     });
 
-    // Handle cluster navigation in flowing 2D mode
-    document.addEventListener("click", (event) => {
-      if (
-        event.target.matches(".liquid-node") ||
-        event.target.closest(".liquid-node")
-      ) {
-        const node = event.target.closest(".liquid-node");
-        const cluster = node.dataset.cluster;
-        this.navigate(`#/${cluster}`);
-      }
-    });
-
-    // Handle protocol emblem click for home navigation
-    document.addEventListener("click", (event) => {
-      if (
-        event.target.matches(getSelector("protocolHomeButton")) ||
-        event.target.closest(getSelector("protocolHomeButton"))
-      ) {
-        this.navigate("#/");
-      }
-    });
-
-    // Handle return navigation buttons
-    document.addEventListener("click", (event) => {
-      if (event.target.closest(".flow-return")) {
-        const button = event.target.closest(".flow-return");
-        const returnTo = button.dataset.returnTo;
-
-        if (returnTo === "starfield") {
-          this.navigate("#/");
-        }
-      }
-    });
-
-    // Handle keyboard navigation for return buttons
-    document.addEventListener("keydown", (event) => {
-      if (
-        event.target.matches(".flow-return") &&
-        EventUtils.isActivationKey(event)
-      ) {
+    // Handle data-nav elements
+    document.addEventListener("click", event => {
+      // Universal navigation attributes
+      const navElement = event.target.closest("[data-nav]");
+      if (navElement) {
         event.preventDefault();
-        const returnTo = event.target.dataset.returnTo;
-
+        const target = navElement.getAttribute("data-nav");
+        this.navigate(target);
+        return;
+      }
+      
+      // Cluster navigation
+      const clusterNode = event.target.closest("[data-cluster]");
+      if (clusterNode) {
+        const cluster = clusterNode.getAttribute("data-cluster");
+        if (cluster) {
+          this.navigate(`#/${cluster}`);
+          return;
+        }
+      }
+      
+      // Home navigation via protocol emblem
+      const homeButton = event.target.closest("[data-component='home-button']");
+      if (homeButton) {
+        this.navigate("#/");
+        return;
+      }
+      
+      // Return navigation buttons
+      const returnButton = event.target.closest(".flow-return");
+      if (returnButton) {
+        const returnTo = returnButton.getAttribute("data-return-to");
         if (returnTo === "starfield") {
           this.navigate("#/");
         }
       }
     });
 
-    // Handle keyboard navigation for protocol home button
-    document.addEventListener("keydown", (event) => {
-      if (
-        event.target.matches(getSelector("protocolHomeButton")) &&
-        EventUtils.isActivationKey(event)
-      ) {
+    // Handle keyboard navigation
+    document.addEventListener("keydown", event => {
+      // Return button keyboard activation
+      if (event.target.matches(".flow-return") && EventUtils.isActivationKey(event)) {
+        event.preventDefault();
+        const returnTo = event.target.getAttribute("data-return-to");
+        if (returnTo === "starfield") {
+          this.navigate("#/");
+        }
+      }
+      
+      // Home button keyboard activation
+      if (event.target.matches("[data-component='home-button']") && 
+          EventUtils.isActivationKey(event)) {
         event.preventDefault();
         this.navigate("#/");
       }
@@ -88,17 +96,25 @@ export class Router {
 
   /**
    * Navigate to a route
+   * @param {string} path - Route path
    */
-  navigate(hash) {
+  navigate(path) {
     try {
-      if (hash.startsWith("#")) {
-        window.location.hash = hash;
+      // Ensure proper hash format
+      if (path.startsWith("#")) {
+        window.location.hash = path;
       } else {
-        window.location.hash = `#${hash}`;
+        window.location.hash = `#${path}`;
       }
+      
+      // Track navigation in state
+      this.state.set("lastNavigation", {
+        path,
+        timestamp: Date.now()
+      });
     } catch (error) {
-      console.error("Navigation error:", error, "Hash:", hash);
-      // Fallback to home on navigation error
+      this.logger.error("Navigation error", error);
+      // Fall back to home on navigation error
       window.location.hash = "#/";
     }
   }
@@ -110,33 +126,37 @@ export class Router {
     try {
       const hash = window.location.hash || "#/";
       const route = hash.replace("#", "");
-
+      
+      // Update current route in state
       this.state.set("currentRoute", route);
-
+      
       // Ensure view manager is available
       if (!this.viewManager) {
-        console.warn("ViewManager not available, deferring route change");
+        this.logger.warn("ViewManager not available, deferring route change");
         return;
       }
-
-      // Handle view transitions - pure mind web navigation
+      
+      // Handle view transitions based on route
       if (route === "/") {
         this.viewManager.showStarfield();
       } else {
         const constellation = route.substring(1); // Remove leading slash
-
-        // Validate constellation name to prevent null/undefined errors
+        
+        // Validate constellation name to prevent errors
         if (constellation && constellation.trim() !== "") {
-          console.log("Navigating to constellation:", constellation);
+          this.logger.info(`Navigating to constellation: ${constellation}`);
           this.viewManager.showConstellation(constellation);
         } else {
-          console.warn("Invalid constellation route:", route);
+          this.logger.warn(`Invalid constellation route: ${route}`);
           this.viewManager.showStarfield();
         }
       }
+      
+      // Trigger route change event for analytics or other systems
+      this.triggerRouteChangeEvent(route);
     } catch (error) {
-      console.error("Route change error:", error);
-      // Fallback to showing starfield
+      this.logger.error("Route change error", error);
+      // Fall back to showing starfield
       if (this.viewManager) {
         this.viewManager.showStarfield();
       }
@@ -144,24 +164,31 @@ export class Router {
   }
 
   /**
+   * Trigger custom event for route change
+   * @param {string} route - Current route
+   */
+  triggerRouteChangeEvent(route) {
+    const event = new CustomEvent("app:route:changed", {
+      detail: { route, timestamp: Date.now() }
+    });
+    document.dispatchEvent(event);
+  }
+
+  /**
    * Get current route
+   * @returns {string} Current route
    */
   getCurrentRoute() {
     return this.state.get("currentRoute");
   }
 
   /**
-   * Get current view
-   */
-  getCurrentView() {
-    return this.state.get("currentView");
-  }
-
-  /**
    * Check if route is valid
+   * @param {string} route - Route to check
+   * @returns {boolean} Whether route is valid
    */
   isValidRoute(route) {
-    return ROUTES.hasOwnProperty(route);
+    return CONFIG.routes.hasOwnProperty(route);
   }
 
   /**
@@ -172,11 +199,9 @@ export class Router {
   }
 
   /**
-   * Clean up event listeners
+   * Clean up resources
    */
   destroy() {
-    // Note: We don't remove these listeners as they're global and may be used by other parts
-    // In a real implementation, we'd need a more sophisticated event management system
-    console.log("Router destroyed");
+    this.logger.info("Router destroyed");
   }
 }

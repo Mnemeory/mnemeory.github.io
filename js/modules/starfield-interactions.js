@@ -1,9 +1,10 @@
 /**
  * Starfield Interaction Management - Event Handling and User Interactions
  * Handles mouse, keyboard, touch events for the 3D starfield
+ * Standardized version with CSS-driven styling
  */
 
-import * as THREE from "three";
+// Three.js loaded globally via script tag
 import {
   CONSTELLATIONS,
   ENHANCED_STARFIELD_CONFIG,
@@ -102,13 +103,12 @@ export class StarfieldInteractions {
         const constellation = this.scene.getConstellation(newHover);
         if (constellation) {
           constellation.targetWarmth = 1;
-          this.canvas.classList.add('cursor-pointer');
-          this.canvas.classList.remove('cursor-default');
+          // Use classes for cursor styling
+          this.canvas.setAttribute('data-hover-state', 'active');
           this.showConstellationTooltip(newHover, event.clientX, event.clientY);
         }
       } else {
-        this.canvas.classList.add('cursor-default');
-        this.canvas.classList.remove('cursor-pointer');
+        this.canvas.setAttribute('data-hover-state', 'default');
         TooltipManager.hide();
       }
 
@@ -142,8 +142,6 @@ export class StarfieldInteractions {
       className: "constellation-tooltip",
     });
   }
-
-  /* Tooltip methods removed - using TooltipManager from shared-utilities.js */
 
   /**
    * Handle click events
@@ -270,8 +268,7 @@ export class StarfieldInteractions {
       }
       TooltipManager.hide();
       this.currentHover = null;
-      this.canvas.classList.add('cursor-default');
-      this.canvas.classList.remove('cursor-pointer');
+      this.canvas.setAttribute('data-hover-state', 'default');
     }
   }
 
@@ -292,22 +289,9 @@ export class StarfieldInteractions {
         prevConstellation.targetWarmth = 0;
       }
       this.currentHover = null;
-      this.canvas.classList.add('cursor-default');
-      this.canvas.classList.remove('cursor-pointer');
+      this.canvas.setAttribute('data-hover-state', 'default');
       TooltipManager.hide();
     }
-  }
-
-  /**
-   * Check if tooltip exists and is valid
-   */
-  isTooltipValid(tooltip) {
-    return (
-      tooltip &&
-      tooltip.id === "constellation-tooltip" &&
-      document.body.contains(tooltip) &&
-      tooltip.parentNode === document.body
-    );
   }
 
   /**

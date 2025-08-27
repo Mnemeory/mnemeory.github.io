@@ -1,6 +1,7 @@
 /**
  * Citizen Management UI for Qu'Poxii Constellation
  * Handles the interface for managing Skrell citizen records
+ * Standardized version with CSS-driven styling
  */
 
 import { CitizenManager } from "./citizen-manager.js";
@@ -66,13 +67,13 @@ export class CitizenUI {
           <div class="session-info">
             <h3>${SITE_CONFIG.interfaceText.citizen.headers.session} ${this.citizenManager.currentSession.id}</h3>
             <div class="session-controls">
-              <button type="button" class="neural-button" id="set-round-btn">
+              <button type="button" data-action="set-round">
                 ${SITE_CONFIG.interfaceText.citizen.buttons.setRound}
               </button>
-              <button type="button" class="neural-button" id="export-session-btn">
+              <button type="button" data-action="export-session">
                 ${SITE_CONFIG.interfaceText.citizen.buttons.exportSession}
               </button>
-              <button type="button" class="neural-button neural-button--warning" id="clear-session-btn">
+              <button type="button" data-action="clear-session" data-state="warning">
                 ${SITE_CONFIG.interfaceText.citizen.buttons.newSession}
               </button>
             </div>
@@ -80,12 +81,12 @@ export class CitizenUI {
         </div>
 
         <div class="citizen-navigation">
-          <button type="button" class="neural-button nav-btn ${
-            this.currentView === "overview" ? "active" : ""
-          }" data-view="overview">${SITE_CONFIG.interfaceText.citizen.navigation.overview}</button>
-          <button type="button" class="neural-button nav-btn ${
-            this.currentView === "add-citizen" ? "active" : ""
-          }" data-view="add-citizen">${SITE_CONFIG.interfaceText.citizen.navigation.addCitizen}</button>
+          <button type="button" class="nav-btn" data-view="overview" data-active="${
+            this.currentView === "overview"
+          }">${SITE_CONFIG.interfaceText.citizen.navigation.overview}</button>
+          <button type="button" class="nav-btn" data-view="add-citizen" data-active="${
+            this.currentView === "add-citizen"
+          }">${SITE_CONFIG.interfaceText.citizen.navigation.addCitizen}</button>
         </div>
 
         <div class="citizen-content">
@@ -147,7 +148,7 @@ export class CitizenUI {
                 <p class="session-note">This ensures proper logging and maintains Federation protocols for citizen welfare operations.</p>
               </div>
 
-              <button type="button" class="neural-button neural-button--large" id="start-new-session-btn">
+              <button type="button" data-action="start-session">
                 <span class="btn-icon">⬢</span>
                 Initialize Diplomatic Session
               </button>
@@ -220,7 +221,7 @@ export class CitizenUI {
           <div class="citizens-list">
             ${
               citizens.length === 0
-                ? `<p class=\"empty-state\">${SITE_CONFIG.interfaceText.citizen.messages.noCitizens}</p>`
+                ? `<p data-state="empty">${SITE_CONFIG.interfaceText.citizen.messages.noCitizens}</p>`
                 : citizens
                     .map((citizen) => this.renderCitizenCard(citizen))
                     .join("")
@@ -231,7 +232,7 @@ export class CitizenUI {
         <div class="session-files-panel">
           <h4>${SITE_CONFIG.interfaceText.citizen.headers.sessionFiles}</h4>
           <div class="session-files-bubbles" id="session-files-bubbles">
-            <p class="empty-state">Session files will be populated dynamically</p>
+            <p data-state="empty">Session files will be populated dynamically</p>
           </div>
         </div>
 
@@ -240,7 +241,7 @@ export class CitizenUI {
           <div class="activity-log">
             ${
               recentLogs.length === 0
-                ? `<p class=\"empty-state\">${SITE_CONFIG.interfaceText.citizen.messages.noActivity}</p>`
+                ? `<p data-state="empty">${SITE_CONFIG.interfaceText.citizen.messages.noActivity}</p>`
                 : recentLogs
                     .map(
                       (log) => `
@@ -258,7 +259,7 @@ export class CitizenUI {
         <div class="files-panel">
           <h4>Available Citizen Files</h4>
           <div class="citizen-files-bubbles" id="citizen-files-bubbles">
-            <p class="empty-state">Citizen files will be populated by node manager</p>
+            <p data-state="empty">Citizen files will be populated by node manager</p>
           </div>
         </div>
       </div>
@@ -269,12 +270,17 @@ export class CitizenUI {
    * Render citizen card
    */
   renderCitizenCard(citizen) {
-    const sciClass =
-      citizen.sciScore >= CONSTANTS.SCI_PRIMARY_THRESHOLD
-        ? "primary"
-        : citizen.sciScore >= CONSTANTS.SCI_SECONDARY_THRESHOLD
-          ? "secondary"
-          : "tertiary";
+    const sciValue = parseFloat(citizen.sciScore);
+    let sciClass = "";
+    
+    if (sciValue >= CONSTANTS.SCI_PRIMARY_THRESHOLD) {
+      sciClass = "primary";
+    } else if (sciValue >= CONSTANTS.SCI_SECONDARY_THRESHOLD) {
+      sciClass = "secondary";
+    } else {
+      sciClass = "tertiary";
+    }
+    
     const behavioralTags = citizen.behavioralTags || [];
 
     return `
@@ -283,13 +289,13 @@ export class CitizenUI {
           <h5 class="citizen-name">${this.citizenManager.getFullName(
             citizen
           )}</h5>
-          <span class="sci-badge sci-${sciClass}">${citizen.sciScore}/10</span>
+          <span class="sci-badge" data-sci-level="${sciClass}">${sciValue}/10</span>
         </div>
         <div class="citizen-card-info">
           <p class="citizen-status">${citizen.citizenStatus}</p>
           ${
             citizen.location
-              ? `<p class="citizen-location">📍 ${citizen.location}</p>`
+              ? `<p class="citizen-location" data-icon="location">${citizen.location}</p>`
               : ""
           }
           ${
@@ -305,11 +311,11 @@ export class CitizenUI {
           }
         </div>
         <div class="citizen-card-actions">
-          <button type="button" class="neural-button neural-button--small"
+          <button type="button" data-action="view-citizen" 
                   data-citizen-id="${citizen.id}">View</button>
-          <button type="button" class="neural-button neural-button--small"
+          <button type="button" data-action="edit-citizen"
                   data-citizen-id="${citizen.id}">Edit</button>
-          <button type="button" class="neural-button neural-button--small neural-button--success"
+          <button type="button" data-action="print-citizen" data-state="success"
                   data-citizen-id="${citizen.id}">Print</button>
         </div>
       </div>
@@ -351,12 +357,12 @@ export class CitizenUI {
               <small>Scale: 0.00 - 10.00</small>
             </div>
 
-              <div class="form-group">
-                <label for="citizen-status">Citizen Status *</label>
-                <select id="citizen-status" name="citizenStatus" required>
-                  ${this.renderStatusOptions()}
-                </select>
-              </div>
+            <div class="form-group">
+              <label for="citizen-status">Citizen Status *</label>
+              <select id="citizen-status" name="citizenStatus" required>
+                ${this.renderStatusOptions()}
+              </select>
+            </div>
 
             <div class="form-group">
               <label for="location">Current Location</label>
@@ -384,10 +390,10 @@ export class CitizenUI {
           </div>
 
           <div class="form-actions">
-            <button type="button" class="neural-button" id="cancel-add-btn">
+            <button type="button" data-action="cancel-add">
               Cancel
             </button>
-            <button type="submit" class="neural-button">
+            <button type="submit">
               Register Citizen
             </button>
           </div>
@@ -476,17 +482,17 @@ export class CitizenUI {
             <h5>Add Log Entry</h5>
             <div class="form-group">
               <input type="text" id="new-log-entry" placeholder="Add new log entry for this citizen...">
-              <button type="button" class="neural-button" id="add-log-btn">
+              <button type="button" data-action="add-log">
                 Add Entry
               </button>
             </div>
           </div>
 
           <div class="form-actions">
-            <button type="button" class="neural-button" id="cancel-edit-btn">
+            <button type="button" data-action="cancel-edit">
               Cancel
             </button>
-            <button type="submit" class="neural-button">
+            <button type="submit">
               Update Record
             </button>
           </div>
@@ -504,23 +510,35 @@ export class CitizenUI {
 
     const availableTags = this.citizenManager.getAvailableBehavioralTags();
     const citizenTags = citizen.behavioralTags || [];
+    
+    // Determine SCI class
+    const sciValue = parseFloat(citizen.sciScore);
+    let sciClass = "";
+    
+    if (sciValue >= 7) {
+      sciClass = "primary";
+    } else if (sciValue >= 4) {
+      sciClass = "secondary";
+    } else {
+      sciClass = "tertiary";
+    }
 
     return `
       <div class="citizen-view">
         <div class="citizen-view-header">
           <h4>Citizen Record: ${this.citizenManager.getFullName(citizen)}</h4>
           <div class="view-actions">
-            <button type="button" class="neural-button" id="edit-from-view-btn" data-citizen-id="${
+            <button type="button" data-action="edit-from-view" data-citizen-id="${
               citizen.id
             }">
               Edit Record
             </button>
-            <button type="button" class="neural-button neural-button--success" id="print-from-view-btn" data-citizen-id="${
+            <button type="button" data-action="print-from-view" data-state="success" data-citizen-id="${
               citizen.id
             }">
               Print Record
             </button>
-            <button type="button" class="neural-button" id="back-to-overview-btn">
+            <button type="button" data-action="back-to-overview">
               Back to Overview
             </button>
           </div>
@@ -541,13 +559,7 @@ export class CitizenUI {
             </div>
             <div class="detail-item">
               <span class="detail-label">Social Compatibility Index:</span>
-              <span class="detail-value sci-${
-                citizen.sciScore >= 7
-                  ? "primary"
-                  : citizen.sciScore >= 4
-                    ? "secondary"
-                    : "tertiary"
-              }">${citizen.sciScore}/10.00</span>
+              <span class="detail-value" data-sci-level="${sciClass}">${sciValue}/10.00</span>
             </div>
             <div class="detail-item">
               <span class="detail-label">Citizen Status:</span>
@@ -588,7 +600,7 @@ export class CitizenUI {
               <div class="tags-list">
                 ${
                   citizenTags.length === 0
-                    ? '<p class="empty-state">No behavioral tags assigned.</p>'
+                    ? '<p data-state="empty">No behavioral tags assigned.</p>'
                     : citizenTags
                         .map(
                           (tag) => `
@@ -597,7 +609,7 @@ export class CitizenUI {
                       <span class="tag-description">${
                         availableTags[tag] || ""
                       }</span>
-                      <button type="button" class="remove-tag-btn" data-tag="${tag}" data-citizen-id="${
+                      <button type="button" data-action="remove-tag" data-tag="${tag}" data-citizen-id="${
                         citizen.id
                       }">×</button>
                     </div>
@@ -620,7 +632,7 @@ export class CitizenUI {
                   )
                   .join("")}
               </select>
-              <button type="button" class="neural-button neural-button--small" id="add-tag-btn" data-citizen-id="${
+              <button type="button" data-action="add-tag" data-citizen-id="${
                 citizen.id
               }">
                 Add Tag
@@ -634,7 +646,7 @@ export class CitizenUI {
               ${
                 citizen.notes
                   ? `<p>${citizen.notes}</p>`
-                  : '<p class="empty-state">No administrative notes.</p>'
+                  : '<p data-state="empty">No administrative notes.</p>'
               }
             </div>
           </div>
@@ -644,7 +656,7 @@ export class CitizenUI {
             <div class="citizen-activity-log">
               ${
                 citizen.logEntries.length === 0
-                  ? '<p class="empty-state">No activity logged for this citizen.</p>'
+                  ? '<p data-state="empty">No activity logged for this citizen.</p>'
                   : citizen.logEntries
                       .map(
                         (entry) => `
@@ -669,95 +681,93 @@ export class CitizenUI {
   setupEventListeners() {
     if (!this.container) return;
 
-    // Navigation
+    // Use event delegation for all button clicks
     this.container.addEventListener("click", (e) => {
-      if (e.target.matches(".nav-btn")) {
-        this.currentView = e.target.dataset.view;
+      // Check if the clicked element has a data-action attribute
+      const actionElement = e.target.closest("[data-action]");
+      if (actionElement) {
+        const action = actionElement.dataset.action;
+        const citizenId = actionElement.dataset.citizenId;
+        
+        // Handle actions based on their type
+        switch (action) {
+          case "start-session":
+            this.handleStartNewSession();
+            break;
+            
+          case "set-round":
+            this.handleSetRound();
+            break;
+            
+          case "export-session":
+            this.citizenManager.exportSession();
+            break;
+            
+          case "clear-session":
+            this.handleClearSession();
+            break;
+            
+          case "view-citizen":
+            this.viewCitizen(citizenId);
+            break;
+            
+          case "edit-citizen":
+          case "edit-from-view":
+            this.editCitizen(citizenId);
+            break;
+            
+          case "print-citizen":
+          case "print-from-view":
+            this.printCitizenRecord(citizenId);
+            break;
+            
+          case "cancel-add":
+            this.currentView = "overview";
+            this.render();
+            break;
+            
+          case "cancel-edit":
+            this.currentView = "overview";
+            this.editingCitizenId = null;
+            this.render();
+            break;
+            
+          case "add-log":
+            this.handleAddLogEntry();
+            break;
+            
+          case "add-tag":
+            this.handleAddBehavioralTag(citizenId);
+            break;
+            
+          case "remove-tag":
+            this.handleRemoveBehavioralTag(
+              actionElement.dataset.tag,
+              citizenId
+            );
+            break;
+            
+          case "back-to-overview":
+            this.currentView = "overview";
+            this.editingCitizenId = null;
+            this.render();
+            break;
+            
+          case "view-file":
+            this.viewCitizenFile(actionElement.dataset.fileId);
+            break;
+            
+          case "import-file":
+            this.importCitizenFile(actionElement.dataset.fileId);
+            break;
+        }
+      }
+      
+      // Navigation tabs
+      const navButton = e.target.closest("[data-view]");
+      if (navButton) {
+        this.currentView = navButton.dataset.view;
         this.render();
-      }
-
-      // Session gate controls
-      if (e.target.matches("#start-new-session-btn")) {
-        this.handleStartNewSession();
-      }
-
-      // Session controls
-      if (e.target.matches("#set-round-btn")) {
-        this.handleSetRound();
-      }
-
-      if (e.target.matches("#export-session-btn")) {
-        this.citizenManager.exportSession();
-      }
-
-      if (e.target.matches("#clear-session-btn")) {
-        this.handleClearSession();
-      }
-
-      // Citizen actions
-      if (e.target.matches(".view-citizen-btn")) {
-        this.viewCitizen(e.target.dataset.citizenId);
-      }
-
-      if (e.target.matches(".edit-citizen-btn")) {
-        this.editCitizen(e.target.dataset.citizenId);
-      }
-
-      if (e.target.matches(".print-citizen-btn")) {
-        this.printCitizenRecord(e.target.dataset.citizenId);
-      }
-
-      // Form actions
-      if (e.target.matches("#cancel-add-btn")) {
-        this.currentView = "overview";
-        this.render();
-      }
-
-      if (e.target.matches("#cancel-edit-btn")) {
-        this.currentView = "overview";
-        this.editingCitizenId = null;
-        this.render();
-      }
-
-      if (e.target.matches("#add-log-btn")) {
-        this.handleAddLogEntry();
-      }
-
-      // Behavioral tag management
-      if (e.target.matches("#add-tag-btn")) {
-        this.handleAddBehavioralTag();
-      }
-
-      if (e.target.matches(".remove-tag-btn")) {
-        this.handleRemoveBehavioralTag(
-          e.target.dataset.tag,
-          e.target.dataset.citizenId
-        );
-      }
-
-      // View citizen navigation
-      if (e.target.matches("#back-to-overview-btn")) {
-        this.currentView = "overview";
-        this.editingCitizenId = null;
-        this.render();
-      }
-
-      if (e.target.matches("#edit-from-view-btn")) {
-        this.editCitizen(e.target.dataset.citizenId);
-      }
-
-      if (e.target.matches("#print-from-view-btn")) {
-        this.printCitizenRecord(e.target.dataset.citizenId);
-      }
-
-      // File viewing
-      if (e.target.matches(".view-file-btn")) {
-        this.viewCitizenFile(e.target.dataset.fileId);
-      }
-
-      // File importing
-      if (e.target.matches(".import-file-btn")) {
-        this.importCitizenFile(e.target.dataset.fileId);
       }
     });
 
@@ -915,11 +925,9 @@ export class CitizenUI {
         .querySelector(".citizen-name")
         .textContent.toLowerCase();
       if (name.includes(query.toLowerCase())) {
-        card.classList.add('visible');
-        card.classList.remove('hidden');
+        card.setAttribute('data-visibility', 'visible');
       } else {
-        card.classList.add('hidden');
-        card.classList.remove('visible');
+        card.setAttribute('data-visibility', 'hidden');
       }
     });
   }
@@ -927,14 +935,14 @@ export class CitizenUI {
   /**
    * Handle adding behavioral tag
    */
-  handleAddBehavioralTag() {
+  handleAddBehavioralTag(citizenId) {
     const selector = this.container.querySelector("#tag-selector");
     const tagName = selector.value;
 
-    if (!tagName || !this.editingCitizenId) return;
+    if (!tagName || !citizenId) return;
 
     const success = this.citizenManager.addBehavioralTag(
-      this.editingCitizenId,
+      citizenId,
       tagName
     );
     if (success) {

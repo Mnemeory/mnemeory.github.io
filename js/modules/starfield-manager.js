@@ -1,301 +1,423 @@
 /**
- * Starfield Manager - Main Orchestrator for 3D Starfield System
- * Coordinates scene and interactions
+ * Starfield Management System
+ * Coordinates starfield visualization and interactions
+ * 
+ * Handles WebGL rendering without manipulating DOM styles directly.
+ * Visual updates are handled via class toggles and data attributes.
  */
 
-import { StarfieldScene } from "./starfield-scene.js";
-import { StarfieldInteractions } from "./starfield-interactions.js";
-import {
-  ENHANCED_STARFIELD_CONFIG,
-  CONSTANTS,
-  SITE_CONFIG,
-  getSelector,
-  createStandardError,
-  logError,
-  getPerformanceConfig,
-  // shouldEnablePerformanceMode, // No longer used - disabled performance mode switching
-} from "../config.js";
-
-const LOCAL_CONFIG = ENHANCED_STARFIELD_CONFIG;
+import { CONFIG } from "../config.js";
+import { Logger, AnimationUtils } from "./shared-utilities.js";
 
 export class StarfieldManager {
-  constructor() {
+  /**
+   * @param {Object} state - Application state manager
+   */
+  constructor(state) {
+    this.state = state;
+    this.logger = new Logger("StarfieldManager");
+    
+    // Core components
     this.scene = null;
     this.interactions = null;
+    
+    // WebGL canvas
     this.canvas = null;
     this.container = null;
-
-    // State
+    
+    // State tracking
     this.isInitialized = false;
-    this.is3DEnabled = true;
-    this.animationId = null;
-
+    this.isRendering = false;
+    this.isVisible = false;
+    this.is3DEnabled = CONFIG.env.features.starfield3D;
+    
     // Performance monitoring
-    this.lastFrameTime = 0;
-    this.frameCount = 0;
-    this.performanceMode = false;
-
-    // Event handlers
-    this.onResize = this.handleResize.bind(this);
-    this.onVisibilityChange = this.handleVisibilityChange.bind(this);
-
-    // Check WebGL support
-    this.is3DEnabled = this.checkWebGLSupport();
-    console.log("WebGL support check:", {
-      is3DEnabled: this.is3DEnabled,
-    });
+    this.performanceStats = {
+      fps: 0,
+      frameTime: 0,
+      frameCount: 0,
+      lastFrameTime: 0
+    };
+    
+    // Animation frame handling
+    this.animationFrameId = null;
+    
+    // Callback for cluster activation
+    this.clusterActivationCallback = null;
   }
 
   /**
    * Check WebGL support
+   * @returns {boolean} Whether WebGL is supported
    */
   checkWebGLSupport() {
     try {
-      const canvas = document.createElement('canvas');
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-      return !!gl;
-    } catch (e) {
+      const canvas = document.createElement("canvas");
+      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+      return gl !== null;
+    } catch (error) {
       return false;
     }
   }
 
   /**
-   * Initialize the starfield system
+   * Initialize starfield
+   * @param {string} containerSelector - Container selector
+   * @returns {Promise<boolean>} Initialization success
    */
-  async init(containerSelector = getSelector("starfieldContainer")) {
+  async init(containerSelector = "[data-component='starfield-container']") {
     try {
-      console.log("Initializing Starfield System...");
-
+      // Check if already initialized
+      if (this.isInitialized) {
+        this.logger.warn("Starfield already initialized");
+        return true;
+      }
+      
+      this.logger.info("Initializing starfield");
+      
+      // Find container
       this.container = document.querySelector(containerSelector);
-      this.canvas = document.querySelector(getSelector("starfieldCanvas"));
-
-      console.log("Starfield elements found:", {
-        container: !!this.container,
-        canvas: !!this.canvas,
-        containerSelector,
-        canvasSelector: getSelector("starfieldCanvas")
-      });
-
       if (!this.container) {
-        console.warn("❌ Starfield container not found with selector:", containerSelector);
-        return false;
+        throw new Error(`Starfield container not found: ${containerSelector}`);
       }
-
-      if (!this.canvas) {
-        console.warn("❌ Starfield canvas not found with selector:", getSelector("starfieldCanvas"));
-        return this.initFallback2D();
+      
+      // Check WebGL support
+      const hasWebGL = this.checkWebGLSupport();
+      if (!hasWebGL) {
+        throw new Error("WebGL not supported");
       }
-
-      if (!this.is3DEnabled) {
-        console.log("⚠️ WebGL not supported, falling back to 2D");
-        return this.initFallback2D();
+      
+      // Update container state
+      this.container.classList.add("is-loading");
+      this.container.setAttribute("data-state", "loading");
+      
+      // Create canvas
+      this.canvas = document.createElement("canvas");
+      this.canvas.className = "starfield-canvas";
+      this.canvas.setAttribute("aria-label", "Neural Starfield Visualization");
+      this.canvas.setAttribute("role", "img");
+      this.container.appendChild(this.canvas);
+      
+      // Initialize 3D scene
+      if (this.is3DEnabled) {
+        await this.init3D();
+      } else {
+        this.initFallback();
       }
-
-      console.log("✅ WebGL supported, initializing 3D starfield");
-      const result = await this.init3D();
-      console.log("3D starfield initialization result:", result);
-      return result;
+      
+      // Setup event listeners
+      this.setupEventListeners();
+      
+      // Start animation loop
+      this.startAnimation();
+      
+      // Update container state
+      this.container.classList.remove("is-loading");
+      this.container.classList.add("is-ready");
+      this.container.setAttribute("data-state", "ready");
+      
+      // Mark as initialized
+      this.isInitialized = true;
+      this.isVisible = true;
+      
+      // Update state
+      if (this.state) {
+        this.state.set("starfieldReady", true);
+      }
+      
+      this.logger.info("Starfield initialization complete");
+      return true;
     } catch (error) {
-      console.error("❌ Starfield initialization failed:", error);
-      const standardError = createStandardError(
-        "Starfield initialization failed",
-        error,
-        "STARFIELD_INIT_ERROR"
-      );
-      logError(standardError, "StarfieldManager");
+      this.logger.error("Failed to initialize starfield", error);
+      
+      // Show error state via class toggle
+      if (this.container) {
+        this.container.classList.remove("is-loading");
+        this.container.classList.add("is-error");
+        this.container.setAttribute("data-state", "error");
+        this.container.setAttribute("data-error", error.message);
+      }
+      
+      // Update state
+      if (this.state) {
+        this.state.set("starfieldReady", false);
+        this.state.set("starfieldError", {
+          message: error.message,
+          stack: error.stack,
+          time: new Date().toISOString()
+        });
+      }
+      
       return false;
     }
   }
 
   /**
    * Initialize 3D starfield
+   * @returns {Promise<void>} Initialization promise
    */
   async init3D() {
     try {
-      // Create and initialize scene
-      console.log("Creating StarfieldScene...");
+      this.logger.info("Initializing 3D starfield");
+      
+      // Import Three.js components dynamically
+      const [
+        { StarfieldScene }, 
+        { StarfieldInteractions }
+      ] = await Promise.all([
+        import("./starfield-scene.js"),
+        import("./starfield-interactions.js")
+      ]);
+      
+      // Create scene
       this.scene = new StarfieldScene();
-      console.log("Initializing scene with canvas and container...");
-      const sceneInitialized = this.scene.init(this.canvas, this.container);
-
-      if (!sceneInitialized) {
-        throw new Error("Scene initialization failed");
-      }
-
-      console.log("Scene initialized successfully");
-
-      // Create and initialize interactions
-      console.log("Creating StarfieldInteractions...");
+      await this.scene.init(this.canvas, this.container);
+      
+      // Create interactions
       this.interactions = new StarfieldInteractions(this.scene, this.canvas);
-      console.log("Initializing interactions...");
       this.interactions.init();
-      console.log("Interactions initialized successfully");
-
-      // Setup event listeners
-      console.log("Setting up event listeners...");
-      this.setupEventListeners();
-
-      // Start animation loop
-      console.log("Starting animation loop...");
-      this.startAnimation();
-
-      this.isInitialized = true;
-      console.log("3D Starfield initialized successfully");
-      console.log("Final initialization state:", {
-        isInitialized: this.isInitialized,
-        is3DEnabled: this.is3DEnabled,
-        scene: !!this.scene,
-        interactions: !!this.interactions,
-        animationId: this.animationId,
+      
+      // Connect interactions to callback
+      this.interactions.setClusterActivationCallback((cluster) => {
+        if (this.clusterActivationCallback) {
+          this.clusterActivationCallback(cluster);
+        }
       });
-      return true;
+      
+      this.logger.info("3D starfield initialized");
     } catch (error) {
-      const standardError = createStandardError(
-        "3D initialization failed",
-        error,
-        "STARFIELD_3D_ERROR"
-      );
-      logError(standardError, "StarfieldManager");
-      return false;
+      this.logger.error("Failed to initialize 3D starfield", error);
+      
+      // Fall back to 2D mode
+      this.logger.info("Falling back to 2D mode");
+      this.is3DEnabled = false;
+      this.initFallback();
     }
   }
 
-
+  /**
+   * Initialize fallback 2D starfield
+   */
+  initFallback() {
+    this.logger.info("Initializing 2D starfield");
+    
+    // Create CSS-based starfield
+    const starsContainer = document.createElement("div");
+    starsContainer.className = "stars-fallback";
+    
+    // Create star layers with different parallax speeds
+    for (let i = 1; i <= 3; i++) {
+      const starLayer = document.createElement("div");
+      starLayer.className = `star-layer star-layer-${i}`;
+      starsContainer.appendChild(starLayer);
+    }
+    
+    // Create constellation markers
+    const constellations = Object.keys(CONFIG.constellations);
+    constellations.forEach((constellation, index) => {
+      const marker = document.createElement("button");
+      marker.className = "constellation-marker";
+      marker.setAttribute("data-constellation", constellation);
+      marker.setAttribute("aria-label", CONFIG.constellations[constellation].name);
+      
+      // Position marker (CSS handles actual positioning)
+      marker.setAttribute("data-position", index);
+      
+      // Add click handler
+      marker.addEventListener("click", () => {
+        if (this.clusterActivationCallback) {
+          this.clusterActivationCallback(constellation);
+        }
+      });
+      
+      starsContainer.appendChild(marker);
+    });
+    
+    // Insert into container
+    this.container.appendChild(starsContainer);
+    
+    this.logger.info("2D starfield initialized");
+  }
 
   /**
    * Setup event listeners
    */
   setupEventListeners() {
-    // Window resize
-    window.addEventListener("resize", this.onResize);
-
+    // Resize handler
+    window.addEventListener("resize", AnimationUtils.debounce(() => {
+      this.handleResize();
+    }, 250));
+    
     // Visibility change
-    document.addEventListener(
-      "starfield-visibility-change",
-      this.onVisibilityChange
-    );
-    document.addEventListener("starfield-resize", this.onResize);
+    document.addEventListener("visibilitychange", (event) => {
+      this.handleVisibilityChange(event);
+    });
   }
 
   /**
    * Handle window resize
    */
   handleResize() {
-    if (!this.container) return;
-
+    if (!this.isInitialized) return;
+    
     const width = this.container.clientWidth;
     const height = this.container.clientHeight;
-
-    if (this.scene) {
+    
+    // Update canvas size
+    if (this.canvas) {
+      this.canvas.width = width;
+      this.canvas.height = height;
+    }
+    
+    // Update 3D scene
+    if (this.scene && this.is3DEnabled) {
       this.scene.handleResize(width, height);
     }
+    
+    // Update interactions
+    if (this.interactions) {
+      this.interactions.handleResize();
+    }
+    
+    this.logger.debug(`Resize: ${width}x${height}`);
   }
 
   /**
-   * Handle visibility change (pause when tab hidden)
+   * Handle visibility change
    */
-  handleVisibilityChange(event) {
-    const isHidden = event.detail.hidden;
-
-    if (isHidden && this.animationId) {
-      cancelAnimationFrame(this.animationId);
-      this.animationId = null;
-    } else if (!isHidden && !this.animationId && this.is3DEnabled) {
+  handleVisibilityChange() {
+    const isVisible = document.visibilityState === "visible";
+    
+    // Pause/resume rendering based on visibility
+    if (isVisible && !this.isRendering) {
+      this.logger.debug("Page visible, resuming rendering");
       this.startAnimation();
+    } else if (!isVisible && this.isRendering) {
+      this.logger.debug("Page hidden, pausing rendering");
+      this.stopAnimation();
     }
+    
+    this.isVisible = isVisible;
   }
 
   /**
    * Start animation loop
    */
   startAnimation() {
-    if (this.animationId || !this.is3DEnabled) return;
-
-    console.log("Starting starfield animation loop");
-
+    if (this.isRendering) return;
+    
+    this.isRendering = true;
+    this.lastFrameTime = performance.now();
+    this.performanceStats.frameCount = 0;
+    
     const animate = (currentTime) => {
-      this.animationId = requestAnimationFrame(animate);
-
-      // Remove automatic performance mode switching to ensure full star visibility
-      // const performanceInterval = 1000; // 1 second
-      // if (currentTime - this.lastFrameTime > performanceInterval) {
-      //   const fps = this.frameCount;
-      //   this.frameCount = 0;
-      //   this.lastFrameTime = currentTime;
-
-      //   // Switch to performance mode if FPS drops
-      //   if (shouldEnablePerformanceMode(fps) && !this.performanceMode) {
-      //     this.enablePerformanceMode();
-      //   }
-      // }
-      // this.frameCount++;
-
+      if (!this.isRendering) return;
+      
+      // Calculate FPS
+      const deltaTime = currentTime - this.lastFrameTime;
+      this.lastFrameTime = currentTime;
+      this.performanceStats.frameTime = deltaTime;
+      this.performanceStats.frameCount++;
+      
+      if (this.performanceStats.frameCount % 30 === 0) {
+        this.performanceStats.fps = Math.round(1000 / deltaTime);
+      }
+      
+      // Update and render
       this.update();
       this.render();
+      
+      // Schedule next frame
+      this.animationFrameId = requestAnimationFrame(animate);
     };
-
-    this.animationId = requestAnimationFrame(animate);
-    console.log("Animation loop started with ID:", this.animationId);
+    
+    this.animationFrameId = requestAnimationFrame(animate);
   }
 
   /**
-   * Update scene animations
+   * Stop animation loop
+   */
+  stopAnimation() {
+    if (!this.isRendering) return;
+    
+    if (this.animationFrameId !== null) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
+    
+    this.isRendering = false;
+  }
+
+  /**
+   * Update starfield state
    */
   update() {
-    if (this.scene) {
+    if (!this.isInitialized) return;
+    
+    // Update 3D scene
+    if (this.scene && this.is3DEnabled) {
       this.scene.update();
-      // console.log("Scene updated"); // Uncomment for verbose logging
     }
   }
 
   /**
-   * Render the scene
+   * Render starfield
    */
   render() {
-    if (this.scene) {
+    if (!this.isInitialized) return;
+    
+    // Render 3D scene
+    if (this.scene && this.is3DEnabled) {
       this.scene.render();
-      // console.log("Scene rendered"); // Uncomment for verbose logging
     }
   }
 
   /**
-   * Enable performance mode (reduced quality)
+   * Enable performance mode for low-end devices
    */
   enablePerformanceMode() {
-    if (this.performanceMode) return;
-
-    this.performanceMode = true;
-    console.log("Starfield: Enabling performance mode");
-
-    if (this.scene) {
+    this.logger.info("Enabling performance mode");
+    
+    // Update container class
+    if (this.container) {
+      this.container.classList.add("performance-mode");
+    }
+    
+    // Apply performance optimizations to scene
+    if (this.scene && this.is3DEnabled) {
       this.scene.enablePerformanceMode();
+    }
+    
+    // Update state
+    if (this.state) {
+      this.state.set("starfieldPerformanceMode", true);
     }
   }
 
   /**
-   * Set cluster activation callback
+   * Set callback for cluster activation
+   * @param {Function} callback - Callback function
    */
   setClusterActivationCallback(callback) {
+    this.clusterActivationCallback = callback;
+    
+    // Pass to interactions if available
     if (this.interactions) {
       this.interactions.setClusterActivationCallback(callback);
     }
-
-
   }
 
   /**
-   * Get current hover state
+   * Get current hover target
+   * @returns {string|null} Hover target
    */
   getCurrentHover() {
-    if (this.interactions) {
-      return this.interactions.getCurrentHover();
-    }
-
-    return null;
+    return this.interactions ? this.interactions.getCurrentHover() : null;
   }
 
   /**
-   * Check if system is initialized
+   * Check if starfield is ready
+   * @returns {boolean} Whether starfield is ready
    */
   isReady() {
     return this.isInitialized;
@@ -303,6 +425,7 @@ export class StarfieldManager {
 
   /**
    * Check if 3D mode is enabled
+   * @returns {boolean} Whether 3D mode is enabled
    */
   is3DModeEnabled() {
     return this.is3DEnabled;
@@ -310,13 +433,14 @@ export class StarfieldManager {
 
   /**
    * Get performance statistics
+   * @returns {Object} Performance statistics
    */
   getPerformanceStats() {
     return {
-      is3DEnabled: this.is3DEnabled,
-      performanceMode: this.performanceMode,
-      frameCount: this.frameCount,
-      isAnimating: !!this.animationId,
+      ...this.performanceStats,
+      is3D: this.is3DEnabled,
+      isRendering: this.isRendering,
+      isVisible: this.isVisible
     };
   }
 
@@ -325,34 +449,28 @@ export class StarfieldManager {
    */
   destroy() {
     // Stop animation
-    if (this.animationId) {
-      cancelAnimationFrame(this.animationId);
-      this.animationId = null;
-    }
-
-    // Remove event listeners
-    window.removeEventListener("resize", this.onResize);
-    document.removeEventListener(
-      "starfield-visibility-change",
-      this.onVisibilityChange
-    );
-    document.removeEventListener("starfield-resize", this.onResize);
-
-    // Destroy subsystems
+    this.stopAnimation();
+    
+    // Clean up interactions
     if (this.interactions) {
       this.interactions.destroy();
-      this.interactions = null;
     }
-
+    
+    // Clean up scene
     if (this.scene) {
       this.scene.destroy();
-      this.scene = null;
     }
-
-    // Clear references
-    this.canvas = null;
-    this.container = null;
-
-    console.log("Starfield destroyed");
+    
+    // Remove canvas
+    if (this.canvas && this.canvas.parentNode) {
+      this.canvas.parentNode.removeChild(this.canvas);
+    }
+    
+    // Reset state
+    this.isInitialized = false;
+    this.isRendering = false;
+    this.isVisible = false;
+    
+    this.logger.info("StarfieldManager destroyed");
   }
 }

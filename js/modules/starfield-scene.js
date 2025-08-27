@@ -1,9 +1,10 @@
 /**
  * Starfield Scene Management - 3D Scene Creation and Rendering
  * Handles Three.js scene setup, geometries, materials, and rendering
+ * Standardized version with CSS-driven styling
  */
 
-import * as THREE from "three";
+// Three.js loaded globally via script tag
 import {
   CONSTELLATIONS,
   ENHANCED_STARFIELD_CONFIG,
@@ -49,26 +50,11 @@ export class StarfieldScene {
 
     // Create scene
     this.scene = new THREE.Scene();
-    // Removed fog effect to eliminate potential visual artifacts
-
-    console.log("Scene created:", {
-      children: this.scene.children.length,
-    });
 
     // Get container dimensions
     const containerRect = container.getBoundingClientRect();
-    const width = Math.max(containerRect.width, 800); // Ensure minimum width
-    const height = Math.max(containerRect.height, 600); // Ensure minimum height
-
-    console.log("Container dimensions:", {
-      containerRect,
-      width,
-      height,
-      containerWidth: container.clientWidth,
-      containerHeight: container.clientHeight,
-      offsetWidth: container.offsetWidth,
-      offsetHeight: container.offsetHeight
-    });
+    const width = Math.max(containerRect.width, 800);
+    const height = Math.max(containerRect.height, 600);
 
     // Create camera
     const aspect = width / height;
@@ -80,25 +66,8 @@ export class StarfieldScene {
     );
     this.camera.position.set(0, 0, 300);
 
-    console.log("Camera created:", {
-      fov: LOCAL_CONFIG.CAMERA_FOV,
-      aspect,
-      near: LOCAL_CONFIG.CAMERA_NEAR,
-      far: LOCAL_CONFIG.CAMERA_FAR,
-      position: this.camera.position,
-      aspect: this.camera.aspect,
-    });
-
     // Create renderer
     try {
-      console.log("Creating WebGL renderer with canvas:", {
-        canvas: this.canvas,
-        width,
-        height,
-        canvasSize: `${this.canvas.width}x${this.canvas.height}`,
-        canvasStyle: `${this.canvas.style.width}x${this.canvas.style.height}`
-      });
-
       this.renderer = new THREE.WebGLRenderer({
         canvas: this.canvas,
         antialias: !this.performanceMode,
@@ -112,20 +81,10 @@ export class StarfieldScene {
 
       this.renderer.setSize(width, height);
       this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      this.renderer.setClearColor(0x000000, 0.0); // Truly transparent background to allow atmospheric effects
+      this.renderer.setClearColor(0x000000, 0.0); // Transparent background for CSS-driven atmospheric effects
       this.renderer.sortObjects = true; // Enable render order sorting
-
-      console.log("✅ WebGL renderer created successfully:", {
-        canvas: this.canvas,
-        width,
-        height,
-        pixelRatio: this.renderer.getPixelRatio(),
-        context: !!this.renderer.getContext(),
-        capabilities: this.renderer.capabilities,
-        canvasRect: this.canvas.getBoundingClientRect()
-      });
     } catch (error) {
-      console.error("❌ Failed to create WebGL renderer:", error);
+      console.error("Failed to create WebGL renderer:", error);
       throw error;
     }
 
@@ -134,17 +93,8 @@ export class StarfieldScene {
     this.createConstellations();
     this.createNlomNode();
 
-    // Immediate test render to ensure everything is working
-    console.log("Performing initial test render...");
+    // Perform initial test render
     this.render();
-
-    console.log("Scene initialization complete:", {
-      backgroundStars: !!this.backgroundStars,
-      constellationCount: this.constellations.size,
-      nlomNode: !!this.nlomNode,
-      sceneChildren: this.scene.children.length,
-      rendererInfo: this.renderer.info
-    });
 
     return true;
   }
@@ -164,8 +114,7 @@ export class StarfieldScene {
       const i3 = i * 3;
 
       // Position - using config spread with better randomization
-      const spread = starConfig.spread * 50; // Increase spread for better distribution
-      // Use different random seeds to avoid patterns
+      const spread = starConfig.spread;
       positions[i3] = (Math.random() * 2 - 1) * spread + (Math.random() - 0.5) * 20;
       positions[i3 + 1] = (Math.random() * 2 - 1) * spread + (Math.random() - 0.5) * 20;
       positions[i3 + 2] = (Math.random() * 2 - 1) * spread - 100 + (Math.random() - 0.5) * 50;
@@ -188,8 +137,7 @@ export class StarfieldScene {
       } else {
         // Dim white stars
         const baseBrightness = brightness * 0.4;
-        const brightVariance =
-          baseBrightness + Math.random() * (brightness * 0.5);
+        const brightVariance = baseBrightness + Math.random() * (brightness * 0.5);
         colors[i3] = brightVariance;
         colors[i3 + 1] = brightVariance;
         colors[i3 + 2] = brightVariance;
@@ -219,7 +167,7 @@ export class StarfieldScene {
 
           // Organic twinkling based on position and time
           float twinkle = sin(time * 0.5 + position.x * 0.01 + position.y * 0.007) * 0.2 + 0.8;
-          vAlpha = twinkle * (0.9 + size * 0.4); // Further increased alpha for better visibility
+          vAlpha = twinkle * (0.9 + size * 0.4);
 
           vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
           gl_PointSize = size * (300.0 / -mvPosition.z);
@@ -245,58 +193,6 @@ export class StarfieldScene {
 
     this.backgroundStars = new THREE.Points(geometry, material);
     this.scene.add(this.backgroundStars);
-
-    console.log("Background stars added to scene:", {
-      stars: this.backgroundStars,
-      geometry: this.backgroundStars.geometry,
-      material: this.backgroundStars.material,
-      sceneChildren: this.scene.children.length,
-      starCount: LOCAL_CONFIG.PARTICLE_COUNT,
-    });
-
-    // Debug: Log star creation
-    console.log(
-      `Created ${LOCAL_CONFIG.PARTICLE_COUNT} background stars at positions:`,
-      {
-        minX: Math.min(
-          ...Array.from(
-            { length: LOCAL_CONFIG.PARTICLE_COUNT },
-            (_, i) => positions[i * 3]
-          )
-        ),
-        maxX: Math.max(
-          ...Array.from(
-            { length: LOCAL_CONFIG.PARTICLE_COUNT },
-            (_, i) => positions[i * 3]
-          )
-        ),
-        minY: Math.min(
-          ...Array.from(
-            { length: LOCAL_CONFIG.PARTICLE_COUNT },
-            (_, i) => positions[i * 3 + 1]
-          )
-        ),
-        maxY: Math.max(
-          ...Array.from(
-            { length: LOCAL_CONFIG.PARTICLE_COUNT },
-            (_, i) => positions[i * 3 + 1]
-          )
-        ),
-        minZ: Math.min(
-          ...Array.from(
-            { length: LOCAL_CONFIG.PARTICLE_COUNT },
-            (_, i) => positions[i * 3 + 2]
-          )
-        ),
-        maxZ: Math.max(
-          ...Array.from(
-            { length: LOCAL_CONFIG.PARTICLE_COUNT },
-            (_, i) => positions[i * 3 + 2]
-          )
-        ),
-        cameraZ: this.camera.position.z,
-      }
-    );
   }
 
   /**
@@ -832,19 +728,6 @@ export class StarfieldScene {
   render() {
     if (this.renderer && this.scene && this.camera) {
       this.renderer.render(this.scene, this.camera);
-
-      // Debug: Log render info occasionally (not every frame)
-      if (this.backgroundStars && Math.random() < 0.001) { // 0.1% chance each frame
-        console.log("Rendering scene with background stars:", {
-          visible: this.backgroundStars.visible,
-          count: this.backgroundStars.geometry.attributes.position.count,
-          position: this.backgroundStars.position,
-          material: this.backgroundStars.material,
-          sceneChildren: this.scene.children.length,
-          cameraPosition: this.camera.position,
-          rendererSize: this.renderer.getSize(new THREE.Vector2()),
-        });
-      }
     }
   }
 
@@ -869,11 +752,6 @@ export class StarfieldScene {
 
     if (this.renderer) {
       this.renderer.setPixelRatio(1);
-
-      // Keep background stars visible - don't hide them for performance
-      // if (this.backgroundStars) {
-      //   this.backgroundStars.visible = false;
-      // }
     }
   }
 
