@@ -176,7 +176,6 @@ export const CONSTELLATIONS = {
   },
 };
 
-export const DEFAULT_CONSTELLATION_COLOR = CONSTELLATIONS["gnarled-tree"].color;
 const hexToInt = (hex) => parseInt(hex.replace("#", ""), 16);
 
 // Clearance level configuration
@@ -316,14 +315,6 @@ export const ENHANCED_STARFIELD_CONFIG = {
 };
 
 // Common utility functions following JS-04 (small, single-purpose, pure functions)
-export function getConstellationName(cluster) {
-  return CONSTELLATIONS[cluster]?.name || cluster;
-}
-
-export function getConstellationColor(cluster) {
-  return CONSTELLATIONS[cluster]?.color || DEFAULT_CONSTELLATION_COLOR;
-}
-
 export function getConstellationDescription(cluster, type = "detailed") {
   return CONSTELLATIONS[cluster]?.descriptions?.[type] || "";
 }
@@ -356,45 +347,6 @@ export function createStandardError(message, details = null, status = null) {
 
 export function logError(error, context = "") {
   console.error(`[NLOM Interface${context ? ` - ${context}` : ""}]:`, error);
-}
-
-// DOM utility functions (JS-04)
-export function safeDOMQuery(selector, container = document) {
-  try {
-    return container.querySelector(selector);
-  } catch (error) {
-    logError(
-      createStandardError(`Invalid selector: ${selector}`, error),
-      "DOM"
-    );
-    return null;
-  }
-}
-
-export function safeDOMQueryAll(selector, container = document) {
-  try {
-    return Array.from(container.querySelectorAll(selector));
-  } catch (error) {
-    logError(
-      createStandardError(`Invalid selector: ${selector}`, error),
-      "DOM"
-    );
-    return [];
-  }
-}
-
-// Validation utilities
-export function isValidCluster(cluster) {
-  return cluster && CONSTELLATIONS.hasOwnProperty(cluster);
-}
-
-export function isValidSeal(seal) {
-  return seal && CLEARANCE_LEVELS.hasOwnProperty(seal);
-}
-
-export function sanitizeInput(input) {
-  if (typeof input !== "string") return "";
-  return input.trim().replace(/[<>]/g, "");
 }
 
 // Site Configuration - Centralized metadata and content
@@ -903,94 +855,19 @@ export function getSuccessMessage(key, data = {}) {
   return getInterfaceMessage("success", key, data);
 }
 
-export function getWarningMessage(key, data = {}) {
-  return getInterfaceMessage("warnings", key, data);
-}
-
 export function getInfoMessage(key, data = {}) {
   return getInterfaceMessage("info", key, data);
-}
-
-export function getFormLabel(key) {
-  return SITE_CONFIG.interfaceText.forms.labels[key] || key;
-}
-
-export function getFormPlaceholder(key) {
-  return SITE_CONFIG.interfaceText.forms.placeholders[key] || "";
-}
-
-export function getValidationMessage(key, data = {}) {
-  return getInterfaceMessage("forms.validation", key, data);
-}
-
-export function getButtonText(key) {
-  return SITE_CONFIG.interfaceText.ui.buttons[key] || key;
-}
-
-export function getHeadingText(key) {
-  return SITE_CONFIG.interfaceText.ui.headings[key] || key;
-}
-
-export function getStatusText(key) {
-  return SITE_CONFIG.interfaceText.ui.status[key] || key;
-}
-
-export function getAccessibilityLabel(key, data = {}) {
-  const label = SITE_CONFIG.interfaceText.accessibility[key] || key;
-  return renderTemplate(label, data);
-}
-
-// Animation utility functions
-export function getAnimationDuration(key) {
-  return (
-    SITE_CONFIG.animations.durations[key] ||
-    SITE_CONFIG.animations.durations.base
-  );
-}
-
-export function getAnimationEasing(key) {
-  return (
-    SITE_CONFIG.animations.easing[key] || SITE_CONFIG.animations.easing.inOut
-  );
-}
-
-export function getAnimationDelay(key) {
-  return SITE_CONFIG.animations.delays[key] || 0;
 }
 
 // Performance utility functions
 export function getPerformanceConfig(key) {
   return SITE_CONFIG.performance[key];
 }
-
-// Disabled performance mode switching to ensure full star visibility
-// export function shouldEnablePerformanceMode(currentFps) {
-//   return currentFps < SITE_CONFIG.performance.performanceModeThreshold;
-// }
-
-export function getAnimationQuality(level = "high") {
-  return SITE_CONFIG.performance.animationQuality[level] || 1.0;
-}
-
 // Starfield utility functions
 export function getStarfieldConfig(key) {
   return SITE_CONFIG.starfield[key];
 }
 
-export function getConstellationPosition(constellationId) {
-  return (
-    SITE_CONFIG.starfield.constellationPositions[constellationId] || {
-      x: 0,
-      y: 0,
-      z: 0,
-    }
-  );
-}
-
 export function getStarGenerationParams() {
   return SITE_CONFIG.starfield.stars;
-}
-
-export function getInteractionConfig() {
-  return SITE_CONFIG.starfield.interaction;
 }
