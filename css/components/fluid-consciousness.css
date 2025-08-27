@@ -9,17 +9,17 @@
     /* Primary fluid streams */
     radial-gradient(
       ellipse 1800px 1200px at 20% 30%,
-      var(--color-russian-violet) 0%,
+      var(--color-quasar) 0%,
       transparent 80%
     ),
     radial-gradient(
       ellipse 1400px 900px at 80% 70%,
-      var(--color-midnight-indigo) 0%,
+      var(--color-abyss) 0%,
       transparent 70%
     ),
     radial-gradient(
       ellipse 1600px 1100px at 60% 20%,
-      var(--color-celestial-blue) 0%,
+      var(--color-skrell-blue) 0%,
       transparent 65%
     ),
     /* Flowing essence patterns */
@@ -65,7 +65,7 @@
       var(--glow-pink-subtle) 0%,
       transparent 90%
     ),
-    /* Deep fluid foundation */ var(--color-midnight-indigo);
+    /* Deep fluid foundation */ var(--color-abyss);
   background-attachment: scroll; /* Changed from fixed to avoid viewport issues */
   background-size:
     3600px 2400px,

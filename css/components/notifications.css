@@ -46,7 +46,7 @@
     transparent 70%
   );
   border-color: var(--glow-gold-error-border);
-  color: var(--color-gold);
+  color: var(--color-warning);
   text-shadow: 0 0 5px var(--glow-gold-error-text);
 }
 

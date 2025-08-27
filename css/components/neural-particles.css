@@ -16,9 +16,9 @@
   font-family: var(--font-primary);
   font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 300;
-  color: var(--color-pale-turquoise);
+  color: var(--color-cyan);
   text-shadow:
-    0 0 10px var(--color-pale-turquoise),
+    0 0 10px var(--color-cyan),
     0 0 20px var(--glow-cyan-placeholder);
   animation: base-floating var(--duration-word-flow) ease-in-out infinite;
   position: relative;
@@ -31,14 +31,14 @@
 .flowing-word:hover {
   transform: scale(1.1);
   text-shadow:
-    0 0 15px var(--color-pale-turquoise),
+    0 0 15px var(--color-cyan),
     0 0 30px var(--glow-cyan-intense),
     var(--shimmer-subtle);
 }
 
 .status-mist {
   font-size: var(--text-sm);
-  color: var(--color-soft-pink);
+  color: var(--color-mist);
   text-align: center;
   opacity: 0.8;
   text-shadow: 0 0 5px var(--glow-pink-soft);

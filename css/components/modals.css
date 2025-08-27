@@ -89,7 +89,7 @@
 .modal-title {
   flex: 1;
   margin: 0;
-  color: var(--color-pale-turquoise);
+  color: var(--color-cyan);
   font-family: var(--font-primary);
   font-size: var(--text-xl);
   font-weight: 400;
@@ -102,7 +102,7 @@
   background: none;
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-morph-bubble);
-  color: var(--color-pale-turquoise);
+  color: var(--color-cyan);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -134,9 +134,9 @@
   padding: var(--space-6);
   max-height: 60vh;
   overflow-y: auto;
-  color: var(--color-soft-pink);
+  color: var(--color-mist);
   line-height: 1.7;
-  text-shadow: 0 0 3px var(--color-soft-pink);
+  text-shadow: 0 0 3px var(--color-mist);
 }
 
 .modal-footer {
@@ -203,7 +203,7 @@
   border-radius: var(--radius-organic-dynamic);
   cursor: pointer;
   padding: var(--space-4);
-  color: var(--color-pale-turquoise);
+  color: var(--color-cyan);
   font-family: var(--font-ui);
   transition: all var(--duration-base) var(--ease-neural);
   min-width: 200px;

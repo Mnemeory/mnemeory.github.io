@@ -256,8 +256,8 @@
 
 .sci-secondary {
   background: var(--constellation-egg-bg);
-  color: var(--color-gold);
-  border: 1px solid var(--color-gold);
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning);
 }
 
 .sci-tertiary {

@@ -109,7 +109,7 @@
   font-family: var(--font-primary);
   font-size: var(--text-lg);
   font-weight: 400;
-  color: var(--color-pale-turquoise);
+  color: var(--color-cyan);
   text-align: center;
   text-shadow: 0 0 8px var(--glow-cyan-bright);
   transition: all var(--duration-slow) var(--ease-organic);
