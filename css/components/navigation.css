@@ -22,7 +22,6 @@
   align-items: center;
   gap: var(--space-4); /* 16px - closest to 15px */
   backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
   position: relative;
 }
 

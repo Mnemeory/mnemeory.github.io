@@ -74,14 +74,7 @@
 /* Grand Council Authority Elements */
 .authority-element {
   position: relative;
-  background: linear-gradient(
-    45deg,
-    var(--color-grand-council) 0%,
-    var(--color-warning) 100%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  color: var(--color-grand-council);
   font-weight: 600;
 }
 
@@ -170,10 +163,7 @@
 
 /* Federation Unity Emphasis */
 .federation-unity {
-  background: var(--color-federation-unity);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  color: var(--color-federation-unity);
   font-weight: 500;
   text-shadow: 0 0 4px var(--color-cyan);
 }
@@ -196,7 +186,6 @@
     ),
     var(--color-bg);
   backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
   border-bottom: 1px solid var(--glass-cultural-border);
   box-shadow:
     0 8px 32px var(--glass-cultural-shadow),

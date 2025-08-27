@@ -14,9 +14,6 @@
 html {
   font-size: 16px;
   line-height: 1.5;
-  -webkit-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
-  text-size-adjust: 100%;
   background: transparent;
   width: 100%;
   height: 100%;
@@ -32,8 +29,6 @@ body {
   min-height: 100vh;
   width: 100vw;
   position: relative;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
@@ -52,26 +47,4 @@ body {
 ::selection {
   background: rgba(92, 231, 231, 0.3);
   color: var(--color-text);
-}
-
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--glass-bg-light);
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--glass-bg-heavy);
-  border-radius: var(--radius-full);
-  border: 1px solid var(--glass-border);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent);
-  box-shadow: var(--shadow-glow);
 }
