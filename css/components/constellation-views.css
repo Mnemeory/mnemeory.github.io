@@ -291,7 +291,6 @@
 
 /* Document ripples now use unified ripple system from utilities.css */
 .thought-bubble-document .document-ripples {
-  /* Uses .base-ripples .base-ripples--organic .base-ripples--bubble classes */
   transform-origin: center;
 }
 
