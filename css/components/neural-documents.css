@@ -212,11 +212,7 @@
   margin-bottom: var(--space-4);
   font-size: var(--text-xl);
   font-weight: 600;
-<<<<<<< HEAD
   text-shadow: 0 0 10px var(--glow-cyan-gentle);
-}
-=======
-  text-shadow: 0 0 4px var(--glow-gold-soft);
 }
 
 .neural-italic {
@@ -662,4 +658,3 @@
     border-style: solid;
   }
 }
->>>>>>> 8a65fcdd141fdc6dd8eff4342ce116423f4121b4
