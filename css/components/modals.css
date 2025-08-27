@@ -11,8 +11,7 @@
  */
 
 /* === MODAL CONTAINER === */
-[data-component="modal"],
-.base-modal {
+[data-component="modal"] {
   /* Positioning */
   position: fixed;
   inset: 0;
@@ -34,15 +33,13 @@
 
 /* Active state */
 [data-component="modal"].is-open,
-[data-component="modal"][aria-hidden="false"],
-.base-modal[aria-hidden="false"] {
+[data-component="modal"][aria-hidden="false"] {
   opacity: 1;
   visibility: visible;
 }
 
 /* === MODAL BACKDROP === */
-[data-component="modal"]__backdrop,
-.bubble-ocean {
+[data-component="modal"]__backdrop {
   position: absolute;
   inset: 0;
   background: var(--gradient-modal-backdrop), var(--bg-overlay-void);
@@ -121,9 +118,7 @@
 
 /* Show content when modal is active */
 [data-component="modal"].is-open [data-component="modal"]__container,
-[data-component="modal"][aria-hidden="false"] [data-component="modal"]__container,
-.base-modal.is-open [data-component="modal"]__container,
-.base-modal[aria-hidden="false"] [data-component="modal"]__container {
+[data-component="modal"][aria-hidden="false"] [data-component="modal"]__container {
   transform: scale(1);
 }
 

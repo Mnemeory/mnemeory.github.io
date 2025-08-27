@@ -79,7 +79,7 @@
 }
 
 /* Navigation buttons - extends neural-button base styles */
-.nav-btn.active {
+.nav-btn[data-active="true"] {
   background: var(--constellation-bond-bg);
   border-color: var(--color-kelpie);
   color: var(--color-accent);

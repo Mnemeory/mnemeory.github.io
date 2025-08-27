@@ -4,18 +4,18 @@
  */
 
 /* Thought bubble animation states */
-.thought-bubble-document {
+.card--document {
   opacity: 0;
   transform: translateY(20px) scale(0.9);
 }
 
-.thought-bubble-document.animate-in {
+.card--document[data-state="visible"] {
   opacity: 1;
   transform: translateY(0) scale(1);
   transition: opacity var(--duration-slow) ease-out, transform var(--duration-slow) ease-out;
 }
 
 /* Remove transition after animation completes */
-.thought-bubble-document.animation-complete {
+.card--document[data-state="static"] {
   transition: none;
 }

@@ -58,7 +58,7 @@
 }
 
 /* Neural buttons */
-.neural-button {
+[data-component="neural-button"] {
   background: var(--glass-bg-medium);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-sm);
@@ -69,7 +69,7 @@
   transition: all var(--duration-base) var(--ease-neural);
 }
 
-.neural-button:hover {
+[data-component="neural-button"]:hover {
   background: var(--gradient-consciousness-flow), var(--gradient-neural-secondary);
   border-color: var(--color-cyan-dim);
   color: var(--color-pale-turquoise);
@@ -158,7 +158,7 @@
 }
 
 /* Document image styling */
-[data-component="neural-document"]-image {
+[data-component="neural-document-image"] {
   display: block;
   width: 90%;
 }
@@ -190,7 +190,7 @@
 }
 
 /* Document container positioning */
-[data-component="neural-document"]-container {
+[data-component="neural-document-container"] {
   position: relative;
 }
 
@@ -294,7 +294,7 @@
 
 /* === NEURAL IMAGES === */
 
-[data-component="neural-document"]-image {
+[data-component="neural-document-image"] {
   display: block;
   width: 90%;
   margin: 0 auto;
