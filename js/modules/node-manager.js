@@ -61,8 +61,8 @@ export class NodeManager {
       closeBtn.addEventListener("click", () => this.closeModal());
     }
     
-    // Backdrop click
-    const backdrop = this.modal.querySelector(".bubble-ocean");
+    // Backdrop click - updated to use new data-component attribute
+    const backdrop = this.modal.querySelector("[data-component='modal-backdrop']");
     if (backdrop) {
       backdrop.addEventListener("click", (event) => {
         // Only close if clicking directly on backdrop (not its children)
@@ -238,10 +238,10 @@ export class NodeManager {
   renderThoughtBubbleLayout(container, nodes, constellation) {
     const constellationData = CONFIG.constellations[constellation];
     
-    // Create thought bubble container
-    const thoughtBubbleContainer = document.createElement("div");
-    thoughtBubbleContainer.className = "thought-bubble-documents";
-    thoughtBubbleContainer.setAttribute("data-constellation", constellation);
+      // Create thought bubble container - updated to use new card system
+      const thoughtBubbleContainer = document.createElement("div");
+      thoughtBubbleContainer.className = "card-container";
+      thoughtBubbleContainer.setAttribute("data-constellation", constellation);
     thoughtBubbleContainer.setAttribute("role", "region");
     thoughtBubbleContainer.setAttribute(
       "aria-label",
@@ -278,9 +278,9 @@ export class NodeManager {
       // Clear container
       bubblesContainer.innerHTML = "";
       
-      // Create thought bubble container
+      // Create thought bubble container - updated to use new card system
       const thoughtBubbleContainer = document.createElement("div");
-      thoughtBubbleContainer.className = "thought-bubble-documents citizen-files-grid";
+      thoughtBubbleContainer.className = "card-container citizen-files-grid";
       thoughtBubbleContainer.setAttribute("data-constellation", constellation);
       thoughtBubbleContainer.setAttribute("role", "region");
       thoughtBubbleContainer.setAttribute(
@@ -319,9 +319,9 @@ export class NodeManager {
       // Clear container
       bubblesContainer.innerHTML = "";
       
-      // Create thought bubble container
+      // Create thought bubble container - updated to use new card system
       const thoughtBubbleContainer = document.createElement("div");
-      thoughtBubbleContainer.className = "thought-bubble-documents session-files-grid";
+      thoughtBubbleContainer.className = "card-container session-files-grid";
       thoughtBubbleContainer.setAttribute("data-constellation", constellation);
       thoughtBubbleContainer.setAttribute("role", "region");
       thoughtBubbleContainer.setAttribute(
@@ -351,19 +351,14 @@ export class NodeManager {
    * @returns {Element} Thought bubble element
    */
   createThoughtBubbleDocument(node, constellation) {
-    // Create bubble button
+    // Create bubble button - updated to use new card classes
     const bubble = document.createElement("button");
-    bubble.className = "thought-bubble-document";
+    bubble.className = "card card--document";
     bubble.setAttribute("type", "button");
     bubble.setAttribute("role", "button");
     bubble.setAttribute("tabindex", "0");
     bubble.setAttribute("aria-label", `Open ${node.name}`);
     bubble.setAttribute("data-node-id", node.id);
-    
-    // Get clearance information
-    const clearanceInfo = this.getClearanceInfo(node.seal);
-    const clearanceClass = clearanceInfo.class;
-    const clearanceText = clearanceInfo.label;
     
     // Get constellation icon
     const constellationData = CONFIG.constellations[constellation];
@@ -371,12 +366,11 @@ export class NodeManager {
       ? `assets/images/${constellationData.icon}.svg`
       : "assets/images/tree.svg";
     
-    // Create bubble content - no inline styles, pure HTML structure
+    // Create bubble content - simplified without clearance system
     bubble.innerHTML = `
-      <div class="document-bubble">
+      <div class="card--bubble">
         <img src="${iconPath}" alt="" class="document-icon" aria-hidden="true" />
         <div class="document-ripples"></div>
-        <div class="document-seal ${clearanceClass}">${clearanceText.charAt(0)}</div>
       </div>
       <span class="document-label">${node.name}</span>
     `;
@@ -395,29 +389,7 @@ export class NodeManager {
     return bubble;
   }
 
-  /**
-   * Get clearance information for styling
-   * @param {string} seal - Clearance seal
-   * @returns {Object} Clearance info with class and label
-   */
-  getClearanceInfo(seal) {
-    const clearanceMap = {
-      "open": {
-        class: "clearance-open",
-        label: "Open"
-      },
-      "filed": {
-        class: "clearance-filed",
-        label: "Filed"
-      },
-      "black-star": {
-        class: "clearance-diplomatic",
-        label: "Diplomatic"
-      }
-    };
-    
-    return clearanceMap[seal] || clearanceMap.open;
-  }
+
 
   /**
    * Open node in modal
@@ -562,7 +534,6 @@ Attempting automatic psionic pathway re-establishment...`;
       date: `2467-${new Date().toISOString().split("T")[0].substring(5)}`, // Federation year format
       
       // Cluster-specific data
-      clearanceLevel: this.formatClearanceLevel(node.seal, cluster),
       templateId: `DIPL-${IDUtils.generateId("DIPL").split("-")[1]}`, // For hatching-egg
       reportPeriod: "2465.140 - 2465.147", // For star-chanter
       
@@ -572,35 +543,16 @@ Attempting automatic psionic pathway re-establishment...`;
       url: node.url,
       id: node.id,
       cluster: cluster,
-      seal: node.seal,
       tags: tags.join(", "),
       
       // Additional required data for templates
       content: node.metadata?.description || "This data stream contains archived Federation diplomatic information accessed via the Nlom neural interface.",
-      classification: this.formatClearanceLevel(node.seal, cluster),
       authority: "Nralakk Federation Diplomatic Mission",
       location: "SCCV Horizon, Stellar Corporate Conglomerate",
     };
   }
 
-  /**
-   * Format clearance level for display
-   * @param {string} seal - Clearance seal
-   * @param {string} cluster - Cluster name
-   * @returns {string} Formatted clearance level
-   */
-  formatClearanceLevel(seal, cluster) {
-    switch (seal) {
-      case "open":
-        return "GENERAL ACCESS";
-      case "filed":
-        return "RESTRICTED ARCHIVES";
-      case "black-star":
-        return "DIPLOMATIC CLEARANCE";
-      default:
-        return "UNCLASSIFIED";
-    }
-  }
+
 
   /**
    * Close modal

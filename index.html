@@ -74,7 +74,7 @@
           Establishing psionic resonance with Federation Nlom network via SCCV
           Horizon...
         </p>
-        <p data-component="loading-subtitle" id="loading-clearance"></p>
+        <p data-component="loading-subtitle">Initializing interface...</p>
       </div>
     </div>
 
@@ -137,11 +137,20 @@
                 >
               </div>
             </div>
-            <div data-component="clearance-matrix"></div>
           </div>
 
           <!-- Right Spacer for Balance -->
           <div data-component="header-balance-spacer"></div>
+          <div data-component="header-actions">
+            <button
+              type="button"
+              data-action="toggle-starfield"
+              title="Toggle starfield visualization"
+              aria-label="Toggle starfield visualization"
+            >
+              <div data-component="action-icon">✨</div>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -302,19 +311,11 @@
                 <div data-component="icon-waves"></div>
               </div>
             </div>
-            <div data-component="essence-flow">
-              <h2 data-component="stream-title"></h2>
-              <div data-component="essence-meaning"></div>
-              <p data-component="stream-description"></p>
-              <div data-component="clearance-bubbles">
-                <span data-clearance="consular"
-                  >Consular Officer Access Granted</span
-                >
-                <span data-clearance="aide"
-                  >Diplomatic Aide Clearance Active</span
-                >
+                          <div data-component="essence-flow">
+                <h2 data-component="stream-title"></h2>
+                <div data-component="essence-meaning"></div>
+                <p data-component="stream-description"></p>
               </div>
-            </div>
           </div>
           <div
             id="void-nodes"

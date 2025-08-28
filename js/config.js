@@ -44,8 +44,7 @@ const TEXT = {
   },
   errors: {
     dataLoadError: 'Failed to load neural data streams',
-    connectionError: 'Neural pathway disruption detected',
-    permissionError: 'Insufficient clearance for neural access'
+    connectionError: 'Neural pathway disruption detected'
   },
   interface: {
     starfield: 'Neural Starfield',
@@ -296,7 +295,6 @@ const DEFAULT_CITIZEN_STATUS = 'civilian';
 // User profile template
 const USER_PROFILE = {
   name: 'Diplomatic Officer',
-  clearance: 'Consular',
   station: 'SCCV Horizon'
 };
 

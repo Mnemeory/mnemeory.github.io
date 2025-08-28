@@ -182,13 +182,13 @@ class DocumentInstance {
     
     return {
       container,
-      editor: container.querySelector('.document-editor'),
-      toolbar: container.querySelector('.document-toolbar'),
-      toggleButton: container.querySelector('[data-js="document-toggle"]'),
-      copyButton: container.querySelector('[data-js="document-copy"]'),
-      saveButton: container.querySelector('[data-js="document-save"]'),
-      templateButton: container.querySelector('[data-js="document-templates"]'),
-      statusBar: container.querySelector('[data-js="document-status"]')
+      editor: container.querySelector('[data-component="document-editor"]'),
+      toolbar: container.querySelector('[data-component="document-toolbar"]'),
+      toggleButton: container.querySelector('[data-action="toggle-view"]'),
+      copyButton: container.querySelector('[data-action="copy-content"]'),
+      saveButton: container.querySelector('[data-action="download-document"]'),
+      templateButton: container.querySelector('[data-action="document-templates"]'),
+      statusBar: container.querySelector('[data-component="document-status"]')
     };
   }
 

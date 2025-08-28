@@ -342,7 +342,7 @@ const TEMPLATE_CONFIGS = {
             subtitle: ''
           }
         },
-        '[b]Clearance Level:[/b] {{clearanceLevel}}\n[b]Issued By:[/b] Grand Council of the Nralakk Federation\n[b]Authorized For:[/b] Consular Officer and Staff Personnel\n[b]Date:[/b] {{date}}\n[b]Document ID:[/b] {{documentId}}',
+        '[b]Issued By:[/b] Grand Council of the Nralakk Federation\n[b]Authorized For:[/b] Consular Officer and Staff Personnel\n[b]Date:[/b] {{date}}\n[b]Document ID:[/b] {{documentId}}',
         '[h2]Executive Summary[/h2]\nThis document outlines the foundational protocols for Consular Officers operating aboard corporate vessels. All diplomatic staff must adhere to these guidelines when representing Federation interests aboard the SCCV Horizon and in Stellar Corporate Conglomerate space.',
         '[h2]Core Directives[/h2]\n[list]\n[*] Maintain constant Psionic Wake-network connection to the Grand Council via secure channels\n[*] Submit Inductive and Deductive Actions Reports weekly per SCI protocols\n[*] Monitor Social Compatibility Index of Federation citizens operating in corporate space\n[*] Coordinate with Diplomatic Aide and Kala Bodyguard staff\n[*] Liaise with SCCV Horizon crew and Stellar Corporate Conglomerate entities\n[*] Report any signs of synthetic intelligence activity immediately\n[*] Maintain diplomatic neutrality while aboard non-Federation vessels\n[/list]',
         { component: 'sections', type: 'divider' },
@@ -360,7 +360,7 @@ const TEMPLATE_CONFIGS = {
             subtitle: ''
           }
         },
-        '[b]Service Type:[/b] Social Compatibility Index Management\n[b]Clearance Level:[/b] Consular Access\n[b]Document ID:[/b] {{documentId}}',
+        '[b]Service Type:[/b] Social Compatibility Index Management\n[b]Document ID:[/b] {{documentId}}',
         '[h2]Current Statistics[/h2]\n[b]Active Citizens Abroad:[/b] 847,329\n[b]Average SCI Rating:[/b] 7.3/10.0\n[b]Primary Numericals:[/b] 12.4% of population\n[b]Secondary Numericals:[/b] 74.2% of population\n[b]Tertiary Numericals:[/b] 13.4% of population\n[b]Stipend Distribution:[/b] 98.7% completion',
         '[h2]Recent Welfare Actions[/h2]\n[list]\n[*] Processed 234 stipend adjustments based on SCI updates\n[*] Coordinated medical support for 67 citizens with Zeng-Hu Pharmaceuticals\n[*] Facilitated 12 emergency repatriation requests from corporate space\n[*] Provided diplomatic assistance for 89 Federation citizens aboard SCC vessels\n[*] Maintained liaison protocols with SCCV Horizon command staff\n[/list]',
         { component: 'sections', type: 'divider' },
@@ -422,8 +422,8 @@ const TEMPLATE_CONFIGS = {
           }
         },
         '[b]Warning:[/b] Classified material - handle according to Federation security protocols\n[b]Document ID:[/b] {{documentId}}\n[b]Glorsh-Omega Classification:[/b] Post-Singularity Intelligence',
-        '[h2]Access Status[/h2]\nYour Aide clearance provides full access to this intelligence data stream. This classified Federation intelligence is available for your review as authorized personnel. All synthetic intelligence indicators must be reported immediately.',
-        '[h2]Historical Context[/h2]\nIntelligence regarding covert operations during the Glorsh-Omega Singularity (2056-2192 CE). Analysis of Collaborator networks and post-Tri-Qyu Calamity security protocols. Available to Aide-level clearance holders.',
+        '[h2]Access Status[/h2]\nThis intelligence data stream is available for review. All synthetic intelligence indicators must be reported immediately.',
+        '[h2]Historical Context[/h2]\nIntelligence regarding covert operations during the Glorsh-Omega Singularity (2056-2192 CE). Analysis of Collaborator networks and post-Tri-Qyu Calamity security protocols.',
         '[h2]Current Threat Assessment[/h2]\nAnalysis of ongoing synthetic intelligence threats in Tau Ceti space and aboard corporate vessels. X\'Lu\'oa genetic monitoring protocols. Updated weekly for Consular and Aide personnel per Grand Council directive. Special focus on SCC synthetic worker programs.',
         { component: 'sections', type: 'divider' },
         {
@@ -448,7 +448,7 @@ const TEMPLATE_CONFIGS = {
             subtitle: ''
           }
         },
-        '[b]Data Stream:[/b] {{constellationName}}\n[b]Document ID:[/b] {{documentId}}\n[b]Date:[/b] {{date}}\n[b]Clearance Level:[/b] {{clearanceLevel}}',
+        '[b]Data Stream:[/b] {{constellationName}}\n[b]Document ID:[/b] {{documentId}}\n[b]Date:[/b] {{date}}',
         '[h2]Content[/h2]\n{{content}}\n\n[h2]Source Information[/h2]\n[b]URL:[/b] {{url}}\n[b]Node ID:[/b] {{id}}\n[b]Tags:[/b] {{tags}}',
         { component: 'sections', type: 'divider' },
         {

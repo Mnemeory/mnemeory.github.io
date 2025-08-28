@@ -10,7 +10,6 @@ import { StateManager } from "./state-manager.js";
 import { Router } from "./router.js";
 import { ViewManager } from "./view-manager.js";
 import { NodeManager } from "./node-manager.js";
-import { ClearanceManager } from "./clearance-manager.js";
 import { DocumentSystem } from "./document-system.js";
 import { StarfieldManager } from "./starfield-manager.js";
 import { Logger } from "./shared-utilities.js";
@@ -26,7 +25,6 @@ export class AppController {
     this.router = null;
     this.viewManager = null;
     this.nodeManager = null;
-    this.clearanceManager = null;
     this.documentSystem = null;
     this.starfieldManager = null;
     
@@ -54,8 +52,6 @@ export class AppController {
       await this.viewManager.init();
       
       // 2. Domain services
-      this.clearanceManager = new ClearanceManager(this.state);
-      this.nodeManager = new NodeManager(this.state);
       this.documentSystem = new DocumentSystem(this.state);
       
       // 3. Starfield visualization
@@ -236,12 +232,12 @@ export class AppController {
           if (element) element.textContent = data.descriptions.accessibility;
         }
         
-        // Update stream views
+        // Update stream views - updated to use new data-component attributes
         const streamView = document.getElementById(`${id}-view`);
         if (streamView) {
-          const titleEl = streamView.querySelector(".stream-title");
-          const meaningEl = streamView.querySelector(".essence-meaning");
-          const descriptionEl = streamView.querySelector(".stream-description");
+          const titleEl = streamView.querySelector('[data-component="stream-title"]');
+          const meaningEl = streamView.querySelector('[data-component="essence-meaning"]');
+          const descriptionEl = streamView.querySelector('[data-component="stream-description"]');
           
           if (titleEl) titleEl.textContent = data.name;
           if (meaningEl) meaningEl.textContent = data.meaning;
@@ -464,7 +460,6 @@ export class AppController {
       view: this.viewManager,
       nodes: this.nodeManager,
       starfield: this.starfieldManager,
-      clearance: this.clearanceManager,
       documents: this.documentSystem
     };
     
@@ -516,7 +511,6 @@ export class AppController {
     if (this.starfieldManager) this.starfieldManager.destroy();
     if (this.nodeManager) this.nodeManager.destroy();
     if (this.documentSystem) this.documentSystem.destroy();
-    if (this.clearanceManager) this.clearanceManager.destroy();
     
     this.logger.info("Application destroyed");
   }
