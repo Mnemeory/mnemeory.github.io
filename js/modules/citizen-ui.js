@@ -7,7 +7,7 @@
 import { CitizenManager } from "./citizen-manager.js";
 import { ToastManager } from "./shared-utilities.js";
 import { CONFIG } from "../config.js";
-const { CITIZEN_STATUSES, site: SITE_CONFIG, CONSTANTS } = CONFIG;
+const { CITIZEN_STATUSES, site: SITE_CONFIG, constants: CONSTANTS } = CONFIG;
 
 export class CitizenUI {
   constructor() {

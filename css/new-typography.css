@@ -1,0 +1,267 @@
+/**
+ * Neural Interface Typography System
+ * Comprehensive typography with neural shimmer effects
+ */
+
+/* === HEADING HIERARCHY === */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-text);
+  text-shadow: var(--shimmer-subtle);
+  margin: 0 0 var(--space-4) 0;
+}
+
+h1 {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+h3 {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+h4 {
+  font-size: var(--text-lg);
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+h5 {
+  font-size: var(--text-base);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+h6 {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* === BODY TEXT === */
+
+p {
+  margin-bottom: var(--space-4);
+  max-width: var(--reading-max-width);
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+/* === FONT WEIGHT UTILITIES === */
+
+.font-light { font-weight: 300; }
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.font-extrabold { font-weight: 800; }
+
+/* === LINE HEIGHT UTILITIES === */
+
+.leading-none { line-height: 1; }
+.leading-tight { line-height: 1.2; }
+.leading-snug { line-height: 1.3; }
+.leading-normal { line-height: 1.5; }
+.leading-relaxed { line-height: 1.6; }
+.leading-loose { line-height: 1.7; }
+
+/* === FONT FAMILY UTILITIES === */
+
+.font-primary { font-family: var(--font-primary); }
+.font-ui { font-family: var(--font-ui); }
+.font-mono { font-family: var(--font-mono); }
+
+/* === TEXT TRANSFORMATION === */
+
+.text-uppercase {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.text-lowercase { text-transform: lowercase; }
+.text-capitalize { text-transform: capitalize; }
+.text-normal-case { text-transform: none; }
+
+/* === LETTER SPACING === */
+
+.tracking-tight { letter-spacing: -0.025em; }
+.tracking-normal { letter-spacing: 0em; }
+.tracking-wide { letter-spacing: 0.025em; }
+.tracking-wider { letter-spacing: 0.05em; }
+.tracking-widest { letter-spacing: 0.1em; }
+
+/* === NEURAL TEXT EFFECTS === */
+
+.text-shimmer {
+  text-shadow: var(--shimmer-subtle);
+}
+
+.text-neural-glow {
+  color: var(--color-cyan);
+  text-shadow:
+    0 0 10px var(--color-cyan),
+    0 0 20px var(--glow-cyan-medium);
+}
+
+.text-cosmic {
+  color: var(--color-cyan);
+  text-shadow:
+    0 0 5px var(--color-cyan),
+    0 0 15px var(--glow-cyan-bright),
+    0 0 25px var(--glow-cyan-medium);
+}
+
+.text-consciousness {
+  color: var(--color-mist);
+  text-shadow: 0 0 8px var(--color-mist);
+}
+
+.text-authority {
+  color: var(--color-warning);
+  font-weight: 600;
+  text-shadow: 0 0 4px var(--color-warning);
+}
+
+/* === TEXT SHADOW VARIATIONS === */
+
+.text-shadow-none { text-shadow: none; }
+.text-shadow-subtle { text-shadow: var(--shimmer-subtle); }
+.text-shadow-glow { text-shadow: 0 0 8px currentColor; }
+.text-shadow-glow-strong { text-shadow: 0 0 12px currentColor; }
+
+.text-shadow-neural {
+  text-shadow:
+    0 0 5px var(--color-cyan),
+    0 0 15px var(--glow-cyan-medium);
+}
+
+.text-shadow-neural-strong {
+  text-shadow:
+    0 0 8px var(--color-cyan),
+    0 0 20px var(--glow-cyan-bright),
+    0 0 35px var(--glow-cyan-medium);
+}
+
+.text-shadow-authority {
+  text-shadow:
+    0 0 5px var(--color-warning),
+    0 0 15px var(--glow-gold-soft);
+}
+
+.text-shadow-consciousness {
+  text-shadow:
+    0 0 3px var(--color-mist),
+    0 0 8px var(--glow-pink-gentle);
+}
+
+/* === SPECIALIZED TYPOGRAPHY === */
+
+/* Cosmic Letter Effects for Interface */
+.cosmic-letter {
+  display: inline-block;
+  color: var(--color-cyan);
+  text-shadow:
+    0 0 5px var(--color-cyan),
+    0 0 15px var(--glow-cyan-bright),
+    0 0 25px var(--glow-cyan-medium);
+  position: relative;
+  transition: all var(--duration-standard) ease;
+}
+
+.cosmic-letter::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  background: radial-gradient(
+    circle at center,
+    var(--glow-pink-gentle) 0%,
+    transparent 50%
+  );
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity var(--duration-standard) ease;
+}
+
+.cosmic-letter:hover {
+  transform: scale(1.1);
+  text-shadow:
+    0 0 8px var(--color-cyan),
+    0 0 20px var(--glow-cyan-intense),
+    0 0 35px var(--glow-cyan-bright);
+}
+
+.cosmic-letter:hover::before {
+  opacity: 1;
+}
+
+/* Flowing Text Animation */
+[data-component="flowing-word"] {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  animation: flowing-text var(--duration-pulse) ease-in-out infinite;
+}
+
+@keyframes flowing-text {
+  0%, 100% {
+    opacity: 0.9;
+    text-shadow: 0 0 8px var(--glow-cyan-gentle);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 12px var(--glow-cyan-medium);
+  }
+}
+
+/* Animation delay utilities for staggered text */
+.stagger-delay:nth-child(1) { animation-delay: 0s; }
+.stagger-delay:nth-child(2) { animation-delay: -3s; }
+.stagger-delay:nth-child(3) { animation-delay: -6s; }
+.stagger-delay:nth-child(4) { animation-delay: -9s; }
+.stagger-delay:nth-child(5) { animation-delay: -12s; }
+
+.stagger-delay--alt:nth-child(odd) { animation-delay: -1s; }
+.stagger-delay--alt:nth-child(3n) { animation-delay: -2s; }
+.stagger-delay--alt:nth-child(5n) { animation-delay: -3s; }
+
+/* === ACCESSIBILITY === */
+
+@media (prefers-reduced-motion: reduce) {
+  .text-shimmer,
+  .text-neural-glow,
+  .text-cosmic,
+  .cosmic-letter,
+  [data-component="flowing-word"] {
+    animation: none !important;
+    text-shadow: none !important;
+  }
+  
+  .cosmic-letter:hover {
+    transform: none !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .text-neural-glow,
+  .text-cosmic,
+  .cosmic-letter {
+    text-shadow: none !important;
+    font-weight: 600 !important;
+  }
+}

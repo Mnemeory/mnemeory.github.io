@@ -1,11 +1,151 @@
 /**
- * Standardized Atmospheric System
- * Seamless fog and glow effects with constellation-specific transitions
- * Replaces the banding-prone fluid-consciousness system
+ * Starfield & Atmospheric System
+ * 3D starfield interface with seamless atmospheric effects
  */
 
-/* === ATMOSPHERIC BASE LAYER === */
+/* === STARFIELD INTERFACE === */
 
+[data-view="starfield-view"] {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  opacity: 1;
+  transition: opacity var(--duration-base) var(--ease-neural);
+  display: flex;
+  flex-direction: column;
+  z-index: var(--z-raised);
+}
+
+[data-view="starfield-view"]:not(.active),
+[data-view="starfield-view"][data-state="hidden"] {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-base);
+}
+
+[data-view="starfield-view"].active,
+[data-view="starfield-view"][data-state="active"] {
+  z-index: var(--z-floating);
+}
+
+/* Starfield Instructions */
+.starfield-instructions {
+  text-align: center;
+  padding: var(--space-4);
+  color: var(--color-text-muted);
+  background: var(--glass-bg-light);
+  border-bottom: 1px solid var(--glass-border);
+  flex-shrink: 0;
+}
+
+.keyboard-hint {
+  font-size: var(--text-sm);
+  margin-top: var(--space-2);
+}
+
+.keyboard-hint kbd {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  background: var(--glass-bg-medium);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--color-accent);
+}
+
+/* Starfield Container */
+[data-component="starfield-container"] {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+[data-component="starfield-canvas"] {
+  width: 100%;
+  height: 100%;
+  display: block;
+  min-height: 400px;
+  background: transparent;
+}
+
+/* Hide scrollbars for immersive experience */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* === CONSTELLATION TOOLTIPS === */
+
+[data-component="constellation-tooltip"] {
+  position: absolute;
+  z-index: var(--z-tooltip);
+  background: var(--glass-bg-dark);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: var(--shadow-glow);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease-neural);
+  max-width: 200px;
+  backdrop-filter: blur(10px);
+}
+
+[data-component="constellation-tooltip"].is-visible {
+  opacity: 1;
+}
+
+[data-component="constellation-tooltip"]--positioned {
+  transform: translate(-50%, -100%);
+  margin-top: -8px;
+  z-index: var(--z-tooltip);
+}
+
+/* Tooltip Components */
+[data-component="tooltip-header"] {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+[data-component="tooltip-resonance-indicator"] {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+[data-component="tooltip-constellation-name"] {
+  font-weight: 600;
+}
+
+[data-component="tooltip-meaning"] {
+  font-size: var(--text-sm);
+  margin-top: var(--space-1);
+}
+
+[data-component="tooltip-instruction"] {
+  font-size: var(--text-xs);
+  margin-top: var(--space-2);
+  opacity: 0.8;
+}
+
+[data-component="psi-glyph"] {
+  margin-right: var(--space-1);
+}
+
+/* === ATMOSPHERIC SYSTEM === */
+
+/* Base Atmospheric Layer */
 [data-component="atmospheric-base"] {
   position: fixed;
   top: -20vh;
@@ -16,11 +156,9 @@
   height: 140vh;
   pointer-events: none;
   z-index: -3;
-
 }
 
-/* === ATMOSPHERIC OVERLAY === */
-
+/* Atmospheric Overlay */
 [data-component="atmospheric-overlay"] {
   position: fixed;
   top: -20vh;
@@ -54,9 +192,7 @@
   will-change: transform;
 }
 
-/* === CONSTELLATION-SPECIFIC ATMOSPHERIC THEMES === */
-
-/* Base atmospheric transition system */
+/* Constellation-Specific Atmospheric Themes */
 [data-component="constellation-atmosphere"] {
   position: fixed;
   top: -20vh;
@@ -100,94 +236,41 @@
   opacity: 0.5;
 }
 
-/* === CONSTELLATION-SPECIFIC THEMES === */
+/* === CONSTELLATION THEMES === */
 
-/* Gnarled Tree - Ancient Wisdom Atmosphere */
+/* Gnarled Tree - Ancient Wisdom */
 [data-component="constellation-atmosphere"].tree-theme {
   --constellation-primary-glow: var(--constellation-tree-glow);
   --constellation-secondary-glow: var(--constellation-tree-bg);
   --constellation-accent-glow: var(--constellation-tree-glow);
 }
 
-/* Qu'Poxii - Love & Bond Atmosphere */
+/* Qu'Poxii - Love & Bond */
 [data-component="constellation-atmosphere"].bond-theme {
   --constellation-primary-glow: var(--constellation-bond-glow);
   --constellation-secondary-glow: var(--constellation-bond-bg);
   --constellation-accent-glow: var(--constellation-bond-glow);
 }
 
-/* Star Chanter - Wisdom Atmosphere */
+/* Star Chanter - Wisdom */
 [data-component="constellation-atmosphere"].chant-theme {
   --constellation-primary-glow: var(--constellation-chant-glow);
   --constellation-secondary-glow: var(--constellation-chant-bg);
   --constellation-accent-glow: var(--constellation-chant-glow);
 }
 
-/* Hatching Egg - Growth Atmosphere */
+/* Hatching Egg - Growth */
 [data-component="constellation-atmosphere"].egg-theme {
   --constellation-primary-glow: var(--constellation-egg-glow);
   --constellation-secondary-glow: var(--constellation-egg-bg);
   --constellation-accent-glow: var(--constellation-egg-glow);
 }
 
-/* Void - Mystery Atmosphere */
+/* Void - Mystery */
 [data-component="constellation-atmosphere"].void-theme {
   --constellation-primary-glow: var(--constellation-void-glow);
   --constellation-secondary-glow: var(--constellation-void-bg);
   --constellation-accent-glow: var(--constellation-void-glow);
-}
-
-/* === SEAMLESS ANIMATIONS === */
-
-@keyframes atmospheric-drift {
-  0%, 100% {
-    transform: scale(1) rotate(0deg);
-    opacity: 0.8;
-  }
-  33% {
-    transform: scale(1.02) rotate(0.5deg);
-    opacity: 1;
-  }
-  66% {
-    transform: scale(0.98) rotate(-0.3deg);
-    opacity: 0.9;
-  }
-}
-
-@keyframes atmospheric-flow {
-  0%, 100% {
-    --atmo-x: 30%;
-    --atmo-y: 40%;
-    --atmo-x2: 70%;
-    --atmo-y2: 60%;
-    transform: scale(1);
-  }
-  50% {
-    --atmo-x: 60%;
-    --atmo-y: 20%;
-    --atmo-x2: 40%;
-    --atmo-y2: 80%;
-    transform: scale(1.01);
-  }
-}
-
-@keyframes constellation-atmospheric-flow {
-  0%, 100% {
-    transform: scale(1) translateX(0) translateY(0);
-    opacity: 0.4;
-  }
-  25% {
-    transform: scale(1.01) translateX(1%) translateY(-0.5%);
-    opacity: 0.5;
-  }
-  50% {
-    transform: scale(0.99) translateX(-0.5%) translateY(1%);
-    opacity: 0.6;
-  }
-  75% {
-    transform: scale(1.005) translateX(0.5%) translateY(-0.5%);
-    opacity: 0.45;
-  }
 }
 
 /* === CONTENT OVERLAY ENHANCEMENT === */
@@ -214,32 +297,44 @@
   opacity: 0.3;
 }
 
-/* === REDUCED MOTION SUPPORT === */
+/* === CONSTELLATION VIEW CONTAINERS === */
 
-@media (prefers-reduced-motion: reduce) {
-  [data-component="atmospheric-base"],
-  [data-component="atmospheric-overlay"],
-  [data-component="constellation-atmosphere"] {
-    animation: none;
-    transform: none;
-  }
+[data-view*="-view"] {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  transition: all var(--duration-slower) var(--ease-neural);
+  pointer-events: none;
+  padding: var(--space-8) var(--space-6);
+  z-index: var(--z-base);
+  box-sizing: border-box;
   
-  [data-component="atmospheric-base"] {
-    opacity: 0.6;
-  }
-  
-  [data-component="atmospheric-overlay"] {
-    opacity: 0.3;
-  }
-  
-  [data-component="constellation-atmosphere"].active {
-    opacity: 0.2;
-  }
+  /* Minimal base styling - atmospheric effects handled separately */
+  background: transparent;
+  backdrop-filter: blur(1px);
 }
 
-/* === ATMOSPHERE ELEMENTS === */
+/* Active view state */
+[data-view*="-view"].active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  z-index: var(--z-floating);
+  animation: thought-materialization var(--duration-slower) var(--ease-neural) forwards;
+}
 
-/* Base atmosphere element styling */
+/* Hidden view state */
+[data-view*="-view"][aria-hidden="true"] {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+  z-index: -1;
+}
+
+/* === ATMOSPHERE ELEMENTS (Alternative System) === */
+
 .atmosphere-element {
   position: fixed;
   top: 0;
@@ -253,7 +348,6 @@
   overflow: hidden;
 }
 
-/* Active atmosphere element */
 .atmosphere-element.active {
   opacity: 0.4;
 }
@@ -329,7 +423,101 @@
     );
 }
 
-/* === HIGH CONTRAST MODE === */
+/* === CURSOR INTERACTIONS === */
+
+[data-hover-state="active"] {
+  cursor: pointer;
+}
+
+[data-hover-state="default"] {
+  cursor: default;
+}
+
+/* === ANIMATIONS === */
+
+@keyframes atmospheric-flow {
+  0%, 100% {
+    --atmo-x: 30%;
+    --atmo-y: 40%;
+    --atmo-x2: 70%;
+    --atmo-y2: 60%;
+    transform: scale(1);
+  }
+  50% {
+    --atmo-x: 60%;
+    --atmo-y: 20%;
+    --atmo-x2: 40%;
+    --atmo-y2: 80%;
+    transform: scale(1.01);
+  }
+}
+
+@keyframes constellation-atmospheric-flow {
+  0%, 100% {
+    transform: scale(1) translateX(0) translateY(0);
+    opacity: 0.4;
+  }
+  25% {
+    transform: scale(1.01) translateX(1%) translateY(-0.5%);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(0.99) translateX(-0.5%) translateY(1%);
+    opacity: 0.6;
+  }
+  75% {
+    transform: scale(1.005) translateX(0.5%) translateY(-0.5%);
+    opacity: 0.45;
+  }
+}
+
+@keyframes thought-materialization {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    filter: blur(2px);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateY(-5px) scale(1.02);
+    filter: blur(0.5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* === ACCESSIBILITY === */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-component="atmospheric-base"],
+  [data-component="atmospheric-overlay"],
+  [data-component="constellation-atmosphere"] {
+    animation: none;
+    transform: none;
+  }
+  
+  [data-component="atmospheric-base"] {
+    opacity: 0.6;
+  }
+  
+  [data-component="atmospheric-overlay"] {
+    opacity: 0.3;
+  }
+  
+  [data-component="constellation-atmosphere"].active {
+    opacity: 0.2;
+  }
+  
+  [data-view].active {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
 
 @media (prefers-contrast: high) {
   [data-component="atmospheric-base"],

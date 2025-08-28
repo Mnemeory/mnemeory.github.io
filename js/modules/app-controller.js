@@ -107,6 +107,89 @@ export class AppController {
   }
 
   /**
+   * Create mock data for fallback when real data is unavailable
+   */
+  async createMockData() {
+    const mockNodes = [];
+    
+    try {
+      // Mock citizen data
+      mockNodes.push({
+        id: "citizen-sf01",
+        name: "SF01-24670825.txt",
+        path: "citizen/SF01-24670825.txt",
+        constellation: "qu-poxii",
+        seal: "open",
+        content: "Mock citizen record content",
+        metadata: {
+          type: "citizen",
+          lastModified: new Date().toISOString(),
+          size: "2.1 KB"
+        }
+      });
+
+      // Mock template data
+      const templates = [
+        { name: "CLERICAL-BusinessCard.txt", title: "Business Card Template" },
+        { name: "CLERICAL-EFaxTemplate.txt", title: "E-Fax Template" },
+        { name: "CLERICAL-FaxTemplate.txt", title: "Fax Template" }
+      ];
+
+      templates.forEach((template, index) => {
+        mockNodes.push({
+          id: `template-${index}`,
+          name: template.name,
+          path: `templates/${template.name}`,
+          constellation: "hatching-egg",
+          seal: "open",
+          content: `Mock template content for ${template.title}`,
+          metadata: {
+            type: "template",
+            lastModified: new Date().toISOString(),
+            size: "1.5 KB"
+          }
+        });
+      });
+
+      // Mock data for other constellations
+      mockNodes.push({
+        id: "tree-sample",
+        name: "Diplomatic Protocol Sample",
+        path: "mock/diplomatic.md",
+        constellation: "gnarled-tree",
+        seal: "open",
+        content: "Mock diplomatic protocol content",
+        metadata: {
+          type: "protocol",
+          lastModified: new Date().toISOString(),
+          size: "3.2 KB"
+        }
+      });
+
+      mockNodes.push({
+        id: "chant-sample",
+        name: "Star Chanter Record",
+        path: "mock/chanter.md",
+        constellation: "star-chanter",
+        seal: "open",
+        content: "Mock star chanter ceremonial record",
+        metadata: {
+          type: "ceremonial",
+          lastModified: new Date().toISOString(),
+          size: "2.8 KB"
+        }
+      });
+
+      this.logger.info(`Created ${mockNodes.length} mock nodes for development`);
+      return mockNodes;
+      
+    } catch (error) {
+      this.logger.warn("Failed to create mock data", error);
+      return [];
+    }
+  }
+
+  /**
    * Set up HTML configuration from centralized config
    */
   setupHTMLConfiguration() {
@@ -263,15 +346,8 @@ export class AppController {
       this.logger.info("Loading application data");
       this.state.set("dataState", "loading");
       
-      // Skip GitHub API in development mode (localhost)
-      const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      
-      if (isDevelopment) {
-        this.logger.info("Development mode detected - skipping GitHub API and using empty data");
-        this.state.set("dataState", "ready");
-        this.logger.info("Application initialized in development mode");
-        return [];
-      }
+      // Try to load real data first, fall back to mock data if needed
+      this.logger.info("Attempting to load data from GitHub API");
       
       // Import the file scanner dynamically
       const { FileScanner } = await import("./file-scanner.js");
@@ -280,13 +356,15 @@ export class AppController {
       // Configure repository
       scanner.setRepositoryConfig("Mnemeory", "mnemeory.github.io");
       
-      // Test connection - but don't fail if GitHub API is unavailable
+      // Test connection - fall back to mock data if GitHub API is unavailable
       const connectionTest = await scanner.testConnection();
       if (!connectionTest) {
-        this.logger.warn("GitHub API not accessible - continuing with empty data");
+        this.logger.warn("GitHub API not accessible - using mock data instead");
+        const mockNodes = await this.createMockData();
+        this.state.set("nodes", mockNodes);
         this.state.set("dataState", "ready");
-        this.logger.info("Application initialized with empty data state");
-        return [];
+        this.logger.info(`Initialized with ${mockNodes.length} mock nodes`);
+        return mockNodes;
       }
       
       // Define scan paths mapped to constellations
@@ -330,16 +408,25 @@ export class AppController {
       
       return sortedNodes;
     } catch (error) {
-      this.logger.warn("Data loading failed - continuing with empty data", error);
-      this.state.set("dataState", "ready");
-      this.state.set("dataError", {
-        message: error.message,
-        stack: error.stack,
-        time: new Date().toISOString()
-      });
+      this.logger.warn("Data loading failed - falling back to mock data", error);
       
-      // Return empty array instead of throwing - app can continue without external data
-      return [];
+      // Fall back to mock data on any error
+      try {
+        const mockNodes = await this.createMockData();
+        this.state.set("nodes", mockNodes);
+        this.state.set("dataState", "ready");
+        this.logger.info(`Fallback: initialized with ${mockNodes.length} mock nodes`);
+        return mockNodes;
+      } catch (mockError) {
+        this.logger.error("Failed to create mock data", mockError);
+        this.state.set("dataState", "ready");
+        this.state.set("dataError", {
+          message: error.message,
+          stack: error.stack,
+          time: new Date().toISOString()
+        });
+        return [];
+      }
     }
   }
 
@@ -383,6 +470,20 @@ export class AppController {
     document.addEventListener("app:constellation:shown", (event) => {
       const { constellation } = event.detail;
       this.populateConstellationView(constellation);
+    });
+
+    // Listen for citizen UI initialization events
+    document.addEventListener("app:initialize:citizenUI", async (event) => {
+      const { containerId, nodes } = event.detail;
+      try {
+        // Dynamically import CitizenUI to avoid circular dependencies
+        const { CitizenUI } = await import("./citizen-ui.js");
+        const citizenUI = new CitizenUI();
+        citizenUI.init(`#${containerId}`);
+        this.logger.info(`Citizen UI initialized for container: ${containerId}`);
+      } catch (error) {
+        this.logger.error("Failed to initialize Citizen UI", error);
+      }
     });
   }
 

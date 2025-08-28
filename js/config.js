@@ -27,8 +27,8 @@ const ANIMATION = {
 
 // Environment and feature flags
 const ENV = {
-  production: window.location.hostname !== 'localhost',
-  debug: false,
+  production: true, // Always treat as production-ready
+  debug: true,      // Always enable debug logging
   features: {
     starfield3D: true,
     notifications: true
@@ -225,7 +225,7 @@ const SITE_CONFIG = {
 // Logging configuration
 const LOGGING = {
   enabled: true,
-  level: ENV.production ? 'warn' : 'debug'
+  level: 'debug' // Always use debug level for better troubleshooting
 };
 
 // Timeline settings
@@ -364,7 +364,8 @@ export const CONFIG = {
   constellations: CONSTELLATIONS,
   site: SITE_CONFIG,
   logging: LOGGING,
-  timeline: TIMELINE
+  timeline: TIMELINE,
+  constants: CONSTANTS
 };
 
 // Export individual constants and configurations

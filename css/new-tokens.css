@@ -1,0 +1,330 @@
+/**
+ * Neural Interface Design Tokens
+ * Comprehensive design system for the Nralakk Federation Interface
+ */
+
+:root {
+  /* === COLOR PALETTE - Cosmic Neural Theme === */
+  
+  /* Primary Cosmic Colors */
+  --color-midnight-indigo: #233c67;
+  --color-russian-violet: #2e1b49;
+  --color-celestial-blue: #489bcf;
+  --color-pale-turquoise: #afeeee;
+  --color-soft-pink: #feddd8;
+  --color-metallic-silver: #c0c0c0;
+  
+  /* Core Interface Colors */
+  --color-abyss: var(--color-midnight-indigo);
+  --color-skrell-blue: var(--color-celestial-blue);
+  --color-quasar: var(--color-russian-violet);
+  --color-kelpie: #1b5e55;
+  --color-cyan: var(--color-pale-turquoise);
+  --color-gold: #e5c76b;
+  --color-mist: var(--color-soft-pink);
+  
+  /* Semantic Colors */
+  --color-bg: var(--color-abyss);
+  --color-accent: var(--color-cyan);
+  --color-warning: var(--color-gold);
+  --color-error: #ef4444;
+  --color-success: #22c55e;
+  --color-text: var(--color-mist);
+  --color-text-muted: rgba(230, 238, 243, 0.7);
+  --color-text-dim: rgba(230, 238, 243, 0.5);
+  --color-border: var(--color-metallic-silver);
+  
+  /* Skrell Cultural Colors */
+  --color-warmth-seek: #f4a460;
+  --color-nlom-resonance: #40e0d0;
+  --color-qerrbalak-depths: #2f4f4f;
+  --color-grand-council: #daa520;
+  --color-post-glorsh: #4682b4;
+  --color-federation-unity: #5f9ea0;
+  --color-star-worship: #b0e0e6;
+  --color-mathematical-precision: #87ceeb;
+  
+  /* Constellation Colors */
+  --constellation-tree-primary: #8fbc8f;
+  --constellation-tree-bg: rgba(143, 188, 143, 0.08);
+  --constellation-tree-glow: rgba(50, 205, 50, 0.25);
+  
+  --constellation-bond-primary: #ff6b9d;
+  --constellation-bond-bg: rgba(255, 107, 157, 0.08);
+  --constellation-bond-glow: rgba(255, 143, 163, 0.25);
+  
+  --constellation-chant-primary: #6495ed;
+  --constellation-chant-bg: rgba(100, 149, 237, 0.08);
+  --constellation-chant-glow: rgba(135, 206, 235, 0.25);
+  
+  --constellation-egg-primary: #90ee90;
+  --constellation-egg-bg: rgba(144, 238, 144, 0.08);
+  --constellation-egg-glow: rgba(152, 251, 152, 0.25);
+  
+  --constellation-void-primary: #483d8b;
+  --constellation-void-bg: rgba(72, 61, 139, 0.08);
+  --constellation-void-glow: rgba(147, 112, 219, 0.25);
+  
+  /* === TYPOGRAPHY === */
+  
+  /* Font Families */
+  --font-primary: "Exo 2", system-ui, sans-serif;
+  --font-ui: "Noto Sans", system-ui, sans-serif;
+  --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace;
+  
+  /* Font Sizes - Fluid Typography */
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1.05rem + 0.375vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.35rem + 0.75vw, 2rem);
+  --text-3xl: clamp(2rem, 1.75rem + 1.25vw, 3rem);
+  
+  /* === SPACING === */
+  
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  
+  /* === BORDER RADIUS === */
+  
+  /* Standard Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+  
+  /* Organic Radius - Neural Interface */
+  --radius-organic-1: 50px 20px 50px 20px;
+  --radius-organic-2: 20px 50px 20px 50px;
+  --radius-organic-3: 30px 30px 30px 30px;
+  --radius-organic-subtle: 24px 16px 24px 16px;
+  --radius-organic-dynamic: 16px 24px 16px 24px;
+  
+  /* Morphing Radius - Advanced States */
+  --radius-morph-1: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  --radius-morph-2: 30% 70% 60% 40% / 40% 60% 30% 70%;
+  --radius-morph-3: 70% 30% 40% 60% / 70% 40% 60% 30%;
+  --radius-morph-4: 40% 60% 70% 30% / 30% 70% 40% 60%;
+  --radius-morph-bubble: 50% 40% 60% 30% / 40% 60% 30% 50%;
+  --radius-morph-flow: 50% 30% 50% 30% / 30% 50% 30% 50%;
+  
+  /* === GLASS SYSTEM === */
+  
+  /* Base Glass Backgrounds */
+  --glass-bg-subtle: rgba(14, 55, 87, 0.08);
+  --glass-bg-light: rgba(14, 55, 87, 0.15);
+  --glass-bg-medium: rgba(14, 55, 87, 0.25);
+  --glass-bg-heavy: rgba(14, 55, 87, 0.4);
+  --glass-bg-dark: rgba(14, 55, 87, 0.6);
+  
+  /* Specialized Glass */
+  --glass-bg-neural: rgba(175, 238, 238, 0.08);
+  --glass-bg-cosmic: rgba(46, 27, 73, 0.15);
+  --glass-bg-accent: rgba(92, 231, 231, 0.12);
+  
+  /* Glass Borders */
+  --glass-border: rgba(92, 231, 231, 0.2);
+  --glass-border-subtle: rgba(92, 231, 231, 0.1);
+  --glass-border-strong: rgba(92, 231, 231, 0.4);
+  --glass-glow: rgba(92, 231, 231, 0.1);
+  
+  /* === GLOW SYSTEM === */
+  
+  /* Cyan Glow Intensities */
+  --glow-cyan-whisper: rgba(175, 238, 238, 0.02);
+  --glow-cyan-ultra: rgba(175, 238, 238, 0.03);
+  --glow-cyan-faint: rgba(175, 238, 238, 0.05);
+  --glow-cyan-gentle: rgba(175, 238, 238, 0.1);
+  --glow-cyan-medium: rgba(175, 238, 238, 0.2);
+  --glow-cyan-strong: rgba(175, 238, 238, 0.4);
+  --glow-cyan-bright: rgba(175, 238, 238, 0.6);
+  --glow-cyan-intense: rgba(175, 238, 238, 0.8);
+  --glow-cyan-border: rgba(175, 238, 238, 0.3);
+  
+  /* Pink Glow */
+  --glow-pink-whisper: rgba(254, 221, 216, 0.015);
+  --glow-pink-subtle: rgba(254, 221, 216, 0.04);
+  --glow-pink-gentle: rgba(254, 221, 216, 0.06);
+  --glow-pink-soft: rgba(254, 221, 216, 0.12);
+  
+  /* Gold Glow */
+  --glow-gold-soft: rgba(229, 199, 107, 0.4);
+  --glow-gold-error-bg-outer: rgba(229, 199, 107, 0.2);
+  --glow-gold-error-bg-inner: rgba(229, 199, 107, 0.1);
+  --glow-gold-error-border: rgba(229, 199, 107, 0.4);
+  --glow-gold-error-text: rgba(229, 199, 107, 0.4);
+  
+  /* === SHADOWS === */
+  
+  /* Base Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
+  
+  /* Neural Shadows */
+  --shadow-neural-sm: 0 2px 8px rgba(175, 238, 238, 0.15);
+  --shadow-neural-md: 0 4px 16px rgba(175, 238, 238, 0.2);
+  --shadow-neural-lg: 0 8px 32px rgba(175, 238, 238, 0.25);
+  --shadow-neural-xl: 0 12px 48px rgba(175, 238, 238, 0.3);
+  
+  /* Specialized Shadows */
+  --shadow-glow: 0 0 20px rgba(92, 231, 231, 0.3);
+  --shadow-glow-intense: 0 0 40px rgba(92, 231, 231, 0.5);
+  --shadow-void: 0 8px 32px rgba(72, 61, 139, 0.4);
+  --shadow-authority: 0 8px 32px rgba(229, 199, 107, 0.3);
+  --shadow-consciousness: 0 0 60px rgba(175, 238, 238, 0.1);
+  
+  /* Inset Shadows */
+  --shadow-inset-neural: inset 0 0 20px rgba(175, 238, 238, 0.1);
+  --shadow-inset-glow: inset 0 0 40px rgba(175, 238, 238, 0.05);
+  
+  /* === Z-INDEX === */
+  
+  --z-base: 0;
+  --z-raised: 10;
+  --z-floating: 50;
+  --z-overlay: 100;
+  --z-dropdown: 200;
+  --z-header: 300;
+  --z-modal: 1000;
+  --z-toast: 1100;
+  --z-tooltip: 1200;
+  
+  /* === ANIMATION === */
+  
+  /* Easing Functions */
+  --ease-neural: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-organic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-consciousness: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-psionic: cubic-bezier(0.23, 1, 0.32, 1);
+  
+  /* Duration System */
+  --duration-instant: 50ms;
+  --duration-micro: 100ms;
+  --duration-quick: 150ms;
+  --duration-fast: 250ms;
+  --duration-base: 300ms;
+  --duration-standard: 400ms;
+  --duration-slow: 500ms;
+  --duration-slower: 800ms;
+  --duration-ultra: 1200ms;
+  
+  /* Long Animations */
+  --duration-float: 16s;
+  --duration-morph: 8s;
+  --duration-pulse: 3s;
+  --duration-flow: 180s;
+  --duration-flow-extended: 240s;
+  --duration-neural-pulse: 4s;
+  --duration-ripples: 6s;
+  
+  /* === GRADIENTS === */
+  
+  /* Neural Gradients */
+  --gradient-neural-primary: radial-gradient(
+    ellipse at center,
+    rgba(175, 238, 238, 0.15) 0%,
+    rgba(175, 238, 238, 0.08) 40%,
+    transparent 70%
+  );
+  
+  --gradient-neural-secondary: linear-gradient(
+    135deg,
+    rgba(35, 60, 103, 0.15) 0%,
+    rgba(46, 27, 73, 0.1) 100%
+  );
+  
+  --gradient-consciousness-flow: radial-gradient(
+    ellipse at top left,
+    rgba(175, 238, 238, 0.12) 0%,
+    rgba(254, 221, 216, 0.06) 40%,
+    transparent 70%
+  );
+  
+  /* Modal Gradients */
+  --gradient-modal-backdrop:
+    radial-gradient(
+      ellipse 1200px 800px at 30% 70%,
+      rgba(35, 60, 103, 0.4) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 800px 600px at 70% 30%,
+      rgba(46, 27, 73, 0.3) 0%,
+      transparent 50%
+    );
+  
+  /* Energy Gradients */
+  --gradient-energy-horizontal: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(175, 238, 238, 0.6) 30%,
+    rgba(254, 221, 216, 0.4) 70%,
+    transparent 100%
+  );
+  
+  --gradient-energy-conic: conic-gradient(
+    transparent 0deg,
+    rgba(175, 238, 238, 0.1) 90deg,
+    transparent 180deg,
+    rgba(254, 221, 216, 0.08) 270deg,
+    transparent 360deg
+  );
+  
+  /* Constellation Header */
+  --gradient-constellation-header: radial-gradient(
+    ellipse 500px 200px at center,
+    rgba(175, 238, 238, 0.1) 0%,
+    rgba(254, 221, 216, 0.05) 40%,
+    transparent 70%
+  );
+  
+  /* === BACKGROUND OVERLAYS === */
+  
+  --bg-overlay-neural: rgba(7, 20, 34, 0.8);
+  --bg-overlay-void: rgba(7, 20, 34, 0.9);
+  --bg-overlay-consciousness: rgba(0, 0, 0, 0.3);
+  --bg-overlay-interface: rgba(0, 0, 0, 0.2);
+  --bg-overlay-white-subtle: rgba(255, 255, 255, 0.02);
+  --bg-overlay-white-medium: rgba(255, 255, 255, 0.05);
+  
+  /* === LAYOUT CONSTRAINTS === */
+  
+  --content-max-width: 1600px;
+  --reading-max-width: 65ch;
+  
+  /* === SHIMMER EFFECTS === */
+  
+  --shimmer-subtle: 0 0 1px rgba(92, 231, 231, 0.3);
+}
+
+/* === THEME VARIATIONS === */
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  :root {
+    --color-text: #ffffff;
+    --color-accent: #00ffff;
+    --glass-border: rgba(255, 255, 255, 0.5);
+  }
+}
+
+/* Dark Mode Support (Default) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
