@@ -410,7 +410,7 @@ export class PencodeRenderEngine {
    */
   processFieldTag(text, tagName, config) {
     const regex = /\[field\]/gi;
-    return text.replace(regex, `<span class="${config.class}">__________</span>`);
+    return text.replace(regex, `<span class="${config.class}" data-component="field-input">__________</span>`);
   }
 
   /**
@@ -427,7 +427,7 @@ export class PencodeRenderEngine {
     const flagInfo = flagMappings[tagName];
 
     if (!flagInfo) {
-      return text.replace(regex, `<span class="error">[Unknown flag: ${tagName}]</span>`);
+      return text.replace(regex, `<span class="error" data-component="error-text">[Unknown flag: ${tagName}]</span>`);
     }
 
     // Use existing asset or fallback to placeholder
@@ -453,7 +453,7 @@ export class PencodeRenderEngine {
     const logoInfo = logoMappings[tagName];
 
     if (!logoInfo) {
-      return text.replace(regex, `<span class="error">[Unknown logo: ${tagName}]</span>`);
+      return text.replace(regex, `<span class="error" data-component="error-text">[Unknown logo: ${tagName}]</span>`);
     }
 
     // Use existing asset or fallback to placeholder
@@ -479,7 +479,7 @@ export class PencodeRenderEngine {
   processStationTag(text, tagName, config) {
     const regex = /\[station\]/gi;
     const stationName = SITE_CONFIG.stationName || 'SCCV Horizon';
-    return text.replace(regex, `<span class="${config.class}">${stationName}</span>`);
+    return text.replace(regex, `<span class="${config.class}" data-component="station-name">${stationName}</span>`);
   }
 
   /**
@@ -499,7 +499,7 @@ export class PencodeRenderEngine {
   processTimeTag(text, tagName, config) {
     const regex = /\[time\]/gi;
     const currentTime = new Date().toLocaleTimeString();
-    return text.replace(regex, `<span class="${config.class}">${currentTime}</span>`);
+    return text.replace(regex, `<span class="${config.class}" data-component="timestamp">${currentTime}</span>`);
   }
 
   /**
@@ -508,7 +508,7 @@ export class PencodeRenderEngine {
   processDateTag(text, tagName, config) {
     const regex = /\[date\]/gi;
     const currentDate = new Date().toLocaleDateString();
-    return text.replace(regex, `<span class="${config.class}">${currentDate}</span>`);
+    return text.replace(regex, `<span class="${config.class}" data-component="datestamp">${currentDate}</span>`);
   }
 
   /**
@@ -579,8 +579,8 @@ export class PencodeRenderEngine {
     const themeConfig = this.themeStyles[theme] || this.themeStyles.neural;
     const editClass = editMode ? ` ${themeConfig.editModeClass}` : '';
 
-    return `<div class="${themeConfig.containerClass}${editClass}" data-theme="${theme}">
-      <div class="${themeConfig.contentClass}">
+    return `<div class="${themeConfig.containerClass}${editClass}" data-component="document-container" data-theme="${theme}">
+      <div class="${themeConfig.contentClass}" data-component="document-content">
         ${html}
       </div>
     </div>`;
@@ -604,15 +604,15 @@ export class PencodeRenderEngine {
    * Generate document stamp HTML
    */
   generateStamp(stampInfo) {
-    return `<div class="neural-stamp">
-      <div class="stamp-header">NRALAKK FEDERATION</div>
-      <div class="stamp-certification">CERTIFIED DOCUMENT</div>
-      <div class="stamp-details">
-        <div class="stamp-date">FILED ON: ${stampInfo.date}</div>
-        <div class="stamp-round ${stampInfo.round === 'EXEC_OVR' ? 'exec-override' : ''}">${stampInfo.round}</div>
-        <div class="stamp-name">Grand Council Archives • Qerrbalak</div>
+    return `<div class="neural-stamp" data-component="document-stamp">
+      <div class="stamp-header" data-component="stamp-header">NRALAKK FEDERATION</div>
+      <div class="stamp-certification" data-component="stamp-certification">CERTIFIED DOCUMENT</div>
+      <div class="stamp-details" data-component="stamp-details">
+        <div class="stamp-date" data-component="stamp-date">FILED ON: ${stampInfo.date}</div>
+        <div class="stamp-round ${stampInfo.round === 'EXEC_OVR' ? 'exec-override' : ''}" data-component="stamp-round">${stampInfo.round}</div>
+        <div class="stamp-name" data-component="stamp-name">Grand Council Archives • Qerrbalak</div>
       </div>
-      <div class="stamp-authority">PRIMARY NUMERICAL - CONSULAR OFFICE</div>
+      <div class="stamp-authority" data-component="stamp-authority">PRIMARY NUMERICAL - CONSULAR OFFICE</div>
     </div>`;
   }
 
@@ -841,8 +841,8 @@ export class PencodeRenderEngine {
    * Render error state
    */
   renderError(error, originalText) {
-    return `<div class="neural-document error-state">
-      <div class="neural-content">
+    return `<div class="neural-document error-state" data-component="document-container">
+      <div class="neural-content" data-component="document-content">
         <h1 class="neural-heading neural-heading--primary">⚠️ NEURAL RENDERING ERROR</h1>
         <p><strong>Error:</strong> ${error.message}</p>
         <p><strong>Original Text:</strong></p>

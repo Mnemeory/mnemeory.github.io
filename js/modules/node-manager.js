@@ -27,8 +27,8 @@ export class NodeManager {
    * Setup modal system
    */
   setupModal() {
-    // Find modal element
-    this.modal = document.querySelector(CONFIG.site.selectors.modal);
+    // Find modal element using new data-component selector
+    this.modal = document.querySelector("[data-component='modal']");
     if (!this.modal) {
       this.logger.warn("Node modal not found in DOM");
       return;
@@ -55,13 +55,13 @@ export class NodeManager {
   setupModalEvents() {
     if (!this.modal) return;
     
-    // Close button
+    // Close button using new data-component selector
     const closeBtn = this.modal.querySelector("[data-component='modal-close']");
     if (closeBtn) {
       closeBtn.addEventListener("click", () => this.closeModal());
     }
     
-    // Backdrop click - updated to use new data-component attribute
+    // Backdrop click using new data-component attribute
     const backdrop = this.modal.querySelector("[data-component='modal-backdrop']");
     if (backdrop) {
       backdrop.addEventListener("click", (event) => {
@@ -238,9 +238,9 @@ export class NodeManager {
   renderThoughtBubbleLayout(container, nodes, constellation) {
     const constellationData = CONFIG.constellations[constellation];
     
-      // Create thought bubble container - updated to use new card system
+      // Create thought bubble container using new design system
       const thoughtBubbleContainer = document.createElement("div");
-      thoughtBubbleContainer.className = "card-container";
+      thoughtBubbleContainer.className = "thought-bubble-documents";
       thoughtBubbleContainer.setAttribute("data-constellation", constellation);
     thoughtBubbleContainer.setAttribute("role", "region");
     thoughtBubbleContainer.setAttribute(
@@ -269,18 +269,29 @@ export class NodeManager {
    */
   populateCitizenFileBubbles(nodes, constellation) {
     setTimeout(() => {
-      const bubblesContainer = document.getElementById("citizen-files-bubbles");
+      let bubblesContainer = document.getElementById("citizen-files-bubbles");
       if (!bubblesContainer) {
-        this.logger.warn("Citizen files bubbles container not found");
-        return;
+        // Try to find or create container within the constellation view
+        const constellationContainer = document.getElementById(`${constellation}-nodes`);
+        if (constellationContainer) {
+          bubblesContainer = document.createElement("div");
+          bubblesContainer.id = "citizen-files-bubbles";
+          bubblesContainer.setAttribute("data-component", "citizen-files-container");
+          bubblesContainer.className = "citizen-files-container";
+          constellationContainer.appendChild(bubblesContainer);
+          this.logger.info("Created citizen files bubbles container");
+        } else {
+          this.logger.warn("Citizen files bubbles container not found and cannot create fallback");
+          return;
+        }
       }
       
       // Clear container
       bubblesContainer.innerHTML = "";
       
-      // Create thought bubble container - updated to use new card system
+      // Create citizen files container using new design system
       const thoughtBubbleContainer = document.createElement("div");
-      thoughtBubbleContainer.className = "card-container citizen-files-grid";
+      thoughtBubbleContainer.className = "citizen-files-grid";
       thoughtBubbleContainer.setAttribute("data-constellation", constellation);
       thoughtBubbleContainer.setAttribute("role", "region");
       thoughtBubbleContainer.setAttribute(
@@ -310,18 +321,29 @@ export class NodeManager {
    */
   populateSessionFileBubbles(nodes, constellation) {
     setTimeout(() => {
-      const bubblesContainer = document.getElementById("session-files-bubbles");
+      let bubblesContainer = document.getElementById("session-files-bubbles");
       if (!bubblesContainer) {
-        this.logger.warn("Session files bubbles container not found");
-        return;
+        // Try to find or create container within the constellation view
+        const constellationContainer = document.getElementById(`${constellation}-nodes`);
+        if (constellationContainer) {
+          bubblesContainer = document.createElement("div");
+          bubblesContainer.id = "session-files-bubbles";
+          bubblesContainer.setAttribute("data-component", "session-files-container");
+          bubblesContainer.className = "session-files-container";
+          constellationContainer.appendChild(bubblesContainer);
+          this.logger.info("Created session files bubbles container");
+        } else {
+          this.logger.warn("Session files bubbles container not found and cannot create fallback");
+          return;
+        }
       }
       
       // Clear container
       bubblesContainer.innerHTML = "";
       
-      // Create thought bubble container - updated to use new card system
+      // Create session files container using new design system
       const thoughtBubbleContainer = document.createElement("div");
-      thoughtBubbleContainer.className = "card-container session-files-grid";
+      thoughtBubbleContainer.className = "session-files-grid";
       thoughtBubbleContainer.setAttribute("data-constellation", constellation);
       thoughtBubbleContainer.setAttribute("role", "region");
       thoughtBubbleContainer.setAttribute(
@@ -351,7 +373,7 @@ export class NodeManager {
    * @returns {Element} Thought bubble element
    */
   createThoughtBubbleDocument(node, constellation) {
-    // Create bubble button - updated to use new card classes
+    // Create bubble button using new card system
     const bubble = document.createElement("button");
     bubble.className = "card--document";
     bubble.setAttribute("data-component", "card");
@@ -367,7 +389,7 @@ export class NodeManager {
       ? `assets/images/${constellationData.icon}.svg`
       : "assets/images/tree.svg";
     
-    // Create bubble content - simplified without clearance system
+    // Create bubble content using new design system
     bubble.innerHTML = `
       <div class="card--bubble">
         <img src="${iconPath}" alt="" class="document-icon" aria-hidden="true" />
@@ -409,7 +431,7 @@ export class NodeManager {
         title.textContent = node.name;
       }
       
-      // Show modal via class toggle
+      // Show modal using new design system classes
       this.modal.classList.add("is-open");
       this.modal.setAttribute("aria-hidden", "false");
       
@@ -561,7 +583,7 @@ Attempting automatic psionic pathway re-establishment...`;
   closeModal() {
     if (!this.modal) return;
     
-    // Hide modal via class toggle
+    // Hide modal using new design system classes
     this.modal.classList.remove("is-open");
     this.modal.setAttribute("aria-hidden", "true");
     

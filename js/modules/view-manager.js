@@ -1,18 +1,12 @@
 /**
  * View Manager
- * Orchestrates view composition and transitions
- * 
- * Handles all view updates through class toggles and data attributes.
- * No direct style manipulation is performed here.
+ * Handles view transitions and atmospheric effects
  */
 
-import { CONFIG } from "../config.js";
-import { Logger } from "./shared-utilities.js";
+import { Logger } from './utilities.js';
+import { CONSTELLATIONS } from './config.js';
 
 export class ViewManager {
-  /**
-   * @param {Object} state - Application state manager
-   */
   constructor(state) {
     this.state = state;
     this.logger = new Logger("ViewManager");
@@ -21,33 +15,26 @@ export class ViewManager {
     this.transitionInProgress = false;
   }
 
-  /**
-   * Initialize view manager
-   */
   async init() {
     try {
       this.logger.info("Initializing ViewManager");
       
-      // Discover and register all views
+      // Discover all views
       this.initializeViews();
       
-      // Setup atmospheric system for view transitions
+      // Initialize atmospheric system
       this.initializeAtmosphericSystem();
       
-      // Set initial view state
-      this.state.set("viewManagerReady", true);
-      
-      // Set the initial view based on what's already active in the HTML
-      const activeView = Array.from(this.views.values()).find(view => view.isActive);
+      // Set initial view
+      const activeView = this.findActiveView();
       if (activeView) {
         this.currentViewId = activeView.id;
         this.state.set("currentView", activeView.id);
-        this.logger.info(`Initial view set to: ${activeView.id}`);
       } else {
-        // Fallback: activate starfield view if no view is active
-        this.transitionToView("starfield-view");
+        this.showView('starfield-view');
       }
       
+      this.state.set("viewManagerReady", true);
       this.logger.info("ViewManager initialized");
       
       return true;
@@ -58,21 +45,15 @@ export class ViewManager {
     }
   }
 
-  /**
-   * Initialize and register all views
-   */
   initializeViews() {
-    // Find all view containers
     const viewElements = document.querySelectorAll("[data-view]");
     
     viewElements.forEach(element => {
       const viewId = element.getAttribute("data-view");
       if (viewId) {
-        // Check initial state from data-state attribute
         const initialState = element.getAttribute("data-state");
         const isInitiallyActive = initialState === "active";
         
-        // Register view
         this.views.set(viewId, {
           id: viewId,
           element,
@@ -80,7 +61,7 @@ export class ViewManager {
           type: element.getAttribute("data-view-type") || "standard"
         });
         
-        // Apply initial CSS classes based on data-state
+        // Apply initial classes
         if (isInitiallyActive) {
           element.classList.add("active");
           element.setAttribute("aria-hidden", "false");
@@ -88,223 +69,105 @@ export class ViewManager {
           element.classList.remove("active");
           element.setAttribute("aria-hidden", "true");
         }
-        
-        this.logger.info(`Registered view: ${viewId} (initially ${isInitiallyActive ? 'active' : 'hidden'})`);
       }
     });
     
-    // Log summary of discovered views
     this.logger.info(`Discovered ${this.views.size} views`);
   }
 
-  /**
-   * Initialize atmospheric system for view transitions
-   */
   initializeAtmosphericSystem() {
-    // Find atmospheric system elements
     const atmosphericSystem = document.querySelector("[data-js='atmospheric-system']");
     if (!atmosphericSystem) {
       this.logger.warn("Atmospheric system not found");
       return;
     }
     
-    // Register view-specific atmospheric overlays
     const atmospheres = document.querySelectorAll("[data-atmosphere]");
     atmospheres.forEach(element => {
       const constellation = element.getAttribute("data-atmosphere");
       if (constellation) {
-        // Store reference to constellation-specific atmosphere
         this.logger.info(`Registered atmosphere for: ${constellation}`);
       }
     });
   }
 
-  /**
-   * Activate constellation-specific atmosphere
-   * @param {string} constellation - Constellation ID
-   */
-  activateConstellationAtmosphere(constellation) {
-    // Remove all active atmospheres first
-    this.deactivateConstellationAtmosphere();
-    
-    // Find and activate the appropriate atmosphere
-    const atmosphere = document.querySelector(`[data-atmosphere="${constellation}"]`);
-    if (atmosphere) {
-      // Toggle class to activate (no direct style manipulation)
-      atmosphere.classList.add("active");
-      
-      // Set atmospheric data attributes
-      const atmosphericSystem = document.querySelector("[data-js='atmospheric-system']");
-      if (atmosphericSystem) {
-        atmosphericSystem.setAttribute("data-active-atmosphere", constellation);
-      }
-      
-      this.logger.info(`Activated atmosphere: ${constellation}`);
-    } else {
-      this.logger.warn(`No atmosphere found for: ${constellation}`);
-    }
+  findActiveView() {
+    return Array.from(this.views.values()).find(view => view.isActive);
   }
 
-  /**
-   * Deactivate all constellation atmospheres
-   */
-  deactivateConstellationAtmosphere() {
-    // Remove active class from all atmospheres
-    const activeAtmospheres = document.querySelectorAll("[data-atmosphere].active");
-    activeAtmospheres.forEach(element => {
-      element.classList.remove("active");
-    });
-    
-    // Clear atmospheric data attributes
-    const atmosphericSystem = document.querySelector("[data-js='atmospheric-system']");
-    if (atmosphericSystem) {
-      atmosphericSystem.removeAttribute("data-active-atmosphere");
-    }
-  }
-
-  /**
-   * Show starfield view
-   */
-  showStarfield() {
-    this.transitionToView("starfield-view");
-    
-    // Clear active constellation atmosphere
-    this.deactivateConstellationAtmosphere();
-    
-    // Update state
-    this.state.set("activeConstellation", null);
-  }
-
-  /**
-   * Show constellation view
-   * @param {string} constellation - Constellation ID
-   */
-  showConstellation(constellation) {
-    // Validate constellation exists
-    if (!CONFIG.constellations[constellation]) {
-      this.logger.warn(`Invalid constellation: ${constellation}`);
-      this.showStarfield();
-      return;
-    }
-    
-    // Get view ID for constellation
-    const viewId = `${constellation}-view`;
-    
-    // Check if view exists
-    if (!this.hasView(viewId)) {
-      this.logger.warn(`View not found for constellation: ${constellation}`);
-      this.showStarfield();
-      return;
-    }
-    
-    // Transition to view
-    this.transitionToView(viewId);
-
-    // Set atmosphere for constellation
-    this.activateConstellationAtmosphere(constellation);
-
-    // Update state
-    this.state.set("activeConstellation", constellation);
-
-    // Dispatch event to notify constellation view is ready for population
-    const event = new CustomEvent("app:constellation:shown", {
-      detail: { constellation }
-    });
-    document.dispatchEvent(event);
-  }
-
-  /**
-   * Transition to a specific view
-   * @param {string} newViewId - ID of view to transition to
-   * @returns {boolean} Whether transition was successful
-   */
-  transitionToView(newViewId) {
-    // Don't transition if already on this view
-    if (this.currentViewId === newViewId) {
-      this.logger.info(`Already on view: ${newViewId}`);
+  showView(viewId) {
+    if (this.currentViewId === viewId) {
+      this.logger.info(`Already on view: ${viewId}`);
       return false;
     }
     
-    // Check if view exists
-    if (!this.hasView(newViewId)) {
-      this.logger.warn(`View not found: ${newViewId}`);
+    if (!this.views.has(viewId)) {
+      this.logger.warn(`View not found: ${viewId}`);
       return false;
     }
     
-    // Don't allow concurrent transitions
     if (this.transitionInProgress) {
-      this.logger.warn("Cannot transition while another transition is in progress");
+      this.logger.warn("Transition already in progress");
       return false;
     }
     
     try {
       this.transitionInProgress = true;
       
-      // Get previous view
-      const previousViewId = this.currentViewId;
-      const previousView = previousViewId ? this.views.get(previousViewId) : null;
-      
-      // Get new view
-      const newView = this.views.get(newViewId);
-      
       // Hide previous view
-      if (previousView) {
-        this.removeFocusFromView(previousView);
-        previousView.isActive = false;
-        previousView.element.classList.remove("active");
-        previousView.element.setAttribute("aria-hidden", "true");
+      if (this.currentViewId) {
+        const previousView = this.views.get(this.currentViewId);
+        if (previousView) {
+          previousView.isActive = false;
+          previousView.element.classList.remove("active");
+          previousView.element.setAttribute("aria-hidden", "true");
+        }
       }
       
       // Show new view
+      const newView = this.views.get(viewId);
       newView.isActive = true;
       newView.element.classList.add("active");
       newView.element.setAttribute("aria-hidden", "false");
       
-      // Set current view
-      this.currentViewId = newViewId;
+      // Update current view
+      this.currentViewId = viewId;
+      this.state.set("currentView", viewId);
       
-      // Update state
-      this.state.set("currentView", newViewId);
-      this.state.set("previousView", previousViewId);
+      // Update atmosphere
+      this.updateAtmosphere(viewId);
       
-      // Manage focus for accessibility
-      this.manageFocusForView(newView);
+      // Manage focus
+      this.manageFocus(newView);
       
-      this.logger.info(`Transitioned to view: ${newViewId}`);
+      this.logger.info(`Transitioned to view: ${viewId}`);
       return true;
     } catch (error) {
-      this.logger.error(`View transition error for ${newViewId}`, error);
+      this.logger.error(`View transition error for ${viewId}`, error);
       return false;
     } finally {
       this.transitionInProgress = false;
     }
   }
 
-  /**
-   * Remove focus from a view
-   * @param {Object} view - View object
-   */
-  removeFocusFromView(view) {
-    if (!view || !view.element) return;
+  updateAtmosphere(viewId) {
+    // Clear all atmospheres
+    const atmospheres = document.querySelectorAll("[data-atmosphere].active");
+    atmospheres.forEach(el => el.classList.remove("active"));
     
-    // Find all focusable elements
-    const focusableElements = view.element.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
+    // Extract constellation from view ID (e.g., "gnarled-tree-view" -> "gnarled-tree")
+    const constellation = viewId.replace('-view', '');
     
-    // Remove focus
-    focusableElements.forEach(element => {
-      if (element === document.activeElement) {
-        element.blur();
+    if (CONSTELLATIONS[constellation]) {
+      const atmosphere = document.querySelector(`[data-atmosphere="${constellation}"]`);
+      if (atmosphere) {
+        atmosphere.classList.add("active");
+        this.logger.info(`Activated atmosphere: ${constellation}`);
       }
-    });
+    }
   }
 
-  /**
-   * Manage focus for new view
-   * @param {Object} view - View object
-   */
-  manageFocusForView(view) {
+  manageFocus(view) {
     if (!view || !view.element) return;
     
     // Find first focusable element
@@ -312,7 +175,6 @@ export class ViewManager {
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
     
-    // Focus first focusable element or view container
     if (firstFocusable) {
       firstFocusable.focus();
     } else if (view.element.tabIndex >= 0) {
@@ -323,15 +185,10 @@ export class ViewManager {
     this.announceViewChange(view);
   }
 
-  /**
-   * Announce view change for screen readers
-   * @param {Object} view - View object
-   */
   announceViewChange(view) {
     const viewName = view.element.getAttribute("aria-label") || 
                     view.id.replace("-view", "").replace(/-/g, " ");
     
-    // Create and append announcement element
     const announcement = document.createElement("div");
     announcement.setAttribute("aria-live", "polite");
     announcement.setAttribute("aria-atomic", "true");
@@ -340,7 +197,6 @@ export class ViewManager {
     
     document.body.appendChild(announcement);
     
-    // Remove after announcement is read
     setTimeout(() => {
       if (document.body.contains(announcement)) {
         document.body.removeChild(announcement);
@@ -348,78 +204,15 @@ export class ViewManager {
     }, 1000);
   }
 
-  /**
-   * Get current view
-   * @returns {string|null} Current view ID
-   */
   getCurrentView() {
     return this.currentViewId;
   }
 
-  /**
-   * Get view by ID
-   * @param {string} viewId - View ID
-   * @returns {Object|null} View object
-   */
-  getView(viewId) {
-    return this.views.get(viewId) || null;
-  }
-
-  /**
-   * Check if view exists
-   * @param {string} viewId - View ID
-   * @returns {boolean} Whether view exists
-   */
   hasView(viewId) {
     return this.views.has(viewId);
   }
 
-  /**
-   * Get all views
-   * @returns {Array} Array of view objects
-   */
-  getAllViews() {
-    return Array.from(this.views.values());
-  }
-
-  /**
-   * Hide all views
-   */
-  hideAllViews() {
-    this.views.forEach(view => {
-      view.isActive = false;
-      view.element.classList.remove("is-active");
-      view.element.setAttribute("aria-hidden", "true");
-    });
-    
-    // Update state
-    this.state.set("currentView", null);
-    this.currentViewId = null;
-  }
-
-  /**
-   * Refresh views after DOM updates
-   */
-  refreshViews() {
-    // Re-initialize views
-    this.initializeViews();
-    
-    // If a view is active, make sure it's properly shown
-    if (this.currentViewId) {
-      const currentView = this.views.get(this.currentViewId);
-      if (currentView) {
-        currentView.isActive = true;
-        currentView.element.classList.add("is-active");
-        currentView.element.setAttribute("aria-hidden", "false");
-      }
-    }
-  }
-
-  /**
-   * Clean up resources
-   */
   destroy() {
-    this.hideAllViews();
     this.views.clear();
     this.logger.info("ViewManager destroyed");
   }

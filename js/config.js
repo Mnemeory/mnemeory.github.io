@@ -1,13 +1,10 @@
 /**
  * Application Configuration
  * Centralized configuration for all application components
- * 
- * Provides a single source of truth for application constants,
- * routes, and environment configuration.
  */
 
-// Constants for animation and UI behavior
-const ANIMATION = {
+// Animation and UI behavior
+export const ANIMATION = {
   duration: {
     short: 150,
     standard: 300,
@@ -26,73 +23,51 @@ const ANIMATION = {
 };
 
 // Environment and feature flags
-const ENV = {
-  production: true, // Always treat as production-ready
-  debug: true,      // Always enable debug logging
+export const ENV = {
+  production: true,
+  debug: true,
   features: {
     starfield3D: true,
     notifications: true
   }
 };
 
-// Text constants used throughout the application
-const TEXT = {
-  general: {
-    appName: 'Nralakk Federation Interface',
-    loading: 'Establishing psionic link...',
-    error: 'Psionic disruption detected'
+// Site configuration
+export const SITE_CONFIG = {
+  meta: {
+    siteName: 'Nralakk Federation Interface',
+    description: 'Neural interface to the Nralakk Federation archives',
+    author: 'Federation Diplomatic Corps',
+    canonicalUrl: 'https://mnemeory.github.io/',
   },
-  errors: {
-    dataLoadError: 'Failed to load neural data streams',
-    connectionError: 'Neural pathway disruption detected'
+  assets: {
+    favicon: 'assets/images/tree.svg',
+    directories: {
+      images: 'assets/images/',
+      css: 'css/',
+      js: 'js/'
+    }
   },
-  interface: {
-    starfield: 'Neural Starfield',
-    return: 'Return to Consciousness',
-    explore: 'Explore Neural Pathway'
-  }
-};
-
-// Route configuration
-const ROUTES = {
-  '/': {
-    id: 'starfield',
-    title: 'Neural Starfield',
-    viewId: 'starfield-view'
+  selectors: {
+    starfieldContainer: "[data-component='starfield-container']",
+    loadingVeil: "[data-js='loading-veil']",
+    toastContainer: "[data-component='toast-container']",
+    modal: "[data-component='modal']",
+    citizenInterface: "#citizen-interface"
   },
-  '/gnarled-tree': {
-    id: 'gnarled-tree',
-    title: 'Gnarled Tree',
-    viewId: 'gnarled-tree-view'
-  },
-  '/qu-poxii': {
-    id: 'qu-poxii',
-    title: 'Qu\'Poxii',
-    viewId: 'qu-poxii-view'
-  },
-  '/star-chanter': {
-    id: 'star-chanter',
-    title: 'Star Chanter',
-    viewId: 'star-chanter-view'
-  },
-  '/hatching-egg': {
-    id: 'hatching-egg',
-    title: 'Hatching Egg',
-    viewId: 'hatching-egg-view'
-  },
-  '/void': {
-    id: 'void',
-    title: 'Void',
-    viewId: 'void-view'
+  stationName: 'SCCV Horizon',
+  fileSystem: {
+    defaultExtension: '.txt'
   }
 };
 
 // Constellation data
-const CONSTELLATIONS = {
+export const CONSTELLATIONS = {
   'gnarled-tree': {
     name: 'The Gnarled Tree',
     icon: 'tree',
     meaning: 'Memory • History • Knowledge',
+    viewId: 'gnarled-tree-view',
     descriptions: {
       accessibility: 'A gnarled tree with spreading branches, representing memory and knowledge',
       stream: 'The Gnarled Tree represents the accumulated wisdom and shared history of the Federation.'
@@ -102,6 +77,7 @@ const CONSTELLATIONS = {
     name: 'The Qu\'Poxii',
     icon: 'bond',
     meaning: 'Love • Friendship • Support',
+    viewId: 'qu-poxii-view',
     descriptions: {
       accessibility: 'Two interlinked figures representing bonds of trust and friendship',
       stream: 'The Qu\'Poxii represents the bonds of trust, friendship, and mutual support.'
@@ -111,6 +87,7 @@ const CONSTELLATIONS = {
     name: 'The Star Chanter',
     icon: 'chant',
     meaning: 'Communication • Understanding • Harmony',
+    viewId: 'star-chanter-view',
     descriptions: {
       accessibility: 'A figure with arms raised toward the stars in song',
       stream: 'The Star Chanter represents communication, understanding, and diplomacy.'
@@ -120,6 +97,7 @@ const CONSTELLATIONS = {
     name: 'The Hatching Egg',
     icon: 'egg',
     meaning: 'Potential • Creation • Beginnings',
+    viewId: 'hatching-egg-view',
     descriptions: {
       accessibility: 'An egg with a crack running through it, representing new beginnings',
       stream: 'The Hatching Egg represents creation, potential, and new beginnings.'
@@ -129,6 +107,7 @@ const CONSTELLATIONS = {
     name: 'The Void',
     icon: 'void',
     meaning: 'Mystery • Unknown • Beyond',
+    viewId: 'void-view',
     descriptions: {
       accessibility: 'A mysterious spiral representing the unknown and unexplored',
       stream: 'The Void represents the unknown, the mysterious, and what lies beyond.',
@@ -149,111 +128,8 @@ const CONSTELLATIONS = {
   }
 };
 
-// Site configuration
-const SITE_CONFIG = {
-  meta: {
-    siteName: 'Nralakk Federation Interface',
-    description: 'Neural interface to the Nralakk Federation archives',
-    author: 'Federation Diplomatic Corps',
-    canonicalUrl: 'https://mnemeory.github.io/',
-    ogTitle: 'Nralakk Federation Neural Interface',
-    ogDescription: 'Access the collective wisdom of the Federation'
-  },
-  assets: {
-    favicon: 'assets/images/tree.svg',
-    directories: {
-      images: 'assets/images/',
-      css: 'css/',
-      js: 'js/'
-    }
-  },
-  cdn: {
-    fonts: {
-      google: 'https://fonts.googleapis.com',
-      googleStatic: 'https://fonts.gstatic.com',
-      fontFamilies: 'Roboto:wght@300;400;500&family=Roboto+Mono:wght@400;500&display=swap'
-    }
-  },
-  selectors: {
-    starfieldContainer: "[data-component='starfield-container']",
-    loadingVeil: "[data-js='loading-veil']",
-    toastContainer: "[data-component='toast-container']",
-    modal: "[data-component='modal']",
-    citizenInterface: "#citizen-interface"
-  },
-  fileSystem: {
-    defaultExtension: '.txt'
-  },
-  stationName: 'SCCV Horizon',
-
-  // Interface text for citizen management
-  interfaceText: {
-    errors: {
-      invalidInput: 'Invalid input provided'
-    },
-    citizen: {
-      headers: {
-        session: 'Diplomatic Session:',
-        stats: 'Session Statistics',
-        citizens: 'Active Citizens',
-        sessionFiles: 'Session Files',
-        activity: 'Recent Activity'
-      },
-      navigation: {
-        overview: 'Overview',
-        addCitizen: 'Add Citizen'
-      },
-      buttons: {
-        setRound: 'Set Round',
-        exportSession: 'Export Session',
-        newSession: 'New Session'
-      },
-      placeholders: {
-        searchCitizens: 'Search citizens...'
-      },
-      messages: {
-        noCitizens: 'No citizens registered in this session.',
-        noActivity: 'No recent activity.',
-        noSessionFiles: 'No session files available.'
-      }
-    }
-  }
-};
-
-
-
-// Logging configuration
-const LOGGING = {
-  enabled: true,
-  level: 'debug' // Always use debug level for better troubleshooting
-};
-
-// Timeline settings
-const TIMELINE = {
-  year: 2467,
-  era: 'Federation Standard'
-};
-
-// Constants used across the application
-const CONSTANTS = {
-  SCI_PRIMARY_THRESHOLD: 85,
-  SCI_SECONDARY_THRESHOLD: 70,
-  RECENT_LOGS_LIMIT: 10,
-  SHORT_DELAY: 300
-};
-
-// Keyboard constants
-const KEYS = {
-  ESCAPE: 'Escape',
-  ENTER: 'Enter',
-  SPACE: ' ',
-  TAB: 'Tab'
-};
-
 // Enhanced starfield configuration
-// This structure is consumed by starfield-scene/interactions and must include
-// camera, cluster and tendril parameters, as well as per-constellation positions.
-const ENHANCED_STARFIELD_CONFIG = {
+export const STARFIELD_CONFIG = {
   // Background starfield
   PARTICLE_COUNT: 800,
   ANIMATION_SPEED: 0.5,
@@ -316,70 +192,80 @@ const ENHANCED_STARFIELD_CONFIG = {
 };
 
 // Citizen status options
-const CITIZEN_STATUSES = [
-  { value: 'active', label: 'Active Service', color: 'primary' },
-  { value: 'reserve', label: 'Reserve Status', color: 'secondary' },
-  { value: 'civilian', label: 'Civilian', color: 'tertiary' },
-  { value: 'diplomatic', label: 'Diplomatic Corps', color: 'diplomatic' }
+export const CITIZEN_STATUSES = [
+  { value: 'active', label: 'Active Service', color: 'primary', default: false },
+  { value: 'reserve', label: 'Reserve Status', color: 'secondary', default: false },
+  { value: 'civilian', label: 'Civilian', color: 'tertiary', default: true },
+  { value: 'diplomatic', label: 'Diplomatic Corps', color: 'diplomatic', default: false }
 ];
 
-// Default citizen status
-const DEFAULT_CITIZEN_STATUS = 'civilian';
-
-// User profile template
-const USER_PROFILE = {
-  name: 'Diplomatic Officer',
-  station: 'SCCV Horizon'
+// Constants
+export const CONSTANTS = {
+  SCI_PRIMARY_THRESHOLD: 85,
+  SCI_SECONDARY_THRESHOLD: 70,
+  RECENT_LOGS_LIMIT: 10,
+  SHORT_DELAY: 300,
+  TIMELINE_YEAR: 2467
 };
 
-// Helper functions
-function getStarfieldConfig() {
-  return ENHANCED_STARFIELD_CONFIG;
-}
-
-function getStarGenerationParams() {
-  return {
-    count: ENHANCED_STARFIELD_CONFIG.PARTICLE_COUNT,
-    brightness: ENHANCED_STARFIELD_CONFIG.BRIGHTNESS_BASE,
-    colorVariance: ENHANCED_STARFIELD_CONFIG.COLOR_VARIANCE,
-    sizeRange: [ENHANCED_STARFIELD_CONFIG.SIZE_RANGE.min, ENHANCED_STARFIELD_CONFIG.SIZE_RANGE.max],
-    spread: 200 // Default spread for star positioning
-  };
-}
-
-function getSuccessMessage(action) {
-  return `${action} completed successfully`;
-}
-
-function getInfoMessage(info) {
-  return `Information: ${info}`;
-}
-
-// Export combined configuration
-export const CONFIG = {
-  animation: ANIMATION,
-  env: ENV,
-  text: TEXT,
-  routes: ROUTES,
-  constellations: CONSTELLATIONS,
-  site: SITE_CONFIG,
-  logging: LOGGING,
-  timeline: TIMELINE,
-  constants: CONSTANTS
+// Keyboard constants
+export const KEYS = {
+  ESCAPE: 'Escape',
+  ENTER: 'Enter',
+  SPACE: ' ',
+  TAB: 'Tab'
 };
 
-// Export individual constants and configurations
-export { 
-  CONSTANTS,
-  KEYS,
-  ENHANCED_STARFIELD_CONFIG,
-  CITIZEN_STATUSES,
-  DEFAULT_CITIZEN_STATUS,
-  USER_PROFILE,
-  CONSTELLATIONS,
-  SITE_CONFIG,
-  getStarfieldConfig,
-  getStarGenerationParams,
-  getSuccessMessage,
-  getInfoMessage
+// Behavioral tags for citizens
+export const BEHAVIORAL_TAGS = {
+  "Nlom-Centered": "Exhibits strong connection to Nlom ideals",
+  "Cooperative": "Works well within group dynamics",
+  "Individualistic": "Shows tendency toward independent thought",
+  "Traditionalist": "Respects established Federation customs",
+  "Progressive": "Embraces new ideas and changes",
+  "Quya-Focused": "Prioritizes family unit bonds",
+  "Career-Driven": "Shows ambition in professional pursuits",
+  "Academically-Inclined": "Demonstrates scholarly interests",
+  "Socially-Withdrawn": "Prefers limited social interaction",
+  "Community-Oriented": "Actively participates in communal activities",
+  "Psionically-Sensitive": "Shows heightened psionic awareness",
+  "Culturally-Adaptive": "Adapts well to non-Skrell environments",
+  "Federation-Loyal": "Strong allegiance to Federation ideals",
+  "Diplomatically-Minded": "Shows skills in inter-species relations",
+  "Scientifically-Curious": "Exhibits research-oriented behavior"
+};
+
+// Interface text
+export const INTERFACE_TEXT = {
+  errors: {
+    invalidInput: 'Invalid input provided',
+    dataLoadError: 'Failed to load neural data streams',
+    connectionError: 'Neural pathway disruption detected'
+  },
+  citizen: {
+    headers: {
+      session: 'Diplomatic Session:',
+      stats: 'Session Statistics',
+      citizens: 'Active Citizens',
+      sessionFiles: 'Session Files',
+      activity: 'Recent Activity'
+    },
+    navigation: {
+      overview: 'Overview',
+      addCitizen: 'Add Citizen'
+    },
+    buttons: {
+      setRound: 'Set Round',
+      exportSession: 'Export Session',
+      newSession: 'New Session'
+    },
+    placeholders: {
+      searchCitizens: 'Search citizens...'
+    },
+    messages: {
+      noCitizens: 'No citizens registered in this session.',
+      noActivity: 'No recent activity.',
+      noSessionFiles: 'No session files available.'
+    }
+  }
 };

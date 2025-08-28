@@ -198,11 +198,12 @@ class DocumentInstance {
   setupDocument() {
     if (!this.elements.container) return;
     
-    // Add theme classes - no inline styles
+    // Add theme classes using new design system
     this.elements.container.classList.add(
       'neural-document',
       `theme-${this.config.theme}`
     );
+    this.elements.container.setAttribute('data-component', 'document-container');
     
     // Setup read-only mode
     if (this.config.readOnly) {
@@ -223,23 +224,31 @@ class DocumentInstance {
   bindEvents() {
     const { elements } = this;
     
-    // Toggle edit mode
+    // Toggle edit mode using neural button
     if (elements.toggleButton) {
+      elements.toggleButton.classList.add('neural-button--toolbar');
+      elements.toggleButton.setAttribute('data-component', 'neural-button');
       elements.toggleButton.addEventListener('click', () => this.toggleEditMode());
     }
     
-    // Copy content
+    // Copy content with neural styling
     if (elements.copyButton) {
+      elements.copyButton.classList.add('neural-button--toolbar');
+      elements.copyButton.setAttribute('data-component', 'neural-button');
       elements.copyButton.addEventListener('click', () => this.copyContent());
     }
     
-    // Save content
+    // Save content with primary styling
     if (elements.saveButton) {
+      elements.saveButton.classList.add('neural-button--toolbar', 'neural-button--primary');
+      elements.saveButton.setAttribute('data-component', 'neural-button');
       elements.saveButton.addEventListener('click', () => this.saveContent());
     }
     
-    // Template selector
+    // Template selector with secondary styling
     if (elements.templateButton) {
+      elements.templateButton.classList.add('neural-button--toolbar');
+      elements.templateButton.setAttribute('data-component', 'neural-button');
       elements.templateButton.addEventListener('click', () => this.showTemplateSelector());
     }
     
@@ -443,10 +452,10 @@ class DocumentInstance {
     try {
       await navigator.clipboard.writeText(this.content);
       
-      // Show success indicator via class toggle
-      this.elements.copyButton?.classList.add('is-success');
+      // Show success indicator using new design system
+      this.elements.copyButton?.classList.add('is-success', 'shadow-neural-sm');
       setTimeout(() => {
-        this.elements.copyButton?.classList.remove('is-success');
+        this.elements.copyButton?.classList.remove('is-success', 'shadow-neural-sm');
       }, 1500);
       
       // Return success message to caller
@@ -454,10 +463,10 @@ class DocumentInstance {
     } catch (error) {
       this.logger.error('Copy failed:', error);
       
-      // Show error indicator via class toggle
-      this.elements.copyButton?.classList.add('is-error');
+      // Show error indicator using new design system
+      this.elements.copyButton?.classList.add('is-error', 'shadow-neural-lg');
       setTimeout(() => {
-        this.elements.copyButton?.classList.remove('is-error');
+        this.elements.copyButton?.classList.remove('is-error', 'shadow-neural-lg');
       }, 1500);
       
       return { success: false, error: 'Failed to copy document' };
@@ -474,10 +483,10 @@ class DocumentInstance {
       this.isDirty = false;
       this.updateStatusBar();
       
-      // Show success indicator via class toggle
-      this.elements.saveButton?.classList.add('is-success');
+      // Show success indicator using new design system
+      this.elements.saveButton?.classList.add('is-success', 'shadow-neural-sm');
       setTimeout(() => {
-        this.elements.saveButton?.classList.remove('is-success');
+        this.elements.saveButton?.classList.remove('is-success', 'shadow-neural-sm');
       }, 1500);
       
       return { success: true, message: 'Document transmitted to local neural storage' };
