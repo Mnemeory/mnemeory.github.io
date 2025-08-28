@@ -199,12 +199,18 @@ export class ViewManager {
     
     // Transition to view
     this.transitionToView(viewId);
-    
+
     // Set atmosphere for constellation
     this.activateConstellationAtmosphere(constellation);
-    
+
     // Update state
     this.state.set("activeConstellation", constellation);
+
+    // Dispatch event to notify constellation view is ready for population
+    const event = new CustomEvent("app:constellation:shown", {
+      detail: { constellation }
+    });
+    document.dispatchEvent(event);
   }
 
   /**

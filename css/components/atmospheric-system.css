@@ -237,6 +237,98 @@
   }
 }
 
+/* === ATMOSPHERE ELEMENTS === */
+
+/* Base atmosphere element styling */
+.atmosphere-element {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity var(--duration-standard) ease-in-out;
+  overflow: hidden;
+}
+
+/* Active atmosphere element */
+.atmosphere-element.active {
+  opacity: 0.4;
+}
+
+/* Constellation-specific atmosphere backgrounds */
+[data-atmosphere="gnarled-tree"].active {
+  background:
+    radial-gradient(
+      ellipse 150% 100% at 20% 30%,
+      var(--constellation-tree-glow, rgba(0, 191, 255, 0.1)) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 120% 80% at 80% 70%,
+      var(--constellation-tree-bg, rgba(0, 191, 255, 0.05)) 0%,
+      transparent 75%
+    );
+}
+
+[data-atmosphere="qu-poxii"].active {
+  background:
+    radial-gradient(
+      ellipse 140% 90% at 25% 35%,
+      var(--constellation-bond-glow, rgba(255, 107, 107, 0.1)) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 110% 75% at 75% 65%,
+      var(--constellation-bond-bg, rgba(255, 107, 107, 0.05)) 0%,
+      transparent 75%
+    );
+}
+
+[data-atmosphere="star-chanter"].active {
+  background:
+    radial-gradient(
+      ellipse 145% 95% at 30% 25%,
+      var(--constellation-chant-glow, rgba(152, 251, 152, 0.1)) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 115% 85% at 70% 75%,
+      var(--constellation-chant-bg, rgba(152, 251, 152, 0.05)) 0%,
+      transparent 75%
+    );
+}
+
+[data-atmosphere="hatching-egg"].active {
+  background:
+    radial-gradient(
+      ellipse 140% 90% at 35% 40%,
+      var(--constellation-egg-glow, rgba(255, 215, 0, 0.1)) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 110% 80% at 65% 60%,
+      var(--constellation-egg-bg, rgba(255, 215, 0, 0.05)) 0%,
+      transparent 75%
+    );
+}
+
+[data-atmosphere="void"].active {
+  background:
+    radial-gradient(
+      ellipse 150% 100% at 40% 35%,
+      var(--constellation-void-glow, rgba(221, 160, 221, 0.1)) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 120% 85% at 60% 65%,
+      var(--constellation-void-bg, rgba(221, 160, 221, 0.05)) 0%,
+      transparent 75%
+    );
+}
+
 /* === HIGH CONTRAST MODE === */
 
 @media (prefers-contrast: high) {

@@ -5,13 +5,8 @@
  */
 
 import { ToastManager, FileUtils, IDUtils } from "./shared-utilities.js";
-import {
-  DEFAULT_CITIZEN_STATUS,
-  USER_PROFILE,
-  getSuccessMessage,
-  getInfoMessage,
-  SITE_CONFIG,
-} from "../config.js";
+import { CONFIG, getSuccessMessage, getInfoMessage } from "../config.js";
+const { DEFAULT_CITIZEN_STATUS, USER_PROFILE, site: SITE_CONFIG } = CONFIG;
 import { TemplateEngine, BEHAVIORAL_TAGS } from "./template-engine.js";
 
 export class CitizenManager {

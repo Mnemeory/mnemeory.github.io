@@ -178,12 +178,46 @@ const SITE_CONFIG = {
     starfieldContainer: "[data-component='starfield-container']",
     loadingVeil: "[data-js='loading-veil']",
     toastContainer: "[data-component='toast-container']",
-    modal: "[data-component='modal']"
+    modal: "[data-component='modal']",
+    citizenInterface: "#citizen-interface"
   },
   fileSystem: {
     defaultExtension: '.txt'
   },
-  stationName: 'SCCV Horizon'
+  stationName: 'SCCV Horizon',
+
+  // Interface text for citizen management
+  interfaceText: {
+    errors: {
+      invalidInput: 'Invalid input provided'
+    },
+    citizen: {
+      headers: {
+        session: 'Diplomatic Session:',
+        stats: 'Session Statistics',
+        citizens: 'Active Citizens',
+        sessionFiles: 'Session Files',
+        activity: 'Recent Activity'
+      },
+      navigation: {
+        overview: 'Overview',
+        addCitizen: 'Add Citizen'
+      },
+      buttons: {
+        setRound: 'Set Round',
+        exportSession: 'Export Session',
+        newSession: 'New Session'
+      },
+      placeholders: {
+        searchCitizens: 'Search citizens...'
+      },
+      messages: {
+        noCitizens: 'No citizens registered in this session.',
+        noActivity: 'No recent activity.',
+        noSessionFiles: 'No session files available.'
+      }
+    }
+  }
 };
 
 

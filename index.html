@@ -96,7 +96,14 @@
     <div data-component="constellation-atmosphere" id="constellation-atmosphere"></div>
     
     <!-- Atmospheric System for View Manager -->
-    <div data-js="atmospheric-system" aria-hidden="true"></div>
+    <div data-js="atmospheric-system" aria-hidden="true">
+      <!-- Constellation Atmosphere Elements -->
+      <div data-atmosphere="gnarled-tree" class="atmosphere-element" aria-hidden="true"></div>
+      <div data-atmosphere="qu-poxii" class="atmosphere-element" aria-hidden="true"></div>
+      <div data-atmosphere="star-chanter" class="atmosphere-element" aria-hidden="true"></div>
+      <div data-atmosphere="hatching-egg" class="atmosphere-element" aria-hidden="true"></div>
+      <div data-atmosphere="void" class="atmosphere-element" aria-hidden="true"></div>
+    </div>
 
     <!-- Neural Interface App -->
     <div id="app" data-component="nlom-interface-app">
@@ -447,8 +454,15 @@
       </footer>
     </div>
 
-    <!-- CDN Libraries -->
-    <script src="https://unpkg.com/three@0.150.1/build/three.min.js"></script>
+    <!-- Import Map for ES Modules -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+          "three/": "https://unpkg.com/three@0.158.0/"
+        }
+      }
+    </script>
 
     <!-- Application Scripts -->
     <script type="module" src="js/script.js"></script>

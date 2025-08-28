@@ -4,7 +4,34 @@
  * Standardized version with CSS-driven styling
  */
 
-// Three.js loaded globally via script tag
+// Three.js ES module imports
+import {
+  Scene,
+  PerspectiveCamera,
+  WebGLRenderer,
+  Clock,
+  BufferGeometry,
+  BufferAttribute,
+  ShaderMaterial,
+  Points,
+  Color,
+  Group,
+  CircleGeometry,
+  Mesh,
+  CanvasTexture,
+  SpriteMaterial,
+  Sprite,
+  SphereGeometry,
+  MeshBasicMaterial,
+  Vector3,
+  CatmullRomCurve3,
+  TubeGeometry,
+  LinearFilter,
+  NormalBlending,
+  AdditiveBlending,
+  DoubleSide
+} from 'three';
+
 import {
   CONSTELLATIONS,
   ENHANCED_STARFIELD_CONFIG,
@@ -21,7 +48,7 @@ export class StarfieldScene {
     this.camera = null;
     this.renderer = null;
     this.canvas = null;
-    this.clock = new THREE.Clock();
+    this.clock = new Clock();
 
     // Scene objects
     this.backgroundStars = null;
@@ -37,9 +64,9 @@ export class StarfieldScene {
   }
 
   setAttributes(geometry, positions, colors, sizes) {
-    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-    geometry.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
+    geometry.setAttribute("position", new BufferAttribute(positions, 3));
+    geometry.setAttribute("color", new BufferAttribute(colors, 3));
+    geometry.setAttribute("size", new BufferAttribute(sizes, 1));
   }
 
   /**
@@ -49,7 +76,7 @@ export class StarfieldScene {
     this.canvas = canvas;
 
     // Create scene
-    this.scene = new THREE.Scene();
+    this.scene = new Scene();
 
     // Get container dimensions
     const containerRect = container.getBoundingClientRect();
@@ -58,7 +85,7 @@ export class StarfieldScene {
 
     // Create camera
     const aspect = width / height;
-    this.camera = new THREE.PerspectiveCamera(
+    this.camera = new PerspectiveCamera(
       LOCAL_CONFIG.CAMERA_FOV,
       aspect,
       LOCAL_CONFIG.CAMERA_NEAR,
@@ -68,7 +95,7 @@ export class StarfieldScene {
 
     // Create renderer
     try {
-      this.renderer = new THREE.WebGLRenderer({
+      this.renderer = new WebGLRenderer({
         canvas: this.canvas,
         antialias: !this.performanceMode,
         alpha: true,
@@ -104,7 +131,7 @@ export class StarfieldScene {
    */
   createBackgroundStars() {
     const starConfig = getStarGenerationParams();
-    const geometry = new THREE.BufferGeometry();
+    const geometry = new BufferGeometry();
     const positions = new Float32Array(LOCAL_CONFIG.PARTICLE_COUNT * 3);
     const colors = new Float32Array(LOCAL_CONFIG.PARTICLE_COUNT * 3);
     const sizes = new Float32Array(LOCAL_CONFIG.PARTICLE_COUNT);
@@ -151,7 +178,7 @@ export class StarfieldScene {
     this.setAttributes(geometry, positions, colors, sizes);
 
     // Star material with organic twinkling
-    const material = new THREE.ShaderMaterial({
+    const material = new ShaderMaterial({
       uniforms: {
         time: { value: 0 },
         pixelRatio: { value: this.renderer.getPixelRatio() },
@@ -188,10 +215,10 @@ export class StarfieldScene {
       `,
       transparent: true,
       vertexColors: true,
-      blending: THREE.AdditiveBlending,
+      blending: AdditiveBlending,
     });
 
-    this.backgroundStars = new THREE.Points(geometry, material);
+    this.backgroundStars = new Points(geometry, material);
     this.scene.add(this.backgroundStars);
   }
 
@@ -210,18 +237,18 @@ export class StarfieldScene {
    * Create individual constellation cluster
    */
   createConstellationCluster(name, config) {
-    const group = new THREE.Group();
+    const group = new Group();
     group.position.set(config.x, config.y, config.z);
     group.userData = { name, config, isWarmed: false };
 
     // Create cluster particles
-    const geometry = new THREE.BufferGeometry();
+    const geometry = new BufferGeometry();
     const positions = new Float32Array(LOCAL_CONFIG.CLUSTER_PARTICLES * 3);
     const colors = new Float32Array(LOCAL_CONFIG.CLUSTER_PARTICLES * 3);
     const sizes = new Float32Array(LOCAL_CONFIG.CLUSTER_PARTICLES);
 
-    const color = new THREE.Color(config.color);
-    const warmColor = new THREE.Color(config.warm);
+    const color = new Color(config.color);
+    const warmColor = new Color(config.warm);
 
     for (let i = 0; i < LOCAL_CONFIG.CLUSTER_PARTICLES; i++) {
       const i3 = i * 3;
@@ -254,7 +281,7 @@ export class StarfieldScene {
     this.setAttributes(geometry, positions, colors, sizes);
 
     // Cluster material
-    const material = new THREE.ShaderMaterial({
+    const material = new ShaderMaterial({
       uniforms: {
         time: { value: 0 },
         warmth: { value: 0 },
@@ -298,27 +325,27 @@ export class StarfieldScene {
       `,
       transparent: true,
       vertexColors: true,
-      blending: THREE.AdditiveBlending,
+      blending: AdditiveBlending,
     });
 
-    const points = new THREE.Points(geometry, material);
+    const points = new Points(geometry, material);
     group.add(points);
 
     // Create constellation icon sprite at the center
     this.createConstellationIcon(group, name, config);
 
     // Add invisible interaction sphere
-    const sphereGeometry = new THREE.SphereGeometry(
+    const sphereGeometry = new SphereGeometry(
       LOCAL_CONFIG.HOVER_DISTANCE,
       8,
       8
     );
-    const sphereMaterial = new THREE.MeshBasicMaterial({
+    const sphereMaterial = new MeshBasicMaterial({
       transparent: true,
       opacity: 0,
       depthWrite: false,
     });
-    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+    const sphere = new Mesh(sphereGeometry, sphereMaterial);
     sphere.userData = { isInteractionSphere: true, clusterName: name };
     group.add(sphere);
 
@@ -341,12 +368,12 @@ export class StarfieldScene {
     if (!constellationData) return;
 
     // Create a glowing circle background for the icon (increased size)
-    const circleGeometry = new THREE.CircleGeometry(18, 32);
-    const circleMaterial = new THREE.ShaderMaterial({
+    const circleGeometry = new CircleGeometry(18, 32);
+    const circleMaterial = new ShaderMaterial({
       uniforms: {
         time: { value: 0 },
         warmth: { value: 0 },
-        color: { value: new THREE.Color(config.color) },
+        color: { value: new Color(config.color) },
       },
       vertexShader: `
          uniform float time;
@@ -386,11 +413,11 @@ export class StarfieldScene {
          }
        `,
       transparent: true,
-      blending: THREE.AdditiveBlending,
-      side: THREE.DoubleSide,
+      blending: AdditiveBlending,
+      side: DoubleSide,
     });
 
-    const iconCircle = new THREE.Mesh(circleGeometry, circleMaterial);
+    const iconCircle = new Mesh(circleGeometry, circleMaterial);
     iconCircle.userData = { isIcon: true, warmthMaterial: circleMaterial };
     iconCircle.renderOrder = 999; // Ensure icon circles render above other elements
     group.add(iconCircle);
@@ -402,7 +429,7 @@ export class StarfieldScene {
     canvas.height = 128;
 
     // Create a stable fallback texture first - make it more visible
-    context.fillStyle = new THREE.Color(config.color).getStyle();
+    context.fillStyle = new Color(config.color).getStyle();
     context.globalAlpha = 0.8;
     context.beginPath();
     context.arc(64, 64, 40, 0, 2 * Math.PI);
@@ -415,21 +442,21 @@ export class StarfieldScene {
     context.textBaseline = "middle";
     context.fillText("●", 64, 64);
 
-    const fallbackTexture = new THREE.CanvasTexture(canvas);
+    const fallbackTexture = new CanvasTexture(canvas);
     fallbackTexture.needsUpdate = true;
     fallbackTexture.flipY = false; // Prevent texture flipping
 
     // Create sprite material with fallback texture
-    const spriteMaterial = new THREE.SpriteMaterial({
+    const spriteMaterial = new SpriteMaterial({
       map: fallbackTexture,
       transparent: true,
-      blending: THREE.NormalBlending,
+      blending: NormalBlending,
       opacity: 1.0, // Full opacity for better visibility
       depthWrite: false, // Prevent depth conflicts
       depthTest: false, // Always render on top
     });
 
-    const sprite = new THREE.Sprite(spriteMaterial);
+    const sprite = new Sprite(spriteMaterial);
     sprite.scale.set(24, 24, 1); // Increased from 16 for better visibility
     sprite.userData = { isIconSprite: true };
     sprite.renderOrder = 1000; // Ensure SVG sprites render on top
@@ -467,12 +494,12 @@ export class StarfieldScene {
         svgContext.drawImage(img, 8, 8, 112, 112);
 
         // Create new texture from SVG canvas
-        const svgTexture = new THREE.CanvasTexture(svgCanvas);
+        const svgTexture = new CanvasTexture(svgCanvas);
         svgTexture.needsUpdate = true;
         svgTexture.flipY = false; // Prevent texture flipping
         svgTexture.generateMipmaps = false; // Prevent blur
-        svgTexture.minFilter = THREE.LinearFilter;
-        svgTexture.magFilter = THREE.LinearFilter;
+        svgTexture.minFilter = LinearFilter;
+        svgTexture.magFilter = LinearFilter;
 
         // Cache the texture to prevent recreation
         this.textureCache.set(svgPath, svgTexture);
@@ -480,10 +507,10 @@ export class StarfieldScene {
         // Update sprite material with new texture smoothly
         if (sprite.material) {
           // Create new material to avoid flickering
-          const newMaterial = new THREE.SpriteMaterial({
+          const newMaterial = new SpriteMaterial({
             map: svgTexture,
             transparent: true,
-            blending: THREE.NormalBlending,
+            blending: NormalBlending,
             opacity: 1.0,
             depthWrite: false,
             depthTest: false,
@@ -522,8 +549,8 @@ export class StarfieldScene {
    * Create central Nlom node (representing the Consular)
    */
   createNlomNode() {
-    const geometry = new THREE.SphereGeometry(8, 16, 16);
-    const material = new THREE.ShaderMaterial({
+    const geometry = new SphereGeometry(8, 16, 16);
+    const material = new ShaderMaterial({
       uniforms: {
         time: { value: 0 },
       },
@@ -559,10 +586,10 @@ export class StarfieldScene {
         }
       `,
       transparent: true,
-      blending: THREE.AdditiveBlending,
+      blending: AdditiveBlending,
     });
 
-    this.nlomNode = new THREE.Mesh(geometry, material);
+    this.nlomNode = new Mesh(geometry, material);
     this.nlomNode.position.set(0, 0, 100);
     this.scene.add(this.nlomNode);
   }
@@ -576,7 +603,7 @@ export class StarfieldScene {
     }
 
     const startPos = this.nlomNode.position.clone();
-    const endPos = new THREE.Vector3().copy(targetPosition);
+    const endPos = new Vector3().copy(targetPosition);
 
     // Create organic curve points
     const points = [];
@@ -586,21 +613,21 @@ export class StarfieldScene {
       const t = i / segments;
 
       // Bezier curve with organic deviation
-      const mid = new THREE.Vector3().lerpVectors(startPos, endPos, 0.5);
+      const mid = new Vector3().lerpVectors(startPos, endPos, 0.5);
       mid.y += Math.sin(t * Math.PI) * 30; // Arch upward
       mid.x += (Math.random() - 0.5) * 20 * Math.sin(t * Math.PI); // Organic sway
 
-      const point = new THREE.Vector3()
+      const point = new Vector3()
         .lerpVectors(startPos, mid, t * 2)
         .lerp(endPos, Math.max(0, (t - 0.5) * 2));
 
       points.push(point);
     }
 
-    const curve = new THREE.CatmullRomCurve3(points);
-    const geometry = new THREE.TubeGeometry(curve, segments, 0.5, 8, false);
+    const curve = new CatmullRomCurve3(points);
+    const geometry = new TubeGeometry(curve, segments, 0.5, 8, false);
 
-    const material = new THREE.ShaderMaterial({
+    const material = new ShaderMaterial({
       uniforms: {
         time: { value: 0 },
         progress: { value: 0 },
@@ -642,10 +669,10 @@ export class StarfieldScene {
         }
       `,
       transparent: true,
-      blending: THREE.AdditiveBlending,
+      blending: AdditiveBlending,
     });
 
-    this.activeTendril = new THREE.Mesh(geometry, material);
+    this.activeTendril = new Mesh(geometry, material);
     this.scene.add(this.activeTendril);
 
     return this.activeTendril;

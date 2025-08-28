@@ -53,24 +53,30 @@ export class AppController {
       
       // 2. Domain services
       this.documentSystem = new DocumentSystem(this.state);
-      
-      // 3. Starfield visualization
+
+      // 3. Node management system
+      this.nodeManager = new NodeManager(this.state);
+
+      // 4. Starfield visualization
       this.starfieldManager = new StarfieldManager(this.state);
       await this.starfieldManager.init();
-      
+
       // Connect starfield to navigation
       this.starfieldManager.setClusterActivationCallback((constellation) => {
         if (this.router) {
           this.router.navigate(`#/${constellation}`);
         }
       });
-      
-      // 4. Load content data
+
+      // 5. Load content data
       await this.loadData();
       
-      // 5. Initialize router (must be last to handle initial route)
+      // 6. Initialize router (must be last to handle initial route)
       this.router = new Router(this.state, this.viewManager);
-      
+
+      // Setup constellation population listener
+      this.setupConstellationPopulation();
+
       // Setup accessibility features
       this.setupAccessibility();
       
@@ -310,16 +316,9 @@ export class AppController {
       // Process nodes
       const sortedNodes = scanner.sortNodes(allNodes);
       this.state.set("nodes", sortedNodes);
-      
-      // Populate constellations
-      Object.keys(CONFIG.constellations).forEach(constellation => {
-        const constellationNodes = sortedNodes.filter(
-          node => node.constellation === constellation
-        );
-        
-        this.logger.info(`Populating ${constellation} with ${constellationNodes.length} nodes`);
-        this.nodeManager.populateConstellation(constellation, constellationNodes);
-      });
+
+      // Note: Constellations will be populated when their views are shown
+      this.logger.info(`Loaded ${sortedNodes.length} nodes - constellations will populate when viewed`);
       
       // Process specific node types
       this.processCitizenNodes(sortedNodes);
@@ -373,6 +372,42 @@ export class AppController {
       this.state.set("sessionFiles", sessionNodes);
     } else {
       this.logger.info("No session files found");
+    }
+  }
+
+  /**
+   * Setup constellation population listener
+   */
+  setupConstellationPopulation() {
+    // Listen for constellation view shown events
+    document.addEventListener("app:constellation:shown", (event) => {
+      const { constellation } = event.detail;
+      this.populateConstellationView(constellation);
+    });
+  }
+
+  /**
+   * Populate constellation view with data
+   * @param {string} constellation - Constellation ID
+   */
+  populateConstellationView(constellation) {
+    if (!this.nodeManager) {
+      this.logger.warn("Node manager not available for constellation population");
+      return;
+    }
+
+    try {
+      // Get nodes for this constellation from state
+      const allNodes = this.state.get("nodes") || [];
+      const constellationNodes = allNodes.filter(
+        node => node.constellation === constellation
+      );
+
+      // Always populate constellation, even with empty data (will show empty state)
+      this.logger.info(`Populating constellation ${constellation} with ${constellationNodes.length} nodes`);
+      this.nodeManager.populateConstellation(constellation, constellationNodes);
+    } catch (error) {
+      this.logger.error(`Failed to populate constellation ${constellation}`, error);
     }
   }
 

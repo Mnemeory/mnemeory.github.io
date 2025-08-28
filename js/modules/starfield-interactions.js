@@ -4,7 +4,9 @@
  * Standardized version with CSS-driven styling
  */
 
-// Three.js loaded globally via script tag
+// Three.js ES module imports
+import { Vector2, Raycaster } from 'three';
+
 import {
   CONSTELLATIONS,
   ENHANCED_STARFIELD_CONFIG,
@@ -70,12 +72,12 @@ export class StarfieldInteractions {
     if (!this.scene.camera || !this.scene.renderer) return;
 
     const rect = this.canvas.getBoundingClientRect();
-    const mouse = new THREE.Vector2(
+    const mouse = new Vector2(
       ((event.clientX - rect.left) / rect.width) * 2 - 1,
       -((event.clientY - rect.top) / rect.height) * 2 + 1
     );
 
-    const raycaster = new THREE.Raycaster();
+    const raycaster = new Raycaster();
     raycaster.setFromCamera(mouse, this.scene.camera);
 
     // Check intersections with interaction spheres
