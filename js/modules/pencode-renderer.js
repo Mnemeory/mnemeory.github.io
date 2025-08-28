@@ -8,8 +8,7 @@
  * Standardized version with CSS-driven styling
  */
 
-import { CONFIG } from "../config.js";
-const SITE_CONFIG = CONFIG.site;
+import { SITE_CONFIG } from "../config.js";
 
 /**
  * Pencode Processing Engine with Neural Theme Integration

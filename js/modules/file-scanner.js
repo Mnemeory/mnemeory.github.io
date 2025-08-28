@@ -6,8 +6,7 @@
  * separation of concerns with display logic.
  */
 
-import { CONFIG } from "../config.js";
-import { Logger, NetworkUtils } from "./shared-utilities.js";
+import { Logger, NetworkUtils } from "./utilities.js";
 
 export class FileScanner {
   constructor() {

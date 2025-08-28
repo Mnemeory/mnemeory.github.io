@@ -5,8 +5,7 @@
  * Provides centralized navigation control with no direct DOM styling
  */
 
-import { CONFIG } from "../config.js";
-import { Logger, EventUtils } from "./shared-utilities.js";
+import { Logger, EventUtils } from "./utilities.js";
 
 export class Router {
   /**
@@ -180,15 +179,6 @@ export class Router {
    */
   getCurrentRoute() {
     return this.state.get("currentRoute");
-  }
-
-  /**
-   * Check if route is valid
-   * @param {string} route - Route to check
-   * @returns {boolean} Whether route is valid
-   */
-  isValidRoute(route) {
-    return CONFIG.routes.hasOwnProperty(route);
   }
 
   /**
