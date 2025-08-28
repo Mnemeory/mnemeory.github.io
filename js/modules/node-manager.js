@@ -5,8 +5,8 @@
  * Responsible for node presentation and interaction without any styling manipulation
  */
 
-import { CONFIG } from "../config.js";
-import { Logger, ToastManager, EventUtils, FileUtils, IDUtils } from "./shared-utilities.js";
+import { CONSTELLATIONS } from "../config.js";
+import { Logger, ToastManager, EventUtils, FileUtils, IDUtils } from "./utilities.js";
 import { DocumentSystem } from "./document-system.js";
 
 export class NodeManager {
@@ -115,7 +115,7 @@ export class NodeManager {
     }
     
     // Special handling for constellations with shell configurations
-    const constellationData = CONFIG.constellations[constellation];
+    const constellationData = CONSTELLATIONS[constellation];
     if (constellationData?.descriptions?.shell) {
       this.populateShellConstellation(container, constellationData);
       return;
@@ -236,7 +236,7 @@ export class NodeManager {
    * @param {string} constellation - Constellation ID
    */
   renderThoughtBubbleLayout(container, nodes, constellation) {
-    const constellationData = CONFIG.constellations[constellation];
+    const constellationData = CONSTELLATIONS[constellation];
     
       // Create thought bubble container using new design system
       const thoughtBubbleContainer = document.createElement("div");
@@ -296,7 +296,7 @@ export class NodeManager {
       thoughtBubbleContainer.setAttribute("role", "region");
       thoughtBubbleContainer.setAttribute(
         "aria-label",
-        `${CONFIG.constellations[constellation]?.name || constellation} citizen files collection`
+        `${CONSTELLATIONS[constellation]?.name || constellation} citizen files collection`
       );
       
       // Create thought bubble documents
@@ -384,7 +384,7 @@ export class NodeManager {
     bubble.setAttribute("data-node-id", node.id);
     
     // Get constellation icon
-    const constellationData = CONFIG.constellations[constellation];
+    const constellationData = CONSTELLATIONS[constellation];
     const iconPath = constellationData?.icon
       ? `assets/images/${constellationData.icon}.svg`
       : "assets/images/tree.svg";
@@ -562,7 +562,7 @@ Attempting automatic psionic pathway re-establishment...`;
       
       // Generic fallback data
       title: node.name,
-      constellationName: CONFIG.constellations[cluster]?.name || "Unknown",
+      constellationName: CONSTELLATIONS[cluster]?.name || "Unknown",
       url: node.url,
       id: node.id,
       cluster: cluster,
@@ -629,7 +629,7 @@ Attempting automatic psionic pathway re-establishment...`;
    * @returns {string} Markdown content
    */
   nodeToMarkdown(node) {
-    const constellation = CONFIG.constellations[node.constellation];
+    const constellation = CONSTELLATIONS[node.constellation];
     
     // Generate tags from metadata if available
     const tags = node.tags || [];

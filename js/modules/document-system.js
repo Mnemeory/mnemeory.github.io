@@ -6,8 +6,7 @@
  * with no direct DOM styling.
  */
 
-import { CONFIG } from "../config.js";
-import { Logger, EventUtils, AnimationUtils } from "./shared-utilities.js";
+import { Logger, EventUtils } from "./utilities.js";
 import { TemplateEngine } from "./template-engine.js";
 
 export class DocumentSystem {
