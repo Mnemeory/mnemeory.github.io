@@ -42,14 +42,14 @@ export class CitizenUI {
 
   renderSessionGate() {
     this.container.innerHTML = `
-      <div class="session-gate">
-        <div class="session-gate-content">
-          <div class="gate-emblem">
-            <img src="assets/images/bond.svg" alt="" class="gate-emblem-icon" />
+      <div data-component="session-gate">
+        <div data-component="session-gate-content">
+          <div data-component="gate-emblem">
+            <img src="assets/images/bond.svg" alt="" data-component="gate-emblem-icon" />
           </div>
           <h2>The Qu'Poxii</h2>
           <p>Love • Friendship • Support</p>
-          <div class="session-gate-body">
+          <div data-component="session-gate-body">
             <h3>Diplomatic Citizen Management System</h3>
             <p>Welcome to the Federation's Citizen Oversight Interface.</p>
             <button type="button" data-action="start-session">Initialize Diplomatic Session</button>
@@ -61,17 +61,17 @@ export class CitizenUI {
   renderInterface() {
     const sessionId = this.citizenManager.currentSession.id;
     this.container.innerHTML = `
-      <div class="citizen-management">
-        <div class="citizen-header">
-          <div class="session-info">
+      <div data-component="citizen-management">
+        <div data-component="citizen-header">
+          <div data-component="session-info">
             <h3>${INTERFACE_TEXT.citizen.headers.session} ${sessionId}</h3>
-            <div class="session-controls">
+            <div data-component="session-controls">
               <button type="button" data-action="export-session">${INTERFACE_TEXT.citizen.buttons.exportSession}</button>
               <button type="button" data-action="clear-session">${INTERFACE_TEXT.citizen.buttons.newSession}</button>
             </div>
           </div>
         </div>
-        <div class="citizen-content">
+        <div data-component="citizen-content">
           ${this.renderCitizenList()}
         </div>
       </div>`;
@@ -80,13 +80,13 @@ export class CitizenUI {
   renderCitizenList() {
     const citizens = this.citizenManager.getAllCitizens();
     if (citizens.length === 0) {
-      return `<p>${INTERFACE_TEXT.citizen.messages.noCitizens}</p>`;
+      return `<p data-component="empty-message">${INTERFACE_TEXT.citizen.messages.noCitizens}</p>`;
     }
 
-    return citizens.map(c => `
-      <div data-component="citizen-card">
-        <h5>${this.citizenManager.getFullName(c)}</h5>
-        <span>${c.sciScore}/10</span>
+    return citizens.map((c, index) => `
+      <div data-component="citizen-card" data-index="${index}">
+        <h5 data-component="citizen-name">${this.citizenManager.getFullName(c)}</h5>
+        <span data-component="sci-score">${c.sciScore}/10</span>
       </div>`).join('');
   }
 

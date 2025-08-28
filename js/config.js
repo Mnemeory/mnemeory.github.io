@@ -53,6 +53,7 @@ export const SITE_CONFIG = {
     loadingVeil: "[data-js='loading-veil']",
     toastContainer: "[data-component='toast-container']",
     modal: "[data-component='modal']",
+    modalClose: "[data-component='modal-close']",
     citizenInterface: "#citizen-interface"
   },
   stationName: 'SCCV Horizon',
@@ -193,10 +194,10 @@ export const STARFIELD_CONFIG = {
 
 // Citizen status options
 export const CITIZEN_STATUSES = [
-  { value: 'active', label: 'Active Service', color: 'primary', default: false },
-  { value: 'reserve', label: 'Reserve Status', color: 'secondary', default: false },
-  { value: 'civilian', label: 'Civilian', color: 'tertiary', default: true },
-  { value: 'diplomatic', label: 'Diplomatic Corps', color: 'diplomatic', default: false }
+  { value: 'active', label: 'Active Service', variant: 'primary', default: false },
+  { value: 'reserve', label: 'Reserve Status', variant: 'secondary', default: false },
+  { value: 'civilian', label: 'Civilian', variant: 'tertiary', default: true },
+  { value: 'diplomatic', label: 'Diplomatic Corps', variant: 'diplomatic', default: false }
 ];
 
 // Constants

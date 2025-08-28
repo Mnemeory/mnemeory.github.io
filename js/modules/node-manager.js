@@ -141,8 +141,8 @@ export class NodeManager {
     // Create citizen interface container
     const citizenInterfaceId = "citizen-interface";
     container.innerHTML = `
-      <div class="citizen-management-container">
-        <div id="${citizenInterfaceId}" class="citizen-interface-wrapper"></div>
+      <div data-component="citizen-management-container">
+        <div id="${citizenInterfaceId}" data-component="citizen-interface-wrapper"></div>
       </div>
     `;
     
@@ -176,9 +176,9 @@ export class NodeManager {
   populateShellConstellation(container, constellationData) {
     const shell = constellationData.descriptions.shell;
     
-    // Create shell container with appropriate class
+    // Create shell container with appropriate data component
     const shellContainer = document.createElement("div");
-    shellContainer.className = "constellation-shell";
+    shellContainer.setAttribute("data-component", "constellation-shell");
     
     // Populate shell content - no inline styles, all class-based
     shellContainer.innerHTML = `
@@ -220,7 +220,7 @@ export class NodeManager {
    */
   renderEmptyConstellation(container) {
     const emptyContainer = document.createElement("div");
-    emptyContainer.className = "empty-constellation";
+    emptyContainer.setAttribute("data-component", "empty-constellation");
     emptyContainer.innerHTML = `
       <p>No psionic data streams available in this constellation.</p>
       <p class="text-shimmer">The Nlom-linked stars are dormant here, for now.</p>
@@ -240,7 +240,7 @@ export class NodeManager {
     
       // Create thought bubble container using new design system
       const thoughtBubbleContainer = document.createElement("div");
-      thoughtBubbleContainer.className = "thought-bubble-documents";
+      thoughtBubbleContainer.setAttribute("data-component", "thought-bubble-documents");
       thoughtBubbleContainer.setAttribute("data-constellation", constellation);
     thoughtBubbleContainer.setAttribute("role", "region");
     thoughtBubbleContainer.setAttribute(
@@ -252,9 +252,9 @@ export class NodeManager {
     nodes.forEach((node, index) => {
       const thoughtBubble = this.createThoughtBubbleDocument(node, constellation);
       
-      // Set data attribute for staggered animation via CSS
+      // Set data attributes for staggered animation via CSS
       thoughtBubble.setAttribute("data-index", index);
-      thoughtBubble.classList.add("animate-in");
+      thoughtBubble.setAttribute("data-animation", "animate-in");
       
       thoughtBubbleContainer.appendChild(thoughtBubble);
     });
@@ -277,7 +277,6 @@ export class NodeManager {
           bubblesContainer = document.createElement("div");
           bubblesContainer.id = "citizen-files-bubbles";
           bubblesContainer.setAttribute("data-component", "citizen-files-container");
-          bubblesContainer.className = "citizen-files-container";
           constellationContainer.appendChild(bubblesContainer);
           this.logger.info("Created citizen files bubbles container");
         } else {
@@ -291,7 +290,7 @@ export class NodeManager {
       
       // Create citizen files container using new design system
       const thoughtBubbleContainer = document.createElement("div");
-      thoughtBubbleContainer.className = "citizen-files-grid";
+      thoughtBubbleContainer.setAttribute("data-component", "citizen-files-grid");
       thoughtBubbleContainer.setAttribute("data-constellation", constellation);
       thoughtBubbleContainer.setAttribute("role", "region");
       thoughtBubbleContainer.setAttribute(
@@ -303,9 +302,9 @@ export class NodeManager {
       nodes.forEach((node, index) => {
         const thoughtBubble = this.createThoughtBubbleDocument(node, constellation);
         
-        // Set data attribute for staggered animation via CSS
+        // Set data attributes for staggered animation via CSS
         thoughtBubble.setAttribute("data-index", index);
-        thoughtBubble.classList.add("animate-in");
+        thoughtBubble.setAttribute("data-animation", "animate-in");
         
         thoughtBubbleContainer.appendChild(thoughtBubble);
       });
@@ -329,7 +328,6 @@ export class NodeManager {
           bubblesContainer = document.createElement("div");
           bubblesContainer.id = "session-files-bubbles";
           bubblesContainer.setAttribute("data-component", "session-files-container");
-          bubblesContainer.className = "session-files-container";
           constellationContainer.appendChild(bubblesContainer);
           this.logger.info("Created session files bubbles container");
         } else {
@@ -343,7 +341,7 @@ export class NodeManager {
       
       // Create session files container using new design system
       const thoughtBubbleContainer = document.createElement("div");
-      thoughtBubbleContainer.className = "session-files-grid";
+      thoughtBubbleContainer.setAttribute("data-component", "session-files-grid");
       thoughtBubbleContainer.setAttribute("data-constellation", constellation);
       thoughtBubbleContainer.setAttribute("role", "region");
       thoughtBubbleContainer.setAttribute(
@@ -355,9 +353,9 @@ export class NodeManager {
       nodes.forEach((node, index) => {
         const thoughtBubble = this.createThoughtBubbleDocument(node, constellation);
         
-        // Set data attribute for staggered animation via CSS
+        // Set data attributes for staggered animation via CSS
         thoughtBubble.setAttribute("data-index", index);
-        thoughtBubble.classList.add("animate-in");
+        thoughtBubble.setAttribute("data-animation", "animate-in");
         
         thoughtBubbleContainer.appendChild(thoughtBubble);
       });
@@ -375,8 +373,8 @@ export class NodeManager {
   createThoughtBubbleDocument(node, constellation) {
     // Create bubble button using new card system
     const bubble = document.createElement("button");
-    bubble.className = "card--document";
     bubble.setAttribute("data-component", "card");
+    bubble.classList.add("card--document");
     bubble.setAttribute("type", "button");
     bubble.setAttribute("role", "button");
     bubble.setAttribute("tabindex", "0");
@@ -431,7 +429,7 @@ export class NodeManager {
         title.textContent = node.name;
       }
       
-      // Show modal using new design system classes
+      // Show modal using CSS class/state attributes
       this.modal.classList.add("is-open");
       this.modal.setAttribute("aria-hidden", "false");
       
@@ -583,7 +581,7 @@ Attempting automatic psionic pathway re-establishment...`;
   closeModal() {
     if (!this.modal) return;
     
-    // Hide modal using new design system classes
+    // Hide modal using CSS class/state attributes
     this.modal.classList.remove("is-open");
     this.modal.setAttribute("aria-hidden", "true");
     
@@ -672,7 +670,7 @@ ${node.metadata?.description || "No description available."}
    * @returns {boolean} Whether modal is open
    */
   isModalOpen() {
-    return this.modal && this.modal.classList.contains("is-open");
+    return this.modal && this.modal.getAttribute("data-state") === "open";
   }
 
   /**

@@ -64,7 +64,7 @@ export class Router {
       }
       
       // Return navigation buttons
-      const returnButton = event.target.closest(".flow-return");
+      const returnButton = event.target.closest("[data-component='flow-return']");
       if (returnButton) {
         const returnTo = returnButton.getAttribute("data-return-to");
         if (returnTo === "starfield") {
@@ -76,7 +76,7 @@ export class Router {
     // Handle keyboard navigation
     document.addEventListener("keydown", event => {
       // Return button keyboard activation
-      if (event.target.matches(".flow-return") && EventUtils.isActivationKey(event)) {
+      if (event.target.matches("[data-component='flow-return']") && EventUtils.isActivationKey(event)) {
         event.preventDefault();
         const returnTo = event.target.getAttribute("data-return-to");
         if (returnTo === "starfield") {

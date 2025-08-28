@@ -83,11 +83,12 @@ export class DOMUtils {
     if (!element) return;
     
     if (active) {
-      element.classList.add(`is-${state}`);
-      element.setAttribute(`data-state-${state}`, "true");
+      element.setAttribute("data-state", state);
     } else {
-      element.classList.remove(`is-${state}`);
-      element.removeAttribute(`data-state-${state}`);
+      // If removing this state, and it's the current state, reset to default
+      if (element.getAttribute("data-state") === state) {
+        element.setAttribute("data-state", "default");
+      }
     }
   }
 }
@@ -244,30 +245,29 @@ export class TooltipManager {
     
     this.tooltip.innerHTML = content;
     
-    this.tooltip.style.position = "fixed";
-    this.tooltip.style.left = `${x + 15}px`;
-    this.tooltip.style.top = `${y - 10}px`;
-    this.tooltip.style.zIndex = "10000";
-    
+    // Position using CSS custom properties instead of inline styles
+    this.tooltip.style.setProperty('--tooltip-x', `${x + 15}px`);
+    this.tooltip.style.setProperty('--tooltip-y', `${y - 10}px`);
     document.body.appendChild(this.tooltip);
     
     requestAnimationFrame(() => {
       if (this.tooltip) {
-        this.tooltip.classList.add("is-visible");
+        this.tooltip.classList.add('is-visible');
       }
     });
   }
   
   static updatePosition(x, y) {
     if (this.tooltip) {
-      this.tooltip.style.left = `${x + 15}px`;
-      this.tooltip.style.top = `${y - 10}px`;
+      // Update position using CSS custom properties
+      this.tooltip.style.setProperty('--tooltip-x', `${x + 15}px`);
+      this.tooltip.style.setProperty('--tooltip-y', `${y - 10}px`);
     }
   }
   
   static hide() {
     if (this.tooltip) {
-      this.tooltip.classList.remove("is-visible");
+      this.tooltip.classList.remove('is-visible');
       this.tooltip.setAttribute("aria-hidden", "true");
       
       setTimeout(() => {
@@ -297,7 +297,6 @@ export class ToastManager {
     if (!this.container) {
       this.container = document.createElement("div");
       this.container.setAttribute("data-component", "toast-container");
-      this.container.className = "toast-container";
       document.body.appendChild(this.container);
     }
   }
@@ -306,19 +305,19 @@ export class ToastManager {
     this.initialize();
     
     const toast = document.createElement("div");
-    toast.className = `toast toast--${type}`;
     toast.setAttribute("role", "alert");
     toast.setAttribute("data-component", "toast");
+    toast.setAttribute("data-type", type);
     toast.textContent = message;
     
     this.container.appendChild(toast);
     
     requestAnimationFrame(() => {
-      toast.classList.add("is-visible");
+      toast.classList.add('is-visible');
     });
     
     setTimeout(() => {
-      toast.classList.remove("is-visible");
+      toast.classList.remove('is-visible');
       
       toast.addEventListener("transitionend", () => {
         if (this.container.contains(toast)) {

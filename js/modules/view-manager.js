@@ -4,7 +4,7 @@
  */
 
 import { Logger } from './utilities.js';
-import { CONSTELLATIONS } from './config.js';
+import { CONSTELLATIONS } from '../config.js';
 
 export class ViewManager {
   constructor(state) {
@@ -61,13 +61,13 @@ export class ViewManager {
           type: element.getAttribute("data-view-type") || "standard"
         });
         
-        // Apply initial classes
+        // Apply initial data attributes
         if (isInitiallyActive) {
-          element.classList.add("active");
           element.setAttribute("aria-hidden", "false");
+          element.setAttribute("data-state", "active");
         } else {
-          element.classList.remove("active");
           element.setAttribute("aria-hidden", "true");
+          element.setAttribute("data-state", "hidden");
         }
       }
     });
@@ -119,16 +119,16 @@ export class ViewManager {
         const previousView = this.views.get(this.currentViewId);
         if (previousView) {
           previousView.isActive = false;
-          previousView.element.classList.remove("active");
           previousView.element.setAttribute("aria-hidden", "true");
+          previousView.element.setAttribute("data-state", "hidden");
         }
       }
       
       // Show new view
       const newView = this.views.get(viewId);
       newView.isActive = true;
-      newView.element.classList.add("active");
       newView.element.setAttribute("aria-hidden", "false");
+      newView.element.setAttribute("data-state", "active");
       
       // Update current view
       this.currentViewId = viewId;
@@ -150,21 +150,77 @@ export class ViewManager {
     }
   }
 
+  // Convenience wrappers used by Router
+  showStarfield() {
+    this.showView('starfield-view');
+    // Ensure we reset atmospheres when returning to starfield
+    this.resetAllAtmospheres();
+  }
+
+  showConstellation(constellation) {
+    const viewId = `${constellation}-view`;
+    const didShow = this.showView(viewId);
+    if (!didShow) return false;
+
+    // Populate stream header content
+    const data = CONSTELLATIONS[constellation];
+    if (data) {
+      const viewEl = this.views.get(viewId)?.element;
+      if (viewEl) {
+        const titleEl = viewEl.querySelector('[data-component="stream-title"]');
+        const meaningEl = viewEl.querySelector('[data-component="essence-meaning"]');
+        const descEl = viewEl.querySelector('[data-component="stream-description"]');
+        if (titleEl) titleEl.textContent = data.name || '';
+        if (meaningEl) meaningEl.textContent = data.meaning || '';
+        if (descEl) descEl.textContent = data.descriptions?.stream || '';
+      }
+    }
+    return true;
+  }
+
   updateAtmosphere(viewId) {
-    // Clear all atmospheres
-    const atmospheres = document.querySelectorAll("[data-atmosphere].active");
-    atmospheres.forEach(el => el.classList.remove("active"));
+    // First reset all atmospheric elements
+    this.resetAllAtmospheres();
     
     // Extract constellation from view ID (e.g., "gnarled-tree-view" -> "gnarled-tree")
     const constellation = viewId.replace('-view', '');
     
-    if (CONSTELLATIONS[constellation]) {
-      const atmosphere = document.querySelector(`[data-atmosphere="${constellation}"]`);
-      if (atmosphere) {
-        atmosphere.classList.add("active");
-        this.logger.info(`Activated atmosphere: ${constellation}`);
-      }
+    // If this is not a constellation view, we're done after reset
+    if (!CONSTELLATIONS[constellation]) return;
+    
+    // Update specific atmospheric element
+    const atmosphere = document.querySelector(`[data-atmosphere="${constellation}"]`);
+    if (atmosphere) {
+      atmosphere.setAttribute("data-state", "active");
+      this.logger.info(`Activated atmosphere: ${constellation}`);
     }
+    
+    // Update constellation atmosphere with theme class
+    const conAtmosphere = document.getElementById('constellation-atmosphere');
+    if (conAtmosphere) {
+      // Set appropriate theme attribute based on constellation
+      conAtmosphere.setAttribute("data-theme", constellation);
+      conAtmosphere.setAttribute("data-state", "active");
+      
+      // Add theme attribute to the root body element to affect all child components
+      document.body.setAttribute('data-theme', constellation);
+    }
+  }
+  
+  resetAllAtmospheres() {
+    // Clear all specific atmospheres
+    const atmospheres = document.querySelectorAll("[data-atmosphere][data-state='active']");
+    atmospheres.forEach(el => el.removeAttribute("data-state"));
+    
+    // Clear constellation atmosphere
+    const conAtmosphere = document.getElementById('constellation-atmosphere');
+    if (conAtmosphere) {
+      conAtmosphere.removeAttribute('data-theme');
+      conAtmosphere.removeAttribute('data-state');
+    }
+    
+    // Remove theme from body
+    document.body.removeAttribute('data-theme');
   }
 
   manageFocus(view) {
@@ -192,7 +248,7 @@ export class ViewManager {
     const announcement = document.createElement("div");
     announcement.setAttribute("aria-live", "polite");
     announcement.setAttribute("aria-atomic", "true");
-    announcement.classList.add("sr-only");
+    announcement.setAttribute("data-component", "sr-only");
     announcement.textContent = `Navigated to ${viewName}`;
     
     document.body.appendChild(announcement);

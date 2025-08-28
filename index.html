@@ -112,11 +112,11 @@
     <!-- Atmospheric System for View Manager -->
     <div data-js="atmospheric-system" aria-hidden="true">
       <!-- Constellation Atmosphere Elements -->
-      <div data-atmosphere="gnarled-tree" class="atmosphere-element" aria-hidden="true"></div>
-      <div data-atmosphere="qu-poxii" class="atmosphere-element" aria-hidden="true"></div>
-      <div data-atmosphere="star-chanter" class="atmosphere-element" aria-hidden="true"></div>
-      <div data-atmosphere="hatching-egg" class="atmosphere-element" aria-hidden="true"></div>
-      <div data-atmosphere="void" class="atmosphere-element" aria-hidden="true"></div>
+      <div data-atmosphere="gnarled-tree" data-component="atmosphere-element" aria-hidden="true"></div>
+      <div data-atmosphere="qu-poxii" data-component="atmosphere-element" aria-hidden="true"></div>
+      <div data-atmosphere="star-chanter" data-component="atmosphere-element" aria-hidden="true"></div>
+      <div data-atmosphere="hatching-egg" data-component="atmosphere-element" aria-hidden="true"></div>
+      <div data-atmosphere="void" data-component="atmosphere-element" aria-hidden="true"></div>
     </div>
 
     <!-- Neural Interface App -->
@@ -162,16 +162,6 @@
 
           <!-- Right Spacer for Balance -->
           <div data-component="header-balance-spacer"></div>
-          <div data-component="header-actions">
-            <button
-              type="button"
-              data-action="toggle-starfield"
-              title="Toggle starfield visualization"
-              aria-label="Toggle starfield visualization"
-            >
-              <div data-component="action-icon">✨</div>
-            </button>
-          </div>
         </div>
       </header>
 
@@ -203,7 +193,7 @@
 
 
             <!-- Flowing Descriptions - populated dynamically -->
-            <div class="sr-only">
+            <div data-component="sr-only">
               <div id="tree-desc"></div>
               <div id="bond-desc"></div>
               <div id="chant-desc"></div>
@@ -456,9 +446,9 @@
       <!-- Invisible Navigation Footer -->
       <footer
         data-component="neural-navigation-anchor"
+        data-visibility="hidden"
         role="contentinfo"
         aria-hidden="true"
-        style="display: none;"
       >
         <div data-component="navigation-essence">
           Navigate through diplomatic mission Psionic Wake data constellations

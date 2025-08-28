@@ -25,15 +25,15 @@ export class PencodeRenderEngine {
    */
   initializeTagRegistry() {
     return {
-      // Basic formatting tags
+      // Basic formatting tags - using actual CSS classes
       'b': {
         tag: 'strong',
-        class: 'neural-bold',
+        class: 'neural-strong',
         processor: null
       },
       'i': {
         tag: 'em',
-        class: 'neural-italic',
+        class: 'neural-em',
         processor: null
       },
       'u': {
@@ -42,20 +42,20 @@ export class PencodeRenderEngine {
         processor: null
       },
 
-      // Heading tags with neural styling
+      // Heading tags with neural styling - using actual CSS classes
       'h1': {
         tag: 'h1',
-        class: 'neural-heading neural-heading--primary',
+        class: 'neural-heading neural-h1',
         processor: null
       },
       'h2': {
         tag: 'h2',
-        class: 'neural-heading neural-heading--secondary',
+        class: 'neural-heading neural-h2',
         processor: null
       },
       'h3': {
         tag: 'h3',
-        class: 'neural-heading neural-heading--tertiary',
+        class: 'neural-heading neural-h3',
         processor: null
       },
 
@@ -110,7 +110,7 @@ export class PencodeRenderEngine {
       // Special content tags
       'field': {
         tag: 'span',
-        class: 'neural-field paper_field',
+        class: 'neural-field',
         processor: this.processFieldTag.bind(this)
       },
       'station': {
@@ -544,9 +544,9 @@ export class PencodeRenderEngine {
   applyNeuralEnhancements(html) {
     // Add neural glow effects to headings via classes
     html = html
-      .replace(/<h1([^>]*)>/g, '<h1$1 class="neural-heading neural-heading--primary">')
-      .replace(/<h2([^>]*)>/g, '<h2$1 class="neural-heading neural-heading--secondary">')
-      .replace(/<h3([^>]*)>/g, '<h3$1 class="neural-heading neural-heading--tertiary">');
+      .replace(/<h1([^>]*)>/g, '<h1$1 class="neural-heading neural-h1">')
+      .replace(/<h2([^>]*)>/g, '<h2$1 class="neural-heading neural-h2">')
+      .replace(/<h3([^>]*)>/g, '<h3$1 class="neural-heading neural-h3">');
 
     // Enhance lists with neural indicators
     html = html.replace(/<li([^>]*)>/g, '<li$1 data-neural-marker="▸">');
@@ -559,7 +559,7 @@ export class PencodeRenderEngine {
    */
   applyDiplomaticEnhancements(html) {
     // Add diplomatic authority styling
-    html = html.replace(/<strong([^>]*)>/g, '<strong$1 class="neural-bold">');
+    html = html.replace(/<strong([^>]*)>/g, '<strong$1 class="neural-strong">');
     return html;
   }
 
@@ -842,7 +842,7 @@ export class PencodeRenderEngine {
   renderError(error, originalText) {
     return `<div class="neural-document error-state" data-component="document-container">
       <div class="neural-content" data-component="document-content">
-        <h1 class="neural-heading neural-heading--primary">⚠️ NEURAL RENDERING ERROR</h1>
+        <h1 class="neural-heading neural-h1">⚠️ NEURAL RENDERING ERROR</h1>
         <p><strong>Error:</strong> ${error.message}</p>
         <p><strong>Original Text:</strong></p>
         <pre class="neural-code-block">${originalText}</pre>

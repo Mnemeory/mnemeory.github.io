@@ -18,10 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
   window.appInstance.init().catch(error => {
     console.error("Application initialization failed:", error);
     
-    // Show error message via class toggle only - no inline styles
+    // Show error message via data attributes only - no inline styles
     const errorContainer = document.querySelector("[data-js='app-error']");
     if (errorContainer) {
-      errorContainer.classList.add("is-visible");
+      errorContainer.setAttribute("data-visibility", "visible");
       errorContainer.setAttribute("data-state", "error");
     }
   });

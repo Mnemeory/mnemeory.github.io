@@ -197,16 +197,13 @@ class DocumentInstance {
   setupDocument() {
     if (!this.elements.container) return;
     
-    // Add theme classes using new design system
-    this.elements.container.classList.add(
-      'neural-document',
-      `theme-${this.config.theme}`
-    );
+    // Setup container using data attributes
     this.elements.container.setAttribute('data-component', 'document-container');
+    this.elements.container.setAttribute('data-theme', this.config.theme);
     
     // Setup read-only mode
     if (this.config.readOnly) {
-      this.elements.container.classList.add('document-readonly');
+      this.elements.container.setAttribute('data-mode', 'readonly');
       this.hideEditControls();
     }
     
@@ -223,31 +220,31 @@ class DocumentInstance {
   bindEvents() {
     const { elements } = this;
     
-    // Toggle edit mode using neural button
+    // Toggle edit mode using data attributes
     if (elements.toggleButton) {
-      elements.toggleButton.classList.add('neural-button--toolbar');
       elements.toggleButton.setAttribute('data-component', 'neural-button');
+      elements.toggleButton.classList.add('neural-button--toolbar');
       elements.toggleButton.addEventListener('click', () => this.toggleEditMode());
     }
     
-    // Copy content with neural styling
+    // Copy content with data attributes
     if (elements.copyButton) {
-      elements.copyButton.classList.add('neural-button--toolbar');
       elements.copyButton.setAttribute('data-component', 'neural-button');
+      elements.copyButton.classList.add('neural-button--toolbar');
       elements.copyButton.addEventListener('click', () => this.copyContent());
     }
     
-    // Save content with primary styling
+    // Save content with data attributes
     if (elements.saveButton) {
-      elements.saveButton.classList.add('neural-button--toolbar', 'neural-button--primary');
       elements.saveButton.setAttribute('data-component', 'neural-button');
+      elements.saveButton.classList.add('neural-button--toolbar', 'neural-button--primary');
       elements.saveButton.addEventListener('click', () => this.saveContent());
     }
     
-    // Template selector with secondary styling
+    // Template selector with data attributes
     if (elements.templateButton) {
-      elements.templateButton.classList.add('neural-button--toolbar');
       elements.templateButton.setAttribute('data-component', 'neural-button');
+      elements.templateButton.classList.add('neural-button--toolbar');
       elements.templateButton.addEventListener('click', () => this.showTemplateSelector());
     }
     
@@ -314,7 +311,7 @@ class DocumentInstance {
    * Enter edit mode
    */
   enterEditMode() {
-    this.elements.container.classList.add('edit-mode');
+    this.elements.container.setAttribute('data-mode', 'edit');
     this.elements.editor.setAttribute('contenteditable', 'true');
     this.elements.editor.focus();
     
@@ -327,7 +324,7 @@ class DocumentInstance {
    * Enter preview mode
    */
   enterPreviewMode() {
-    this.elements.container.classList.remove('edit-mode');
+    this.elements.container.setAttribute('data-mode', 'preview');
     this.elements.editor.setAttribute('contenteditable', 'false');
     
     // Update accessibility
@@ -352,9 +349,9 @@ class DocumentInstance {
         .replace(/\[b\](.*?)\[\/b\]/g, '<strong>$1</strong>')
         .replace(/\[i\](.*?)\[\/i\]/g, '<em>$1</em>')
         .replace(/\[u\](.*?)\[\/u\]/g, '<u>$1</u>')
-        .replace(/\[h1\](.*?)\[\/h1\]/g, '<h1 class="neural-heading neural-heading--primary">$1</h1>')
-        .replace(/\[h2\](.*?)\[\/h2\]/g, '<h2 class="neural-heading neural-heading--secondary">$1</h2>')
-        .replace(/\[h3\](.*?)\[\/h3\]/g, '<h3 class="neural-heading neural-heading--tertiary">$1</h3>')
+        .replace(/\[h1\](.*?)\[\/h1\]/g, '<h1 data-component="neural-heading" data-level="primary">$1</h1>')
+        .replace(/\[h2\](.*?)\[\/h2\]/g, '<h2 data-component="neural-heading" data-level="secondary">$1</h2>')
+        .replace(/\[h3\](.*?)\[\/h3\]/g, '<h3 data-component="neural-heading" data-level="tertiary">$1</h3>')
         .replace(/\n/g, '<br>');
     }
   }
@@ -434,14 +431,14 @@ class DocumentInstance {
    * Handle editor focus
    */
   handleEditorFocus() {
-    this.elements.container.classList.add('focused');
+    this.elements.container.setAttribute('data-focus', 'true');
   }
 
   /**
    * Handle editor blur
    */
   handleEditorBlur() {
-    this.elements.container.classList.remove('focused');
+    this.elements.container.setAttribute('data-focus', 'false');
   }
 
   /**
@@ -451,10 +448,10 @@ class DocumentInstance {
     try {
       await navigator.clipboard.writeText(this.content);
       
-      // Show success indicator using new design system
-      this.elements.copyButton?.classList.add('is-success', 'shadow-neural-sm');
+      // Show success indicator using data attributes
+      this.elements.copyButton?.setAttribute('data-state', 'success');
       setTimeout(() => {
-        this.elements.copyButton?.classList.remove('is-success', 'shadow-neural-sm');
+        this.elements.copyButton?.removeAttribute('data-state');
       }, 1500);
       
       // Return success message to caller
@@ -462,10 +459,10 @@ class DocumentInstance {
     } catch (error) {
       this.logger.error('Copy failed:', error);
       
-      // Show error indicator using new design system
-      this.elements.copyButton?.classList.add('is-error', 'shadow-neural-lg');
+      // Show error indicator using data attributes
+      this.elements.copyButton?.setAttribute('data-state', 'error');
       setTimeout(() => {
-        this.elements.copyButton?.classList.remove('is-error', 'shadow-neural-lg');
+        this.elements.copyButton?.removeAttribute('data-state');
       }, 1500);
       
       return { success: false, error: 'Failed to copy document' };
@@ -482,20 +479,20 @@ class DocumentInstance {
       this.isDirty = false;
       this.updateStatusBar();
       
-      // Show success indicator using new design system
-      this.elements.saveButton?.classList.add('is-success', 'shadow-neural-sm');
+      // Show success indicator using data attributes
+      this.elements.saveButton?.setAttribute('data-state', 'success');
       setTimeout(() => {
-        this.elements.saveButton?.classList.remove('is-success', 'shadow-neural-sm');
+        this.elements.saveButton?.removeAttribute('data-state');
       }, 1500);
       
       return { success: true, message: 'Document transmitted to local neural storage' };
     } catch (error) {
       this.logger.error('Save failed:', error);
       
-      // Show error indicator via class toggle
-      this.elements.saveButton?.classList.add('is-error');
+      // Show error indicator via data attributes
+      this.elements.saveButton?.setAttribute('data-state', 'error');
       setTimeout(() => {
-        this.elements.saveButton?.classList.remove('is-error');
+        this.elements.saveButton?.removeAttribute('data-state');
       }, 1500);
       
       return { success: false, error: 'Failed to save document' };
@@ -544,7 +541,7 @@ class DocumentInstance {
     ];
     
     controls.forEach(control => {
-      if (control) control.classList.add('hidden');
+      if (control) control.setAttribute('data-visibility', 'hidden');
     });
   }
 

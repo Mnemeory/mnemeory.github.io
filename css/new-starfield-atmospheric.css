@@ -17,7 +17,6 @@
   z-index: var(--z-raised);
 }
 
-[data-view="starfield-view"]:not(.active),
 [data-view="starfield-view"][data-state="hidden"] {
   opacity: 0;
   pointer-events: none;
@@ -26,7 +25,6 @@
   z-index: var(--z-base);
 }
 
-[data-view="starfield-view"].active,
 [data-view="starfield-view"][data-state="active"] {
   z-index: var(--z-floating);
 }
@@ -228,11 +226,46 @@
 }
 
 /* Active constellation atmosphere */
-[data-component="constellation-atmosphere"].active {
+[data-component="constellation-atmosphere"][data-state="active"] {
   opacity: 0.5;
 }
 
 /* === CONSTELLATION THEMES === */
+
+/* Global theme variables for all components */
+body[data-theme="gnarled-tree"] {
+  --current-constellation-glow: var(--constellation-tree-glow);
+  --current-constellation-bg: var(--constellation-tree-bg);
+}
+
+body[data-theme="qu-poxii"] {
+  --current-constellation-glow: var(--constellation-bond-glow);
+  --current-constellation-bg: var(--constellation-bond-bg);
+}
+
+body[data-theme="star-chanter"] {
+  --current-constellation-glow: var(--constellation-chant-glow);
+  --current-constellation-bg: var(--constellation-chant-bg);
+}
+
+body[data-theme="hatching-egg"] {
+  --current-constellation-glow: var(--constellation-egg-glow);
+  --current-constellation-bg: var(--constellation-egg-bg);
+}
+
+body[data-theme="void"] {
+  --current-constellation-glow: var(--constellation-void-glow);
+  --current-constellation-bg: var(--constellation-void-bg);
+}
+
+/* Themed components automatically inherit the current constellation's colors */
+[data-component="citizen-card"],
+[data-component="document-card"],
+[data-component="session-gate"],
+[data-component="citizen-management"] {
+  --glow-color: var(--current-constellation-glow, var(--glow-cyan-faint));
+  --bg-color: var(--current-constellation-bg, var(--glass-bg-subtle));
+}
 
 /* Gnarled Tree - Ancient Wisdom */
 [data-component="constellation-atmosphere"].tree-theme {
@@ -289,7 +322,7 @@
   transition: opacity var(--duration-slower) var(--ease-neural);
 }
 
-[data-view*="-view"].active [data-component="constellation-content-overlay"] {
+[data-view*="-view"][data-state="active"] [data-component="constellation-content-overlay"] {
   opacity: 0.3;
 }
 
@@ -313,7 +346,7 @@
 }
 
 /* Active view state */
-[data-view*="-view"].active {
+[data-view*="-view"][data-state="active"] {
   opacity: 1;
   transform: translateY(0) scale(1);
   pointer-events: auto;
@@ -344,12 +377,12 @@
   overflow: hidden;
 }
 
-.atmosphere-element.active {
+.atmosphere-element[data-state="active"] {
   opacity: 0.4;
 }
 
 /* Constellation-specific atmosphere backgrounds */
-[data-atmosphere="gnarled-tree"].active {
+[data-atmosphere="gnarled-tree"][data-state="active"] {
   background:
     radial-gradient(
       ellipse 150% 100% at 20% 30%,
@@ -363,7 +396,7 @@
     );
 }
 
-[data-atmosphere="qu-poxii"].active {
+[data-atmosphere="qu-poxii"][data-state="active"] {
   background:
     radial-gradient(
       ellipse 140% 90% at 25% 35%,
@@ -377,7 +410,7 @@
     );
 }
 
-[data-atmosphere="star-chanter"].active {
+[data-atmosphere="star-chanter"][data-state="active"] {
   background:
     radial-gradient(
       ellipse 145% 95% at 30% 25%,
@@ -391,7 +424,7 @@
     );
 }
 
-[data-atmosphere="hatching-egg"].active {
+[data-atmosphere="hatching-egg"][data-state="active"] {
   background:
     radial-gradient(
       ellipse 140% 90% at 35% 40%,
@@ -405,7 +438,7 @@
     );
 }
 
-[data-atmosphere="void"].active {
+[data-atmosphere="void"][data-state="active"] {
   background:
     radial-gradient(
       ellipse 150% 100% at 40% 35%,
@@ -503,11 +536,11 @@
     opacity: 0.3;
   }
   
-  [data-component="constellation-atmosphere"].active {
+  [data-component="constellation-atmosphere"][data-state="active"] {
     opacity: 0.2;
   }
   
-  [data-view].active {
+  [data-view][data-state="active"] {
     animation: none;
     opacity: 1;
     transform: none;
@@ -521,7 +554,7 @@
     opacity: 0.1;
   }
   
-  [data-component="constellation-atmosphere"].active {
+  [data-component="constellation-atmosphere"][data-state="active"] {
     opacity: 0.1;
   }
 }

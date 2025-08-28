@@ -11,7 +11,7 @@ import {
   DoubleSide, Raycaster
 } from 'three';
 
-import { CONSTELLATIONS, STARFIELD_CONFIG, KEYS } from './config.js';
+import { CONSTELLATIONS, STARFIELD_CONFIG, KEYS } from '../config.js';
 import { Logger, AnimationUtils, TooltipManager, EventUtils } from './utilities.js';
 
 export class StarfieldManager {
@@ -74,11 +74,11 @@ export class StarfieldManager {
       }
       
       // Update container state
-      this.container.classList.add("is-loading");
+      this.container.setAttribute("data-state", "loading");
       
       // Create canvas
       this.canvas = document.createElement("canvas");
-      this.canvas.className = "starfield-canvas";
+      this.canvas.setAttribute("data-component", "starfield-canvas");
       this.canvas.setAttribute("aria-label", "Neural Starfield Visualization");
       this.canvas.setAttribute("role", "img");
       this.canvas.setAttribute("tabindex", "0");
@@ -94,8 +94,7 @@ export class StarfieldManager {
       this.startAnimation();
       
       // Update container state
-      this.container.classList.remove("is-loading");
-      this.container.classList.add("is-ready");
+      this.container.setAttribute("data-state", "ready");
       
       this.isInitialized = true;
       
@@ -109,8 +108,7 @@ export class StarfieldManager {
       this.logger.error("Failed to initialize starfield", error);
       
       if (this.container) {
-        this.container.classList.remove("is-loading");
-        this.container.classList.add("is-error");
+        this.container.setAttribute("data-state", "error");
       }
       
       return false;
@@ -201,7 +199,7 @@ export class StarfieldManager {
         colors[i3 + 2] = brightVariance;
       }
 
-      const [minSize, maxSize] = STARFIELD_CONFIG.SIZE_RANGE;
+      const { min: minSize, max: maxSize } = STARFIELD_CONFIG.SIZE_RANGE;
       sizes[i] = minSize + Math.random() * (maxSize - minSize);
     }
 
@@ -285,7 +283,7 @@ export class StarfieldManager {
       colors[i3 + 1] = color.g;
       colors[i3 + 2] = color.b;
 
-      const [minSize, maxSize] = STARFIELD_CONFIG.SIZE_RANGE;
+      const { min: minSize, max: maxSize } = STARFIELD_CONFIG.SIZE_RANGE;
       sizes[i] = (minSize + Math.random() * (maxSize - minSize)) * 3;
     }
 
@@ -579,11 +577,11 @@ export class StarfieldManager {
         const constellation = this.constellations.get(newHover);
         if (constellation) {
           constellation.targetWarmth = 1;
-          this.canvas.setAttribute('data-hover-state', 'active');
+          this.container.setAttribute('data-hover-state', 'active');
           this.showConstellationTooltip(newHover, event.clientX, event.clientY);
         }
       } else {
-        this.canvas.setAttribute('data-hover-state', 'default');
+        this.container.setAttribute('data-hover-state', 'default');
         TooltipManager.hide();
       }
 
@@ -600,7 +598,7 @@ export class StarfieldManager {
         constellation.targetWarmth = 0;
       }
       this.currentHover = null;
-      this.canvas.setAttribute('data-hover-state', 'default');
+      this.container.setAttribute('data-hover-state', 'default');
       TooltipManager.hide();
     }
   }
@@ -697,8 +695,7 @@ export class StarfieldManager {
 
     TooltipManager.show(content, x, y, {
       id: "constellation-tooltip",
-      className: "constellation-tooltip",
-      component: "constellation-tooltip",
+      component: "constellation-tooltip"
     });
   }
 
