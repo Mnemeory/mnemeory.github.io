@@ -127,19 +127,20 @@ export class StarfieldInteractions {
     if (!constellationData) return;
 
     const content = `
-      <div class="tooltip-header">
-        <div class="tooltip-resonance-indicator"></div>
-        <span class="tooltip-constellation-name">${constellationData.name}</span>
+      <div data-component="tooltip-header">
+        <div data-component="tooltip-resonance-indicator"></div>
+        <span data-component="tooltip-constellation-name">${constellationData.name}</span>
       </div>
-      <div class="tooltip-meaning">${constellationData.meaning}</div>
-      <div class="tooltip-instruction">
-        <span class="psi-glyph">◈</span> Focus your consciousness to access data streams
+      <div data-component="tooltip-meaning">${constellationData.meaning}</div>
+      <div data-component="tooltip-instruction">
+        <span data-component="psi-glyph">◈</span> Focus your consciousness to access data streams
       </div>
     `;
 
     TooltipManager.show(content, x, y, {
       id: "constellation-tooltip",
       className: "constellation-tooltip",
+      component: "constellation-tooltip",
     });
   }
 

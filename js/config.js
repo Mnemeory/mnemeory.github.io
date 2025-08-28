@@ -178,7 +178,7 @@ const SITE_CONFIG = {
     starfieldContainer: "[data-component='starfield-container']",
     loadingVeil: "[data-js='loading-veil']",
     toastContainer: "[data-component='toast-container']",
-    nodeModal: "[data-component='node-modal']"
+    modal: "[data-component='modal']"
   },
   fileSystem: {
     defaultExtension: '.txt'

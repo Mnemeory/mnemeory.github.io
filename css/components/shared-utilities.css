@@ -4,7 +4,7 @@
  */
 
 /* Toast and tooltip positioning */
-.tooltip {
+[data-component="tooltip"] {
   position: fixed;
   z-index: var(--z-tooltip);
   pointer-events: none;
@@ -13,13 +13,13 @@
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.tooltip.is-visible {
+[data-component="tooltip"].is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
 /* Form validation styling */
-.form-error {
+[data-component="form-error"] {
   color: var(--color-error);
   font-size: 0.8rem;
   margin-top: 0.25rem;
