@@ -561,10 +561,17 @@ export class TooltipManager {
     
     // Create tooltip element
     this.tooltip = document.createElement("div");
-    this.tooltip.className = `tooltip ${options.className || ""}`;
     this.tooltip.setAttribute("role", "tooltip");
     this.tooltip.setAttribute("aria-hidden", "false");
-    
+    this.tooltip.setAttribute(
+      "data-component",
+      options.component || "tooltip"
+    );
+
+    if (options.className) {
+      this.tooltip.className = options.className;
+    }
+
     if (options.id) {
       this.tooltip.id = options.id;
     }
@@ -667,6 +674,7 @@ export class ToastManager {
     const toast = document.createElement("div");
     toast.className = `toast toast--${type}`;
     toast.setAttribute("role", "alert");
+    toast.setAttribute("data-component", "toast");
     
     // Set content safely (no innerHTML)
     toast.textContent = message;

@@ -214,56 +214,56 @@ export class CitizenUI {
 
         <div class="citizens-panel">
           <h4>${SITE_CONFIG.interfaceText.citizen.headers.citizens}</h4>
-          <div class="citizen-search">
-            <input type="search" id="citizen-search" placeholder="${SITE_CONFIG.interfaceText.citizen.placeholders.searchCitizens}"
-                   class="search-input">
-          </div>
-          <div class="citizens-list">
-            ${
-              citizens.length === 0
-                ? `<p data-state="empty">${SITE_CONFIG.interfaceText.citizen.messages.noCitizens}</p>`
-                : citizens
-                    .map((citizen) => this.renderCitizenCard(citizen))
-                    .join("")
-            }
-          </div>
+        <div data-component="citizen-search">
+          <input type="search" id="citizen-search" placeholder="${SITE_CONFIG.interfaceText.citizen.placeholders.searchCitizens}"
+                 data-component="search-input">
         </div>
-
-        <div class="session-files-panel">
-          <h4>${SITE_CONFIG.interfaceText.citizen.headers.sessionFiles}</h4>
-          <div class="session-files-bubbles" id="session-files-bubbles">
-            <p data-state="empty">Session files will be populated dynamically</p>
-          </div>
-        </div>
-
-        <div class="activity-panel">
-          <h4>${SITE_CONFIG.interfaceText.citizen.headers.activity}</h4>
-          <div class="activity-log">
-            ${
-              recentLogs.length === 0
-                ? `<p data-state="empty">${SITE_CONFIG.interfaceText.citizen.messages.noActivity}</p>`
-                : recentLogs
-                    .map(
-                      (log) => `
-                <div class="log-entry">
-                  <span class="log-time">${log.timestamp.toLocaleTimeString()}</span>
-                  <span class="log-text">${log.entry}</span>
-                </div>
-              `
-                    )
-                    .join("")
-            }
-          </div>
-        </div>
-
-        <div class="files-panel">
-          <h4>Available Citizen Files</h4>
-          <div class="citizen-files-bubbles" id="citizen-files-bubbles">
-            <p data-state="empty">Citizen files will be populated by node manager</p>
-          </div>
+        <div data-component="citizens-list">
+          ${
+            citizens.length === 0
+              ? `<p data-state="empty">${SITE_CONFIG.interfaceText.citizen.messages.noCitizens}</p>`
+              : citizens
+                  .map((citizen) => this.renderCitizenCard(citizen))
+                  .join("")
+          }
         </div>
       </div>
-    `;
+
+      <div class="session-files-panel">
+        <h4>${SITE_CONFIG.interfaceText.citizen.headers.sessionFiles}</h4>
+        <div class="session-files-bubbles" id="session-files-bubbles">
+          <p data-state="empty">Session files will be populated dynamically</p>
+        </div>
+      </div>
+
+      <div class="activity-panel">
+        <h4>${SITE_CONFIG.interfaceText.citizen.headers.activity}</h4>
+        <div data-component="activity-log">
+          ${
+            recentLogs.length === 0
+              ? `<p data-state="empty">${SITE_CONFIG.interfaceText.citizen.messages.noActivity}</p>`
+              : recentLogs
+                  .map(
+                    (log) => `
+                <div data-component="log-entry">
+                  <span data-component="log-time">${log.timestamp.toLocaleTimeString()}</span>
+                  <span data-component="log-text">${log.entry}</span>
+                </div>
+              `
+                  )
+                  .join("")
+          }
+        </div>
+      </div>
+
+      <div class="files-panel">
+        <h4>Available Citizen Files</h4>
+        <div class="citizen-files-bubbles" id="citizen-files-bubbles">
+          <p data-state="empty">Citizen files will be populated by node manager</p>
+        </div>
+      </div>
+    </div>
+  `;
   }
 
   /**
@@ -284,34 +284,34 @@ export class CitizenUI {
     const behavioralTags = citizen.behavioralTags || [];
 
     return `
-      <div class="citizen-card" data-citizen-id="${citizen.id}">
-        <div class="citizen-card-header">
-          <h5 class="citizen-name">${this.citizenManager.getFullName(
+      <div data-component="citizen-card" data-citizen-id="${citizen.id}">
+        <div data-component="citizen-card-header">
+          <h5 data-component="citizen-name">${this.citizenManager.getFullName(
             citizen
           )}</h5>
-          <span class="sci-badge" data-sci-level="${sciClass}">${sciValue}/10</span>
+          <span data-component="sci-badge" data-sci-level="${sciClass}">${sciValue}/10</span>
         </div>
-        <div class="citizen-card-info">
-          <p class="citizen-status">${citizen.citizenStatus}</p>
+        <div data-component="citizen-card-info">
+          <p data-component="citizen-status">${citizen.citizenStatus}</p>
           ${
             citizen.location
-              ? `<p class="citizen-location" data-icon="location">${citizen.location}</p>`
+              ? `<p data-component="citizen-location" data-icon="location">${citizen.location}</p>`
               : ""
           }
           ${
             behavioralTags.length > 0
               ? `
-            <div class="citizen-tags">
+            <div data-component="citizen-tags">
               ${behavioralTags
-                .map((tag) => `<span class="tag-bubble">${tag}</span>`)
+                .map((tag) => `<span data-component="tag-bubble">${tag}</span>`)
                 .join("")}
             </div>
           `
               : ""
           }
         </div>
-        <div class="citizen-card-actions">
-          <button type="button" data-action="view-citizen" 
+        <div data-component="citizen-card-actions">
+          <button type="button" data-action="view-citizen"
                   data-citizen-id="${citizen.id}">View</button>
           <button type="button" data-action="edit-citizen"
                   data-citizen-id="${citizen.id}">Edit</button>
@@ -653,16 +653,16 @@ export class CitizenUI {
 
           <div class="activity-section">
             <h5>Activity Log</h5>
-            <div class="citizen-activity-log">
+            <div data-component="activity-log">
               ${
                 citizen.logEntries.length === 0
                   ? '<p data-state="empty">No activity logged for this citizen.</p>'
                   : citizen.logEntries
                       .map(
                         (entry) => `
-                  <div class="log-entry">
-                    <span class="log-time">${entry.timestamp.toLocaleString()}</span>
-                    <span class="log-text">${entry.entry}</span>
+                  <div data-component="log-entry">
+                    <span data-component="log-time">${entry.timestamp.toLocaleString()}</span>
+                    <span data-component="log-text">${entry.entry}</span>
                   </div>
                 `
                       )
@@ -919,10 +919,10 @@ export class CitizenUI {
    */
   handleSearch(query) {
     // Simple search implementation - could be enhanced
-    const cards = this.container.querySelectorAll(".citizen-card");
+    const cards = this.container.querySelectorAll('[data-component="citizen-card"]');
     cards.forEach((card) => {
       const name = card
-        .querySelector(".citizen-name")
+        .querySelector('[data-component="citizen-name"]')
         .textContent.toLowerCase();
       if (name.includes(query.toLowerCase())) {
         card.setAttribute('data-visibility', 'visible');
@@ -1011,7 +1011,7 @@ export class CitizenUI {
         nodeManager.modalDocument.setContent(file.content, file.name);
 
         // Show the modal
-        const modal = document.querySelector(SITE_CONFIG.selectors.nodeModal);
+        const modal = document.querySelector(SITE_CONFIG.selectors.modal);
         if (modal) {
           modal.setAttribute("aria-hidden", "false");
         }

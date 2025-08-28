@@ -3,14 +3,14 @@
  * Standardized card components and view container styling
  *
  * MIGRATION GUIDE:
- * - Previous class: .data-node => Now use .card or .card--data
+ * - Previous class: .data-node => Now use [data-component="card"] or .card--data
  * - Previous class: .node-bubble => Now use .card--bubble
  * - Previous class: .thought-bubble-document => Now use .card--document
  */
 
 /* === BASE CARD COMPONENT === */
 
-.card {
+[data-component="card"] {
   /* Base styling */
   background: var(--gradient-neural-primary), var(--gradient-neural-secondary);
   border: 1px solid var(--glass-border);
@@ -30,7 +30,7 @@
 }
 
 /* Card header */
-.card__header {
+[data-component="card-header"] {
   display: flex;
   align-items: center;
   gap: var(--space-3);
@@ -38,7 +38,7 @@
 }
 
 /* Card title */
-.card__title {
+[data-component="card-title"] {
   font-size: var(--text-lg);
   font-weight: 600;
   color: var(--color-text);
@@ -46,12 +46,12 @@
 }
 
 /* Card content area */
-.card__body {
+[data-component="card-body"] {
   margin-bottom: var(--space-4);
 }
 
 /* Card description text */
-.card__description {
+[data-component="card-description"] {
   color: var(--color-text-muted);
   font-size: var(--text-sm);
   line-height: 1.6;
@@ -59,7 +59,7 @@
 }
 
 /* Card footer */
-.card__footer {
+[data-component="card-footer"] {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
@@ -446,7 +446,7 @@
 
 /* === CARD HOVER EFFECTS === */
 
-.card:hover {
+[data-component="card"]:hover {
   background: var(--gradient-consciousness-flow), var(--gradient-neural-secondary);
   border-color: var(--color-cyan);
   transform: translateY(-4px);
@@ -501,7 +501,7 @@
 }
 
 @media (prefers-contrast: high) {
-  .card {
+  [data-component="card"] {
     border-width: 2px;
   }
   

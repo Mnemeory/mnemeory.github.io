@@ -102,15 +102,36 @@
   z-index: var(--z-tooltip);
 }
 
-[data-component="tooltip-content"] {
-  color: var(--color-text);
-  font-size: var(--text-sm);
-  line-height: 1.4;
+/* Tooltip internal structure */
+[data-component="tooltip-header"] {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
 }
 
-[data-component="tooltip-text"] {
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+[data-component="tooltip-resonance-indicator"] {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+[data-component="tooltip-constellation-name"] {
+  font-weight: 600;
+}
+
+[data-component="tooltip-meaning"] {
+  font-size: var(--text-sm);
+  margin-top: var(--space-1);
+}
+
+[data-component="tooltip-instruction"] {
+  font-size: var(--text-xs);
+  margin-top: var(--space-2);
+  opacity: 0.8;
+}
+
+[data-component="psi-glyph"] {
+  margin-right: var(--space-1);
 }

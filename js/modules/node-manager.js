@@ -28,7 +28,7 @@ export class NodeManager {
    */
   setupModal() {
     // Find modal element
-    this.modal = document.querySelector("[data-component='node-modal']");
+    this.modal = document.querySelector(CONFIG.site.selectors.modal);
     if (!this.modal) {
       this.logger.warn("Node modal not found in DOM");
       return;
@@ -56,7 +56,7 @@ export class NodeManager {
     if (!this.modal) return;
     
     // Close button
-    const closeBtn = this.modal.querySelector("[data-action='modal-close']");
+    const closeBtn = this.modal.querySelector("[data-component='modal-close']");
     if (closeBtn) {
       closeBtn.addEventListener("click", () => this.closeModal());
     }
@@ -353,7 +353,8 @@ export class NodeManager {
   createThoughtBubbleDocument(node, constellation) {
     // Create bubble button - updated to use new card classes
     const bubble = document.createElement("button");
-    bubble.className = "card card--document";
+    bubble.className = "card--document";
+    bubble.setAttribute("data-component", "card");
     bubble.setAttribute("type", "button");
     bubble.setAttribute("role", "button");
     bubble.setAttribute("tabindex", "0");
@@ -422,7 +423,7 @@ export class NodeManager {
       this.currentNode = node;
       
       // Focus management
-      const closeBtn = this.modal.querySelector("[data-action='modal-close']");
+      const closeBtn = this.modal.querySelector("[data-component='modal-close']");
       if (closeBtn) {
         closeBtn.focus();
       }

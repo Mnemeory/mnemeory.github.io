@@ -207,7 +207,7 @@
 /* === LEGACY SUPPORT === */
 
 /* Flow action button - Legacy support (deprecated) */
-.flow-action {
+[data-component="flow-action"] {
   background: var(--gradient-bubble-base);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-organic-dynamic);
@@ -219,7 +219,7 @@
   min-width: 200px;
 }
 
-.flow-action:hover {
+[data-component="flow-action"]:hover {
   background: var(--gradient-neural-primary);
   border-color: var(--glow-cyan-border);
   transform: scale(1.05);

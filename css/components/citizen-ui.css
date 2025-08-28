@@ -4,10 +4,10 @@
  */
 
 /* Card visibility states */
-.citizen-card[data-visibility="visible"] {
+[data-component="citizen-card"][data-visibility="visible"] {
   display: block;
 }
 
-.citizen-card[data-visibility="hidden"] {
+[data-component="citizen-card"][data-visibility="hidden"] {
   display: none;
 }

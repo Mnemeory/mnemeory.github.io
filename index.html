@@ -171,8 +171,13 @@
               data-component="constellation-tooltip"
               data-state="hidden"
             >
-              <div data-component="tooltip-content">
-                <span data-component="tooltip-text"></span>
+              <div data-component="tooltip-header">
+                <div data-component="tooltip-resonance-indicator"></div>
+                <span data-component="tooltip-constellation-name"></span>
+              </div>
+              <div data-component="tooltip-meaning"></div>
+              <div data-component="tooltip-instruction">
+                <span data-component="psi-glyph">◈</span> Focus your consciousness to access data streams
               </div>
             </div>
 
@@ -330,7 +335,7 @@
 
       <!-- Flowing Data Detail -->
       <div
-        data-component="node-modal"
+        data-component="modal"
         role="dialog"
         aria-modal="true"
         aria-hidden="true"
@@ -342,9 +347,10 @@
             <button
               type="button"
               data-action="modal-close"
+              data-component="modal-close"
               aria-label="Close dialog"
             >
-              <div data-component="close-ripple">×</div>
+              <div data-component="modal-close-icon">×</div>
             </button>
           </div>
           <div data-component="modal-body">
