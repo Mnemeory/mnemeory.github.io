@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>N4NL Security Terminal | SCCV Horizon ISD</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="theme.css?v=2">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div id="app" class="terminal-interface">
+    <div class="system-status-bar">
+      <div class="status-indicator">
+        <span class="status-label">TERMINAL</span>
+        <span class="status-value pulse-active">N4NL-7734</span>
+      </div>
+      <div class="status-indicator">
+        <span class="status-label">AUTH</span>
+        <span class="status-value">LEVEL-3</span>
+      </div>
+      <div class="status-indicator">
+        <span class="status-label">CONN</span>
+        <span class="status-value pulse-secure">ENCRYPTED</span>
+      </div>
+      <div class="status-indicator">
+        <span class="status-label">TIME</span>
+        <span class="status-value" id="systemTime">--:--:--</span>
+      </div>
+    </div>
+
+    <header class="terminal-header">
+      <div class="brand">
+        <img src="SCC_logo.png" alt="Stellar Corporate Conglomerate Logo" class="brand-logo">
+        <div class="brand-text">
+          <h1>Stellar Corporate Conglomerate</h1>
+          <small>SCCV Horizon • Internal Security Department Terminal</small>
+        </div>
+      </div>
+      <div class="header-meta">
+        <div class="header-input-group">
+          <label for="officerInput" class="header-label">OFFICER:</label>
+          <input type="text" id="officerInput" class="header-input" placeholder="Character Name" maxlength="20">
+        </div>
+        <div class="header-input-group">
+          <label for="shiftInput" class="header-label">SHIFT:</label>
+          <input type="text" id="shiftInput" class="header-input" placeholder="Round ID (min 7 chars)" maxlength="20">
+        </div>
+      </div>
+    </header>
+
+    <div class="template-bar">
+      <div class="template-controls">
+        <div class="control-group">
+          <label for="templateSelector" class="control-label">FORM TEMPLATE</label>
+          <select id="templateSelector" class="control-select">
+            <option>Loading templates...</option>
+          </select>
+        </div>
+        <p id="templateDescription" class="template-desc"></p>
+      </div>
+      <div class="quick-actions">
+        <button id="copyButton" class="action-btn" title="Copy to clipboard">
+          <span class="btn-icon">📋</span> COPY
+        </button>
+        <button id="downloadButton" class="action-btn" title="Download as text file">
+          <span class="btn-icon">💾</span> SAVE
+        </button>
+      </div>
+    </div>
+
+    <main class="terminal-main">
+      <section class="fields-panel panel">
+        <header class="panel-header">
+          <h2 class="panel-title">
+            <span class="status-indicator-mini"></span>
+            FIELDS
+          </h2>
+          <span class="field-counter" id="fieldCounter">0 / 0</span>
+        </header>
+        <div id="fieldControls" class="field-controls"></div>
+      </section>
+
+      <section class="preview-panel panel">
+        <header class="panel-header">
+          <h2 class="panel-title">
+            <span class="status-indicator-mini"></span>
+            DOCUMENT PREVIEW
+          </h2>
+          <button id="terminalToggle" class="toggle-btn" aria-pressed="false">HIDE TERMINAL</button>
+        </header>
+        <div id="previewRender" class="preview-content"></div>
+      </section>
+
+      <section class="output-panel panel">
+        <header class="panel-header">
+          <h2 class="panel-title">
+            <span class="status-indicator-mini"></span>
+            N4NL SECURITY TERMINAL
+          </h2>
+        </header>
+        <div class="terminal-wrapper">
+          <div class="terminal-scanlines"></div>
+          <div id="outputTerminal" class="terminal-output" contenteditable spellcheck="false"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="terminal-footer">
+      <div class="footer-content">
+        <small class="footer-motto">The unbreakable chainlink, holding the Spur together.</small>
+        <div class="system-info">
+          <span>NET_STATUS//SECURE</span>
+          <span class="info-separator">|</span>
+          <span>ISD_TERMINAL//ACTIVE</span>
+          <span class="info-separator">|</span>
+          <span>MAINFRAME//N4NL-CORE</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
