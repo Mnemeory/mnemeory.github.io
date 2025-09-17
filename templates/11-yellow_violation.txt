@@ -34,14 +34,14 @@ Stellar Corporate Conglomerate
 [large]Payment[/large]
 [table]
 [row][cell][b]Fine:[/b][cell][field]cr[cell][b]Processing Fee:[/b][cell][field]cr
-[row][cell][b]Total Due:[/b][cell][field]cr[cell][b]Due Time/By:[/b][cell][field]
+[row][cell][b]Total Due:[/b][cell][field]cr[cell][b]Due Time/By:[/b][cell]End of Shift
 [row][cell][b]Remit Payment To:[/b][cell]Internal Security Department[cell][b]Consent to OMPCDP?:[/b][cell][field]
 [/table]
 
 [large]Administration[/large]
 [table]
 [row][cell][b]Refer to CCIA?[/b][cell]No.
-[row][cell][b]Copy Provided?[/b][cell]Yes. Yellow Carbon Copy.
+[row][cell][b]Copy Provided?[/b][cell]Yes. Pink Carbon Copy.
 [row][cell][b]Payment Status Code (Q, S, or PK):[/b][cell][field]
 [row][cell][b]ISDP Signature:[/b][cell][field]
 [/table]
