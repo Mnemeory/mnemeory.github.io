@@ -203,7 +203,7 @@
         const processedTemplates = await Promise.all(
           txtFiles.map(async (file) => {
             try {
-              const res = await fetch(`templates/${file.name}`);
+              const res = await fetch(`templates/${file.name}?v=${Date.now()}`);
               if (!res.ok) throw new Error("Failed to load template");
 
               const text = await res.text();
