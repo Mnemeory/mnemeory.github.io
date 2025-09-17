@@ -460,9 +460,6 @@
       htmlResult = htmlResult.replace(regex, htmlValue);
     });
 
-    const metadata = `\n\n[System Generated: ${utils.formatDate()} ${utils.formatTime()}]`;
-    rawResult += metadata;
-
     state.currentRaw = rawResult;
 
     if (dom.previewRender) {
