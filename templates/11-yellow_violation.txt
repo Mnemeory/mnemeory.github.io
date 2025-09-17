@@ -34,7 +34,7 @@ Stellar Corporate Conglomerate
 [large]Payment[/large]
 [table]
 [row][cell][b]Fine:[/b][cell][field]cr[cell][b]Processing Fee:[/b][cell][field]cr
-[row][cell][b]Total Due:[/b][cell][field]cr[cell][b]Due Time/By:[/b][cell]End of Shift
+[row][cell][b]Total Due:[/b][cell][field]cr[cell][b]Due Time/By:[/b][cell] End of Shift
 [row][cell][b]Remit Payment To:[/b][cell]Internal Security Department[cell][b]Consent to OMPCDP?:[/b][cell][field]
 [/table]
 
