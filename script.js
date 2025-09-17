@@ -531,7 +531,6 @@
 
       // Special elements
       "[barcode]": '<span class="barcode">║║│║║│││║│║║││║║│║</span>',
-      "[sign]": '<span class="signature">[Signature Required]</span>',
     };
 
     // Corporate logos
@@ -574,8 +573,6 @@
 
     // Dynamic replacements
     const dynamics = {
-      "[time]": utils.formatTime(),
-      "[date]": utils.formatDate(),
       "[officername]": state.officerId || "",
       "[roundid]": state.shiftCode || "",
     };
