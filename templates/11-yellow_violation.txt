@@ -33,8 +33,8 @@ Stellar Corporate Conglomerate
 
 [large]Payment[/large]
 [table]
-[row][cell][b]Fine:[/b][cell]电[field][cell][b]Processing Fee:[/b][cell]电[field]
-[row][cell][b]Total Due:[/b][cell]电[field][cell][b]Due Time/By:[/b][cell][field]
+[row][cell][b]Fine:[/b][cell][field]cr[cell][b]Processing Fee:[/b][cell][field]cr
+[row][cell][b]Total Due:[/b][cell][field]cr[cell][b]Due Time/By:[/b][cell][field]
 [row][cell][b]Remit Payment To:[/b][cell]Internal Security Department[cell][b]Consent to OMPCDP?:[/b][cell][field]
 [/table]
 
