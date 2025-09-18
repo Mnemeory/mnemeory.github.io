@@ -17,6 +17,7 @@
       officer: "officer_id",
       shift: "shift_code",
     },
+    shiftTimeout: 9000000, // 2.5 hours
   };
 
   const state = {
@@ -29,57 +30,39 @@
     shiftCode: "",
   };
 
-  const dom = {
-    templateSelector: null,
-    templateDescription: null,
-    fieldControls: null,
-    previewRender: null,
-    outputTerminal: null,
-    fieldCounter: null,
-    systemTime: null,
-    officerInput: null,
-    shiftInput: null,
-    copyButton: null,
-  };
+  const dom = {};
 
+  // Unified utility functions
   const utils = {
-    formatTime() {
-      return new Date().toLocaleTimeString("en-US", {
-        hour12: false,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      });
-    },
+    formatTime: () => new Date().toLocaleTimeString("en-US", {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    }),
 
-    formatDate() {
-      return new Date().toLocaleDateString("en-CA"); // YYYY-MM-DD format
-    },
+    formatDate: () => new Date().toLocaleDateString("en-CA"),
 
-    saveToStorage(key, value) {
-      try {
-        localStorage.setItem(
-          CONFIG.storage.prefix + key,
-          JSON.stringify(value),
-        );
-      } catch (e) {
-        console.warn("Storage save failed:", e);
+    storage: {
+      save(key, value) {
+        try {
+          localStorage.setItem(CONFIG.storage.prefix + key, JSON.stringify(value));
+        } catch (e) {
+          console.warn("Storage save failed:", e);
+        }
+      },
+      load(key) {
+        try {
+          const item = localStorage.getItem(CONFIG.storage.prefix + key);
+          return item ? JSON.parse(item) : null;
+        } catch (e) {
+          console.warn("Storage load failed:", e);
+          return null;
+        }
       }
     },
 
-    loadFromStorage(key) {
-      try {
-        const item = localStorage.getItem(CONFIG.storage.prefix + key);
-        return item ? JSON.parse(item) : null;
-      } catch (e) {
-        console.warn("Storage load failed:", e);
-        return null;
-      }
-    },
-
-    getTextContent(element) {
-      return element?.innerText || element?.textContent || "";
-    },
+    getTextContent: (el) => el?.innerText || el?.textContent || "",
 
     debounce(func, wait) {
       let timeout;
@@ -89,47 +72,30 @@
       };
     },
 
-    updateElement(element, property, value) {
-      if (!element) return;
-      element[property] = value;
-    },
-
-    toggleClass(element, className, condition) {
-      if (!element) return;
-      element.classList.toggle(className, condition);
+    updateElement(el, prop, val) {
+      if (el) el[prop] = val;
     },
   };
 
+  // Terminal authentication and UI management
   const terminal = {
     initializeInputs() {
-      const inputConfigs = [
-        {
-          input: dom.officerInput,
-          storageKey: CONFIG.storage.officer,
-          stateKey: "officerId",
-        },
-        {
-          input: dom.shiftInput,
-          storageKey: CONFIG.storage.shift,
-          stateKey: "shiftCode",
-        },
-      ];
-
-      inputConfigs.forEach(({ input, storageKey, stateKey }) => {
+      [
+        { input: dom.officerInput, storageKey: CONFIG.storage.officer, stateKey: "officerId" },
+        { input: dom.shiftInput, storageKey: CONFIG.storage.shift, stateKey: "shiftCode" }
+      ].forEach(({ input, storageKey, stateKey }) => {
         if (!input) return;
 
-        // Load saved value
-        const savedValue = utils.loadFromStorage(storageKey);
+        const savedValue = utils.storage.load(storageKey);
         if (savedValue) {
           utils.updateElement(input, "value", savedValue);
           state[stateKey] = savedValue;
         }
 
-        // Add event listener
         input.addEventListener("input", (e) => {
           const value = e.target.value.trim();
           state[stateKey] = value;
-          utils.saveToStorage(storageKey, value);
+          utils.storage.save(storageKey, value);
           terminal.updateFieldsLock();
           generateOutput();
         });
@@ -139,28 +105,36 @@
     },
 
     isFieldsLocked() {
-      return (
-        !state.officerId ||
-        state.officerId.trim() === "" ||
-        !state.shiftCode ||
-        state.shiftCode.trim() === "" ||
-        state.shiftCode.trim().length < 7
-      );
+      return !state.officerId?.trim() || 
+             !state.shiftCode?.trim() || 
+             state.shiftCode.trim().length < 7;
     },
 
     updateFieldsLock() {
       const isLocked = terminal.isFieldsLocked();
-      const inputs = dom.fieldControls?.querySelectorAll("input") || [];
+      
+      dom.fieldControls?.querySelectorAll("input, button").forEach(
+        el => el.disabled = isLocked
+      );
 
-      inputs.forEach((input) => (input.disabled = isLocked));
+      dom.fieldControls?.querySelectorAll(".charge-field-button").forEach(
+        button => {
+          button.disabled = isLocked;
+          if (isLocked) {
+            button.style.cursor = "not-allowed";
+            button.style.opacity = "0.5";
+          } else {
+            button.style.cursor = "pointer";
+            button.style.opacity = "";
+          }
+        }
+      );
 
-      // Update visual states with fade transition
-      const elementsToUpdate = [
+      // Update visual states
+      [
         { selector: ".fields-panel", lockedClass: "panel-locked" },
-        { selector: ".header-meta", lockedClass: "auth-required" },
-      ];
-
-      elementsToUpdate.forEach(({ selector, lockedClass }) => {
+        { selector: ".header-meta", lockedClass: "auth-required" }
+      ].forEach(({ selector, lockedClass }) => {
         const element = document.querySelector(selector);
         if (!element) return;
 
@@ -169,24 +143,21 @@
           element.classList.add(lockedClass);
         } else {
           element.classList.add("fade-out");
-          setTimeout(() => {
-            element.classList.remove(lockedClass, "fade-out");
-          }, 500);
+          setTimeout(() => element.classList.remove(lockedClass, "fade-out"), 500);
         }
       });
     },
 
     startSystemClock() {
       const updateClock = () => {
-        if (dom.systemTime) {
-          dom.systemTime.textContent = utils.formatTime();
-        }
+        if (dom.systemTime) dom.systemTime.textContent = utils.formatTime();
       };
       updateClock();
       setInterval(updateClock, 1000);
     },
   };
 
+  // Template loading and management
   const templates = {
     async loadList() {
       try {
@@ -196,40 +167,35 @@
         if (!response.ok) throw new Error("Failed to load template list");
 
         const items = await response.json();
-        const txtFiles = items
-          .filter((f) => f && f.type === "file" && /\.txt$/i.test(f.name))
-          .map((f) => ({ name: f.name, path: f.path }));
+        const txtFiles = items.filter(f => f?.type === "file" && /\.txt$/i.test(f.name));
 
-        const processedTemplates = await Promise.all(
-          txtFiles.map(async (file) => {
+        const processedTemplates = (await Promise.all(
+          txtFiles.map(async ({ name }) => {
             try {
-              const res = await fetch(`templates/${file.name}?v=${Date.now()}`);
+              const res = await fetch(`templates/${name}?v=${Date.now()}`);
               if (!res.ok) throw new Error("Failed to load template");
 
               const text = await res.text();
-              const { body, name, desc } = extractHeaders(text);
+              const { body, name: tplName, desc } = extractHeaders(text);
 
               return {
-                file: file.name,
-                name: name || file.name.replace(/\.txt$/i, ""),
+                file: name,
+                name: tplName || name.replace(/\.txt$/i, ""),
                 description: desc || "",
                 body,
               };
             } catch (err) {
-              console.error(`Error loading template ${file.name}:`, err);
+              console.error(`Error loading template ${name}:`, err);
               return null;
             }
-          }),
-        );
+          })
+        )).filter(Boolean);
 
-        state.templates = processedTemplates.filter((t) => t !== null);
+        state.templates = processedTemplates;
         populateTemplateSelector();
 
         if (state.templates.length > 0) {
-          await templates.load(
-            state.templates[0].file,
-            state.templates[0].description,
-          );
+          await templates.load(state.templates[0].file, state.templates[0].description);
         }
       } catch (err) {
         console.error("Error loading template list:", err);
@@ -238,15 +204,13 @@
 
     async load(fileName, description) {
       try {
-        const template = state.templates.find((t) => t.file === fileName);
+        const template = state.templates.find(t => t.file === fileName);
         if (!template) throw new Error("Template not found");
 
         state.currentTemplate = parseTemplate(template.body);
         renderFields(state.currentTemplate.fields);
 
-        if (dom.outputTerminal) {
-          dom.outputTerminal.dataset.userEdited = "false";
-        }
+        if (dom.outputTerminal) dom.outputTerminal.dataset.userEdited = "false";
 
         updateFieldCounter();
         generateOutput();
@@ -262,88 +226,63 @@
     },
   };
 
+  // Unified template parsing
   function parseTemplate(text) {
     const fields = [];
-    const regex = /\[field\]/g;
-    let match;
-    let index = 0;
-
-    while ((match = regex.exec(text)) !== null) {
-      const pos = match.index;
-      const before = text.slice(Math.max(0, pos - 200), pos);
-
-      let label = null;
-      const labelMatches = before.match(/\[b\]([^\[]+?):\s*\[\/b\]/g);
-
-      if (labelMatches && labelMatches.length > 0) {
-        const lastMatch = labelMatches[labelMatches.length - 1];
-        const m = lastMatch.match(/\[b\]([^\[]+?):\s*\[\/b\]/);
-        if (m) {
-          label = m[1].trim();
-        }
-      }
-
-      if (!label) {
-        label = `Field ${index + 1}`;
-      }
-
-      fields.push({
-        label,
-        value: "",
-        pos,
-        id: `field_${index}`,
-      });
-
-      index++;
-    }
-
-    // Also look for charge fields
-    const chargesRegex = /\[charges\]/g;
-    let chargeMatch;
-    let chargeIndex = 0;
     
-    while ((chargeMatch = chargesRegex.exec(text)) !== null) {
-      const pos = chargeMatch.index;
-      const before = text.slice(Math.max(0, pos - 200), pos);
+    // Combined regex for both field types
+    const patterns = [
+      { regex: /\[field\]/g, type: "text", prefix: "field_" },
+      { regex: /\[charges\]/g, type: "charge", prefix: "charge_" }
+    ];
+    
+    patterns.forEach(({ regex, type, prefix }) => {
+      let match;
+      let index = 0;
       
-      let label = "Charges";
-      const labelMatches = before.match(/\[b\]([^\[]+?):\s*\[\/b\]/g);
-      
-      if (labelMatches && labelMatches.length > 0) {
-        const lastMatch = labelMatches[labelMatches.length - 1];
-        const m = lastMatch.match(/\[b\]([^\[]+?):\s*\[\/b\]/);
-        if (m) label = m[1].trim();
+      while ((match = regex.exec(text)) !== null) {
+        const pos = match.index;
+        const before = text.slice(Math.max(0, pos - 200), pos);
+        
+        // Extract label from preceding bold text
+        let label = type === "charge" ? "Charges" : `Field ${index + 1}`;
+        const labelMatches = before.match(/\[b\]([^\[]+?):\s*\[\/b\]/g);
+        
+        if (labelMatches?.length > 0) {
+          const lastMatch = labelMatches[labelMatches.length - 1];
+          const m = lastMatch.match(/\[b\]([^\[]+?):\s*\[\/b\]/);
+          if (m) label = m[1].trim();
+        }
+        
+        fields.push({
+          label,
+          value: "",
+          pos,
+          id: `${prefix}${index}`,
+          type
+        });
+        
+        index++;
       }
-      
-      fields.push({
-        label,
-        value: "",
-        pos,
-        id: `charge_${chargeIndex}`,
-        type: "charge"
-      });
-      
-      chargeIndex++;
-    }
-
-    // Sort fields by position
+    });
+    
     fields.sort((a, b) => a.pos - b.pos);
-
     return { fields, originalText: text };
   }
 
+  // Unified field rendering
   function renderFields(fields) {
     if (!dom.fieldControls) return;
 
     dom.fieldControls.innerHTML = "";
 
-    if (!fields || fields.length === 0) {
+    if (!fields?.length) {
       dom.fieldControls.innerHTML = `
         <div class="empty-state">
           <p>No editable fields in this template.</p>
         </div>
       `;
-      state.totalFields = fields.length;
+      state.totalFields = 0;
       updateFieldCounter();
       return;
     }
@@ -355,7 +294,7 @@
       wrapper.className = "field-group";
       
       if (field.type === "charge") {
-        // Render charge fields as buttons
+        // Charge field button
         wrapper.innerHTML = `
           <label for="${field.id}">${field.label}</label>
           <button 
@@ -369,15 +308,15 @@
           </button>
         `;
 
-        const button = wrapper.querySelector("button");
-        button.addEventListener("click", (e) => {
+        wrapper.querySelector("button").addEventListener("click", (e) => {
           e.preventDefault();
-          if (window.N4NL_CHARGES && window.N4NL_CHARGES.openChargeSelector) {
+          if (e.target.disabled) return;
+          if (window.N4NL_CHARGES?.openChargeSelector) {
             window.N4NL_CHARGES.openChargeSelector(field.id);
           }
         });
       } else {
-        // Render regular fields as inputs
+        // Regular text field
         wrapper.innerHTML = `
           <label for="${field.id}">${field.label}</label>
           <input 
@@ -391,7 +330,16 @@
         `;
 
         const input = wrapper.querySelector("input");
-        input.addEventListener("input", handleFieldInput);
+        const handleInput = utils.debounce((e) => {
+          const index = parseInt(e.target.dataset.index, 10);
+          if (state.currentTemplate?.fields[index]) {
+            state.currentTemplate.fields[index].value = e.target.value;
+            generateOutput();
+            updateFieldCounter();
+          }
+        }, 150);
+        
+        input.addEventListener("input", handleInput);
         input.addEventListener("change", saveFieldsToStorage);
       }
 
@@ -399,117 +347,91 @@
     });
 
     updateFieldCounter();
-
-    // Update lock state after rendering fields
     terminal.updateFieldsLock();
   }
-
-
-  const handleFieldInput = utils.debounce((e) => {
-    const index = parseInt(e.target.dataset.index, 10);
-    if (state.currentTemplate && state.currentTemplate.fields[index]) {
-      state.currentTemplate.fields[index].value = e.target.value;
-      generateOutput();
-      updateFieldCounter();
-    }
-  }, 150);
 
   function updateFieldCounter() {
     if (!dom.fieldCounter) return;
 
-    let filled = 0;
-    if (state.currentTemplate && state.currentTemplate.fields) {
-      filled = state.currentTemplate.fields.filter(
-        (f) => f.value.trim() !== "",
-      ).length;
-    }
-
+    const filled = state.currentTemplate?.fields?.filter(f => f.value.trim() !== "").length || 0;
     state.fieldsFilled = filled;
+    
     dom.fieldCounter.textContent = `${filled} / ${state.totalFields}`;
-
-    if (filled === state.totalFields && state.totalFields > 0) {
-      dom.fieldCounter.classList.add("complete");
-    } else {
-      dom.fieldCounter.classList.remove("complete");
-    }
+    dom.fieldCounter.classList.toggle("complete", filled === state.totalFields && state.totalFields > 0);
   }
 
   function saveFieldsToStorage() {
     if (!state.currentTemplate) return;
 
-    const fieldData = state.currentTemplate.fields.map((f) => ({
+    const fieldData = state.currentTemplate.fields.map(f => ({
       label: f.label,
       value: f.value,
       type: f.type || "text"
     }));
 
-    utils.saveToStorage(CONFIG.storage.fields, fieldData);
+    utils.storage.save(CONFIG.storage.fields, fieldData);
   }
 
   function loadSavedFields() {
-    const savedFields = utils.loadFromStorage(CONFIG.storage.fields);
+    const savedFields = utils.storage.load(CONFIG.storage.fields);
     if (!savedFields || !state.currentTemplate) return;
 
     savedFields.forEach((saved, idx) => {
-      if (
-        state.currentTemplate.fields[idx] &&
-        state.currentTemplate.fields[idx].label === saved.label
-      ) {
-        state.currentTemplate.fields[idx].value = saved.value;
+      const field = state.currentTemplate.fields[idx];
+      if (field && field.label === saved.label) {
+        field.value = saved.value;
 
-        // For regular fields, update the input element
-        if (saved.type !== "charge") {
-          const input = document.querySelector(`#field_${idx}`);
-          if (input) {
-            input.value = saved.value;
+        // Update UI element
+        if (saved.type === "charge") {
+          const button = document.getElementById(field.id);
+          if (button) {
+            button.textContent = saved.value || '[SELECT CHARGE]';
+            button.title = saved.value || '[SELECT CHARGE]';
+            button.className = `charge-field-button ${saved.value ? 'filled' : 'empty'}`;
           }
+        } else {
+          const input = document.getElementById(field.id);
+          if (input) input.value = saved.value;
         }
-        // For charge fields, the value is displayed directly in the preview
       }
     });
 
     updateFieldCounter();
     generateOutput();
-
-    // Check lock state after loading saved fields
     terminal.updateFieldsLock();
   }
 
+  // Simplified output generation
   function generateOutput() {
     if (!state.currentTemplate) return;
 
     let rawResult = state.currentTemplate.originalText;
     let htmlResult = state.currentTemplate.originalText;
 
-
-    // Replace dynamic placeholders
-    const replacements = {
+    // Dynamic replacements
+    const dynamics = {
       "[officername]": state.officerId || "",
       "[roundid]": state.shiftCode || "",
     };
 
-    Object.entries(replacements).forEach(([placeholder, value]) => {
-      const regex = new RegExp(
-        placeholder.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-        "g",
-      );
-      const htmlValue = value
-        ? `<span class="understood">${value}</span>`
-        : '<span class="paper_field"></span>';
+    // Apply dynamic replacements
+    Object.entries(dynamics).forEach(([placeholder, value]) => {
+      const regex = new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g");
+      const htmlValue = value ? `<span class="understood">${value}</span>` : '<span class="paper_field"></span>';
       rawResult = rawResult.replace(regex, value);
       htmlResult = htmlResult.replace(regex, htmlValue);
     });
 
-    // Handle field replacements (both regular and charge fields)
+    // Apply field replacements
     if (state.currentTemplate) {
-      // Process fields in the order they appear in the template
       const sortedFields = [...state.currentTemplate.fields].sort((a, b) => a.pos - b.pos);
       
       sortedFields.forEach(field => {
         const placeholder = field.type === "charge" ? "[charges]" : "[field]";
         const value = field.value || "";
+        const htmlValue = value ? `<span class="understood">${value}</span>` : '<span class="paper_field"></span>';
         
-        // Find the first occurrence of the placeholder and replace it
+        // Replace first occurrence
         const rawIndex = rawResult.indexOf(placeholder);
         if (rawIndex !== -1) {
           rawResult = rawResult.substring(0, rawIndex) + value + 
@@ -518,9 +440,6 @@
         
         const htmlIndex = htmlResult.indexOf(placeholder);
         if (htmlIndex !== -1) {
-          const htmlValue = value
-            ? `<span class="understood">${value}</span>`
-            : '<span class="paper_field"></span>';
           htmlResult = htmlResult.substring(0, htmlIndex) + htmlValue + 
                       htmlResult.substring(htmlIndex + placeholder.length);
         }
@@ -534,9 +453,7 @@
     }
 
     if (dom.outputTerminal) {
-      // Always update the terminal output to ensure fields populate correctly
       dom.outputTerminal.innerText = rawResult;
-      // Reset the user-edited flag when we programmatically update
       dom.outputTerminal.dataset.userEdited = "false";
     }
   }
@@ -545,7 +462,6 @@
     if (!dom.outputTerminal) return;
 
     dom.outputTerminal.dataset.userEdited = "true";
-
     const terminalContent = utils.getTextContent(dom.outputTerminal);
     state.currentRaw = terminalContent;
 
@@ -554,184 +470,118 @@
     }
   }
 
+  // Optimized pencode to HTML conversion
   function pencodeToHtml(text) {
     if (!text) return "";
 
-    // Tag replacements using optimized lookup map
+    // Build tag map with all replacements
     const tagMap = {
       // Basic formatting
-      "[b]": "<B>",
-      "[/b]": "</B>",
-      "[i]": "<I>",
-      "[/i]": "</I>",
-      "[u]": "<U>",
-      "[/u]": "</U>",
-      "[large]": '<font size="4">',
-      "[/large]": "</font>",
-      "[small]": '<font size="1">',
-      "[/small]": "</font>",
-      "[center]": "<center>",
-      "[/center]": "</center>",
+      "[b]": "<B>", "[/b]": "</B>",
+      "[i]": "<I>", "[/i]": "</I>",
+      "[u]": "<U>", "[/u]": "</U>",
+      "[large]": '<font size="4">', "[/large]": "</font>",
+      "[small]": '<font size="1">', "[/small]": "</font>",
+      "[center]": "<center>", "[/center]": "</center>",
       "[br]": "<BR>",
       "[hr]": "<HR>",
       "[field]": '<span class="paper_field"></span>',
       "[charges]": '<span class="paper_field"></span>',
-
+      
       // Headers and lists
-      "[h1]": "<H1>",
-      "[/h1]": "</H1>",
-      "[h2]": "<H2>",
-      "[/h2]": "</H2>",
-      "[h3]": "<H3>",
-      "[/h3]": "</H3>",
+      "[h1]": "<H1>", "[/h1]": "</H1>",
+      "[h2]": "<H2>", "[/h2]": "</H2>",
+      "[h3]": "<H3>", "[/h3]": "</H3>",
       "[*]": "<li>",
-      "[list]": "<ul>",
-      "[/list]": "</ul>",
-
+      "[list]": "<ul>", "[/list]": "</ul>",
+      
       // Tables
-      "[table]":
-        '<table border=1 cellspacing=0 cellpadding=3 style="border: 1px solid black;">',
+      "[table]": '<table border=1 cellspacing=0 cellpadding=3 style="border: 1px solid black;">',
       "[/table]": "</td></tr></table>",
       "[grid]": "<table>",
       "[/grid]": "</td></tr></table>",
       "[row]": "</td><tr>",
       "[cell]": "<td>",
-
+      
       // Special elements
       "[barcode]": '<span class="barcode">║║│║║│││║│║║││║║│║</span>',
     };
 
     // Corporate logos
-    [
-      ["scc", "⬢", "SCC"],
-      ["nt", "◆", "NT"],
-      ["zh", "▣", "ZH"],
-      ["idris", "◉", "IDRIS"],
-      ["eridani", "⬟", "ECF"],
-      ["zavod", "▲", "ZAVOD"],
-      ["hp", "⬡", "HEPH"],
-      ["be", "◈", "BE"],
-      ["golden", "◊", "GOLDEN"],
-      ["pvpolice", "★", "PKM"],
-    ].forEach(([name, symbol, text]) => {
-      tagMap[`[logo_${name}]`] =
-        `<span class="corp-logo">${symbol} ${text}</span>`;
-      tagMap[`[logo_${name}_small]`] =
-        `<span class="corp-logo">${symbol}</span>`;
+    const logos = [
+      ["scc", "⬢", "SCC"], ["nt", "◆", "NT"], ["zh", "▣", "ZH"],
+      ["idris", "◉", "IDRIS"], ["eridani", "⬟", "ECF"], ["zavod", "▲", "ZAVOD"],
+      ["hp", "⬡", "HEPH"], ["be", "◈", "BE"], ["golden", "◊", "GOLDEN"],
+      ["pvpolice", "★", "PKM"]
+    ];
+    
+    logos.forEach(([name, symbol, text]) => {
+      tagMap[`[logo_${name}]`] = `<span class="corp-logo">${symbol} ${text}</span>`;
+      tagMap[`[logo_${name}_small]`] = `<span class="corp-logo">${symbol}</span>`;
     });
 
-    let t = text;
-
-    // Apply simple tag replacements using single regex
+    // Apply replacements
     const tagPattern = new RegExp(
-      Object.keys(tagMap)
-        .map((key) => key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-        .join("|"),
-      "g",
+      Object.keys(tagMap).map(key => key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|"),
+      "g"
     );
 
-    t = t.replace(tagPattern, (match) => tagMap[match]);
+    let result = text.replace(tagPattern, match => tagMap[match]);
 
-    // Handle complex replacements that require custom logic
-    t = t.replace(
-      /\[redacted\](.*?)\[\/redacted\]/gs,
-      (match, content) =>
-        `<span class="redacted">${"|".repeat(content.length)}</span>`,
-    );
+    // Complex replacements
+    result = result
+      .replace(/\[redacted\](.*?)\[\/redacted\]/gs, (_, content) => 
+        `<span class="redacted">${"|".repeat(content.length)}</span>`)
+      .replace(/\[color=([^\]]+)\](.*?)\[\/color\]/gs, 
+        '<span style="color: $1;">$2</span>')
+      .replace(/\[lang=([^\]]+)\](.*?)\[\/lang\]/gs, 
+        '<span class="language" data-lang="$1" title="Language: $1">$2</span>');
 
-    // Dynamic replacements
-    const dynamics = {
-      "[officername]": state.officerId || "",
-      "[roundid]": state.shiftCode || "",
-    };
+    // Apply dynamic values
+    Object.entries({ "[officername]": state.officerId || "", "[roundid]": state.shiftCode || "" })
+      .forEach(([placeholder, replacement]) => {
+        const regex = new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g");
+        result = result.replace(regex, replacement);
+      });
 
-    Object.entries(dynamics).forEach(([placeholder, replacement]) => {
-      const regex = new RegExp(
-        placeholder.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-        "g",
-      );
-      t = t.replace(regex, replacement);
-    });
-
-    // Complex pattern replacements
-    t = t.replace(
-      /\[color=([^\]]+)\](.*?)\[\/color\]/gs,
-      '<span style="color: $1;">$2</span>',
-    );
-    t = t.replace(
-      /\[lang=([^\]]+)\](.*?)\[\/lang\]/gs,
-      '<span class="language" data-lang="$1" title="Language: $1">$2</span>',
-    );
-
-    return t;
+    return result;
   }
 
   function extractHeaders(text) {
     const lines = text.split(/\r?\n/);
-    let name = "";
-    let desc = "";
-    let i = 0;
+    let name = "", desc = "", i = 0;
 
     while (i < lines.length) {
       const line = lines[i].trim();
-      if (line.startsWith("Name:")) {
-        name = line.slice(5).trim();
-        i++;
-        continue;
-      }
-      if (line.startsWith("Desc:")) {
-        desc = line.slice(5).trim();
-        i++;
-        continue;
-      }
-      if (line === "") {
-        i++;
-        continue;
-      }
-      break;
+      if (line.startsWith("Name:")) name = line.slice(5).trim();
+      else if (line.startsWith("Desc:")) desc = line.slice(5).trim();
+      else if (line !== "") break;
+      i++;
     }
 
-    const body = lines.slice(i).join("\n");
-    return { name, desc, body };
+    return { name, desc, body: lines.slice(i).join("\n") };
   }
 
   function populateTemplateSelector() {
     if (!dom.templateSelector) return;
 
-    dom.templateSelector.innerHTML = "";
-
-    state.templates.forEach((template, index) => {
-      const option = document.createElement("option");
-      option.value = template.file;
-      option.textContent = template.name;
-      option.dataset.description = template.description || "";
-
-      if (index === 0) option.selected = true;
-
-      dom.templateSelector.appendChild(option);
-    });
+    dom.templateSelector.innerHTML = state.templates.map((template, index) => 
+      `<option value="${template.file}" data-description="${template.description || ""}" 
+        ${index === 0 ? 'selected' : ''}>${template.name}</option>`
+    ).join('');
   }
 
   function toggleTerminal() {
     const main = document.querySelector(".terminal-main");
     const toggleBtn = document.getElementById("terminalToggle");
 
-    if (main.classList.contains("terminal-hidden")) {
-      main.classList.remove("terminal-hidden");
-      toggleBtn.textContent = "HIDE TERMINAL";
-      toggleBtn.setAttribute("aria-pressed", "false");
-    } else {
-      main.classList.add("terminal-hidden");
-      toggleBtn.textContent = "SHOW TERMINAL";
-      toggleBtn.setAttribute("aria-pressed", "true");
-    }
+    const isHidden = main.classList.toggle("terminal-hidden");
+    toggleBtn.textContent = isHidden ? "SHOW TERMINAL" : "HIDE TERMINAL";
+    toggleBtn.setAttribute("aria-pressed", isHidden);
   }
 
   function getCurrentOutput() {
-    return (
-      state.currentRaw ||
-      (dom.outputTerminal ? utils.getTextContent(dom.outputTerminal) : "")
-    );
+    return state.currentRaw || utils.getTextContent(dom.outputTerminal) || "";
   }
 
   async function copyOutput() {
@@ -754,18 +604,14 @@
       }
     } catch (err) {
       console.error("Copy failed:", err);
-      try {
-        const textArea = document.createElement("textarea");
-        textArea.value = content;
-        textArea.style.position = "fixed";
-        textArea.style.opacity = "0";
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textArea);
-      } catch (fallbackErr) {
-        console.error("Fallback copy also failed:", fallbackErr);
-      }
+      // Fallback method
+      const textArea = document.createElement("textarea");
+      textArea.value = content;
+      textArea.style.cssText = "position:fixed;opacity:0";
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
     }
   }
 
@@ -773,8 +619,10 @@
     const content = getCurrentOutput();
     if (!content) return;
 
+    const headerContent = `Name: ${state.shiftCode || "Unknown"}\nDesc: A finished document.\n\n${content}`;
     const fileName = `citation_${state.officerId}_${Date.now()}.txt`;
-    const blob = new Blob([content], { type: "text/plain" });
+    
+    const blob = new Blob([headerContent], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement("a");
@@ -785,11 +633,20 @@
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
+    // Clear fields after download
     if (state.currentTemplate?.fields) {
-      state.currentTemplate.fields.forEach((field, i) => {
+      state.currentTemplate.fields.forEach(field => {
         field.value = "";
-        const input = document.querySelector(`#field_${i}`);
-        if (input) input.value = "";
+        const element = document.getElementById(field.id);
+        if (element) {
+          if (field.type === "charge") {
+            element.textContent = '[SELECT CHARGE]';
+            element.title = '[SELECT CHARGE]';
+            element.className = 'charge-field-button empty';
+          } else {
+            element.value = "";
+          }
+        }
       });
       updateFieldCounter();
       generateOutput();
@@ -800,13 +657,11 @@
   function setupEventHandlers() {
     // Template selector
     dom.templateSelector?.addEventListener("change", async (e) => {
-      const selectedOption = e.target.options[e.target.selectedIndex];
-      const file = selectedOption.value;
-      const desc = selectedOption.dataset.description;
-      await templates.load(file, desc);
+      const option = e.target.selectedOptions[0];
+      await templates.load(option.value, option.dataset.description);
     });
 
-    // Button event handlers
+    // Button handlers
     const buttons = {
       terminalToggle: toggleTerminal,
       copyButton: copyOutput,
@@ -820,76 +675,59 @@
     // Terminal editing
     if (dom.outputTerminal) {
       dom.outputTerminal.addEventListener("input", handleTerminalEdit);
-      dom.outputTerminal.addEventListener("paste", () => {
-        setTimeout(handleTerminalEdit, 0);
-      });
+      dom.outputTerminal.addEventListener("paste", () => setTimeout(handleTerminalEdit, 0));
     }
 
+    // Keyboard shortcuts
     document.addEventListener("keydown", (e) => {
-      if (e.ctrlKey && e.key === "s") {
-        e.preventDefault();
-        downloadOutput();
-      }
-
-      if (e.ctrlKey && e.key === "c" && !window.getSelection().toString()) {
-        e.preventDefault();
-        copyOutput();
+      if (e.ctrlKey) {
+        if (e.key === "s") {
+          e.preventDefault();
+          downloadOutput();
+        } else if (e.key === "c" && !window.getSelection().toString()) {
+          e.preventDefault();
+          copyOutput();
+        }
       }
     });
   }
 
   async function initialize() {
-    const elementIds = [
-      "templateSelector",
-      "templateDescription",
-      "fieldControls",
-      "previewRender",
-      "outputTerminal",
-      "fieldCounter",
-      "systemTime",
-      "officerInput",
-      "shiftInput",
-      "copyButton",
-    ];
-    elementIds.forEach((id) => (dom[id] = document.getElementById(id)));
+    // Initialize DOM references
+    [
+      "templateSelector", "templateDescription", "fieldControls",
+      "previewRender", "outputTerminal", "fieldCounter",
+      "systemTime", "officerInput", "shiftInput", "copyButton"
+    ].forEach(id => dom[id] = document.getElementById(id));
 
-    const storedOfficer = utils.loadFromStorage(CONFIG.storage.officer);
-    const storedShift = utils.loadFromStorage(CONFIG.storage.shift);
-
-    if (storedOfficer) {
-      state.officerId = storedOfficer;
-      console.log("Restored officer:", storedOfficer);
-    }
-    if (storedShift) {
-      state.shiftCode = storedShift;
-      console.log("Restored shift:", storedShift);
-    }
+    // Load saved authentication
+    ["officer", "shift"].forEach((type, i) => {
+      const key = type === "officer" ? "officerId" : "shiftCode";
+      const saved = utils.storage.load(CONFIG.storage[type]);
+      if (saved) state[key] = saved;
+    });
 
     terminal.initializeInputs();
     terminal.startSystemClock();
-
     setupEventHandlers();
-
     await templates.loadList();
-
     generateOutput();
 
+    // Auto-clear shift code after timeout
     setInterval(() => {
       if (dom.shiftInput) {
         dom.shiftInput.value = "";
         state.shiftCode = "";
-        utils.saveToStorage(CONFIG.storage.shift, "");
+        utils.storage.save(CONFIG.storage.shift, "");
         terminal.updateFieldsLock();
       }
-    }, 9000000);
+    }, CONFIG.shiftTimeout);
   }
 
-  // Expose API for charge system integration
+  // Public API
   window.N4NL_TERMINAL = {
     updateField(fieldId, value) {
-      if (!state.currentTemplate) return;
-      
-      const field = state.currentTemplate.fields.find(f => f.id === fieldId);
+      const field = state.currentTemplate?.fields.find(f => f.id === fieldId);
       if (field) {
         field.value = value;
         generateOutput();
@@ -898,13 +736,11 @@
     },
     
     getFieldValue(fieldId) {
-      if (!state.currentTemplate) return "";
-      
-      const field = state.currentTemplate.fields.find(f => f.id === fieldId);
-      return field ? field.value : "";
+      return state.currentTemplate?.fields.find(f => f.id === fieldId)?.value || "";
     }
   };
 
+  // Initialize when ready
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initialize);
   } else {
