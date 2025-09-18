@@ -15,7 +15,7 @@ Stellar Corporate Conglomerate
 
 [large]Information[/large]
 [table]
-[row][cell][b]Citation #:[/b][cell][roundid]-[field][cell][b]Date:[/b][cell][date]
+[row][cell][b]Citation #:[/b][cell][roundid]#[field][cell][b]Date:[/b][cell][date]
 [row][cell][b]Time:[/b][cell][time][cell][b]Point of Dispute:[/b][cell]SCCV Horizon
 [row][cell][b]Issuing ISDP:[/b][cell][officername]
 [sign][cell][b]Badge #:[/b][cell]PMCG-ISS-13972
