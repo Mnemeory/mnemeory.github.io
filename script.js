@@ -297,6 +297,38 @@
       index++;
     }
 
+    // Also look for charge fields
+    const chargesRegex = /\[charges\]/g;
+    let chargeMatch;
+    let chargeIndex = 0;
+    
+    while ((chargeMatch = chargesRegex.exec(text)) !== null) {
+      const pos = chargeMatch.index;
+      const before = text.slice(Math.max(0, pos - 200), pos);
+      
+      let label = "Charges";
+      const labelMatches = before.match(/\[b\]([^\[]+?):\s*\[\/b\]/g);
+      
+      if (labelMatches && labelMatches.length > 0) {
+        const lastMatch = labelMatches[labelMatches.length - 1];
+        const m = lastMatch.match(/\[b\]([^\[]+?):\s*\[\/b\]/);
+        if (m) label = m[1].trim();
+      }
+      
+      fields.push({
+        label,
+        value: "",
+        pos,
+        id: `charge_${chargeIndex}`,
+        type: "charge"
+      });
+      
+      chargeIndex++;
+    }
+
+    // Sort fields by position
+    fields.sort((a, b) => a.pos - b.pos);
+
     return { fields, originalText: text };
   }
 
@@ -311,7 +343,7 @@
           <p>No editable fields in this template.</p>
         </div>
       `;
-      state.totalFields = 0;
+      state.totalFields = fields.length;
       updateFieldCounter();
       return;
     }
@@ -321,21 +353,47 @@
     fields.forEach((field, idx) => {
       const wrapper = document.createElement("div");
       wrapper.className = "field-group";
-      wrapper.innerHTML = `
-        <label for="${field.id}">${field.label}</label>
-        <input 
-          type="text" 
-          id="${field.id}"
-          data-index="${idx}"
-          value="${field.value}"
-          placeholder="Enter ${field.label.toLowerCase()}"
-          autocomplete="off"
-        >
-      `;
+      
+      if (field.type === "charge") {
+        // Render charge fields as buttons
+        wrapper.innerHTML = `
+          <label for="${field.id}">${field.label}</label>
+          <button 
+            type="button"
+            class="charge-field-button ${field.value ? 'filled' : 'empty'}"
+            id="${field.id}"
+            data-index="${idx}"
+            title="${field.value || '[SELECT CHARGE]'}"
+          >
+            ${field.value || '[SELECT CHARGE]'}
+          </button>
+        `;
 
-      const input = wrapper.querySelector("input");
-      input.addEventListener("input", handleFieldInput);
-      input.addEventListener("change", saveFieldsToStorage);
+        const button = wrapper.querySelector("button");
+        button.addEventListener("click", (e) => {
+          e.preventDefault();
+          if (window.N4NL_CHARGES && window.N4NL_CHARGES.openChargeSelector) {
+            window.N4NL_CHARGES.openChargeSelector(field.id);
+          }
+        });
+      } else {
+        // Render regular fields as inputs
+        wrapper.innerHTML = `
+          <label for="${field.id}">${field.label}</label>
+          <input 
+            type="text" 
+            id="${field.id}"
+            data-index="${idx}"
+            value="${field.value}"
+            placeholder="Enter ${field.label.toLowerCase()}"
+            autocomplete="off"
+          >
+        `;
+
+        const input = wrapper.querySelector("input");
+        input.addEventListener("input", handleFieldInput);
+        input.addEventListener("change", saveFieldsToStorage);
+      }
 
       dom.fieldControls.appendChild(wrapper);
     });
@@ -345,6 +403,7 @@
     // Update lock state after rendering fields
     terminal.updateFieldsLock();
   }
+
 
   const handleFieldInput = utils.debounce((e) => {
     const index = parseInt(e.target.dataset.index, 10);
@@ -381,6 +440,7 @@
     const fieldData = state.currentTemplate.fields.map((f) => ({
       label: f.label,
       value: f.value,
+      type: f.type || "text"
     }));
 
     utils.saveToStorage(CONFIG.storage.fields, fieldData);
@@ -397,10 +457,14 @@
       ) {
         state.currentTemplate.fields[idx].value = saved.value;
 
-        const input = document.querySelector(`#field_${idx}`);
-        if (input) {
-          input.value = saved.value;
+        // For regular fields, update the input element
+        if (saved.type !== "charge") {
+          const input = document.querySelector(`#field_${idx}`);
+          if (input) {
+            input.value = saved.value;
+          }
         }
+        // For charge fields, the value is displayed directly in the preview
       }
     });
 
@@ -417,30 +481,6 @@
     let rawResult = state.currentTemplate.originalText;
     let htmlResult = state.currentTemplate.originalText;
 
-    // Replace field placeholders in order - this ensures each [field] gets replaced with the correct value
-    state.currentTemplate.fields.forEach((field, index) => {
-      const value = field.value || "";
-      // Use a more specific replacement to ensure we replace the right field
-      const fieldPlaceholder = "[field]";
-      const fieldIndex = rawResult.indexOf(fieldPlaceholder);
-      if (fieldIndex !== -1) {
-        rawResult =
-          rawResult.substring(0, fieldIndex) +
-          value +
-          rawResult.substring(fieldIndex + fieldPlaceholder.length);
-      }
-
-      const htmlFieldIndex = htmlResult.indexOf(fieldPlaceholder);
-      if (htmlFieldIndex !== -1) {
-        const htmlValue = value
-          ? `<span class="understood">${value}</span>`
-          : '<span class="paper_field"></span>';
-        htmlResult =
-          htmlResult.substring(0, htmlFieldIndex) +
-          htmlValue +
-          htmlResult.substring(htmlFieldIndex + fieldPlaceholder.length);
-      }
-    });
 
     // Replace dynamic placeholders
     const replacements = {
@@ -459,6 +499,33 @@
       rawResult = rawResult.replace(regex, value);
       htmlResult = htmlResult.replace(regex, htmlValue);
     });
+
+    // Handle field replacements (both regular and charge fields)
+    if (state.currentTemplate) {
+      // Process fields in the order they appear in the template
+      const sortedFields = [...state.currentTemplate.fields].sort((a, b) => a.pos - b.pos);
+      
+      sortedFields.forEach(field => {
+        const placeholder = field.type === "charge" ? "[charges]" : "[field]";
+        const value = field.value || "";
+        
+        // Find the first occurrence of the placeholder and replace it
+        const rawIndex = rawResult.indexOf(placeholder);
+        if (rawIndex !== -1) {
+          rawResult = rawResult.substring(0, rawIndex) + value + 
+                     rawResult.substring(rawIndex + placeholder.length);
+        }
+        
+        const htmlIndex = htmlResult.indexOf(placeholder);
+        if (htmlIndex !== -1) {
+          const htmlValue = value
+            ? `<span class="understood">${value}</span>`
+            : '<span class="paper_field"></span>';
+          htmlResult = htmlResult.substring(0, htmlIndex) + htmlValue + 
+                      htmlResult.substring(htmlIndex + placeholder.length);
+        }
+      });
+    }
 
     state.currentRaw = rawResult;
 
@@ -508,6 +575,7 @@
       "[br]": "<BR>",
       "[hr]": "<HR>",
       "[field]": '<span class="paper_field"></span>',
+      "[charges]": '<span class="paper_field"></span>',
 
       // Headers and lists
       "[h1]": "<H1>",
@@ -815,6 +883,27 @@
       }
     }, 9000000);
   }
+
+  // Expose API for charge system integration
+  window.N4NL_TERMINAL = {
+    updateField(fieldId, value) {
+      if (!state.currentTemplate) return;
+      
+      const field = state.currentTemplate.fields.find(f => f.id === fieldId);
+      if (field) {
+        field.value = value;
+        generateOutput();
+        saveFieldsToStorage();
+      }
+    },
+    
+    getFieldValue(fieldId) {
+      if (!state.currentTemplate) return "";
+      
+      const field = state.currentTemplate.fields.find(f => f.id === fieldId);
+      return field ? field.value : "";
+    }
+  };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initialize);
