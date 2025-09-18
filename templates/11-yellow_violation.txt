@@ -25,7 +25,7 @@ Stellar Corporate Conglomerate
 
 [large]Charge[/large]
 [table]
-[row][cell][b]Regulation:[/b][cell]i[field]
+[row][cell][b]Regulation:[/b][cell][charges]
 [row][cell][b]Summary of Relevant Facts:[/b][cell][field]
 [row][cell][b]Disposition:[/b][cell]Subject found responsible, citation issued.
 [row][cell][b]Arrest In Lieu of Fine:[/b][cell]If Subject refuses or fails to pay by Due Time and does not enroll in the OMPCDP.
