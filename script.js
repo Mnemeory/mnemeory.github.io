@@ -59,6 +59,19 @@
           console.warn("Storage load failed:", e);
           return null;
         }
+      },
+      clear() {
+        try {
+          // Clear all data with our prefix
+          Object.keys(localStorage).forEach(key => {
+            if (key.startsWith(CONFIG.storage.prefix)) {
+              localStorage.removeItem(key);
+            }
+          });
+          console.log("Terminal data cleared");
+        } catch (e) {
+          console.warn("Storage clear failed:", e);
+        }
       }
     },
 
@@ -690,6 +703,23 @@
         }
       }
     });
+
+    // Data clearing on window close
+    window.addEventListener("beforeunload", () => {
+      utils.storage.clear();
+    });
+
+    // Data clearing when tab becomes hidden (mobile/background)
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        utils.storage.clear();
+      }
+    });
+
+    // Data clearing on page unload (additional safety)
+    window.addEventListener("unload", () => {
+      utils.storage.clear();
+    });
   }
 
   async function initialize() {
@@ -737,6 +767,27 @@
     
     getFieldValue(fieldId) {
       return state.currentTemplate?.fields.find(f => f.id === fieldId)?.value || "";
+    },
+
+    clearData() {
+      utils.storage.clear();
+      // Reset state
+      state.officerId = null;
+      state.shiftCode = "";
+      state.currentTemplate = null;
+      state.currentRaw = "";
+      state.fieldsFilled = 0;
+      state.totalFields = 0;
+      
+      // Clear UI
+      if (dom.officerInput) dom.officerInput.value = "";
+      if (dom.shiftInput) dom.shiftInput.value = "";
+      if (dom.fieldControls) dom.fieldControls.innerHTML = "";
+      if (dom.previewRender) dom.previewRender.innerHTML = "";
+      if (dom.outputTerminal) dom.outputTerminal.innerHTML = "";
+      if (dom.fieldCounter) dom.fieldCounter.textContent = "0 / 0";
+      
+      terminal.updateFieldsLock();
     }
   };
 
