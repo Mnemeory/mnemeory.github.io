@@ -195,7 +195,7 @@
   .system-status-bar {
     display: flex;
     align-items: center;
-    gap: calc(var(--space-unit) * 4);
+    justify-content: center;
     height: var(--status-bar-height);
     padding: 0 calc(var(--space-unit) * 3);
     background: var(--space-deep);
@@ -205,20 +205,31 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
+
+  .status-indicators {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--space-unit) * 4);
+  }
   
   .status-indicator {
     display: flex;
     align-items: center;
     gap: calc(var(--space-unit) * 1);
   }
-  
+
   .status-label {
     color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
-  
+
   .status-value {
     color: var(--stellar-cyan);
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 0.8rem;
   }
   
   /* Cosmic decoration for status bar */
@@ -562,6 +573,7 @@
   .dashboard-controls {
     display: flex;
     gap: calc(var(--space-unit) * 1);
+    margin-left: auto;
   }
   
   /* ============================================
@@ -643,7 +655,7 @@
   
   .terminal-main {
     display: grid;
-    grid-template-columns: var(--sidebar-width) 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: calc(var(--space-unit) * 3);
     padding: calc(var(--space-unit) * 3);
     flex: 1;
@@ -651,7 +663,7 @@
   }
   
   .terminal-main.terminal-hidden {
-    grid-template-columns: var(--sidebar-width) 1fr;
+    grid-template-columns: 1fr;
   }
   
   .terminal-main.terminal-hidden .output-panel {
@@ -829,6 +841,8 @@
     white-space: pre-wrap;
     word-wrap: break-word;
     text-shadow: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--glass-border) var(--space-deep);
   }
   
   .preview-content hr {
@@ -879,9 +893,27 @@
     display: inline-block;
     min-width: 100px;
     min-height: 1.2em;
-    border-bottom: 1px solid var(--stellar-gold);
+    border: 1px solid var(--stellar-gold);
+    border-radius: var(--border-radius);
     background: rgba(212, 160, 74, 0.08);
-    padding: 0 calc(var(--space-unit) * 0.5);
+    padding: calc(var(--space-unit) * 0.5) calc(var(--space-unit) * 1);
+    font-family: var(--font-primary);
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    outline: none;
+    transition: all var(--transition-fast);
+    cursor: text;
+  }
+  
+  .paper_field:focus {
+    border-color: var(--stellar-cyan);
+    background: rgba(107, 184, 212, 0.1);
+    box-shadow: 0 0 0 2px rgba(107, 184, 212, 0.1);
+  }
+  
+  .paper_field:hover {
+    border-color: var(--stellar-blue);
+    background: rgba(74, 143, 185, 0.1);
   }
   
   .understood {
@@ -944,6 +976,8 @@
     overflow-y: auto;
     white-space: pre-wrap;
     word-wrap: break-word;
+    scrollbar-width: thin;
+    scrollbar-color: var(--glass-border) var(--space-deep);
   }
   
   .terminal-output:focus {
@@ -1532,7 +1566,6 @@
     letter-spacing: 0.06em;
   }
   
-  /* Ian Status - Special Operations Easter Egg */
   .ian-status {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -1554,7 +1587,7 @@
   }
   
   .ian-status::before {
-    content: "[SPEC_OPS]";
+    content: "[CORGI_OPS]";
     font-family: var(--font-mono);
     font-size: 0.7rem;
     color: var(--stellar-gold);
@@ -1668,7 +1701,6 @@
       margin: 0 auto;
     }
     
-    .fields-panel,
     .preview-panel,
     .output-panel {
       max-height: 400px;

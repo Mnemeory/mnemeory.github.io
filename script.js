@@ -127,22 +127,20 @@
     updateFieldsLock() {
       const isLocked = terminal.isFieldsLocked();
       
-      dom.fieldSynthesis?.querySelectorAll("input, button").forEach(
-        el => el.disabled = isLocked
-      );
-
-      dom.fieldSynthesis?.querySelectorAll(".job-button").forEach(
-        button => {
-          button.disabled = isLocked;
+      // Update inline editable fields
+      if (dom.previewSurface) {
+        const fields = dom.previewSurface.querySelectorAll('.paper_field[data-field-id]');
+        fields.forEach(field => {
+          field.contentEditable = !isLocked;
           if (isLocked) {
-            button.style.cursor = "not-allowed";
-            button.style.opacity = "0.5";
+            field.style.cursor = "not-allowed";
+            field.style.opacity = "0.5";
           } else {
-            button.style.cursor = "pointer";
-            button.style.opacity = "";
+            field.style.cursor = field.dataset.fieldType === "job" ? "pointer" : "text";
+            field.style.opacity = "";
           }
-        }
-      );
+        });
+      }
     },
 
     startSystemClock() {
@@ -265,7 +263,7 @@ EXECUTIVE COMMAND INTERFACE[/center]
     },
   };
 
-  // Template parsing
+  // Template parsing - simplified for inline editing
   function parseTemplate(text) {
     const fields = [];
     
@@ -298,7 +296,8 @@ EXECUTIVE COMMAND INTERFACE[/center]
           value: "",
           pos,
           id: `${prefix}${index}`,
-          type
+          type,
+          placeholder: label
         });
         
         index++;
@@ -309,84 +308,25 @@ EXECUTIVE COMMAND INTERFACE[/center]
     return { fields, originalText: text };
   }
 
-  // Field rendering
+  // Field rendering - now handled inline in preview
   function renderFields(fields) {
-    if (!dom.fieldSynthesis) return;
-
-    dom.fieldSynthesis.innerHTML = "";
-
-    if (!fields?.length) {
-      dom.fieldSynthesis.innerHTML = `<div class="empty-state"><p>No editable fields in this template.</p></div>`;
-      state.totalFields = 0;
-      updateFieldCounter();
-      return;
-    }
-
-    state.totalFields = fields.length;
-
-    fields.forEach((field, idx) => {
-      const wrapper = document.createElement("div");
-      wrapper.className = "field-group";
-      
-      if (field.type === "job") {
-        wrapper.innerHTML = `
-          <label for="${field.id}">${field.label}</label>
-          <button 
-            type="button"
-            class="job-button ${field.value ? 'filled' : 'empty'}"
-            id="${field.id}"
-            data-index="${idx}"
-            title="${field.value || '[SELECT ASSIGNMENT]'}"
-          >
-            ${field.value || '[SELECT ASSIGNMENT]'}
-          </button>
-        `;
-
-        wrapper.querySelector("button").addEventListener("click", (e) => {
-          e.preventDefault();
-          if (e.target.disabled) return;
-          if (window.SCC_JOBS?.openJobSelector) {
-            window.SCC_JOBS.openJobSelector(field.id);
-          }
-        });
-      } else {
-        wrapper.innerHTML = `
-          <label for="${field.id}">${field.label}</label>
-          <input 
-            type="text" 
-            id="${field.id}"
-            data-index="${idx}"
-            value="${field.value}"
-            placeholder="Enter ${field.label.toLowerCase()}"
-            autocomplete="off"
-          >
-        `;
-
-        const input = wrapper.querySelector("input");
-        const handleInput = utils.debounce((e) => {
-          const index = parseInt(e.target.dataset.index, 10);
-          if (state.currentTemplate?.fields[index]) {
-            state.currentTemplate.fields[index].value = e.target.value;
-            generateOutput();
-            updateFieldCounter();
-          }
-        }, 150);
-        
-        input.addEventListener("input", handleInput);
-        input.addEventListener("change", saveFieldsToStorage);
-      }
-
-      dom.fieldSynthesis.appendChild(wrapper);
-    });
-
+    // No longer needed - fields are rendered inline in the preview
+    state.totalFields = fields?.length || 0;
     updateFieldCounter();
-    terminal.updateFieldsLock();
   }
 
   function updateFieldCounter() {
-    if (!dom.fieldCounter) return;
+    if (!dom.fieldCounter) {
+      console.warn("Field counter element not found");
+      return;
+    }
 
-    const filled = state.currentTemplate?.fields?.filter(f => f.value.trim() !== "").length || 0;
+    if (!state.currentTemplate?.fields) {
+      dom.fieldCounter.textContent = "0 / 0";
+      return;
+    }
+
+    const filled = state.currentTemplate.fields.filter(f => f.value && f.value.trim() !== "").length;
     state.fieldsFilled = filled;
     
     dom.fieldCounter.textContent = `${filled} / ${state.totalFields}`;
@@ -413,18 +353,6 @@ EXECUTIVE COMMAND INTERFACE[/center]
       const field = state.currentTemplate.fields[idx];
       if (field && field.label === saved.label) {
         field.value = saved.value;
-
-        if (saved.type === "job") {
-          const button = document.getElementById(field.id);
-          if (button) {
-            button.textContent = saved.value || '[SELECT ASSIGNMENT]';
-            button.title = saved.value || '[SELECT ASSIGNMENT]';
-            button.className = `job-button ${saved.value ? 'filled' : 'empty'}`;
-          }
-        } else {
-          const input = document.getElementById(field.id);
-          if (input) input.value = saved.value;
-        }
       }
     });
 
@@ -433,7 +361,7 @@ EXECUTIVE COMMAND INTERFACE[/center]
     terminal.updateFieldsLock();
   }
 
-  // Output generation
+  // Output generation with inline editable fields
   function generateOutput() {
     if (!state.currentTemplate) return;
 
@@ -456,15 +384,23 @@ EXECUTIVE COMMAND INTERFACE[/center]
       htmlResult = htmlResult.replace(regex, htmlValue);
     });
 
-    // Apply field replacements
+    // Apply field replacements with editable spans
     if (state.currentTemplate) {
       const sortedFields = [...state.currentTemplate.fields].sort((a, b) => a.pos - b.pos);
       
-      sortedFields.forEach(field => {
+      sortedFields.forEach((field, index) => {
         const placeholder = field.type === "job" ? "[jobs]" :
                            field.type === "charge" ? "[charges]" : "[field]";
         const value = field.value || "";
-        const htmlValue = value ? `<span class="understood">${value}</span>` : '<span class="paper_field"></span>';
+        
+        // Create editable span for HTML
+        const htmlValue = `<span class="paper_field" 
+          contenteditable="true" 
+          data-field-id="${field.id}" 
+          data-field-index="${index}"
+          data-field-type="${field.type}"
+          data-placeholder="${field.placeholder}"
+          spellcheck="false">${value}</span>`;
         
         const rawIndex = rawResult.indexOf(placeholder);
         if (rawIndex !== -1) {
@@ -484,7 +420,114 @@ EXECUTIVE COMMAND INTERFACE[/center]
 
     if (dom.previewSurface) {
       dom.previewSurface.innerHTML = pencodeToHtml(htmlResult);
+      setupInlineFieldEvents();
     }
+
+    if (dom.terminalSurface) {
+      dom.terminalSurface.innerText = rawResult;
+      dom.terminalSurface.dataset.userEdited = "false";
+    }
+  }
+
+  // Setup event handlers for inline editable fields
+  function setupInlineFieldEvents() {
+    if (!dom.previewSurface) return;
+
+    // Remove existing event listeners
+    const existingFields = dom.previewSurface.querySelectorAll('.paper_field[data-field-id]');
+    existingFields.forEach(field => {
+      field.replaceWith(field.cloneNode(true));
+    });
+
+    // Add new event listeners
+    const fields = dom.previewSurface.querySelectorAll('.paper_field[data-field-id]');
+    fields.forEach(field => {
+      const fieldId = field.dataset.fieldId;
+      const fieldIndex = parseInt(field.dataset.fieldIndex, 10);
+      const fieldType = field.dataset.fieldType;
+      
+      // Handle input events
+      const handleInput = utils.debounce((e) => {
+        const value = e.target.textContent || "";
+        if (state.currentTemplate?.fields[fieldIndex]) {
+          state.currentTemplate.fields[fieldIndex].value = value;
+          updateFieldCounter();
+          updateRawOutput();
+        }
+      }, 150);
+
+      // Handle focus events
+      const handleFocus = (e) => {
+        e.target.classList.add('focused');
+        if (!e.target.textContent.trim()) {
+          e.target.textContent = '';
+        }
+      };
+
+      // Handle blur events
+      const handleBlur = (e) => {
+        e.target.classList.remove('focused');
+        if (!e.target.textContent.trim()) {
+          e.target.textContent = '';
+        }
+        saveFieldsToStorage();
+      };
+
+      // Handle job button clicks
+      const handleClick = (e) => {
+        if (fieldType === "job" && window.SCC_JOBS?.openJobSelector) {
+          e.preventDefault();
+          window.SCC_JOBS.openJobSelector(fieldId);
+        }
+      };
+
+      field.addEventListener('input', handleInput);
+      field.addEventListener('focus', handleFocus);
+      field.addEventListener('blur', handleBlur);
+      field.addEventListener('click', handleClick);
+
+      // Make job fields look clickable
+      if (fieldType === "job") {
+        field.style.cursor = "pointer";
+        field.title = field.textContent || "Click to select assignment";
+      }
+    });
+  }
+
+  // Update raw output when fields change
+  function updateRawOutput() {
+    if (!state.currentTemplate) return;
+
+    let rawResult = state.currentTemplate.originalText;
+
+    // Apply dynamic replacements
+    const dynamics = {
+      "[officername]": state.officerId || "",
+      "[roundid]": state.shiftCode || "",
+      "[time]": utils.formatTime(),
+      "[date]": utils.formatDate(),
+    };
+
+    Object.entries(dynamics).forEach(([placeholder, value]) => {
+      const regex = new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g");
+      rawResult = rawResult.replace(regex, value);
+    });
+
+    // Apply field replacements
+    const sortedFields = [...state.currentTemplate.fields].sort((a, b) => a.pos - b.pos);
+    sortedFields.forEach(field => {
+      const placeholder = field.type === "job" ? "[jobs]" :
+                         field.type === "charge" ? "[charges]" : "[field]";
+      const value = field.value || "";
+      
+      const rawIndex = rawResult.indexOf(placeholder);
+      if (rawIndex !== -1) {
+        rawResult = rawResult.substring(0, rawIndex) + value + 
+                   rawResult.substring(rawIndex + placeholder.length);
+      }
+    });
+
+    state.currentRaw = rawResult;
 
     if (dom.terminalSurface) {
       dom.terminalSurface.innerText = rawResult;
@@ -750,9 +793,9 @@ ${content}`;
   async function initialize() {
     // Initialize DOM references
     [
-      "templateMatrix", "templateMetadata", "fieldSynthesis",
+      "templateMatrix", "templateMetadata",
       "previewSurface", "terminalSurface",
-      "galacticTime", "executiveAuth", "commandCipher", "processDocument"
+      "galacticTime", "executiveAuth", "commandCipher", "processDocument", "fieldCounter"
     ].forEach(id => dom[id] = document.getElementById(id));
 
     // Load saved authentication
@@ -766,8 +809,10 @@ ${content}`;
     terminal.startSystemClock();
     setupEventHandlers();
     DashboardManager.initialize();
+    scrollSync.init();
     await templates.loadList();
     generateOutput();
+    updateFieldCounter();
 
     // Auto-clear shift code after timeout
     setInterval(() => {
@@ -904,12 +949,65 @@ ${content}`;
       
       if (dom.executiveAuth) dom.executiveAuth.value = "";
       if (dom.commandCipher) dom.commandCipher.value = "";
-      if (dom.fieldSynthesis) dom.fieldSynthesis.innerHTML = "";
       if (dom.previewSurface) dom.previewSurface.innerHTML = "";
       if (dom.terminalSurface) dom.terminalSurface.innerHTML = "";
       if (dom.fieldCounter) dom.fieldCounter.textContent = "0 / 0";
       
       terminal.updateFieldsLock();
+    }
+  };
+
+  // Scroll synchronization between terminal and preview panels
+  const scrollSync = {
+    isScrolling: false,
+    syncTimeout: null,
+
+    init() {
+      this.setupScrollListeners();
+    },
+
+    setupScrollListeners() {
+      const terminalSurface = dom.terminalSurface;
+      const previewSurface = dom.previewSurface;
+
+      if (!terminalSurface || !previewSurface) return;
+
+      // Terminal to Preview sync
+      terminalSurface.addEventListener('scroll', (e) => {
+        if (this.isScrolling) return;
+        this.syncScroll(terminalSurface, previewSurface);
+      });
+
+      // Preview to Terminal sync
+      previewSurface.addEventListener('scroll', (e) => {
+        if (this.isScrolling) return;
+        this.syncScroll(previewSurface, terminalSurface);
+      });
+    },
+
+    syncScroll(source, target) {
+      this.isScrolling = true;
+      
+      // Clear any existing timeout
+      if (this.syncTimeout) {
+        clearTimeout(this.syncTimeout);
+      }
+
+      // Calculate scroll percentage
+      const scrollTop = source.scrollTop;
+      const scrollHeight = source.scrollHeight - source.clientHeight;
+      const scrollPercentage = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
+
+      // Apply scroll to target
+      const targetScrollHeight = target.scrollHeight - target.clientHeight;
+      const targetScrollTop = targetScrollHeight * scrollPercentage;
+      
+      target.scrollTop = targetScrollTop;
+
+      // Reset scrolling flag after a short delay
+      this.syncTimeout = setTimeout(() => {
+        this.isScrolling = false;
+      }, 50);
     }
   };
 

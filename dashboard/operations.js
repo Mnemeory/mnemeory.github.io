@@ -137,7 +137,7 @@
  <div class="manifest-section">
  <h4>Special Operations</h4>
  <div class="ian-status" onclick="window.SCC_OPERATIONS.toggleIanStatus()">
- <div>Special Operations Unit Status: ${this.data.ianStatus}</div>
+ <div>Ian the Corgi Status: ${this.data.ianStatus}</div>
  </div>
  </div>
  `;
@@ -243,7 +243,7 @@
       }
       if (window.ExecutiveInterface?.showNotification) {
         window.ExecutiveInterface.showNotification(
-          `Ian is a ${this.data.ianStatus}! 🐕`,
+          `Ian the Corgi is a ${this.data.ianStatus}! 🐕`,
           "success",
         );
       }

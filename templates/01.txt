@@ -16,14 +16,6 @@ Nralakk Federation
 [row][cell][b]Subject:[/b][cell][field][cell][b]Priority:[/b][cell][field]
 [/table]
 
-[large]Content[/large]
-[table]
-[row][cell][b]Summary:[/b][cell][field]
-[row][cell][b]Regulations Cited:[/b][cell][charges]
-[row][cell][b]Recommended Action:[/b][cell][field]
-[row][cell][b]Additional Notes:[/b][cell][field]
-[/table]
-
 [center]
 [small][i]Unity through Consciousness, Harmony through Understanding.[/i][/small]
 

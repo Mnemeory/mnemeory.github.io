@@ -22,17 +22,19 @@
     <div class="terminal-interface">
       <!-- System Status Bar -->
       <div class="system-status-bar">
-        <div class="status-indicator">
-          <span class="status-label">NEXUS:</span>
-          <span class="status-value">SCC-CORE-ALPHA</span>
-        </div>
-        <div class="status-indicator">
-          <span class="status-label">STATUS:</span>
-          <span class="status-value">ONLINE</span>
-        </div>
-        <div class="status-indicator">
-          <span class="status-label">AUTH:</span>
-          <span class="status-value">ENCRYPTED</span>
+        <div class="status-indicators">
+          <div class="status-indicator">
+            <span class="status-label">CODE:</span>
+            <span class="status-value" id="overviewAlerts">Green</span>
+          </div>
+          <div class="status-indicator">
+            <span class="status-label">PERSONNEL:</span>
+            <span class="status-value" id="overviewPersonnel">0</span>
+          </div>
+          <div class="status-indicator">
+            <span class="status-label">TREASURY:</span>
+            <span class="status-value" id="overviewTreasury">0 cr</span>
+          </div>
         </div>
       </div>
 
@@ -49,11 +51,11 @@
         <div class="header-meta">
           <div class="header-input-group">
             <span class="header-label">Executive</span>
-            <input id="executiveAuth" class="header-input" type="text" maxlength="25" placeholder="Executive Designation" autocomplete="off" />
+            <input id="executiveAuth" class="header-input" type="text" maxlength="25" placeholder="((Character Name))" autocomplete="off" />
           </div>
           <div class="header-input-group">
             <span class="header-label">Cipher</span>
-            <input id="commandCipher" class="header-input" type="text" maxlength="20" placeholder="Session Authentication" autocomplete="off" />
+            <input id="commandCipher" class="header-input" type="text" maxlength="20" placeholder="((Round ID))" autocomplete="off" />
           </div>
         </div>
       </header>
@@ -70,35 +72,12 @@
           <div id="templateMetadata" class="template-desc"></div>
         </div>
 
-        <!-- Dashboard Overview -->
-        <div class="dashboard-overview-header">
-          <div class="overview-cards">
-            <div class="overview-card">
-              <div class="card-content">
-                <div class="card-value" id="overviewPersonnel">0</div>
-                <div class="card-label">Personnel</div>
-              </div>
-            </div>
-            <div class="overview-card">
-              <div class="card-content">
-                <div class="card-value" id="overviewTreasury">0 cr</div>
-                <div class="card-label">Treasury</div>
-              </div>
-            </div>
-            <div class="overview-card">
-              <div class="card-content">
-                <div class="card-value" id="overviewAlerts">Green</div>
-                <div class="card-label">Alert Level</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="dashboard-controls">
-            <button class="dashboard-tab" data-window="personnel">Personnel</button>
-            <button class="dashboard-tab" data-window="financial">Financial</button>
-            <button class="dashboard-tab" data-window="manifest">Manifest</button>
-            <button class="dashboard-tab" data-window="operations">Operations</button>
-          </div>
+        <!-- Dashboard Controls -->
+        <div class="dashboard-controls">
+          <button class="dashboard-tab" data-window="personnel">Personnel</button>
+          <button class="dashboard-tab" data-window="financial">Financial</button>
+          <button class="dashboard-tab" data-window="manifest">Manifest</button>
+          <button class="dashboard-tab" data-window="operations">Operations</button>
         </div>
 
       </div>
@@ -106,23 +85,13 @@
       <!-- Main Grid -->
       <main class="terminal-main">
 
-        <!-- Fields Panel -->
-        <section class="panel fields-panel">
-          <div class="panel-header">
-            <h2 class="panel-title">Document Fields</h2>
-          </div>
-          <div class="field-controls">
-            <div class="field-counter" id="fieldCounter">0 / 0</div>
-            <div class="field-synthesis-area" id="fieldSynthesis"><!-- dynamic --></div>
-          </div>
-        </section>
-
         <!-- Preview Panel -->
         <section class="panel preview-panel">
           <div class="panel-header">
             <h2 class="panel-title">Document Preview</h2>
             <div class="quick-actions">
-              <button class="action-btn" id="processDocument">Process Document</button>
+              <div class="field-counter" id="fieldCounter">0 / 0</div>
+              <button class="action-btn" id="transmitCommand">Copy</button>
               <button class="toggle-btn" id="terminalToggle" aria-pressed="false">HIDE TERMINAL</button>
             </div>
           </div>
@@ -134,13 +103,14 @@
           <div class="panel-header">
             <h2 class="panel-title">Terminal Output</h2>
             <div class="quick-actions">
-              <button class="action-btn" id="transmitCommand">Transmit Data</button>
+              <button class="action-btn" id="processDocument">Save</button>
             </div>
           </div>
           <div class="terminal-wrapper">
             <div id="terminalSurface" class="terminal-output" contenteditable="true" spellcheck="false"></div>
           </div>
         </section>
+
       </main>
 
       <!-- Footer -->
