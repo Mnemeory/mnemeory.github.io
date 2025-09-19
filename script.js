@@ -12,7 +12,7 @@
       headers: { Accept: "application/vnd.github+json" },
     },
     storage: {
-      prefix: "n4nl_terminal_",
+      prefix: "scc_terminal_",
       fields: "saved_fields",
       officer: "officer_id",
       shift: "shift_code",
@@ -28,11 +28,16 @@
     totalFields: 0,
     officerId: null,
     shiftCode: "",
+    dashboard: {
+      personnel: 0,
+      treasury: 0,
+      alertLevel: "Green",
+    }
   };
 
   const dom = {};
 
-  // Unified utility functions
+  // Utility functions
   const utils = {
     formatTime: () => new Date().toLocaleTimeString("en-US", {
       hour12: false,
@@ -62,20 +67,16 @@
       },
       clear() {
         try {
-          // Clear all data with our prefix
           Object.keys(localStorage).forEach(key => {
             if (key.startsWith(CONFIG.storage.prefix)) {
               localStorage.removeItem(key);
             }
           });
-          console.log("Terminal data cleared");
         } catch (e) {
           console.warn("Storage clear failed:", e);
         }
       }
     },
-
-    getTextContent: (el) => el?.innerText || el?.textContent || "",
 
     debounce(func, wait) {
       let timeout;
@@ -90,12 +91,12 @@
     },
   };
 
-  // Terminal authentication and UI management
+  // Authentication and UI management
   const terminal = {
     initializeInputs() {
       [
-        { input: dom.officerInput, storageKey: CONFIG.storage.officer, stateKey: "officerId" },
-        { input: dom.shiftInput, storageKey: CONFIG.storage.shift, stateKey: "shiftCode" }
+        { input: dom.executiveAuth, storageKey: CONFIG.storage.officer, stateKey: "officerId" },
+        { input: dom.commandCipher, storageKey: CONFIG.storage.shift, stateKey: "shiftCode" }
       ].forEach(({ input, storageKey, stateKey }) => {
         if (!input) return;
 
@@ -126,11 +127,11 @@
     updateFieldsLock() {
       const isLocked = terminal.isFieldsLocked();
       
-      dom.fieldControls?.querySelectorAll("input, button").forEach(
+      dom.fieldSynthesis?.querySelectorAll("input, button").forEach(
         el => el.disabled = isLocked
       );
 
-      dom.fieldControls?.querySelectorAll(".charge-field-button").forEach(
+      dom.fieldSynthesis?.querySelectorAll(".job-button").forEach(
         button => {
           button.disabled = isLocked;
           if (isLocked) {
@@ -142,35 +143,18 @@
           }
         }
       );
-
-      // Update visual states
-      [
-        { selector: ".fields-panel", lockedClass: "panel-locked" },
-        { selector: ".header-meta", lockedClass: "auth-required" }
-      ].forEach(({ selector, lockedClass }) => {
-        const element = document.querySelector(selector);
-        if (!element) return;
-
-        if (isLocked) {
-          element.classList.remove("fade-out");
-          element.classList.add(lockedClass);
-        } else {
-          element.classList.add("fade-out");
-          setTimeout(() => element.classList.remove(lockedClass, "fade-out"), 500);
-        }
-      });
     },
 
     startSystemClock() {
       const updateClock = () => {
-        if (dom.systemTime) dom.systemTime.textContent = utils.formatTime();
+        if (dom.galacticTime) dom.galacticTime.textContent = utils.formatTime();
       };
       updateClock();
       setInterval(updateClock, 1000);
     },
   };
 
-  // Template loading and management
+  // Template loading and management  
   const templates = {
     async loadList() {
       try {
@@ -212,6 +196,48 @@
         }
       } catch (err) {
         console.error("Error loading template list:", err);
+        // Fallback: create a basic template so the UI still works
+        await this.createFallbackTemplate();
+      }
+    },
+
+    async createFallbackTemplate() {
+      console.log("Creating fallback template due to GitHub API failure");
+      
+      // Create a basic template that will work
+      state.templates = [{
+        file: "fallback.txt",
+        name: "Basic Document Template",
+        description: "Emergency fallback template - GitHub unavailable",
+        body: `[center][b]STELLAR CORPORATE CONGLOMERATE[/b]
+[logo_scc]
+EXECUTIVE COMMAND INTERFACE[/center]
+
+[hr]
+
+[b]Document Information:[/b]
+[b]Officer:[/b] [officername]
+[b]Session ID:[/b] [roundid]
+[b]Date:[/b] [date] [time]
+
+[hr]
+
+[b]Subject:[/b] [field]
+
+[b]Content:[/b]
+[field]
+
+[b]Additional Notes:[/b]
+[field]
+
+[hr]
+[center][small]The Unbreakable Chainlink • Holding the Spur Together[/small][/center]`
+      }];
+      
+      populateTemplateSelector();
+      
+      if (state.templates.length > 0) {
+        await templates.load(state.templates[0].file, state.templates[0].description);
       }
     },
 
@@ -223,13 +249,13 @@
         state.currentTemplate = parseTemplate(template.body);
         renderFields(state.currentTemplate.fields);
 
-        if (dom.outputTerminal) dom.outputTerminal.dataset.userEdited = "false";
+        if (dom.terminalSurface) dom.terminalSurface.dataset.userEdited = "false";
 
         updateFieldCounter();
         generateOutput();
 
-        if (dom.templateDescription) {
-          dom.templateDescription.textContent = description || "";
+        if (dom.templateMetadata) {
+          dom.templateMetadata.textContent = description || "";
         }
 
         loadSavedFields();
@@ -239,13 +265,13 @@
     },
   };
 
-  // Unified template parsing
+  // Template parsing
   function parseTemplate(text) {
     const fields = [];
     
-    // Combined regex for both field types
     const patterns = [
       { regex: /\[field\]/g, type: "text", prefix: "field_" },
+      { regex: /\[jobs\]/g, type: "job", prefix: "job_" },
       { regex: /\[charges\]/g, type: "charge", prefix: "charge_" }
     ];
     
@@ -257,8 +283,8 @@
         const pos = match.index;
         const before = text.slice(Math.max(0, pos - 200), pos);
         
-        // Extract label from preceding bold text
-        let label = type === "charge" ? "Charges" : `Field ${index + 1}`;
+        let label = type === "job" ? "Personnel Assignment" : 
+                   type === "charge" ? "Charges" : `Field ${index + 1}`;
         const labelMatches = before.match(/\[b\]([^\[]+?):\s*\[\/b\]/g);
         
         if (labelMatches?.length > 0) {
@@ -283,18 +309,14 @@
     return { fields, originalText: text };
   }
 
-  // Unified field rendering
+  // Field rendering
   function renderFields(fields) {
-    if (!dom.fieldControls) return;
+    if (!dom.fieldSynthesis) return;
 
-    dom.fieldControls.innerHTML = "";
+    dom.fieldSynthesis.innerHTML = "";
 
     if (!fields?.length) {
-      dom.fieldControls.innerHTML = `
-        <div class="empty-state">
-          <p>No editable fields in this template.</p>
-        </div>
-      `;
+      dom.fieldSynthesis.innerHTML = `<div class="empty-state"><p>No editable fields in this template.</p></div>`;
       state.totalFields = 0;
       updateFieldCounter();
       return;
@@ -306,30 +328,28 @@
       const wrapper = document.createElement("div");
       wrapper.className = "field-group";
       
-      if (field.type === "charge") {
-        // Charge field button
+      if (field.type === "job") {
         wrapper.innerHTML = `
           <label for="${field.id}">${field.label}</label>
           <button 
             type="button"
-            class="charge-field-button ${field.value ? 'filled' : 'empty'}"
+            class="job-button ${field.value ? 'filled' : 'empty'}"
             id="${field.id}"
             data-index="${idx}"
-            title="${field.value || '[SELECT CHARGE]'}"
+            title="${field.value || '[SELECT ASSIGNMENT]'}"
           >
-            ${field.value || '[SELECT CHARGE]'}
+            ${field.value || '[SELECT ASSIGNMENT]'}
           </button>
         `;
 
         wrapper.querySelector("button").addEventListener("click", (e) => {
           e.preventDefault();
           if (e.target.disabled) return;
-          if (window.N4NL_CHARGES?.openChargeSelector) {
-            window.N4NL_CHARGES.openChargeSelector(field.id);
+          if (window.SCC_JOBS?.openJobSelector) {
+            window.SCC_JOBS.openJobSelector(field.id);
           }
         });
       } else {
-        // Regular text field
         wrapper.innerHTML = `
           <label for="${field.id}">${field.label}</label>
           <input 
@@ -356,7 +376,7 @@
         input.addEventListener("change", saveFieldsToStorage);
       }
 
-      dom.fieldControls.appendChild(wrapper);
+      dom.fieldSynthesis.appendChild(wrapper);
     });
 
     updateFieldCounter();
@@ -394,13 +414,12 @@
       if (field && field.label === saved.label) {
         field.value = saved.value;
 
-        // Update UI element
-        if (saved.type === "charge") {
+        if (saved.type === "job") {
           const button = document.getElementById(field.id);
           if (button) {
-            button.textContent = saved.value || '[SELECT CHARGE]';
-            button.title = saved.value || '[SELECT CHARGE]';
-            button.className = `charge-field-button ${saved.value ? 'filled' : 'empty'}`;
+            button.textContent = saved.value || '[SELECT ASSIGNMENT]';
+            button.title = saved.value || '[SELECT ASSIGNMENT]';
+            button.className = `job-button ${saved.value ? 'filled' : 'empty'}`;
           }
         } else {
           const input = document.getElementById(field.id);
@@ -414,7 +433,7 @@
     terminal.updateFieldsLock();
   }
 
-  // Simplified output generation
+  // Output generation
   function generateOutput() {
     if (!state.currentTemplate) return;
 
@@ -425,6 +444,8 @@
     const dynamics = {
       "[officername]": state.officerId || "",
       "[roundid]": state.shiftCode || "",
+      "[time]": utils.formatTime(),
+      "[date]": utils.formatDate(),
     };
 
     // Apply dynamic replacements
@@ -440,11 +461,11 @@
       const sortedFields = [...state.currentTemplate.fields].sort((a, b) => a.pos - b.pos);
       
       sortedFields.forEach(field => {
-        const placeholder = field.type === "charge" ? "[charges]" : "[field]";
+        const placeholder = field.type === "job" ? "[jobs]" :
+                           field.type === "charge" ? "[charges]" : "[field]";
         const value = field.value || "";
         const htmlValue = value ? `<span class="understood">${value}</span>` : '<span class="paper_field"></span>';
         
-        // Replace first occurrence
         const rawIndex = rawResult.indexOf(placeholder);
         if (rawIndex !== -1) {
           rawResult = rawResult.substring(0, rawIndex) + value + 
@@ -461,35 +482,33 @@
 
     state.currentRaw = rawResult;
 
-    if (dom.previewRender) {
-      dom.previewRender.innerHTML = pencodeToHtml(htmlResult);
+    if (dom.previewSurface) {
+      dom.previewSurface.innerHTML = pencodeToHtml(htmlResult);
     }
 
-    if (dom.outputTerminal) {
-      dom.outputTerminal.innerText = rawResult;
-      dom.outputTerminal.dataset.userEdited = "false";
+    if (dom.terminalSurface) {
+      dom.terminalSurface.innerText = rawResult;
+      dom.terminalSurface.dataset.userEdited = "false";
     }
   }
 
   function handleTerminalEdit() {
-    if (!dom.outputTerminal) return;
+    if (!dom.terminalSurface) return;
 
-    dom.outputTerminal.dataset.userEdited = "true";
-    const terminalContent = utils.getTextContent(dom.outputTerminal);
+    dom.terminalSurface.dataset.userEdited = "true";
+    const terminalContent = dom.terminalSurface.textContent || "";
     state.currentRaw = terminalContent;
 
-    if (dom.previewRender) {
-      dom.previewRender.innerHTML = pencodeToHtml(terminalContent);
+    if (dom.previewSurface) {
+      dom.previewSurface.innerHTML = pencodeToHtml(terminalContent);
     }
   }
 
-  // Optimized pencode to HTML conversion
+  // Pencode to HTML conversion
   function pencodeToHtml(text) {
     if (!text) return "";
 
-    // Build tag map with all replacements
     const tagMap = {
-      // Basic formatting
       "[b]": "<B>", "[/b]": "</B>",
       "[i]": "<I>", "[/i]": "</I>",
       "[u]": "<U>", "[/u]": "</U>",
@@ -499,24 +518,19 @@
       "[br]": "<BR>",
       "[hr]": "<HR>",
       "[field]": '<span class="paper_field"></span>',
+      "[jobs]": '<span class="paper_field"></span>',
       "[charges]": '<span class="paper_field"></span>',
-      
-      // Headers and lists
       "[h1]": "<H1>", "[/h1]": "</H1>",
       "[h2]": "<H2>", "[/h2]": "</H2>",
       "[h3]": "<H3>", "[/h3]": "</H3>",
       "[*]": "<li>",
       "[list]": "<ul>", "[/list]": "</ul>",
-      
-      // Tables
       "[table]": '<table border=1 cellspacing=0 cellpadding=3 style="border: 1px solid black;">',
       "[/table]": "</td></tr></table>",
       "[grid]": "<table>",
       "[/grid]": "</td></tr></table>",
       "[row]": "</td><tr>",
       "[cell]": "<td>",
-      
-      // Special elements
       "[barcode]": '<span class="barcode">║║│║║│││║│║║││║║│║</span>',
     };
 
@@ -533,7 +547,6 @@
       tagMap[`[logo_${name}_small]`] = `<span class="corp-logo">${symbol}</span>`;
     });
 
-    // Apply replacements
     const tagPattern = new RegExp(
       Object.keys(tagMap).map(key => key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|"),
       "g"
@@ -549,13 +562,6 @@
         '<span style="color: $1;">$2</span>')
       .replace(/\[lang=([^\]]+)\](.*?)\[\/lang\]/gs, 
         '<span class="language" data-lang="$1" title="Language: $1">$2</span>');
-
-    // Apply dynamic values
-    Object.entries({ "[officername]": state.officerId || "", "[roundid]": state.shiftCode || "" })
-      .forEach(([placeholder, replacement]) => {
-        const regex = new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g");
-        result = result.replace(regex, replacement);
-      });
 
     return result;
   }
@@ -576,9 +582,9 @@
   }
 
   function populateTemplateSelector() {
-    if (!dom.templateSelector) return;
+    if (!dom.templateMatrix) return;
 
-    dom.templateSelector.innerHTML = state.templates.map((template, index) => 
+    dom.templateMatrix.innerHTML = state.templates.map((template, index) => 
       `<option value="${template.file}" data-description="${template.description || ""}" 
         ${index === 0 ? 'selected' : ''}>${template.name}</option>`
     ).join('');
@@ -594,25 +600,23 @@
   }
 
   function getCurrentOutput() {
-    return state.currentRaw || utils.getTextContent(dom.outputTerminal) || "";
+    return state.currentRaw || dom.terminalSurface?.textContent || "";
   }
 
   async function copyOutput() {
     const content = getCurrentOutput();
-    if (!content) {
-      console.warn("No content to copy");
-      return;
-    }
+    if (!content) return;
 
     try {
       await navigator.clipboard.writeText(content);
-      if (dom.copyButton) {
-        const originalText = dom.copyButton.textContent;
-        dom.copyButton.textContent = "COPIED!";
-        dom.copyButton.style.color = "var(--state-success)";
+      const copyBtn = document.getElementById("transmitCommand");
+      if (copyBtn) {
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = "COPIED!";
+        copyBtn.style.color = "var(--state-success)";
         setTimeout(() => {
-          dom.copyButton.textContent = originalText;
-          dom.copyButton.style.color = "";
+          copyBtn.textContent = originalText;
+          copyBtn.style.color = "";
         }, 1500);
       }
     } catch (err) {
@@ -632,8 +636,13 @@
     const content = getCurrentOutput();
     if (!content) return;
 
-    const headerContent = `Name: ${state.shiftCode || "Unknown"}\nDesc: A finished document.\n\n${content}`;
-    const fileName = `citation_${state.officerId}_${Date.now()}.txt`;
+    const headerContent = `STELLAR CORPORATE CONGLOMERATE
+Executive Officer: ${state.officerId || "Anonymous"}
+Session ID: ${state.shiftCode || "Unknown"}
+Generated: ${utils.formatTime()} ${utils.formatDate()}
+
+${content}`;
+    const fileName = `SCC_Document_${state.officerId}_${Date.now()}.txt`;
     
     const blob = new Blob([headerContent], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
@@ -652,10 +661,10 @@
         field.value = "";
         const element = document.getElementById(field.id);
         if (element) {
-          if (field.type === "charge") {
-            element.textContent = '[SELECT CHARGE]';
-            element.title = '[SELECT CHARGE]';
-            element.className = 'charge-field-button empty';
+          if (field.type === "job") {
+            element.textContent = '[SELECT ASSIGNMENT]';
+            element.title = '[SELECT ASSIGNMENT]';
+            element.className = 'job-button empty';
           } else {
             element.value = "";
           }
@@ -667,18 +676,56 @@
     }
   }
 
+  // Dashboard Management
+  const DashboardManager = {
+    initialize() {
+      this.setupDashboardTabs();
+      this.updateDashboard();
+      setInterval(() => this.updateDashboard(), 5000);
+    },
+
+    setupDashboardTabs() {
+      document.querySelectorAll(".dashboard-tab").forEach((tab) => {
+        tab.addEventListener("click", (e) => {
+          const popupType = e.target.dataset.window;
+          if (popupType) this.openDashboardPopup(popupType);
+        });
+      });
+    },
+
+    openDashboardPopup(type) {
+      if (window.SCC_DASHBOARD_POPUP) {
+        window.SCC_DASHBOARD_POPUP.showPopup(type);
+      }
+    },
+
+    updateDashboard() {
+      // Update dashboard overview cards
+      const personnelEl = document.getElementById("overviewPersonnel");
+      const treasuryEl = document.getElementById("overviewTreasury");
+      const alertsEl = document.getElementById("overviewAlerts");
+
+      if (personnelEl) personnelEl.textContent = state.dashboard.personnel.toString();
+      if (treasuryEl) treasuryEl.textContent = `${state.dashboard.treasury.toLocaleString()} cr`;
+      if (alertsEl) {
+        alertsEl.textContent = state.dashboard.alertLevel;
+        alertsEl.className = `card-value alert-level-${state.dashboard.alertLevel.toLowerCase()}`;
+      }
+    }
+  };
+
   function setupEventHandlers() {
     // Template selector
-    dom.templateSelector?.addEventListener("change", async (e) => {
+    dom.templateMatrix?.addEventListener("change", async (e) => {
       const option = e.target.selectedOptions[0];
       await templates.load(option.value, option.dataset.description);
     });
 
     // Button handlers
     const buttons = {
+      processDocument: downloadOutput,
+      transmitCommand: copyOutput,
       terminalToggle: toggleTerminal,
-      copyButton: copyOutput,
-      downloadButton: downloadOutput,
     };
 
     Object.entries(buttons).forEach(([id, handler]) => {
@@ -686,48 +733,26 @@
     });
 
     // Terminal editing
-    if (dom.outputTerminal) {
-      dom.outputTerminal.addEventListener("input", handleTerminalEdit);
-      dom.outputTerminal.addEventListener("paste", () => setTimeout(handleTerminalEdit, 0));
+    if (dom.terminalSurface) {
+      dom.terminalSurface.addEventListener("input", handleTerminalEdit);
+      dom.terminalSurface.addEventListener("paste", () => setTimeout(handleTerminalEdit, 0));
     }
 
-    // Keyboard shortcuts
-    document.addEventListener("keydown", (e) => {
-      if (e.ctrlKey) {
-        if (e.key === "s") {
-          e.preventDefault();
-          downloadOutput();
-        } else if (e.key === "c" && !window.getSelection().toString()) {
-          e.preventDefault();
-          copyOutput();
-        }
-      }
-    });
-
-    // Data clearing on window close
-    window.addEventListener("beforeunload", () => {
-      utils.storage.clear();
-    });
-
-    // Data clearing when tab becomes hidden (mobile/background)
+    // Data clearing
+    const clearData = () => utils.storage.clear();
+    window.addEventListener("beforeunload", clearData);
+    window.addEventListener("unload", clearData);
     document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        utils.storage.clear();
-      }
-    });
-
-    // Data clearing on page unload (additional safety)
-    window.addEventListener("unload", () => {
-      utils.storage.clear();
+      if (document.hidden) clearData();
     });
   }
 
   async function initialize() {
     // Initialize DOM references
     [
-      "templateSelector", "templateDescription", "fieldControls",
-      "previewRender", "outputTerminal", "fieldCounter",
-      "systemTime", "officerInput", "shiftInput", "copyButton"
+      "templateMatrix", "templateMetadata", "fieldSynthesis",
+      "previewSurface", "terminalSurface",
+      "galacticTime", "executiveAuth", "commandCipher", "processDocument"
     ].forEach(id => dom[id] = document.getElementById(id));
 
     // Load saved authentication
@@ -740,13 +765,14 @@
     terminal.initializeInputs();
     terminal.startSystemClock();
     setupEventHandlers();
+    DashboardManager.initialize();
     await templates.loadList();
     generateOutput();
 
     // Auto-clear shift code after timeout
     setInterval(() => {
-      if (dom.shiftInput) {
-        dom.shiftInput.value = "";
+      if (dom.commandCipher) {
+        dom.commandCipher.value = "";
         state.shiftCode = "";
         utils.storage.save(CONFIG.storage.shift, "");
         terminal.updateFieldsLock();
@@ -754,8 +780,102 @@
     }, CONFIG.shiftTimeout);
   }
 
-  // Public API
-  window.N4NL_TERMINAL = {
+  // Dashboard Popup System
+  window.SCC_DASHBOARD_POPUP = {
+    currentPopup: null,
+    
+    showPopup(type) {
+      const modules = {
+        personnel: { name: "SCC_PERSONNEL", title: "Personnel Management" },
+        financial: { name: "SCC_FINANCIAL", title: "Financial Operations" },
+        manifest: { name: "SCC_MANIFEST", title: "Crew Manifest" },
+        operations: { name: "SCC_OPERATIONS", title: "Operations Control" },
+      };
+
+      const moduleInfo = modules[type];
+      if (moduleInfo && window[moduleInfo.name]) {
+        const module = window[moduleInfo.name];
+        const content = module.generateContent();
+        this.currentPopup = type;
+        this.createPopup(moduleInfo.title, content, module);
+      }
+    },
+    
+    getCurrentPopup() {
+      return this.currentPopup;
+    },
+    
+    closePopup() {
+      const existingPopup = document.querySelector('.dashboard-popup-overlay');
+      if (existingPopup) {
+        existingPopup.remove();
+        this.currentPopup = null;
+      }
+    },
+    
+    createPopup(title, content, module) {
+      // Remove existing popup if any
+      const existingPopup = document.querySelector('.dashboard-popup-overlay');
+      if (existingPopup) {
+        existingPopup.remove();
+      }
+
+      // Create popup overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'dashboard-popup-overlay';
+      
+      // Create popup content
+      overlay.innerHTML = `
+        <div class="dashboard-popup">
+          <div class="dashboard-popup-header">
+            <div class="dashboard-popup-title">${title}</div>
+            <div class="dashboard-popup-status">ACTIVE</div>
+            <button class="dashboard-popup-close" onclick="this.closest('.dashboard-popup-overlay').remove()">×</button>
+          </div>
+          <div class="dashboard-popup-content">
+            ${content}
+          </div>
+        </div>
+      `;
+
+      // Add to DOM
+      document.body.appendChild(overlay);
+      
+      // Trigger animation
+      setTimeout(() => {
+        overlay.classList.add('active');
+      }, 10);
+
+      // Bind events if module has bindEvents method
+      if (module && typeof module.bindEvents === 'function') {
+        module.bindEvents(overlay);
+      }
+
+      // Close on escape key
+      const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+          overlay.remove();
+          this.currentPopup = null;
+          document.removeEventListener('keydown', handleEscape);
+        }
+      };
+      document.addEventListener('keydown', handleEscape);
+
+      // Close on overlay click
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          overlay.remove();
+          this.currentPopup = null;
+          document.removeEventListener('keydown', handleEscape);
+        }
+      });
+
+      return overlay;
+    }
+  };
+
+  // Public API for dashboard modules
+  window.SCC_TERMINAL = {
     updateField(fieldId, value) {
       const field = state.currentTemplate?.fields.find(f => f.id === fieldId);
       if (field) {
@@ -769,9 +889,12 @@
       return state.currentTemplate?.fields.find(f => f.id === fieldId)?.value || "";
     },
 
+    updateDashboard(data) {
+      Object.assign(state.dashboard, data);
+    },
+
     clearData() {
       utils.storage.clear();
-      // Reset state
       state.officerId = null;
       state.shiftCode = "";
       state.currentTemplate = null;
@@ -779,12 +902,11 @@
       state.fieldsFilled = 0;
       state.totalFields = 0;
       
-      // Clear UI
-      if (dom.officerInput) dom.officerInput.value = "";
-      if (dom.shiftInput) dom.shiftInput.value = "";
-      if (dom.fieldControls) dom.fieldControls.innerHTML = "";
-      if (dom.previewRender) dom.previewRender.innerHTML = "";
-      if (dom.outputTerminal) dom.outputTerminal.innerHTML = "";
+      if (dom.executiveAuth) dom.executiveAuth.value = "";
+      if (dom.commandCipher) dom.commandCipher.value = "";
+      if (dom.fieldSynthesis) dom.fieldSynthesis.innerHTML = "";
+      if (dom.previewSurface) dom.previewSurface.innerHTML = "";
+      if (dom.terminalSurface) dom.terminalSurface.innerHTML = "";
       if (dom.fieldCounter) dom.fieldCounter.textContent = "0 / 0";
       
       terminal.updateFieldsLock();

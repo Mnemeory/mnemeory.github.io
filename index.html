@@ -1,156 +1,160 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>N4NL Security Terminal | SCCV Horizon ISD</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Share+Tech+Mono&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="theme.css?v=2" />
-    <link rel="stylesheet" href="charges.css?v=1" />
-    <script src="script.js" defer></script>
-    <script src="charges.js?v=1" defer></script>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Stellar Corporate Conglomerate | SCCV Horizon</title>
+
+    <!-- Fonts & Theme -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="theme.css" rel="stylesheet" />
+
+    <!-- Optional dashboard modules (safe if missing) -->
+    <script defer src="dashboard/personnel.js"></script>
+    <script defer src="dashboard/financial.js"></script>
+    <script defer src="dashboard/manifest.js"></script>
+    <script defer src="dashboard/operations.js"></script>
+
+    <!-- Main app logic -->
+    <script defer src="script.js"></script>
   </head>
   <body>
-    <div id="app" class="terminal-interface">
+    <div class="terminal-interface">
+      <!-- System Status Bar -->
       <div class="system-status-bar">
         <div class="status-indicator">
-          <span class="status-label">TERMINAL</span>
-          <span class="status-value pulse-active">N4NL-7734</span>
+          <span class="status-label">NEXUS:</span>
+          <span class="status-value">SCC-CORE-ALPHA</span>
         </div>
         <div class="status-indicator">
-          <span class="status-label">AUTH</span>
-          <span class="status-value">LEVEL-3</span>
+          <span class="status-label">STATUS:</span>
+          <span class="status-value">ONLINE</span>
         </div>
         <div class="status-indicator">
-          <span class="status-label">CONN</span>
-          <span class="status-value pulse-secure">ENCRYPTED</span>
-        </div>
-        <div class="status-indicator">
-          <span class="status-label">TIME</span>
-          <span class="status-value" id="systemTime">--:--:--</span>
+          <span class="status-label">AUTH:</span>
+          <span class="status-value">ENCRYPTED</span>
         </div>
       </div>
 
+      <!-- Header -->
       <header class="terminal-header">
         <div class="brand">
-          <img
-            src="SCC_logo.png"
-            alt="Stellar Corporate Conglomerate Logo"
-            class="brand-logo"
-          />
+          <img class="brand-logo" src="SCC_logo.png" alt="Stellar Corporate Conglomerate" />
           <div class="brand-text">
             <h1>Stellar Corporate Conglomerate</h1>
-            <small>SCCV Horizon • Internal Security Department Terminal</small>
+            <small>Command Interface • SCCV Horizon</small>
           </div>
         </div>
+
         <div class="header-meta">
           <div class="header-input-group">
-            <label for="officerInput" class="header-label">OFFICER:</label>
-            <input
-              type="text"
-              id="officerInput"
-              class="header-input"
-              placeholder="Character Name"
-              maxlength="20"
-            />
+            <span class="header-label">Executive</span>
+            <input id="executiveAuth" class="header-input" type="text" maxlength="25" placeholder="Executive Designation" autocomplete="off" />
           </div>
           <div class="header-input-group">
-            <label for="shiftInput" class="header-label">SHIFT:</label>
-            <input
-              type="text"
-              id="shiftInput"
-              class="header-input"
-              placeholder="Round ID (min 7 chars)"
-              maxlength="20"
-            />
+            <span class="header-label">Cipher</span>
+            <input id="commandCipher" class="header-input" type="text" maxlength="20" placeholder="Session Authentication" autocomplete="off" />
           </div>
         </div>
       </header>
 
+      <!-- Template Bar -->
       <div class="template-bar">
         <div class="template-controls">
           <div class="control-group">
-            <label for="templateSelector" class="control-label"
-              >FORM TEMPLATE</label
-            >
-            <select id="templateSelector" class="control-select">
-              <option>Loading templates...</option>
+            <span class="control-label">Template</span>
+            <select id="templateMatrix" class="control-select">
+              <option>Initializing template constellation...</option>
             </select>
           </div>
-          <p id="templateDescription" class="template-desc"></p>
+          <div id="templateMetadata" class="template-desc"></div>
         </div>
-        <div class="quick-actions">
-          <button id="copyButton" class="action-btn" title="Copy to clipboard">
-            <span class="btn-icon">📋</span> COPY
-          </button>
-          <button
-            id="downloadButton"
-            class="action-btn"
-            title="Download as text file"
-          >
-            <span class="btn-icon">💾</span> SAVE
-          </button>
+
+        <!-- Dashboard Overview -->
+        <div class="dashboard-overview-header">
+          <div class="overview-cards">
+            <div class="overview-card">
+              <div class="card-content">
+                <div class="card-value" id="overviewPersonnel">0</div>
+                <div class="card-label">Personnel</div>
+              </div>
+            </div>
+            <div class="overview-card">
+              <div class="card-content">
+                <div class="card-value" id="overviewTreasury">0 cr</div>
+                <div class="card-label">Treasury</div>
+              </div>
+            </div>
+            <div class="overview-card">
+              <div class="card-content">
+                <div class="card-value" id="overviewAlerts">Green</div>
+                <div class="card-label">Alert Level</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-controls">
+            <button class="dashboard-tab" data-window="personnel">Personnel</button>
+            <button class="dashboard-tab" data-window="financial">Financial</button>
+            <button class="dashboard-tab" data-window="manifest">Manifest</button>
+            <button class="dashboard-tab" data-window="operations">Operations</button>
+          </div>
         </div>
+
       </div>
 
+      <!-- Main Grid -->
       <main class="terminal-main">
-        <section class="fields-panel panel">
-          <header class="panel-header">
-            <h2 class="panel-title">
-              <span class="status-indicator-mini"></span>
-              FIELDS
-            </h2>
-            <span class="field-counter" id="fieldCounter">0 / 0</span>
-          </header>
-          <div id="fieldControls" class="field-controls"></div>
+
+        <!-- Fields Panel -->
+        <section class="panel fields-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Document Fields</h2>
+          </div>
+          <div class="field-controls">
+            <div class="field-counter" id="fieldCounter">0 / 0</div>
+            <div class="field-synthesis-area" id="fieldSynthesis"><!-- dynamic --></div>
+          </div>
         </section>
 
-        <section class="preview-panel panel">
-          <header class="panel-header">
-            <h2 class="panel-title">
-              <span class="status-indicator-mini"></span>
-              DOCUMENT PREVIEW
-            </h2>
-            <button id="terminalToggle" class="toggle-btn" aria-pressed="false">
-              HIDE TERMINAL
-            </button>
-          </header>
-          <div id="previewRender" class="preview-content"></div>
+        <!-- Preview Panel -->
+        <section class="panel preview-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Document Preview</h2>
+            <div class="quick-actions">
+              <button class="action-btn" id="processDocument">Process Document</button>
+              <button class="toggle-btn" id="terminalToggle" aria-pressed="false">HIDE TERMINAL</button>
+            </div>
+          </div>
+          <div class="preview-content" id="previewSurface"></div>
         </section>
 
-        <section class="output-panel panel">
-          <header class="panel-header">
-            <h2 class="panel-title">
-              <span class="status-indicator-mini"></span>
-              N4NL SECURITY TERMINAL
-            </h2>
-          </header>
+        <!-- Output Panel -->
+        <section class="panel output-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Terminal Output</h2>
+            <div class="quick-actions">
+              <button class="action-btn" id="transmitCommand">Transmit Data</button>
+            </div>
+          </div>
           <div class="terminal-wrapper">
-            <div class="terminal-scanlines"></div>
-            <div
-              id="outputTerminal"
-              class="terminal-output"
-              contenteditable
-              spellcheck="false"
-            ></div>
+            <div id="terminalSurface" class="terminal-output" contenteditable="true" spellcheck="false"></div>
           </div>
         </section>
       </main>
 
+      <!-- Footer -->
       <footer class="terminal-footer">
         <div class="footer-content">
-          <small class="footer-motto"
-            >The unbreakable chainlink, holding the Spur together.</small
-          >
+          <div class="footer-motto">The Unbreakable Chainlink • Holding the Spur Together</div>
           <div class="system-info">
-            <span>NET_STATUS//SECURE</span>
-            <span class="info-separator">|</span>
-            <span>ISD_TERMINAL//ACTIVE</span>
-            <span class="info-separator">|</span>
-            <span>MAINFRAME//N4NL-CORE</span>
+            <span class="telemetry-data">NEXUS://SCC-CORE-ALPHA</span>
+            <span class="info-separator">∞</span>
+            <span class="telemetry-data">QUANTUM://ENTANGLED</span>
+            <span class="info-separator">∞</span>
+            <span class="telemetry-data">REACH://GALACTIC</span>
+            <span class="info-separator">∞</span>
+            <span class="telemetry-data" id="galacticTime">--:--:--</span>
           </div>
         </div>
       </footer>
