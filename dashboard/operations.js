@@ -8,12 +8,12 @@
       serviceStaff: 0,
       alertLevel: "Green",
       systemsStatus: {
-        lifeSupportSystems: "",
-        powerGrid: "",
-        communicationsArray: "",
-        navigationSystems: "",
-        defensiveSystems: "",
-        emergencySystems: "",
+        lifeSupportSystems: "Nominal",
+        powerGrid: "Nominal",
+        communicationsArray: "Nominal",
+        navigationSystems: "Nominal",
+        defensiveSystems: "Nominal",
+        emergencySystems: "Nominal",
       },
       ianStatus: "",
     },
@@ -51,7 +51,7 @@
       const totalSystemsOperational = Object.values(
         this.data.systemsStatus,
       ).filter(
-        (status) => status === "OPERATIONAL" || status === "OPTIMAL",
+        (status) => status === "Nominal",
       ).length;
       const totalSystems = Object.keys(this.data.systemsStatus).length;
       const systemsHealth = Math.round(
@@ -128,7 +128,7 @@
  ${Object.entries(this.data.systemsStatus)
    .map(
      ([system, status]) =>
-       `<div class="operations-metric"><div class="operations-metric-label">${this.getSystemIdentifier(system)}</div><div class="operations-metric-value ${this.getStatusClass(status)}">${status}</div></div>`,
+       `<div class="operations-metric clickable-system" data-system="${system}" onclick="window.SCC_OPERATIONS.cycleSystemStatus('${system}')"><div class="operations-metric-label">${this.getSystemIdentifier(system)}</div><div class="operations-metric-value ${this.getStatusClass(status)}">${status}</div></div>`,
    )
    .join("")}
  </div>
@@ -233,19 +233,46 @@
         }
       }
     },
+    cycleSystemStatus(system) {
+      const statuses = ["Nominal", "Strained", "Failed"];
+      const currentIndex = statuses.indexOf(this.data.systemsStatus[system]);
+      this.data.systemsStatus[system] = statuses[(currentIndex + 1) % statuses.length];
+      this.saveData();
+      this.updatePopupContent();
+      if (window.ExecutiveInterface?.showNotification) {
+        window.ExecutiveInterface.showNotification(
+          `${this.getSystemIdentifier(system)} status changed to ${this.data.systemsStatus[system]}`,
+          this.data.systemsStatus[system] === "Failed" ? "error" : "info",
+        );
+      }
+    },
     toggleIanStatus() {
       const statuses = ["Good Boy", "Very Good Boy", "Best Boy", "Good Boy"];
       const currentIndex = statuses.indexOf(this.data.ianStatus);
       this.data.ianStatus = statuses[(currentIndex + 1) % statuses.length];
       this.saveData();
-      if (window.SCC_DASHBOARD_POPUP?.getCurrentPopup() === "operations") {
-        window.SCC_DASHBOARD_POPUP.showPopup("operations");
-      }
+      this.updatePopupContent();
       if (window.ExecutiveInterface?.showNotification) {
         window.ExecutiveInterface.showNotification(
           `Ian the Corgi is a ${this.data.ianStatus}! 🐕`,
           "success",
         );
+      }
+    },
+    updatePopupContent() {
+      // Only update if the operations popup is currently open
+      if (window.SCC_DASHBOARD_POPUP?.getCurrentPopup() === "operations") {
+        const popupContent = document.querySelector('.dashboard-popup-content');
+        if (popupContent) {
+          // Generate new content
+          const newContent = this.generateContent();
+          
+          // Update the content
+          popupContent.innerHTML = newContent;
+          
+          // Re-bind events for the new content
+          this.bindEvents(document.querySelector('.dashboard-popup-overlay'));
+        }
       }
     },
     saveData() {
@@ -290,12 +317,12 @@
         serviceStaff: 0,
         alertLevel: "Green",
         systemsStatus: {
-          lifeSupportSystems: "",
-          powerGrid: "",
-          communicationsArray: "",
-          navigationSystems: "",
-          defensiveSystems: "",
-          emergencySystems: "",
+          lifeSupportSystems: "Nominal",
+          powerGrid: "Nominal",
+          communicationsArray: "Nominal",
+          navigationSystems: "Nominal",
+          defensiveSystems: "Nominal",
+          emergencySystems: "Nominal",
         },
         ianStatus: "",
       };

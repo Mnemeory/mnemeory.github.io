@@ -179,8 +179,22 @@
           this.data.commandSupport[position] = "";
         });
         this.saveData();
-        if (window.SCC_DASHBOARD_POPUP?.getCurrentPopup() === "manifest") {
-          window.SCC_DASHBOARD_POPUP.showPopup("manifest");
+        this.updatePopupContent();
+      }
+    },
+    updatePopupContent() {
+      // Only update if the manifest popup is currently open
+      if (window.SCC_DASHBOARD_POPUP?.getCurrentPopup() === "manifest") {
+        const popupContent = document.querySelector('.dashboard-popup-content');
+        if (popupContent) {
+          // Generate new content
+          const newContent = this.generateContent();
+          
+          // Update the content
+          popupContent.innerHTML = newContent;
+          
+          // Re-bind events for the new content
+          this.bindEvents(document.querySelector('.dashboard-popup-overlay'));
         }
       }
     },
