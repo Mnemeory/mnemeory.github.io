@@ -1,51 +1,40 @@
 Name: Personnel Assignment Form
 Desc: Document personnel assignments for missions and departments
-[center][logo_scc_small]
-Stellar Corporate Conglomerate
-SCCV Horizon – Onboard Personnel Directive 89-F
-[b]JOB TRANSFER REQUEST / REASSIGNMENT AUTHORIZATION[/b]
-[hr][/center][small][b]NOTICE:[/b] Per SCC Operational Mandate and Horizon Assignment Protocols, any in-shift occupational reassignment must be authorized by the Executive Officer (XO) or Commanding Officer (Captain). Departmental clearance is required for all interdepartmental transfers. ID access and payroll changes are not considered valid until digitally encoded by Bridge Command and acknowledged in the station manifest.[/small]
+[small]
+[center][b][logo_scc]
+Stellar Corporate Conglomerate[/b]
+Chainlink Expeditionary Vessel - SCCV Horizon
+[h2]CC-0103 - Personnel Reassignment / Promotion Authorization[/h2][/center]
+[small][b]NOTICE:[/b] Issued under Stellar Corporate Conglomerate Regulations and SCCV Horizon SOP. Departmental promotions may be authorized by the relevant Head of Staff. Cross-department transfers and all Command appointments require either a Captain's Order or a recorded Majority Command Vote entered into the Bridge log. Acting appointments revert at shift end unless renewed. Misuse of this form may result in disciplinary action and SCC-CC Odin audit.[/small]
 
-[large]Personnel & Assignment Data[/large]
-[table]
-[row][cell][b]Filing ID:[/b][cell][field][cell][b]Shift ID:[/b][cell][roundid]
-[row][cell][b]Stardate:[/b][cell][date][cell][b]Time:[/b][cell][time]
-[row][cell][b]Vessel:[/b][cell]SCCV Horizon[cell][b]Processing Node:[/b][cell]Bridge Command – XO Office
-[row][cell][b]Crewmember Name:[/b][cell][field][cell][b]Employee ID#[/b][cell][field]
-[row][cell][b]Home System / Nationality:[/b][cell][field][cell][b]Current Department:[/b][cell][field]
-[row][cell][b]Corporate Affiliation:[/b][cell][field][cell][b]Subcontractor Entity (if any):[/b][cell][field]
-[/table][large]Current Station Assignment[/large]
-[table]
-[row][cell][b]Role Title:[/b][cell][field][cell][b]Grade Classification:[/b][cell][field]
-[row][cell][b]Access Permissions:[/b][cell][field][cell][b]Immediate Supervisor:[/b][cell][field]
-[row][cell][b]Certifications (Relevant):[/b][cell][field][cell][b]Medical Fitness Status:[/b][cell]Cleared / Restricted [field]
-[/table][large]Requested New Assignment[/large]
-[table]
-[row][cell][b]Target Department:[/b][cell][field][cell][b]Proposed Role Title:[/b][cell][field]
-[row][cell][b]Justification for Transfer:[/b][cell][field]
-[row][cell][b]Transfer Type:[/b][cell]Permanent / Temporary Until [field][cell][b]Effective Stardate:[/b][cell][date] [time]
-[/table][large]Authorizations & Oversight[/large]
-[table]
-[row][cell][b]Departmental Approval:[/b][cell]Granted / Denied / Not Applicable [field][cell][b]Security Vetting:[/b][cell]Approved / Flagged [field]
-[row][cell][b]Medical Review Status:[/b][cell]Cleared / Hold [field][cell][b]Disciplinary Status:[/b][cell]None / Active Infraction(s) [field]
-[row][cell][b]Transfer Authorized By:[/b][cell]Executive Officer / Captain [field][cell][b]Command ID Badge #[/b][cell][field]
-[/table][large]Post-Authorization Actions[/large]
-[table]
-[row][cell][b]ID Modification (XO/Captain):[/b][cell][field][cell][b]Access Permissions Applied:[/b][cell]Yes / No
-[row][cell][b]Payroll Update Complete:[/b][cell]Yes / No[cell][b]Updated Pay Grade:[/b][cell][field]
-[row][cell][b]New Uniform/Locker Issued:[/b][cell][field][cell][b]Equipment Checklist Completed:[/b][cell]Yes / No
-[row][cell][b]Orientation/Job Training Assigned:[/b][cell][field][cell][b]Mentorship Designated:[/b][cell][field]
-[/table][large]Signatures[/large]
-[table]
-[row][cell][b]Crewmember Signature:[/b][cell][field][cell][b]Timestamp:[/b][cell][date] [time]
-[row][cell][b]Command Signature:[/b][cell][field][cell][b]Timestamp:[/b][cell][date] [time]
-[/table][large]Administrative Summary[/large]
-[table]
-[row][cell][b]Physical Copy Provided?[/b][cell]Yes – Hardcopy, Blue SCC Ship Record
-[row][cell][b]Referral to CCIA Required?[/b][cell]No / Pending Review
-[row][cell][b]Manifest & Database Updated By:[/b][cell][field]
-[/table][center][small][i]“The unbreakable chainlink, holding the Spur together.”
-— SCC Ethics & Branding, Rev. 12.9b[/i][/small]
+[hr][b]Employee Information[/b][table]
 
-[barcode]
-[/center]
+[row][cell][b]Vessel:[/b] SCCV Horizon[cell][b]Date/Time:[/b] [date] - [time][cell][b]Shift:[/b] [roundid][cell][b]Index:[/b] [field]
+[row][cell][b]Name:[/b] [field][cell][b]Employee ID:[/b] [field][cell][b]Department:[/b] [field][cell][b]Corporation:[/b] [field]
+[/table]
+
+[b]Assignment Details[/b]
+[table]
+[row][cell][b]Current Assignment:[/b] [field][cell][b]New Assignment:[/b] [field][cell][b]Effective Start:[/b] [field][cell][b]Type (Perm./Interim):[/b] [field]
+[row][cell][b]Current Salary:[/b] [field][cell][b]New Salary:[/b] [field][cell][b]Area of Responsibility:[/b] [field][cell][b]Operational Sector:[/b] [field]
+[/table]
+
+[b]Operational Reason[/b]
+[list][field][/list]
+
+[b]Legal Authority & Vote[/b]
+[table]
+[row][cell][b]Authority Invoked:[/b] [field][cell][b]Bridge Log/Vote Ref #:[/b] [field][cell][b]Vote Tallies:[/b] Y: [field] N: [field] A: [field]
+[/table]
+
+[b]Authorizations & Routing[/b]
+[table]
+[row][cell][b]Head of Staff (Dept):[/b] [field]
+[b]Signature:[/b] [field]
+[cell][b]Captain/Command Authority:[/b] [field]
+[b]Signature:[/b] [field]
+[cell][b]Executive Officer:[/b] [officername]
+[b]Signature:[/b] [sign]
+[cell][b]Route To:[/b] [field]
+[/table]
+[hr][center][barcode][/center][/small]
