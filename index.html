@@ -9,35 +9,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link href="theme.css" rel="stylesheet" />
 
-    <!-- Optional dashboard modules (safe if missing) -->
-    <script defer src="dashboard/personnel.js"></script>
-    <script defer src="dashboard/financial.js"></script>
-    <script defer src="dashboard/manifest.js"></script>
-    <script defer src="dashboard/operations.js"></script>
 
     <!-- Main app logic -->
     <script defer src="script.js"></script>
+    <script defer src="jobs.js"></script>
   </head>
   <body>
     <div class="terminal-interface">
-      <!-- System Status Bar -->
-      <div class="system-status-bar">
-        <div class="status-indicators">
-          <div class="status-indicator">
-            <span class="status-label">CODE:</span>
-            <span class="status-value" id="overviewAlerts">Green</span>
-          </div>
-          <div class="status-indicator">
-            <span class="status-label">PERSONNEL:</span>
-            <span class="status-value" id="overviewPersonnel">0</span>
-          </div>
-          <div class="status-indicator">
-            <span class="status-label">TREASURY:</span>
-            <span class="status-value" id="overviewTreasury">0 cr</span>
-          </div>
-        </div>
-      </div>
-
       <!-- Header -->
       <header class="terminal-header">
         <div class="brand">
@@ -72,13 +50,6 @@
           <div id="templateMetadata" class="template-desc"></div>
         </div>
 
-        <!-- Dashboard Controls -->
-        <div class="dashboard-controls">
-          <button class="dashboard-tab" data-window="personnel">Personnel</button>
-          <button class="dashboard-tab" data-window="financial">Financial</button>
-          <button class="dashboard-tab" data-window="manifest">Manifest</button>
-          <button class="dashboard-tab" data-window="operations">Operations</button>
-        </div>
 
       </div>
 
@@ -107,7 +78,7 @@
             </div>
           </div>
           <div class="terminal-wrapper">
-            <div id="terminalSurface" class="terminal-output" contenteditable="true" spellcheck="false"></div>
+            <textarea id="terminalSurface" class="terminal-output" spellcheck="false"></textarea>
           </div>
         </section>
 

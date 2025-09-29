@@ -3,8 +3,8 @@
 ### Dynamic Content Tags
 - `[officername]` - Automatically replaced with authenticated officer name ((NOT IN GAME PENCODE, UNIQUE TO SYSTEM))
 - `[roundid]` - Automatically replaced with current round/shift ID ((NOT IN GAME PENCODE, UNIQUE TO SYSTEM))
-- `[field]` - User-input field
-- `[charges]` - Creates clickable charge field ((NOT IN GAME PENCODE, UNIQUE TO SYSTEM))
+- `[field]` - User-input text field
+- `[jobs]` - Creates clickable job selector button ((NOT IN GAME PENCODE, UNIQUE TO SYSTEM))
 - `[time]` - Current system time
 - `[date]` - Current system date
 

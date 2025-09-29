@@ -28,30 +28,29 @@
     totalFields: 0,
     officerId: null,
     shiftCode: "",
-    dashboard: {
-      personnel: 0,
-      treasury: 0,
-      alertLevel: "Green",
-    }
   };
 
   const dom = {};
 
   // Utility functions
   const utils = {
-    formatTime: () => new Date().toLocaleTimeString("en-US", {
-      hour12: false,
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    }),
+    formatTime: () =>
+      new Date().toLocaleTimeString("en-US", {
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      }),
 
     formatDate: () => new Date().toLocaleDateString("en-CA"),
 
     storage: {
       save(key, value) {
         try {
-          localStorage.setItem(CONFIG.storage.prefix + key, JSON.stringify(value));
+          localStorage.setItem(
+            CONFIG.storage.prefix + key,
+            JSON.stringify(value),
+          );
         } catch (e) {
           console.warn("Storage save failed:", e);
         }
@@ -67,7 +66,7 @@
       },
       clear() {
         try {
-          Object.keys(localStorage).forEach(key => {
+          Object.keys(localStorage).forEach((key) => {
             if (key.startsWith(CONFIG.storage.prefix)) {
               localStorage.removeItem(key);
             }
@@ -75,7 +74,7 @@
         } catch (e) {
           console.warn("Storage clear failed:", e);
         }
-      }
+      },
     },
 
     debounce(func, wait) {
@@ -95,8 +94,16 @@
   const terminal = {
     initializeInputs() {
       [
-        { input: dom.executiveAuth, storageKey: CONFIG.storage.officer, stateKey: "officerId" },
-        { input: dom.commandCipher, storageKey: CONFIG.storage.shift, stateKey: "shiftCode" }
+        {
+          input: dom.executiveAuth,
+          storageKey: CONFIG.storage.officer,
+          stateKey: "officerId",
+        },
+        {
+          input: dom.commandCipher,
+          storageKey: CONFIG.storage.shift,
+          stateKey: "shiftCode",
+        },
       ].forEach(({ input, storageKey, stateKey }) => {
         if (!input) return;
 
@@ -119,25 +126,44 @@
     },
 
     isFieldsLocked() {
-      return !state.officerId?.trim() || 
-             !state.shiftCode?.trim() || 
-             state.shiftCode.trim().length < 7;
+      return (
+        !state.officerId?.trim() ||
+        !state.shiftCode?.trim() ||
+        state.shiftCode.trim().length < 7
+      );
     },
 
     updateFieldsLock() {
       const isLocked = terminal.isFieldsLocked();
-      
+
       // Update inline editable fields
       if (dom.previewSurface) {
-        const fields = dom.previewSurface.querySelectorAll('.paper_field[data-field-id]');
-        fields.forEach(field => {
+        const fields = dom.previewSurface.querySelectorAll(
+          ".paper_field[data-field-id]",
+        );
+        fields.forEach((field) => {
           field.contentEditable = !isLocked;
           if (isLocked) {
             field.style.cursor = "not-allowed";
             field.style.opacity = "0.5";
           } else {
-            field.style.cursor = field.dataset.fieldType === "job" ? "pointer" : "text";
+            field.style.cursor = "text";
             field.style.opacity = "";
+          }
+        });
+
+        // Update job buttons
+        const jobButtons = dom.previewSurface.querySelectorAll(
+          'button.job-button[data-field-type="job"]',
+        );
+        jobButtons.forEach((button) => {
+          button.disabled = isLocked;
+          if (isLocked) {
+            button.style.cursor = "not-allowed";
+            button.style.opacity = "0.5";
+          } else {
+            button.style.cursor = "pointer";
+            button.style.opacity = "";
           }
         });
       }
@@ -152,7 +178,7 @@
     },
   };
 
-  // Template loading and management  
+  // Template loading and management
   const templates = {
     async loadList() {
       try {
@@ -162,35 +188,42 @@
         if (!response.ok) throw new Error("Failed to load template list");
 
         const items = await response.json();
-        const txtFiles = items.filter(f => f?.type === "file" && /\.txt$/i.test(f.name));
+        const txtFiles = items.filter(
+          (f) => f?.type === "file" && /\.txt$/i.test(f.name),
+        );
 
-        const processedTemplates = (await Promise.all(
-          txtFiles.map(async ({ name }) => {
-            try {
-              const res = await fetch(`templates/${name}?v=${Date.now()}`);
-              if (!res.ok) throw new Error("Failed to load template");
+        const processedTemplates = (
+          await Promise.all(
+            txtFiles.map(async ({ name }) => {
+              try {
+                const res = await fetch(`templates/${name}?v=${Date.now()}`);
+                if (!res.ok) throw new Error("Failed to load template");
 
-              const text = await res.text();
-              const { body, name: tplName, desc } = extractHeaders(text);
+                const text = await res.text();
+                const { body, name: tplName, desc } = extractHeaders(text);
 
-              return {
-                file: name,
-                name: tplName || name.replace(/\.txt$/i, ""),
-                description: desc || "",
-                body,
-              };
-            } catch (err) {
-              console.error(`Error loading template ${name}:`, err);
-              return null;
-            }
-          })
-        )).filter(Boolean);
+                return {
+                  file: name,
+                  name: tplName || name.replace(/\.txt$/i, ""),
+                  description: desc || "",
+                  body,
+                };
+              } catch (err) {
+                console.error(`Error loading template ${name}:`, err);
+                return null;
+              }
+            }),
+          )
+        ).filter(Boolean);
 
         state.templates = processedTemplates;
         populateTemplateSelector();
 
         if (state.templates.length > 0) {
-          await templates.load(state.templates[0].file, state.templates[0].description);
+          await templates.load(
+            state.templates[0].file,
+            state.templates[0].description,
+          );
         }
       } catch (err) {
         console.error("Error loading template list:", err);
@@ -201,13 +234,14 @@
 
     async createFallbackTemplate() {
       console.log("Creating fallback template due to GitHub API failure");
-      
+
       // Create a basic template that will work
-      state.templates = [{
-        file: "fallback.txt",
-        name: "Basic Document Template",
-        description: "Emergency fallback template - GitHub unavailable",
-        body: `[center][b]STELLAR CORPORATE CONGLOMERATE[/b]
+      state.templates = [
+        {
+          file: "fallback.txt",
+          name: "Basic Document Template",
+          description: "Emergency fallback template - GitHub unavailable",
+          body: `[center][b]STELLAR CORPORATE CONGLOMERATE[/b]
 [logo_scc]
 EXECUTIVE COMMAND INTERFACE[/center]
 
@@ -229,25 +263,30 @@ EXECUTIVE COMMAND INTERFACE[/center]
 [field]
 
 [hr]
-[center][small]The Unbreakable Chainlink • Holding the Spur Together[/small][/center]`
-      }];
-      
+[center][small]The Unbreakable Chainlink • Holding the Spur Together[/small][/center]`,
+        },
+      ];
+
       populateTemplateSelector();
-      
+
       if (state.templates.length > 0) {
-        await templates.load(state.templates[0].file, state.templates[0].description);
+        await templates.load(
+          state.templates[0].file,
+          state.templates[0].description,
+        );
       }
     },
 
     async load(fileName, description) {
       try {
-        const template = state.templates.find(t => t.file === fileName);
+        const template = state.templates.find((t) => t.file === fileName);
         if (!template) throw new Error("Template not found");
 
         state.currentTemplate = parseTemplate(template.body);
         renderFields(state.currentTemplate.fields);
 
-        if (dom.terminalSurface) dom.terminalSurface.dataset.userEdited = "false";
+        if (dom.terminalSurface)
+          dom.terminalSurface.dataset.userEdited = "false";
 
         updateFieldCounter();
         generateOutput();
@@ -266,44 +305,43 @@ EXECUTIVE COMMAND INTERFACE[/center]
   // Template parsing - simplified for inline editing
   function parseTemplate(text) {
     const fields = [];
-    
+
     const patterns = [
       { regex: /\[field\]/g, type: "text", prefix: "field_" },
       { regex: /\[jobs\]/g, type: "job", prefix: "job_" },
-      { regex: /\[charges\]/g, type: "charge", prefix: "charge_" }
     ];
-    
+
     patterns.forEach(({ regex, type, prefix }) => {
       let match;
       let index = 0;
-      
+
       while ((match = regex.exec(text)) !== null) {
         const pos = match.index;
         const before = text.slice(Math.max(0, pos - 200), pos);
-        
-        let label = type === "job" ? "Personnel Assignment" : 
-                   type === "charge" ? "Charges" : `Field ${index + 1}`;
+
+        let label =
+          type === "job" ? "Personnel Assignment" : `Field ${index + 1}`;
         const labelMatches = before.match(/\[b\]([^\[]+?):\s*\[\/b\]/g);
-        
+
         if (labelMatches?.length > 0) {
           const lastMatch = labelMatches[labelMatches.length - 1];
           const m = lastMatch.match(/\[b\]([^\[]+?):\s*\[\/b\]/);
           if (m) label = m[1].trim();
         }
-        
+
         fields.push({
           label,
           value: "",
           pos,
           id: `${prefix}${index}`,
           type,
-          placeholder: label
+          placeholder: label,
         });
-        
+
         index++;
       }
     });
-    
+
     fields.sort((a, b) => a.pos - b.pos);
     return { fields, originalText: text };
   }
@@ -326,20 +364,25 @@ EXECUTIVE COMMAND INTERFACE[/center]
       return;
     }
 
-    const filled = state.currentTemplate.fields.filter(f => f.value && f.value.trim() !== "").length;
+    const filled = state.currentTemplate.fields.filter(
+      (f) => f.value && f.value.trim() !== "",
+    ).length;
     state.fieldsFilled = filled;
-    
+
     dom.fieldCounter.textContent = `${filled} / ${state.totalFields}`;
-    dom.fieldCounter.classList.toggle("complete", filled === state.totalFields && state.totalFields > 0);
+    dom.fieldCounter.classList.toggle(
+      "complete",
+      filled === state.totalFields && state.totalFields > 0,
+    );
   }
 
   function saveFieldsToStorage() {
     if (!state.currentTemplate) return;
 
-    const fieldData = state.currentTemplate.fields.map(f => ({
+    const fieldData = state.currentTemplate.fields.map((f) => ({
       label: f.label,
       value: f.value,
-      type: f.type || "text"
+      type: f.type || "text",
     }));
 
     utils.storage.save(CONFIG.storage.fields, fieldData);
@@ -358,7 +401,7 @@ EXECUTIVE COMMAND INTERFACE[/center]
 
     updateFieldCounter();
     generateOutput();
-    terminal.updateFieldsLock();
+    // Note: updateFieldsLock() is now called at the end of generateOutput()
   }
 
   // Output generation with inline editable fields
@@ -378,40 +421,61 @@ EXECUTIVE COMMAND INTERFACE[/center]
 
     // Apply dynamic replacements
     Object.entries(dynamics).forEach(([placeholder, value]) => {
-      const regex = new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g");
-      const htmlValue = value ? `<span class="understood">${value}</span>` : '<span class="paper_field"></span>';
+      const regex = new RegExp(
+        placeholder.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+        "g",
+      );
+      const htmlValue = value
+        ? `<span class="understood">${value}</span>`
+        : '<span class="paper_field"></span>';
       rawResult = rawResult.replace(regex, value);
       htmlResult = htmlResult.replace(regex, htmlValue);
     });
 
-    // Apply field replacements with editable spans
+    // Apply field replacements with editable spans or buttons
     if (state.currentTemplate) {
-      const sortedFields = [...state.currentTemplate.fields].sort((a, b) => a.pos - b.pos);
-      
+      const sortedFields = [...state.currentTemplate.fields].sort(
+        (a, b) => a.pos - b.pos,
+      );
+
       sortedFields.forEach((field, index) => {
-        const placeholder = field.type === "job" ? "[jobs]" :
-                           field.type === "charge" ? "[charges]" : "[field]";
+        const placeholder = field.type === "job" ? "[jobs]" : "[field]";
         const value = field.value || "";
-        
-        // Create editable span for HTML
-        const htmlValue = `<span class="paper_field" 
-          contenteditable="true" 
-          data-field-id="${field.id}" 
-          data-field-index="${index}"
-          data-field-type="${field.type}"
-          data-placeholder="${field.placeholder}"
-          spellcheck="false">${value}</span>`;
-        
+
+        // Create HTML element - button for jobs, editable span for others
+        let htmlValue;
+        if (field.type === "job") {
+          const buttonText = value || "Click to Select Assignment";
+          const buttonClass = value ? "job-button filled" : "job-button empty";
+          htmlValue = `<button class="${buttonClass}" 
+            data-field-id="${field.id}" 
+            data-field-index="${index}"
+            data-field-type="job"
+            data-placeholder="${field.placeholder}"
+            type="button">${buttonText}</button>`;
+        } else {
+          htmlValue = `<span class="paper_field" 
+            data-field-id="${field.id}" 
+            data-field-index="${index}"
+            data-field-type="${field.type}"
+            data-placeholder="${field.placeholder}"
+            spellcheck="false">${value}</span>`;
+        }
+
         const rawIndex = rawResult.indexOf(placeholder);
         if (rawIndex !== -1) {
-          rawResult = rawResult.substring(0, rawIndex) + value + 
-                     rawResult.substring(rawIndex + placeholder.length);
+          rawResult =
+            rawResult.substring(0, rawIndex) +
+            value +
+            rawResult.substring(rawIndex + placeholder.length);
         }
-        
+
         const htmlIndex = htmlResult.indexOf(placeholder);
         if (htmlIndex !== -1) {
-          htmlResult = htmlResult.substring(0, htmlIndex) + htmlValue + 
-                      htmlResult.substring(htmlIndex + placeholder.length);
+          htmlResult =
+            htmlResult.substring(0, htmlIndex) +
+            htmlValue +
+            htmlResult.substring(htmlIndex + placeholder.length);
         }
       });
     }
@@ -424,28 +488,25 @@ EXECUTIVE COMMAND INTERFACE[/center]
     }
 
     if (dom.terminalSurface) {
-      dom.terminalSurface.innerText = rawResult;
+      dom.terminalSurface.value = rawResult;
       dom.terminalSurface.dataset.userEdited = "false";
     }
+
+    // Apply field locking state after rendering
+    terminal.updateFieldsLock();
   }
 
-  // Setup event handlers for inline editable fields
+  // Setup event handlers for inline editable fields and buttons
   function setupInlineFieldEvents() {
     if (!dom.previewSurface) return;
 
-    // Remove existing event listeners
-    const existingFields = dom.previewSurface.querySelectorAll('.paper_field[data-field-id]');
-    existingFields.forEach(field => {
-      field.replaceWith(field.cloneNode(true));
-    });
-
-    // Add new event listeners
-    const fields = dom.previewSurface.querySelectorAll('.paper_field[data-field-id]');
-    fields.forEach(field => {
-      const fieldId = field.dataset.fieldId;
+    // Handle regular editable fields
+    const editableFields = dom.previewSurface.querySelectorAll(
+      ".paper_field[data-field-id]",
+    );
+    editableFields.forEach((field) => {
       const fieldIndex = parseInt(field.dataset.fieldIndex, 10);
-      const fieldType = field.dataset.fieldType;
-      
+
       // Handle input events
       const handleInput = utils.debounce((e) => {
         const value = e.target.textContent || "";
@@ -458,39 +519,39 @@ EXECUTIVE COMMAND INTERFACE[/center]
 
       // Handle focus events
       const handleFocus = (e) => {
-        e.target.classList.add('focused');
+        e.target.classList.add("focused");
         if (!e.target.textContent.trim()) {
-          e.target.textContent = '';
+          e.target.textContent = "";
         }
       };
 
       // Handle blur events
       const handleBlur = (e) => {
-        e.target.classList.remove('focused');
+        e.target.classList.remove("focused");
         if (!e.target.textContent.trim()) {
-          e.target.textContent = '';
+          e.target.textContent = "";
         }
         saveFieldsToStorage();
       };
 
-      // Handle job button clicks
-      const handleClick = (e) => {
-        if (fieldType === "job" && window.SCC_JOBS?.openJobSelector) {
-          e.preventDefault();
+      field.addEventListener("input", handleInput);
+      field.addEventListener("focus", handleFocus);
+      field.addEventListener("blur", handleBlur);
+    });
+
+    // Handle job button clicks
+    const jobButtons = dom.previewSurface.querySelectorAll(
+      'button.job-button[data-field-type="job"]',
+    );
+    jobButtons.forEach((button) => {
+      const fieldId = button.dataset.fieldId;
+
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (window.SCC_JOBS?.openJobSelector) {
           window.SCC_JOBS.openJobSelector(fieldId);
         }
-      };
-
-      field.addEventListener('input', handleInput);
-      field.addEventListener('focus', handleFocus);
-      field.addEventListener('blur', handleBlur);
-      field.addEventListener('click', handleClick);
-
-      // Make job fields look clickable
-      if (fieldType === "job") {
-        field.style.cursor = "pointer";
-        field.title = field.textContent || "Click to select assignment";
-      }
+      });
     });
   }
 
@@ -509,28 +570,34 @@ EXECUTIVE COMMAND INTERFACE[/center]
     };
 
     Object.entries(dynamics).forEach(([placeholder, value]) => {
-      const regex = new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g");
+      const regex = new RegExp(
+        placeholder.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+        "g",
+      );
       rawResult = rawResult.replace(regex, value);
     });
 
     // Apply field replacements
-    const sortedFields = [...state.currentTemplate.fields].sort((a, b) => a.pos - b.pos);
-    sortedFields.forEach(field => {
-      const placeholder = field.type === "job" ? "[jobs]" :
-                         field.type === "charge" ? "[charges]" : "[field]";
+    const sortedFields = [...state.currentTemplate.fields].sort(
+      (a, b) => a.pos - b.pos,
+    );
+    sortedFields.forEach((field) => {
+      const placeholder = field.type === "job" ? "[jobs]" : "[field]";
       const value = field.value || "";
-      
+
       const rawIndex = rawResult.indexOf(placeholder);
       if (rawIndex !== -1) {
-        rawResult = rawResult.substring(0, rawIndex) + value + 
-                   rawResult.substring(rawIndex + placeholder.length);
+        rawResult =
+          rawResult.substring(0, rawIndex) +
+          value +
+          rawResult.substring(rawIndex + placeholder.length);
       }
     });
 
     state.currentRaw = rawResult;
 
     if (dom.terminalSurface) {
-      dom.terminalSurface.innerText = rawResult;
+      dom.terminalSurface.value = rawResult;
       dom.terminalSurface.dataset.userEdited = "false";
     }
   }
@@ -539,11 +606,13 @@ EXECUTIVE COMMAND INTERFACE[/center]
     if (!dom.terminalSurface) return;
 
     dom.terminalSurface.dataset.userEdited = "true";
-    const terminalContent = dom.terminalSurface.textContent || "";
+    const terminalContent = dom.terminalSurface.value || "";
     state.currentRaw = terminalContent;
 
     if (dom.previewSurface) {
       dom.previewSurface.innerHTML = pencodeToHtml(terminalContent);
+      setupInlineFieldEvents();
+      terminal.updateFieldsLock();
     }
   }
 
@@ -552,23 +621,33 @@ EXECUTIVE COMMAND INTERFACE[/center]
     if (!text) return "";
 
     const tagMap = {
-      "[b]": "<B>", "[/b]": "</B>",
-      "[i]": "<I>", "[/i]": "</I>",
-      "[u]": "<U>", "[/u]": "</U>",
-      "[large]": '<font size="4">', "[/large]": "</font>",
-      "[small]": '<font size="1">', "[/small]": "</font>",
-      "[center]": "<center>", "[/center]": "</center>",
+      "[b]": "<B>",
+      "[/b]": "</B>",
+      "[i]": "<I>",
+      "[/i]": "</I>",
+      "[u]": "<U>",
+      "[/u]": "</U>",
+      "[large]": '<font size="4">',
+      "[/large]": "</font>",
+      "[small]": '<font size="1">',
+      "[/small]": "</font>",
+      "[center]": "<center>",
+      "[/center]": "</center>",
       "[br]": "<BR>",
       "[hr]": "<HR>",
       "[field]": '<span class="paper_field"></span>',
       "[jobs]": '<span class="paper_field"></span>',
-      "[charges]": '<span class="paper_field"></span>',
-      "[h1]": "<H1>", "[/h1]": "</H1>",
-      "[h2]": "<H2>", "[/h2]": "</H2>",
-      "[h3]": "<H3>", "[/h3]": "</H3>",
+      "[h1]": "<H1>",
+      "[/h1]": "</H1>",
+      "[h2]": "<H2>",
+      "[/h2]": "</H2>",
+      "[h3]": "<H3>",
+      "[/h3]": "</H3>",
       "[*]": "<li>",
-      "[list]": "<ul>", "[/list]": "</ul>",
-      "[table]": '<table border=1 cellspacing=0 cellpadding=3 style="border: 1px solid black;">',
+      "[list]": "<ul>",
+      "[/list]": "</ul>",
+      "[table]":
+        '<table border=1 cellspacing=0 cellpadding=3 style="border: 1px solid black;">',
       "[/table]": "</td></tr></table>",
       "[grid]": "<table>",
       "[/grid]": "</td></tr></table>",
@@ -579,39 +658,58 @@ EXECUTIVE COMMAND INTERFACE[/center]
 
     // Corporate logos
     const logos = [
-      ["scc", "⬢", "SCC"], ["nt", "◆", "NT"], ["zh", "▣", "ZH"],
-      ["idris", "◉", "IDRIS"], ["eridani", "⬟", "ECF"], ["zavod", "▲", "ZAVOD"],
-      ["hp", "⬡", "HEPH"], ["be", "◈", "BE"], ["golden", "◊", "GOLDEN"],
-      ["pvpolice", "★", "PKM"]
+      ["scc", "⬢", "SCC"],
+      ["nt", "◆", "NT"],
+      ["zh", "▣", "ZH"],
+      ["idris", "◉", "IDRIS"],
+      ["eridani", "⬟", "ECF"],
+      ["zavod", "▲", "ZAVOD"],
+      ["hp", "⬡", "HEPH"],
+      ["be", "◈", "BE"],
+      ["golden", "◊", "GOLDEN"],
+      ["pvpolice", "★", "PKM"],
     ];
-    
+
     logos.forEach(([name, symbol, text]) => {
-      tagMap[`[logo_${name}]`] = `<span class="corp-logo">${symbol} ${text}</span>`;
-      tagMap[`[logo_${name}_small]`] = `<span class="corp-logo">${symbol}</span>`;
+      tagMap[`[logo_${name}]`] =
+        `<span class="corp-logo">${symbol} ${text}</span>`;
+      tagMap[`[logo_${name}_small]`] =
+        `<span class="corp-logo">${symbol}</span>`;
     });
 
     const tagPattern = new RegExp(
-      Object.keys(tagMap).map(key => key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|"),
-      "g"
+      Object.keys(tagMap)
+        .map((key) => key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+        .join("|"),
+      "g",
     );
 
-    let result = text.replace(tagPattern, match => tagMap[match]);
+    let result = text.replace(tagPattern, (match) => tagMap[match]);
 
     // Complex replacements
     result = result
-      .replace(/\[redacted\](.*?)\[\/redacted\]/gs, (_, content) => 
-        `<span class="redacted">${"|".repeat(content.length)}</span>`)
-      .replace(/\[color=([^\]]+)\](.*?)\[\/color\]/gs, 
-        '<span style="color: $1;">$2</span>')
-      .replace(/\[lang=([^\]]+)\](.*?)\[\/lang\]/gs, 
-        '<span class="language" data-lang="$1" title="Language: $1">$2</span>');
+      .replace(
+        /\[redacted\](.*?)\[\/redacted\]/gs,
+        (_, content) =>
+          `<span class="redacted">${"|".repeat(content.length)}</span>`,
+      )
+      .replace(
+        /\[color=([^\]]+)\](.*?)\[\/color\]/gs,
+        '<span style="color: $1;">$2</span>',
+      )
+      .replace(
+        /\[lang=([^\]]+)\](.*?)\[\/lang\]/gs,
+        '<span class="language" data-lang="$1" title="Language: $1">$2</span>',
+      );
 
     return result;
   }
 
   function extractHeaders(text) {
     const lines = text.split(/\r?\n/);
-    let name = "", desc = "", i = 0;
+    let name = "",
+      desc = "",
+      i = 0;
 
     while (i < lines.length) {
       const line = lines[i].trim();
@@ -627,10 +725,13 @@ EXECUTIVE COMMAND INTERFACE[/center]
   function populateTemplateSelector() {
     if (!dom.templateMatrix) return;
 
-    dom.templateMatrix.innerHTML = state.templates.map((template, index) => 
-      `<option value="${template.file}" data-description="${template.description || ""}" 
-        ${index === 0 ? 'selected' : ''}>${template.name}</option>`
-    ).join('');
+    dom.templateMatrix.innerHTML = state.templates
+      .map(
+        (template, index) =>
+          `<option value="${template.file}" data-description="${template.description || ""}" 
+        ${index === 0 ? "selected" : ""}>${template.name}</option>`,
+      )
+      .join("");
   }
 
   function toggleTerminal() {
@@ -643,7 +744,7 @@ EXECUTIVE COMMAND INTERFACE[/center]
   }
 
   function getCurrentOutput() {
-    return state.currentRaw || dom.terminalSurface?.textContent || "";
+    return state.currentRaw || dom.terminalSurface?.value || "";
   }
 
   async function copyOutput() {
@@ -686,7 +787,7 @@ Generated: ${utils.formatTime()} ${utils.formatDate()}
 
 ${content}`;
     const fileName = `SCC_Document_${state.officerId}_${Date.now()}.txt`;
-    
+
     const blob = new Blob([headerContent], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
 
@@ -700,62 +801,14 @@ ${content}`;
 
     // Clear fields after download
     if (state.currentTemplate?.fields) {
-      state.currentTemplate.fields.forEach(field => {
+      state.currentTemplate.fields.forEach((field) => {
         field.value = "";
-        const element = document.getElementById(field.id);
-        if (element) {
-          if (field.type === "job") {
-            element.textContent = '[SELECT ASSIGNMENT]';
-            element.title = '[SELECT ASSIGNMENT]';
-            element.className = 'job-button empty';
-          } else {
-            element.value = "";
-          }
-        }
       });
       updateFieldCounter();
       generateOutput();
       saveFieldsToStorage();
     }
   }
-
-  // Dashboard Management
-  const DashboardManager = {
-    initialize() {
-      this.setupDashboardTabs();
-      this.updateDashboard();
-      setInterval(() => this.updateDashboard(), 5000);
-    },
-
-    setupDashboardTabs() {
-      document.querySelectorAll(".dashboard-tab").forEach((tab) => {
-        tab.addEventListener("click", (e) => {
-          const popupType = e.target.dataset.window;
-          if (popupType) this.openDashboardPopup(popupType);
-        });
-      });
-    },
-
-    openDashboardPopup(type) {
-      if (window.SCC_DASHBOARD_POPUP) {
-        window.SCC_DASHBOARD_POPUP.showPopup(type);
-      }
-    },
-
-    updateDashboard() {
-      // Update dashboard overview cards
-      const personnelEl = document.getElementById("overviewPersonnel");
-      const treasuryEl = document.getElementById("overviewTreasury");
-      const alertsEl = document.getElementById("overviewAlerts");
-
-      if (personnelEl) personnelEl.textContent = state.dashboard.personnel.toString();
-      if (treasuryEl) treasuryEl.textContent = `${state.dashboard.treasury.toLocaleString()} cr`;
-      if (alertsEl) {
-        alertsEl.textContent = state.dashboard.alertLevel;
-        alertsEl.className = `card-value alert-level-${state.dashboard.alertLevel.toLowerCase()}`;
-      }
-    }
-  };
 
   function setupEventHandlers() {
     // Template selector
@@ -778,7 +831,9 @@ ${content}`;
     // Terminal editing
     if (dom.terminalSurface) {
       dom.terminalSurface.addEventListener("input", handleTerminalEdit);
-      dom.terminalSurface.addEventListener("paste", () => setTimeout(handleTerminalEdit, 0));
+      dom.terminalSurface.addEventListener("paste", () =>
+        setTimeout(handleTerminalEdit, 0),
+      );
     }
 
     // Data clearing
@@ -793,10 +848,16 @@ ${content}`;
   async function initialize() {
     // Initialize DOM references
     [
-      "templateMatrix", "templateMetadata",
-      "previewSurface", "terminalSurface",
-      "galacticTime", "executiveAuth", "commandCipher", "processDocument", "fieldCounter"
-    ].forEach(id => dom[id] = document.getElementById(id));
+      "templateMatrix",
+      "templateMetadata",
+      "previewSurface",
+      "terminalSurface",
+      "galacticTime",
+      "executiveAuth",
+      "commandCipher",
+      "processDocument",
+      "fieldCounter",
+    ].forEach((id) => (dom[id] = document.getElementById(id)));
 
     // Load saved authentication
     ["officer", "shift"].forEach((type, i) => {
@@ -808,7 +869,6 @@ ${content}`;
     terminal.initializeInputs();
     terminal.startSystemClock();
     setupEventHandlers();
-    DashboardManager.initialize();
     scrollSync.init();
     await templates.loadList();
     generateOutput();
@@ -825,117 +885,25 @@ ${content}`;
     }, CONFIG.shiftTimeout);
   }
 
-  // Dashboard Popup System
-  window.SCC_DASHBOARD_POPUP = {
-    currentPopup: null,
-    
-    showPopup(type) {
-      const modules = {
-        personnel: { name: "SCC_PERSONNEL", title: "Personnel Management" },
-        financial: { name: "SCC_FINANCIAL", title: "Financial Operations" },
-        manifest: { name: "SCC_MANIFEST", title: "Crew Manifest" },
-        operations: { name: "SCC_OPERATIONS", title: "Operations Control" },
-      };
-
-      const moduleInfo = modules[type];
-      if (moduleInfo && window[moduleInfo.name]) {
-        const module = window[moduleInfo.name];
-        const content = module.generateContent();
-        this.currentPopup = type;
-        this.createPopup(moduleInfo.title, content, module);
-      }
-    },
-    
-    getCurrentPopup() {
-      return this.currentPopup;
-    },
-    
-    closePopup() {
-      const existingPopup = document.querySelector('.dashboard-popup-overlay');
-      if (existingPopup) {
-        existingPopup.remove();
-        this.currentPopup = null;
-      }
-    },
-    
-    createPopup(title, content, module) {
-      // Remove existing popup if any
-      const existingPopup = document.querySelector('.dashboard-popup-overlay');
-      if (existingPopup) {
-        existingPopup.remove();
-      }
-
-      // Create popup overlay
-      const overlay = document.createElement('div');
-      overlay.className = 'dashboard-popup-overlay';
-      
-      // Create popup content
-      overlay.innerHTML = `
-        <div class="dashboard-popup">
-          <div class="dashboard-popup-header">
-            <div class="dashboard-popup-title">${title}</div>
-            <div class="dashboard-popup-status">ACTIVE</div>
-            <button class="dashboard-popup-close" onclick="this.closest('.dashboard-popup-overlay').remove()">×</button>
-          </div>
-          <div class="dashboard-popup-content">
-            ${content}
-          </div>
-        </div>
-      `;
-
-      // Add to DOM
-      document.body.appendChild(overlay);
-      
-      // Trigger animation
-      setTimeout(() => {
-        overlay.classList.add('active');
-      }, 10);
-
-      // Bind events if module has bindEvents method
-      if (module && typeof module.bindEvents === 'function') {
-        module.bindEvents(overlay);
-      }
-
-      // Close on escape key
-      const handleEscape = (e) => {
-        if (e.key === 'Escape') {
-          overlay.remove();
-          this.currentPopup = null;
-          document.removeEventListener('keydown', handleEscape);
-        }
-      };
-      document.addEventListener('keydown', handleEscape);
-
-      // Close on overlay click
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-          overlay.remove();
-          this.currentPopup = null;
-          document.removeEventListener('keydown', handleEscape);
-        }
-      });
-
-      return overlay;
-    }
-  };
-
-  // Public API for dashboard modules
+  // Public API
   window.SCC_TERMINAL = {
     updateField(fieldId, value) {
-      const field = state.currentTemplate?.fields.find(f => f.id === fieldId);
+      const field = state.currentTemplate?.fields.find((f) => f.id === fieldId);
       if (field) {
         field.value = value;
         generateOutput();
         saveFieldsToStorage();
       }
     },
-    
+
     getFieldValue(fieldId) {
-      return state.currentTemplate?.fields.find(f => f.id === fieldId)?.value || "";
+      return (
+        state.currentTemplate?.fields.find((f) => f.id === fieldId)?.value || ""
+      );
     },
 
-    updateDashboard(data) {
-      Object.assign(state.dashboard, data);
+    isFieldsLocked() {
+      return terminal.isFieldsLocked();
     },
 
     clearData() {
@@ -946,21 +914,22 @@ ${content}`;
       state.currentRaw = "";
       state.fieldsFilled = 0;
       state.totalFields = 0;
-      
+
       if (dom.executiveAuth) dom.executiveAuth.value = "";
       if (dom.commandCipher) dom.commandCipher.value = "";
       if (dom.previewSurface) dom.previewSurface.innerHTML = "";
-      if (dom.terminalSurface) dom.terminalSurface.innerHTML = "";
+      if (dom.terminalSurface) dom.terminalSurface.value = "";
       if (dom.fieldCounter) dom.fieldCounter.textContent = "0 / 0";
-      
+
       terminal.updateFieldsLock();
-    }
+    },
   };
 
   // Scroll synchronization between terminal and preview panels
   const scrollSync = {
-    isScrolling: false,
-    syncTimeout: null,
+    lastScrollSource: null,
+    lastScrollTime: 0,
+    syncFrame: null,
 
     init() {
       this.setupScrollListeners();
@@ -973,25 +942,48 @@ ${content}`;
       if (!terminalSurface || !previewSurface) return;
 
       // Terminal to Preview sync
-      terminalSurface.addEventListener('scroll', (e) => {
-        if (this.isScrolling) return;
-        this.syncScroll(terminalSurface, previewSurface);
-      });
+      terminalSurface.addEventListener(
+        "scroll",
+        () => {
+          this.handleScroll(terminalSurface, previewSurface);
+        },
+        { passive: true },
+      );
 
       // Preview to Terminal sync
-      previewSurface.addEventListener('scroll', (e) => {
-        if (this.isScrolling) return;
-        this.syncScroll(previewSurface, terminalSurface);
+      previewSurface.addEventListener(
+        "scroll",
+        () => {
+          this.handleScroll(previewSurface, terminalSurface);
+        },
+        { passive: true },
+      );
+    },
+
+    handleScroll(source, target) {
+      const now = Date.now();
+
+      // If the target just scrolled within the last 100ms, ignore this event
+      // to prevent feedback loop
+      if (this.lastScrollSource === target && now - this.lastScrollTime < 100) {
+        return;
+      }
+
+      // Cancel any pending sync
+      if (this.syncFrame) {
+        cancelAnimationFrame(this.syncFrame);
+      }
+
+      // Schedule sync on next frame for smooth animation
+      this.syncFrame = requestAnimationFrame(() => {
+        this.syncScroll(source, target);
       });
     },
 
     syncScroll(source, target) {
-      this.isScrolling = true;
-      
-      // Clear any existing timeout
-      if (this.syncTimeout) {
-        clearTimeout(this.syncTimeout);
-      }
+      // Mark this source as the last one that scrolled
+      this.lastScrollSource = source;
+      this.lastScrollTime = Date.now();
 
       // Calculate scroll percentage
       const scrollTop = source.scrollTop;
@@ -1001,14 +993,9 @@ ${content}`;
       // Apply scroll to target
       const targetScrollHeight = target.scrollHeight - target.clientHeight;
       const targetScrollTop = targetScrollHeight * scrollPercentage;
-      
-      target.scrollTop = targetScrollTop;
 
-      // Reset scrolling flag after a short delay
-      this.syncTimeout = setTimeout(() => {
-        this.isScrolling = false;
-      }, 50);
-    }
+      target.scrollTop = targetScrollTop;
+    },
   };
 
   // Initialize when ready
