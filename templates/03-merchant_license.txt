@@ -33,7 +33,7 @@ Chainlink Expeditionary Vessel – SCCV Horizon
 [center]Operational Conditions[/center][/b]
 [list]1. [[field]] | Merchant and crew must obey SCC vessel regulations and orders from the Internal Security Department or Vessel Command while aboard.
 
-2. [[field]] | Concealed personal defense arms are permitted unless specifically banned by a Command Authority.
+2. [[field]] | Concealed personal defense arms, coloquially known as "sidearms"; "handguns"; "pistols"; and all other similar-type arms, are permitted unless specifically banned by a Command Authority.
 
 3. [[field]] | Merchant wares and personal arms are protected under Standard Operating Procedure and are not contraband while aboard the merchant’s vessel; the Internal Security Department may not confiscate or impound the aforementioned except in cases of emergency or illegality.
 
@@ -41,7 +41,7 @@ Chainlink Expeditionary Vessel – SCCV Horizon
 
 5. [[field]] | The merchant’s authority extends only within their own vessel; none is held aboard SCC property.
 
-6. [[field]] | Contraband includes restricted military weapons, improvised weaponry, unlicensed pharmaceuticals, and unauthorized experimental goods.
+6. [[field]] | Contraband includes, but is not limited to, restricted military weapons, improvised weaponry, unlicensed pharmaceuticals, and unauthorized experimental goods.
 
 7. [[field]] | Violations, such as contraband trade, failure to declare cargo, or anti-corporate conduct, will result in license revocation and possible legal action.
 [/list]
