@@ -1,0 +1,77 @@
+Name: SCC Merchant License Authorization
+Desc: Authorize an external merchant to dock with the SCCV Horizon and conduct commerce under SCC oversight
+[small][center][b][logo_scc]
+Stellar Corporate Conglomerate[/b]
+Chainlink Expeditionary Vessel – SCCV Horizon
+[h2]CC-ML-0301 – Temporary Merchant Docking & Trade License[/h2][/center][hr][small][b]NOTICE:[/b]
+[list][*]Issued under the authority of the Stellar Corporate Conglomerate ("SCC") and the SCCV Horizon Standard Operating Procedure.
+
+[*]Approved External Business Partners (“Merchants”) possessing a valid SCC license may dock and conduct trade aboard SCC facilities, provided they comply with vessel regulations and Command directives.
+
+[*]Merchants hold authority only aboard their own vessel and may offer or refuse services at their discretion. If allocated a trading spot on an SCC facility, the Internal Security Department shall be responsible for enforcing a refusal of service and shall exclude the individual from the Authorized Operating Areas if permissable under Corporate Regulations and Federal Republic of Biesel law.
+
+[*]All goods must be declared and are subject to SCC inspection on request.
+
+[*]Unauthorized commerce, possession of contraband, or breach of these terms may result in revocation of docking rights, fines, or legal prosecution under SCC Corporate Regulations.[/list][/small][hr]
+[b][center]Merchant Information[/center][/b]
+[table][row][cell][b]Merchant / Company:[/b] [field]
+[cell][b]Representative Name:[/b] [field]
+[cell][b]License ID / Pass #:[/b] [field]
+[cell][b]Vessel Designation:[/b] [field]
+[row][cell][b]Date / Time Issued:[/b] [date] – [time]
+[cell][b]Valid From:[/b] [field]
+[cell][b]Expires On:[/b] [field]
+[cell][b]Assigned Dock / Sector:[/b] [field]
+[/table]
+[hr]
+[b][center]Trade Permissions[/center][/b]
+[table][row][cell][b]Approved Commerce Types:[/b] [field]
+[cell][b]Authorized Operating Areas:[/b] [field]
+[cell][b]Cargo Manifest:[/b] [field]
+[/table]
+[hr][b]
+[center]Operational Conditions[/center][/b]
+[list]1. [[field]] | Merchant and crew must obey SCC vessel regulations and orders from the Internal Security Department or Vessel Command while aboard.
+
+2. [[field]] | Concealed personal defense arms are permitted unless specifically banned by a Command Authority.
+
+3. [[field]] | Merchant wares and personal arms are protected under Standard Operating Procedure and are not contraband while aboard the merchant’s vessel; the Internal Security Department may not confiscate or impound the aforementioned except in cases of emergency or illegality.
+
+4. [[field]] | Possession or trade of illegal drugs is strictly forbidden under Biesellite law; violations constitute contraband (i212).
+
+5. [[field]] | The merchant’s authority extends only within their own vessel; none is held aboard SCC property.
+
+6. [[field]] | Contraband includes restricted military weapons, improvised weaponry, unlicensed pharmaceuticals, and unauthorized experimental goods.
+
+7. [[field]] | Violations, such as contraband trade, failure to declare cargo, or anti-corporate conduct, will result in license revocation and possible legal action.
+[/list]
+[hr]
+[b][center]Issued By (choose one):[/center][/b][table]
+[cell][b]Captain:[/b]
+[field]
+
+[b]Signature:[/b]
+[field]
+[cell][b]Executive Officer:[/b] [officername]
+
+[b]Signature:[/b]
+[sign]
+[cell][b]Operations Manager:[/b]
+[field]
+
+[b]Signature:[/b]
+[field]
+[cell][b]SCC Corporate Liasion:[/b]
+[field]
+
+[b]Signature:[/b]
+[field]
+[cell][b]Idris Incorporated Corporate Liasion:[/b]
+[field]
+
+[b]Signature:[/b]
+[field]
+[/table]
+[hr]
+[center][barcode][/center]
+[/small]
