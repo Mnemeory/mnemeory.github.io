@@ -1,0 +1,81 @@
+Name: SCC Service Rationing Guidelines
+Desc: Flyer to outline restrictions due to rationing.
+[center][logo_scc]
+
+Lola Lavish, J.D. M.B.A.
+Office of the Executive Officer
+SCCV Horizon
+
+Stellar Corporate Conglomerate
+[i]The Unbreakable Chainlink, Holding the Spur Together.[/i]
+[hr][b]MEMORANDUM ON RATIONING GUIDELINES FOR SERVICE PERSONNEL[/b]
+October 22, 2467
+[/center]
+[list]Hello my little ducklings,
+
+It is with great sorrow that I write to let you all know that given the recent supply issue we will have to take corrective measure insofar as the cost of the goods offered, and the quality of goods offered, at our Service facilities for the foreseeable future. 
+
+The following dictates how it applies to your specific workplace:
+
+[table][row][cell][u]Janitorial[/u]
+[list][*]Main Walkways, the Bar, the Kitchen, Medical, Security, Engineering, and Command are to be prioritized. Other areas are to be handled after if supplies permit;
+
+[*]Sterilization agents should be reserved for Medical and Command.
+
+[*]Waste should be assessed for value prior to disposal, if of some value, it is to be stored or given to the Office of the Executive Officer.[/list]
+[row][cell][u]Bar:[/u]
+[list][*]Liqour now costs credits, beer and wine is free.
+
+[*]Top Shelf Liqour (15cr per 1.5oz shot) is restricted to Command, Medical, and VIPs (Consulars, Liasions, Merchants, etc.);
+
+[*] Call Liqour (10cr per 1.5oz shot) is restricted to Engineering, Security, Command Support;
+
+[*] Well Liqour (5cr per 1.5oz shot)is restricted to Operations, Service, Independents, and Visitors.
+
+[*]When in doubt, Well should be used.
+
+[row][cell][u]Kitchen:[/u]
+[list][*]Chefs are instructed to develop three basic four course menus. One for carnivorious diets, one for omnivorious diets, and one for herbivorious diets. Each menu should consist of:
+[list][*] x1 Breakfast Item, 
+[*] x1 Lunch Item,
+[*] x1 Dinner Item, and 
+[*] x1 Dessert Item.
+
+[/list]Anything on these menus is to be considered free. For any order off-menu, a 25cr charge is to be applied.
+
+[*]The following dishes are reserved for VIPS (Consulars, Liasions, Merchants, etc.). These dishes should not be offered to Crew unless approved by Command:
+[list][*] Aesir Salad,
+[*] Baked Golden Apple,
+[*] Breakfast of Champions,
+[*] Fermented Hma'trra Sandwich,
+[*] Golden Apple Streusel Tart,
+[*] Imperial Pot,
+[*] Jelly Stew,
+[*] Korlaaskak,
+[*] Kraken Soup,
+[*] Matsuul,
+[*] Neaera Stew,
+[*] North Sixty Sea Platter,
+[*] Razir Noodles,
+[*] Ras'val Pasta, and
+[*] Seafood Mousse.
+[/list]                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+[row][cell][u]Library:[/u]          
+[list]A publication fee should be charged, 10cr for every book bound or published.
+
+[row][cell][u]Press Services:[/u][list]No changes.
+
+[row][cell][u]Religious Services:[/u]
+[list]No changes.
+
+[/table][/list]
+[list]Let me know if you have any questions!
+
+Tata,
+Lola
+
+Lola Lavish, J.D. M.B.A
+Executive Officer
+Office of the Executive Officer
+SCCV Horizon
+Stellar Corporate Conglomerate[/list][hr]
