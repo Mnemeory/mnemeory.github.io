@@ -1,0 +1,167 @@
+/* ================================================
+   CORKBOARD INVESTIGATION - 1960s Sicilian Mob Detective Board
+   Complete redesign - zero similarity to previous ledger
+   ================================================ */
+
+/* ================================================
+   DESIGN TOKENS - Period Color Palette
+   ================================================ */
+:root {
+  /* Cork Board Colors */
+  --cork-base: #8B6F47;
+  --cork-dark: #6B5644;
+  --cork-grain: #A67C52;
+  --cork-shadow: #4A3B2F;
+  
+  /* Aged Paper & Polaroid */
+  --paper-polaroid: #FEFEF8;
+  --paper-aged: #F5F0E1;
+  --paper-manila: #E6D7B8;
+  --paper-yellow: #FFF8DC;
+  --paper-carbon: #E8E8F0;
+  
+  /* Period Inks */
+  --ink-typewriter: #1A1A1A;
+  --ink-ballpoint-blue: #2B4C7E;
+  --ink-ballpoint-black: #0D0D0D;
+  --ink-redpen: #B8252C;
+  --ink-stamp-faded: #5C4033;
+  --ink-pencil: #4A4A4A;
+  --ink-faded: #888888;
+  
+  /* Metal Pins & Tacks */
+  --pin-brass: #B8A070;
+  --pin-brass-dark: #8B7355;
+  --pin-red: #A63232;
+  --pin-silver: #C0C0C0;
+  --pin-shadow: rgba(0, 0, 0, 0.4);
+  
+  /* Stains & Wear */
+  --stain-coffee: rgba(101, 67, 33, 0.15);
+  --stain-grease: rgba(139, 119, 101, 0.2);
+  --stain-water: rgba(120, 120, 120, 0.08);
+  --burn-cigarette: #2C1810;
+  
+  /* Typography - Period Fonts */
+  --font-typewriter: 'Courier Prime', 'Courier', monospace;
+  --font-stamp: 'Oswald', sans-serif;
+  
+  /* Type Sizes */
+  --text-xs: 0.8rem;
+  --text-sm: 0.9rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 1.875rem;
+  --text-3xl: 2.5rem;
+  --text-stamp: 2rem;
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 0.75rem;
+  --space-lg: 1rem;
+  --space-xl: 1.5rem;
+  --space-2xl: 2rem;
+  --space-3xl: 3rem;
+  
+  /* Z-Index Layers - Complete Scale */
+  --z-cork: 1;
+  --z-pins-back: 8;
+  --z-paper: 10;
+  --z-polaroid: 15;
+  --z-pins-front: 20;
+  --z-stamp: 25;
+  --z-roster-button: 100;
+  --z-feedback: 500;
+  --z-frame: 9999;
+  --z-modal-seal: 10000;
+  --z-loading: 15000;
+  --z-modal-roster: 20000;
+  --z-modal-roster-close: 20001;
+  
+  /* Shadows - Realistic Depth */
+  --shadow-pin: 0 2px 3px var(--pin-shadow);
+  --shadow-paper: 2px 3px 8px rgba(0, 0, 0, 0.25);
+  --shadow-polaroid: 3px 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 4px 6px 16px rgba(0, 0, 0, 0.35);
+  
+  /* Card Rotation Angles */
+  --rotate-card-1: -2.5deg;
+  --rotate-card-2: 2.3deg;
+  --rotate-card-3: -1.2deg;
+  --rotate-card-4: 1.8deg;
+  --rotate-card-5: -3deg;
+  --rotate-card-6: 2.7deg;
+  --rotate-card-7: 2.8deg;
+  --rotate-territory-1: 2.1deg;
+  --rotate-territory-2: -1.9deg;
+  --rotate-territory-3: 0.9deg;
+  --rotate-territory-4: -2.4deg;
+  --rotate-territory-5: 1.6deg;
+  --rotate-territory-6: -1.1deg;
+  --rotate-territory-7: 2.8deg;
+}
+
+/* ================================================
+   BASE RESET
+   ================================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: var(--font-typewriter);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--ink-typewriter);
+  background: #2a2a2a;
+  position: relative;
+  padding: 0;
+  margin: 0;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Wooden Frame Border */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  border: 40px solid transparent;
+  border-image: url('../images/wooden-frame.png') 40 stretch;
+  pointer-events: none;
+  z-index: var(--z-frame);
+  transition: opacity 0.3s ease;
+}
+
+/* Hide wooden frame when roster modal is active */
+body.roster-modal-open::before {
+  opacity: 0;
+}
+
+/* Corkboard inside frame */
+.ledger-book {
+  background: url('../images/corkbackground.jpeg') center center;
+  background-size: cover;
+  margin: 15px;
+  height: calc(100vh - 30px);
+  width: calc(100vw - 30px);
+  overflow: hidden;
+  position: relative;
+  z-index: var(--z-cork);
+}
+

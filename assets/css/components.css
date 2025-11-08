@@ -1,0 +1,544 @@
+/* ================================================
+   COLLECTIONS - Typewritten List on Paper
+   ================================================ */
+
+.table-wrapper {
+  background: 
+    url('../images/paper-texture-2.jpg'),
+    var(--paper-carbon);
+  background-blend-mode: multiply;
+  background-size: cover;
+  padding: 20px 18px;
+  box-shadow: var(--shadow-paper);
+  border: 1px solid rgba(139, 119, 101, 0.2);
+  transform: rotate(0.7deg);
+  position: relative;
+}
+
+/* Coffee ring stain */
+.table-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 15px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--stain-coffee);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.the-books {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-typewriter);
+  font-size: var(--text-base);
+  color: var(--ink-typewriter);
+  table-layout: fixed;
+}
+
+/* Adjust column widths for better fit */
+.the-books thead th:nth-child(1) { width: 12%; } /* Start Date */
+.the-books thead th:nth-child(2) { width: 18%; } /* Business */
+.the-books thead th:nth-child(3) { width: 12%; } /* Nightly */
+.the-books thead th:nth-child(4) { width: 20%; } /* Made By */
+.the-books thead th:nth-child(5) { width: 18%; } /* Contact */
+.the-books thead th:nth-child(6) { width: 20%; } /* Notes */
+
+.the-books thead th {
+  text-align: center;
+  padding: 10px 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--ink-typewriter);
+  font-size: 0.82rem;
+}
+
+.the-books tbody td {
+  padding: 12px 8px;
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.2);
+  vertical-align: middle;
+  font-size: 0.95rem;
+  position: relative;
+  z-index: 1;
+}
+
+
+.collection-location {
+  color: var(--ink-typewriter);
+  font-size: 0.9rem;
+  word-wrap: break-word;
+}
+
+.collection-contact,
+.collection-made {
+  font-weight: 600;
+  color: var(--ink-ballpoint-blue);
+  font-size: 0.9rem;
+  word-wrap: break-word;
+}
+
+.collection-start {
+  color: var(--ink-pencil-gray);
+  line-height: 1.3;
+  word-break: break-word;
+  font-size: 0.9rem;
+}
+
+.collection-nightly {
+  font-weight: 600;
+  color: var(--ink-typewriter);
+}
+
+.collection-notes {
+  font-size: 0.82rem;
+  color: var(--ink-pencil-gray);
+  max-width: 200px;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.the-books tbody tr {
+  position: relative;
+}
+
+/* Status watermark on collection rows */
+.collection-row::after {
+  content: attr(data-status-text);
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  display: inline-block;
+  width: fit-content;
+  font-family: var(--font-stamp);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  opacity: 0.7;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 0;
+  border: 0.1px solid currentColor;
+  padding: 0;
+  line-height: 1;
+}
+
+/* Status-based watermark colors */
+.collection-row[data-status="current"]::after {
+  color: #4CAF50;
+}
+
+.collection-row[data-status="suspended"]::after,
+.collection-row[data-status="late"]::after {
+  color: #BC8E08;
+}
+
+.collection-row[data-status="terminated"]::after,
+.collection-row[data-status="refusing"]::after {
+  color: #D32F2F;
+}
+
+/* Status highlighting */
+.collection-row[data-status="terminated"],
+.collection-row[data-status="refusing"] {
+  background: rgba(184, 37, 44, 0.04);
+}
+
+.numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.numeric.collection-nightly {
+  text-align: left;
+}
+
+.money {
+  color: var(--ink-ballpoint-blue);
+  font-weight: 600;
+}
+
+.money.warning {
+  color: var(--ink-redpen);
+  font-weight: 700;
+}
+
+/* ================================================
+   VENDETTA - Mugshot Polaroids Scattered
+   ================================================ */
+
+.vendetta-ledger {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2xl);
+  margin-top: var(--space-xl);
+}
+
+.vendetta-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 0.75;
+  background: 
+    url('../images/paper-texture-1.jpg'),
+    var(--paper-polaroid);
+  background-blend-mode: multiply;
+  background-size: cover;
+  padding: 12px 12px 25px 12px;
+  box-shadow: var(--shadow-polaroid);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transform: rotate(var(--rotate-card-1));
+  transition: all 0.2s ease;
+}
+
+.vendetta-card::after,
+.territory-card::after {
+  content: '(click to view)';
+  position: absolute;
+  bottom: 5px;
+  right: 8px;
+  font-size: 0.65rem;
+  color: var(--ink-faded);
+  font-style: italic;
+  opacity: 0.6;
+}
+
+.clickable-card {
+  cursor: pointer;
+}
+
+.clickable-card:hover {
+  transform: rotate(0deg) scale(1.02);
+  z-index: 10;
+}
+
+.vendetta-card:nth-child(2n) {
+  transform: rotate(var(--rotate-card-2));
+}
+
+.vendetta-card:nth-child(2n):hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+.vendetta-card:nth-child(3n) {
+  transform: rotate(var(--rotate-card-3));
+}
+
+.vendetta-card:nth-child(4n) {
+  transform: rotate(var(--rotate-card-4));
+}
+
+.vendetta-card:nth-child(5n) {
+  transform: rotate(var(--rotate-card-5));
+}
+
+.vendetta-card:nth-child(6n) {
+  transform: rotate(var(--rotate-card-6));
+}
+
+.vendetta-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: rotate(0deg) translateY(-4px) !important;
+}
+
+/* Pin on polaroid */
+.vendetta-card::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, var(--pin-brass), var(--pin-brass-dark));
+  box-shadow: 
+    var(--shadow-pin),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.4);
+  z-index: var(--z-pins-front);
+}
+
+/* Red pin for blood debt */
+.vendetta-card[data-type="blood"]::before {
+  background: radial-gradient(circle at 30% 30%, #D32F2F, #B71C1C);
+}
+
+.vendetta-card[data-type="blood"] {
+  box-shadow: 
+    var(--shadow-polaroid),
+    0 0 0 2px rgba(211, 47, 47, 0.25);
+}
+
+/* Green pin for financial debt */
+.vendetta-card[data-type="financial"]::before {
+  background: radial-gradient(circle at 30% 30%, #4CAF50, #2E7D32);
+}
+
+.vendetta-header {
+  background: rgba(0, 0, 0, 0.04);
+  padding: 15px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+.target-name {
+  font-family: var(--font-typewriter);
+  font-size: var(--text-base);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  margin: 0;
+}
+
+.vendetta-type {
+  display: inline-block;
+  padding: 2px 7px 4px 7px;
+  font-family: var(--font-typewriter);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+.vendetta-type.blood {
+  background: #D32F2F;
+  color: var(--paper-polaroid);
+}
+
+.vendetta-type.financial {
+  background: #4CAF50;
+  color: var(--paper-polaroid);
+}
+
+.target-offense {
+  font-family: var(--font-typewriter);
+  font-size: var(--text-sm);
+  color: var(--ink-ballpoint-blue);
+  line-height: 1.5;
+  margin: 8px 0;
+  font-style: italic;
+}
+
+.card-detail-row {
+  display: flex;
+  gap: 6px;
+  font-family: var(--font-typewriter);
+  font-size: 0.85rem;
+  color: var(--ink-ballpoint-black);
+  margin: 4px 0;
+  line-height: 1.3;
+}
+
+.card-detail-row .label {
+  font-weight: 700;
+  min-width: 55px;
+  flex-shrink: 0;
+}
+
+.card-detail-row .value {
+  flex: 1;
+}
+
+.made-name {
+  font-weight: 700;
+  color: var(--ink-stamp-faded);
+}
+
+.card-preview {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--ink-faded);
+}
+
+
+/* ================================================
+   TERRITORY - Geographic Polaroid Clusters
+   ================================================ */
+
+.territory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+}
+
+.territory-card {
+  position: relative;
+  width: 100%;
+  background: 
+    url('../images/paper-texture-1.jpg'),
+    #FFE87C;
+  background-blend-mode: multiply;
+  background-size: cover;
+  padding: 8px 8px 28px 8px;
+  box-shadow: var(--shadow-polaroid);
+  border: 1px solid rgba(255, 232, 124, 0.3);
+  transform: rotate(var(--rotate-territory-1));
+  transition: all 0.2s ease;
+}
+
+.territory-card:nth-child(2n) {
+  transform: rotate(var(--rotate-territory-2));
+}
+
+.territory-card:nth-child(3n) {
+  transform: rotate(var(--rotate-territory-3));
+}
+
+.territory-card:nth-child(4n) {
+  transform: rotate(var(--rotate-territory-4));
+}
+
+.territory-card:nth-child(5n) {
+  transform: rotate(var(--rotate-territory-5));
+}
+
+.territory-card:nth-child(6n) {
+  transform: rotate(var(--rotate-territory-6));
+}
+
+.territory-card:nth-child(7n) {
+  transform: rotate(var(--rotate-territory-7));
+}
+
+.territory-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: rotate(0deg) translateY(-3px) !important;
+}
+
+/* Status-based pin colors */
+.territory-card::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  box-shadow: 
+    var(--shadow-pin),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.4);
+  z-index: var(--z-pins-front);
+}
+
+/* Neutral - Gray pushpin */
+.territory-card[data-status="Neutral"]::before {
+  background: radial-gradient(circle at 30% 30%, #808080, #5A5A5A);
+}
+
+/* Uncontrolled - Light gray pushpin */
+.territory-card[data-status="Uncontrolled"]::before {
+  background: radial-gradient(circle at 30% 30%, #B0B0B0, #8A8A8A);
+}
+
+/* Controlled - Green pushpin */
+.territory-card[data-status="Controlled"]::before {
+  background: radial-gradient(circle at 30% 30%, #4CAF50, #2E7D32);
+}
+
+/* Contested - Orange pushpin */
+.territory-card[data-status="Contested"]::before {
+  background: radial-gradient(circle at 30% 30%, #FF9800, #E65100);
+}
+
+/* Shared (including "Shared with Camarilla") - Blue pushpin */
+.territory-card[data-status*="Shared"]::before {
+  background: radial-gradient(circle at 30% 30%, #2196F3, #1565C0);
+}
+
+/* Expanding - Gold pushpin */
+.territory-card[data-status="Expanding"]::before {
+  background: radial-gradient(circle at 30% 30%, #D4AF37, #B8960C);
+}
+
+.territory-name {
+  font-family: var(--font-typewriter);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin: 0 0 6px 0;
+  padding-top: 12px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.territory-status {
+  font-family: var(--font-typewriter);
+  font-size: 0.8rem;
+  color: var(--ink-ballpoint-blue);
+  text-align: center;
+  font-style: italic;
+  margin-bottom: 8px;
+}
+
+.territory-stat {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-typewriter);
+  font-size: 0.8rem;
+  padding: 3px 0;
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.15);
+}
+
+.territory-stat:last-child {
+  border-bottom: none;
+}
+
+.territory-stat .label {
+  color: var(--ink-pencil);
+  font-weight: 600;
+}
+
+.territory-stat .value {
+  font-weight: 400;
+}
+
+.territory-stat .value.money {
+  color: var(--ink-ballpoint-blue);
+  font-weight: 700;
+}
+
+.territory-businesses {
+  font-family: var(--font-typewriter);
+  font-size: 0.85rem;
+  font-weight: 400;
+  text-align: center;
+  margin-top: 8px;
+  color: var(--ink-ballpoint-black);
+}
+
+.territory-businesses .more-indicator {
+  font-style: italic;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.territory-notes {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.2);
+  font-family: var(--font-typewriter);
+  font-size: 0.75rem;
+  color: var(--ink-ballpoint-black);
+  line-height: 1.5;
+}
+
+/* Notes with column layout for longer content */
+.territory-notes.columns {
+  column-count: 3;
+  column-gap: 8px;
+}
+
+.territory-notes.long-note {
+  max-height: none;
+  text-align: left;
+}

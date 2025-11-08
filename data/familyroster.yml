@@ -1,0 +1,60 @@
+# Family Roster
+
+boss:
+  - name: "Unelected"
+    status: "vacant"
+
+boss_consigliere:
+  - name: "Not Appointed"
+    status: "vacant"
+
+capo:
+  - name: "Luigi Giovanni"
+    clan: "Giovanni"
+    status: "active"
+
+consigliere:
+  - name: "Gaio Puttanesca"
+    assigned_capo: "Luigi Giovanni"
+    clan: "Giovanni"
+
+soldato:
+  - name: "Alex Puttanesca"
+    assigned_capo: "Luigi Giovanni"
+    clan: "Giovanni"
+    status: "active"
+
+  - name: "Paulie Puttanesca"
+    assigned_capo: "Luigi Giovanni"
+    clan: "Giovanni"
+    status: "active"
+
+  - name: "Vincenzo Giovanni"
+    assigned_capo: "Luigi Giovanni"
+    clan: "Giovanni"
+    status: "active"
+
+associate:
+  - name: "Roi Geant"
+    assigned_soldato: "Vincenzo Giovanni"
+    clan: "Nosferatu"
+    status: "active"
+  
+  - name: "Asano Mai"
+    assigned_consigliere: "Gaio Puttanesca"
+    clan: "Ghoul"
+    status: "active"
+
+  - name: "Lucius Sadler"
+    assigned_consigliere: "Gaio Puttanesca"
+    clan: "Ghoul"
+    status: "active"
+
+  - name: "Ganymedes"
+    assigned_soldato: "Vincenzo Giovanni"
+    clan: "Ghoul"
+    status: "active"
+  
+  - name: "Anthony Bianchi"
+    assigned_soldato: "Vincenzo Giovanni"
+    status: "active"

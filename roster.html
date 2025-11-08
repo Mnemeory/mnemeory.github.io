@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Roster | Clan Giovanni</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/roster.css">
+    <link rel="stylesheet" href="assets/css/utilities.css">
+    
+    <style>
+        html {
+            overflow: auto;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+        }
+        
+        html::-webkit-scrollbar {
+            width: 0 !important;
+            height: 0 !important;
+            display: none !important;
+        }
+        
+        body {
+            background: #2a2a2a;
+            overflow: auto;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+        }
+        
+        body::-webkit-scrollbar {
+            width: 0 !important;
+            height: 0 !important;
+            display: none !important;
+        }
+        
+        body::before {
+            display: none !important;
+        }
+        
+        .roster-wall {
+            min-height: 100vh;
+            width: 100%;
+            overflow: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .roster-wall::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+        
+        .roster-wall.show-scrollbar {
+            scrollbar-width: thin;
+            -ms-overflow-style: auto;
+        }
+        
+        .roster-wall.show-scrollbar::-webkit-scrollbar {
+            height: 12px;
+            width: 12px;
+        }
+        
+        .roster-wall.show-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+        }
+        
+        .roster-wall.show-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(212, 175, 55, 0.6);
+            border-radius: 6px;
+        }
+        
+        .roster-wall.show-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(212, 175, 55, 0.8);
+        }
+        
+        .roster-close-button {
+            position: fixed;
+        }
+    </style>
+</head>
+<body>
+    <button class="roster-close-button" aria-label="Close Family Roster">×</button>
+    
+    <div class="roster-wall">
+        <h1 class="roster-title">CLAN GIOVANNI</h1>
+        <div class="roster-subtitle">San Francisco, California</div>
+        <div id="organizationalChart" class="org-chart-container">
+            <svg id="orgChartLines" class="org-chart-lines-svg"></svg>
+        </div>
+    </div>
+    
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js" crossorigin="anonymous"></script>
+    <script>
+        if (typeof jsyaml === 'undefined') {
+            console.error('Failed to load js-yaml from CDN. YAML data will not load.');
+        }
+    </script>
+    
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/roster.js"></script>
+    <script src="assets/js/roster-lines.js"></script>
+    
+    <script>
+        (function() {
+            'use strict';
+            
+            window.addEventListener('message', function(event) {
+                if (event.data && event.data.action === 'populate') {
+                    if (window.populateFamilyRoster) {
+                        window.populateFamilyRoster();
+                    }
+                } else if (event.data && event.data.action === 'dataUpdate') {
+                    if (event.data.ledgerData) {
+                        window.ledgerData = event.data.ledgerData;
+                    }
+                }
+            });
+            
+            function init() {
+                const closeButton = document.querySelector('.roster-close-button');
+                if (closeButton) {
+                    closeButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        window.parent.postMessage({action: 'closeRoster'}, '*');
+                    });
+                }
+                
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        window.parent.postMessage({action: 'closeRoster'}, '*');
+                    }
+                });
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
+    
+    <script>
+        (function() {
+            const wall = document.querySelector('.roster-wall');
+            const chart = document.querySelector('.org-chart-container');
+            
+            document.addEventListener('mousemove', (e) => {
+                const distanceFromBottom = window.innerHeight - e.clientY;
+                
+                if (distanceFromBottom <= 20) {
+                    wall?.classList.add('show-scrollbar');
+                    chart?.classList.add('show-scrollbar');
+                } else {
+                    wall?.classList.remove('show-scrollbar');
+                    chart?.classList.remove('show-scrollbar');
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

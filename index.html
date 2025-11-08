@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Il Giovanni Libro Mastro | TFN</title>
+    
+    <link rel="icon" type="image/png" href="assets/images/Puttanesca.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/roster.css">
+    <link rel="stylesheet" href="assets/css/utilities.css">
+</head>
+<body>
+    <div class="ledger-book">
+        
+        <button class="family-roster-button" aria-label="Open Family Roster">
+            <img src="assets/images/GenericSeal.png" alt="Giovanni Family Seal" class="roster-button-image">
+        </button>
+        
+        <main class="ledger-page">
+            
+            <div class="header-cards">
+                <header class="ledger-header">
+                    <h1 class="ledger-title">LIBRO MASTRO</h1>
+                    <div class="ledger-subtitle">Registrazione Settimanale</div>
+                </header>
+            </div>
+            
+            <div id="sealModal" class="seal-modal">
+                <div class="seal-modal-content">
+                    <img id="sealModalImage" src="" alt="Official Seal" class="seal-modal-image">
+                </div>
+            </div>
+            
+            <div id="cardModal" class="seal-modal">
+                <div class="seal-modal-content">
+                    <div id="cardModalContent"></div>
+                </div>
+            </div>
+            
+            <div class="ledger-content">
+                
+                <section class="ledger-section" id="collections">
+                    <header class="section-header">
+                        <h2 class="section-title">RISCOSSIONI</h2>
+                        <span class="section-code">Section I - Nightly Collections</span>
+                    </header>
+                    
+                    <div class="table-wrapper">
+                        <table class="the-books" role="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Date Made</th>
+                                    <th scope="col">Business</th>
+                                    <th scope="col" class="numeric">Nightly</th>
+                                    <th scope="col">Made By</th>
+                                    <th scope="col">Contact</th>
+                                    <th scope="col">Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody id="collections-tbody">
+                                <tr>
+                                    <td colspan="6" class="text-center">Loading collections...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <section class="ledger-section" id="territory">
+                    <header class="section-header">
+                        <h2 class="section-title">CONTROLLO TERRITORIALE</h2>
+                        <span class="section-code">Section II - Family Holdings</span>
+                    </header>
+                    
+                    <div class="territory-grid" id="territory-container"></div>
+                </section>
+                
+                <section class="ledger-section" id="vendetta">
+                    <header class="section-header">
+                        <h2 class="section-title">DEBITI DI GIOVANNI</h2>
+                        <span class="section-code">Section III - Outstanding Vendettas</span>
+                    </header>
+                    
+                    <div class="vendetta-ledger" id="vendetta-container"></div>
+                </section>
+            </div>
+            
+            <div class="page-number" id="page-number">Page 147</div>
+            
+        </main>
+    </div>
+    
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js" crossorigin="anonymous"></script>
+    <script>
+        if (typeof jsyaml === 'undefined') {
+            console.error('Failed to load js-yaml from CDN. YAML data will not load.');
+        }
+    </script>
+    
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/data-loader.js"></script>
+    <script src="assets/js/roster.js"></script>
+    <script src="assets/js/roster-lines.js"></script>
+    <script src="assets/js/navigation.js"></script>
+    
+    <iframe id="familyRosterFrame" 
+            src="roster.html" 
+            class="roster-iframe"
+            allow="fullscreen"
+            title="Family Roster Organizational Chart"></iframe>
+</body>
+</html>

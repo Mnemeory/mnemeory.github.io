@@ -1,0 +1,64 @@
+# Territory Holdings
+
+- name: "Chinatown"
+  status: "Neutral"
+  la_squadra: []
+  la_famiglia: []
+  businesses: [Laundromat, Pawn Shop (Fence), Restaurant]
+  notes: "Controlled by the Axe Gang."
+
+- name: "Baywalk District"
+  status: "Uncontrolled"
+  la_squadra: []
+  la_famiglia: []
+  businesses: [Coffee House, Hospital, Hotel, Ice Cream Shop, Park, Medical Store, News Station]
+  notes: "Placeholder"
+
+- name: "Financial District"
+  status: "Shared with Camarilla"
+  la_squadra: [Alex Puttanesca, Gaio Puttanesca]
+  la_famiglia: [Asano Mai, Lucius Sadler]
+  businesses: [Baco Tell, Bianchi Bank (Safehouse), Community Center, DoRa Club, Endron HQ, Jazz Club, Library, Little Italy (Safehouse), Millenium Tower, Theatre]
+  notes: "Placeholder"
+
+- name: "Fisherman's Wharf"
+  status: "Uncontrolled"
+  la_squadra: []
+  la_famiglia: []
+  businesses: [Fence]
+  notes: "Placeholder"
+
+- name: "Ghetto"
+  status: "Uncontrolled"
+  la_squadra: []
+  la_famiglia: []
+  businesses: [Apartments, Cleaners, Veterinarian Clinic]
+  notes: "Placeholder"
+
+- name: "Outskirts"
+  status: "Controlled"
+  la_squadra: []
+  la_famiglia: []
+  businesses: [Giovanni Manor (Safehouse)]
+  notes: "The woods."
+
+- name: "Pacific Heights"
+  status: "Uncontrolled"
+  la_squadra: []
+  la_famiglia: []
+  businesses: [Alcoholics Anonymous, Bar, Church, Courthouse, Endron Processing Plant, Graveyard, Grid Substation, SFPD, Supply Depot, Taxi Depot]
+  notes: "Placeholder"
+
+- name: "Sewers"
+  status: "Uncontrolled"
+  la_squadra: []
+  la_famiglia: [Roi Keant]
+  businesses: []
+  notes: "Placeholder"
+
+- name: "Union Square"
+  status: "Uncontrolled"
+  la_squadra: []
+  la_famiglia: []
+  businesses: [Bubway, Camping Store, General Store, Shopping Mall]
+  notes: "Placeholder"
