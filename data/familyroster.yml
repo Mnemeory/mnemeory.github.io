@@ -5,18 +5,14 @@ boss:
     status: "vacant"
 
 boss_consigliere:
-  - name: "Not Appointed"
-    status: "vacant"
+  - name: "Gaio Puttanesca"
+    clan: "Giovanni"
+    status: "active"
 
 capo:
   - name: "Luigi Giovanni"
     clan: "Giovanni"
     status: "active"
-
-consigliere:
-  - name: "Gaio Puttanesca"
-    assigned_capo: "Luigi Giovanni"
-    clan: "Giovanni"
 
 soldato:
   - name: "Alex Puttanesca"

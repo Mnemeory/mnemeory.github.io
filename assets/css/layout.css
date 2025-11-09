@@ -17,10 +17,12 @@
 .header-cards {
   display: flex;
   gap: var(--space-xl);
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  margin: var(--space-xl) auto 0 auto;
+  margin: var(--space-xl) auto var(--space-lg) auto;
+  width: min(100%, 960px);
+  padding: 0 var(--space-lg);
 }
 
 /* ================================================

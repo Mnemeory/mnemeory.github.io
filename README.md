@@ -1,3 +1,10 @@
+### Mob Radio Playlist
+
+- Run `npm install` once to set up the workspace.
+- Generate the shuffled playlist manifest with `npm run generate:mobradio`. The script scans `assets/mobradio/` for `.mp3` files, normalizes their titles, and writes `assets/mobradio/playlist.json`.
+- The Mob Radio button reads the manifest at runtime and shows a tooltip with the active track title. If the manifest is missing, the control disables itself instead of failing silently.
+- A GitHub Actions workflow (`.github/workflows/mobradio.yml`) runs the generator on every push and pull request. Commits that forget to update the manifest will fail CI.
+
 #### Collections (`data/collections.yml`)
 ```yaml
 - name: "Business Name"

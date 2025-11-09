@@ -1,0 +1,13 @@
+{
+  "name": "mnemeory-mobradio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Build tooling and scripts for the Mob Radio playlist generator.",
+  "scripts": {
+    "generate:mobradio": "node scripts/generate-mobradio.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+

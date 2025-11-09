@@ -23,6 +23,7 @@
     territoryContainer: 'territory-container',
     pageNumber: 'page-number',
     rosterButton: '.family-roster-button',
+    mobRadioButton: '.mob-radio-button',
     vendettaCard: '.vendetta-card[data-card-type="vendetta"]',
     territoryCard: '.territory-card[data-card-type="territory"]',
     rosterPlaque: '.roster-plaque'
