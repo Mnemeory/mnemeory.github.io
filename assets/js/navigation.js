@@ -98,8 +98,59 @@
       const territory = data.territory[index];
       if (!territory) return;
       
-      const squadraHtml = window.utils.formatNameList(territory.la_squadra, window.CONFIG.DISPLAY_TEXT.defaults.unassigned);
-      const famigliaHtml = window.utils.formatNameList(territory.la_famiglia, window.CONFIG.DISPLAY_TEXT.defaults.none);
+      const assignedCrew = territory.assigned_crew || {};
+      const sortCrewList = list => {
+        if (!Array.isArray(list)) return [];
+        return list
+          .slice()
+          .filter(member => typeof member === 'string' || typeof member === 'number')
+          .map(member => String(member).trim())
+          .filter(Boolean)
+          .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+      };
+
+      const sortedCapo = sortCrewList(assignedCrew.capo);
+      const sortedSquadra = sortCrewList(assignedCrew.la_squadra);
+      const sortedFamiglia = sortCrewList(assignedCrew.la_famiglia);
+
+      const renderCrewGroup = (label, names, fallback, modifier) => {
+        const safeFallback = window.utils.escapeHtml(fallback);
+
+        if (!Array.isArray(names) || names.length === 0) {
+          return `
+            <div class="crew-group crew-group-${modifier} crew-group-single crew-group-empty">
+              <span class="crew-role">${label}</span>
+              <span class="crew-names crew-names-single">${safeFallback}</span>
+            </div>
+          `;
+        }
+
+        if (names.length === 1) {
+          return `
+            <div class="crew-group crew-group-${modifier} crew-group-single">
+              <span class="crew-role">${label}</span>
+              <span class="crew-names crew-names-single">${window.utils.escapeHtml(names[0])}</span>
+            </div>
+          `;
+        }
+
+        const namesHtml = names
+          .map(name => `<span class="crew-name">${window.utils.escapeHtml(name)}</span>`)
+          .join('');
+
+        return `
+          <div class="crew-group crew-group-${modifier} crew-group-multiple">
+            <span class="crew-role">${label}</span>
+            <div class="crew-names crew-names-multiple">
+              ${namesHtml}
+            </div>
+          </div>
+        `;
+      };
+
+      const capoGroup = renderCrewGroup('Capo:', sortedCapo, window.CONFIG.DISPLAY_TEXT.defaults.unassigned, 'capo');
+      const squadraGroup = renderCrewGroup('La Squadra:', sortedSquadra, window.CONFIG.DISPLAY_TEXT.defaults.unassigned, 'squadra');
+      const famigliaGroup = renderCrewGroup('La Famiglia:', sortedFamiglia, window.CONFIG.DISPLAY_TEXT.defaults.none, 'famiglia');
       const businessesHtml = window.utils.formatNameList(territory.businesses, window.CONFIG.DISPLAY_TEXT.defaults.none);
       
       content = `
@@ -109,12 +160,12 @@
         </div>
         <div class="modal-card-body">
           <div class="detail-row">
-            <span class="label">La Squadra:</span>
-            <span class="value made-name">${squadraHtml}</span>
-          </div>
-          <div class="detail-row">
-            <span class="label">La Famiglia:</span>
-            <span class="value">${famigliaHtml}</span>
+            <span class="label">Assigned Crew:</span>
+            <div class="value assigned-crew">
+              ${capoGroup}
+              ${squadraGroup}
+              ${famigliaGroup}
+            </div>
           </div>
           <div class="detail-row">
             <span class="label">Businesses:</span>

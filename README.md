@@ -14,8 +14,10 @@
 ```yaml
 - name: "District Name"
   status: "Controlled"  # Controlled, Uncontrolled, Contested, Neutral, Expanding
-  la_squadra: [Soldato Names]
-  la_famiglia: [Associate Names]
+  assigned_crew:
+    capo: [Capo Names]
+    la_squadra: [Soldato Names]
+    la_famiglia: [Associate Names]
   businesses: [Business1, Business2]
   notes: "Territory details"
 ```

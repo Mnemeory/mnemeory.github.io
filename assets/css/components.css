@@ -357,6 +357,54 @@
   border-top: 1px dashed var(--ink-faded);
 }
 
+.assigned-crew {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.crew-group {
+  font-family: var(--font-typewriter);
+  font-size: 0.9rem;
+  color: var(--ink-ballpoint-black);
+}
+
+.crew-group-single {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.crew-group-multiple {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.crew-role {
+  font-weight: 700;
+}
+
+.crew-names-single {
+  font-weight: 400;
+}
+
+.crew-names-multiple {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 1.5rem;
+}
+
+.crew-name {
+  font-weight: 400;
+}
+
+.crew-group-empty .crew-names-single {
+  font-style: italic;
+  color: var(--ink-faded);
+}
+
 
 /* ================================================
    TERRITORY - Geographic Polaroid Clusters
