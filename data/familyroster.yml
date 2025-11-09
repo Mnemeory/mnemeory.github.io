@@ -5,12 +5,22 @@ boss:
     status: "vacant"
 
 boss_consigliere:
-  - name: "Gaio Puttanesca"
-    clan: "Giovanni"
-    status: "active"
+  - name: "Unappointed"
+    status: "vacant"
 
 capo:
   - name: "Luigi Giovanni"
+    clan: "Giovanni"
+    status: "active"
+
+consigliere:
+  - name: "Gaio Puttanesca"
+    assigned_capo: "Luigi Giovanni"
+    clan: "Giovanni"
+    status: "active"
+    
+  - name: "Miria Monteith"
+    assigned_capo: "Luigi Giovanni"
     clan: "Giovanni"
     status: "active"
 
@@ -20,22 +30,17 @@ soldato:
     clan: "Giovanni"
     status: "active"
 
-  - name: "Paulie Puttanesca"
+  - name: "Paulie 'Big Paulie' Puttanesca"
     assigned_capo: "Luigi Giovanni"
     clan: "Giovanni"
     status: "active"
 
-  - name: "Vincenzo Giovanni"
+  - name: "Vincenzo 'Vinnie' Giovanni"
     assigned_capo: "Luigi Giovanni"
     clan: "Giovanni"
     status: "active"
-
-associate:
-  - name: "Roi Geant"
-    assigned_soldato: "Vincenzo Giovanni"
-    clan: "Nosferatu"
-    status: "active"
-  
+    
+associate:  
   - name: "Asano Mai"
     assigned_consigliere: "Gaio Puttanesca"
     clan: "Ghoul"
@@ -45,12 +50,22 @@ associate:
     assigned_consigliere: "Gaio Puttanesca"
     clan: "Ghoul"
     status: "active"
+    
+  - name: "Malcom Dunsirn"
+    assigned_consigliere: "Gaio Puttanesca"
+    clan: "Garou"
+    status: "active"
 
   - name: "Ganymedes"
-    assigned_soldato: "Vincenzo Giovanni"
+    assigned_soldato: "Vincenzo 'Vinnie' Giovanni"
     clan: "Ghoul"
     status: "active"
   
-  - name: "Anthony Bianchi"
-    assigned_soldato: "Vincenzo Giovanni"
+  - name: "Anthony 'Fat Tony' Bianchi"
+    assigned_soldato: "Vincenzo 'Vinnie' Giovanni"
+    status: "active"
+
+  - name: "Roi Geant"
+    assigned_soldato: "Vincenzo 'Vinnie' Giovanni"
+    clan: "Nosferatu"
     status: "active"
