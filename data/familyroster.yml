@@ -12,6 +12,9 @@ capo:
   - name: "Luigi Giovanni"
     clan: "Giovanni"
     status: "active"
+    
+  - name: "Independent"
+    status: "active"
 
 consigliere:
   - name: "Gaio Puttanesca"
