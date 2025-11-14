@@ -13,12 +13,12 @@ capo:
     clan: "Giovanni"
     status: "active"
     
-  - name: "Independent"
+  - name: "Crewless"
     status: "active"
 
 consigliere:
   - name: "Gaio Puttanesca"
-    assigned_capo: "Luigi Giovanni"
+    assigned_capo: "Crewless"
     clan: "Giovanni"
     status: "active"
     
