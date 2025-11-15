@@ -38,6 +38,7 @@
     const selectors = config.SELECTORS || {};
     const button = document.querySelector(selectors.mobRadioButton || '.mob-radio-button');
     const audio = document.getElementById(AUDIO_ELEMENT_ID);
+    const volumeSlider = document.getElementById('mob-radio-volume-slider');
 
     if (!button || !audio) {
       return;
@@ -52,6 +53,32 @@
     };
 
     button.setAttribute('disabled', 'disabled');
+
+    // Initialize volume from localStorage
+    function initVolume() {
+      const savedVolume = localStorage.getItem('mobRadioVolume');
+      const volume = savedVolume !== null ? parseFloat(savedVolume) : 0.7;
+      audio.volume = volume;
+      if (volumeSlider) {
+        volumeSlider.value = volume * 100;
+      }
+    }
+
+    // Handle volume changes
+    function handleVolumeChange() {
+      if (!volumeSlider) return;
+      const volume = volumeSlider.value / 100;
+      audio.volume = volume;
+      localStorage.setItem('mobRadioVolume', volume.toString());
+    }
+
+    // Set up volume control
+    if (volumeSlider) {
+      volumeSlider.addEventListener('input', handleVolumeChange);
+      volumeSlider.addEventListener('change', handleVolumeChange);
+    }
+
+    initVolume();
 
     function setButtonPlaying(playing) {
       button.classList.toggle(PLAYING_CLASS, playing);

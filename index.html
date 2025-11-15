@@ -31,9 +31,20 @@
                     <div class="ledger-subtitle">Registrazione Settimanale</div>
                 </header>
 
-                <button class="mob-radio-button" type="button" aria-label="Toggle Mob Radio" aria-pressed="false">
-                    <img src="assets/images/MobRadio.png" alt="Mob Radio" class="mob-radio-button-image">
-                </button>
+                <div class="mob-radio-container">
+                    <button class="mob-radio-button" type="button" aria-label="Toggle Mob Radio" aria-pressed="false">
+                        <img src="assets/images/MobRadio.png" alt="Mob Radio" class="mob-radio-button-image">
+                    </button>
+                    <div class="mob-radio-volume">
+                        <input type="range" 
+                               id="mob-radio-volume-slider" 
+                               class="volume-slider" 
+                               min="0" 
+                               max="100" 
+                               value="70" 
+                               aria-label="Volume Control">
+                    </div>
+                </div>
             </div>
             
             <div id="sealModal" class="seal-modal">
