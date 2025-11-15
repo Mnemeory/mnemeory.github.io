@@ -3,29 +3,40 @@
 (function() {
   'use strict';
   
+  const escapeContainer = document.createElement('div');
+
   function escapeHtml(text) {
-    if (typeof text !== 'string') return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    if (text === null || text === undefined) {
+      return '';
+    }
+
+    escapeContainer.textContent = String(text);
+    return escapeContainer.innerHTML;
   }
-  
+
   function debugLog(...args) {
     if (window.CONFIG && window.CONFIG.DEBUG) {
       console.log(...args);
     }
   }
-  
+
   function debounce(func, wait) {
     let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
+    function debounced(...args) {
+      const context = this;
       clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
+      timeout = setTimeout(() => {
+        timeout = null;
+        func.apply(context, args);
+      }, wait);
     };
+    debounced.cancel = () => {
+      if (timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+      }
+    };
+    return debounced;
   }
   
   function formatStatus(status, defaultValue = 'Unknown') {
@@ -66,29 +77,45 @@
     return element;
   }
   
-  function normalizeMoneyValue(value) {
-    if (typeof value === 'string') {
-      const numericValue = value.replace(/[$,]/g, '');
-      if (!isNaN(numericValue) && numericValue.trim() !== '') {
-        if (value.startsWith('$')) {
-          return formatMoney(parseFloat(numericValue));
-        }
-      }
-      return value;
+  const numberFormatter = typeof Intl !== 'undefined'
+    ? new Intl.NumberFormat('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })
+    : null;
+
+  function formatMoney(num) {
+    const numericValue = Number(num);
+    if (!Number.isFinite(numericValue)) {
+      return '0';
     }
-    
+
+    if (numberFormatter) {
+      return numberFormatter.format(numericValue);
+    }
+
+    return numericValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  function normalizeMoneyValue(value) {
     if (typeof value === 'number') {
       return formatMoney(value);
     }
-    
-    return '0';
-  }
-  
-  function formatMoney(num) {
-    if (num === null || num === undefined || isNaN(num)) {
-      return '0';
+
+    if (typeof value === 'string') {
+      const trimmed = value.trim();
+      if (!trimmed) {
+        return formatMoney(0);
+      }
+
+      const cleaned = trimmed.replace(/[$,]/g, '');
+      const numericValue = cleaned ? Number(cleaned) : Number.NaN;
+
+      if (Number.isFinite(numericValue)) {
+        return formatMoney(numericValue);
+      }
+
+      return escapeHtml(trimmed);
     }
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    return formatMoney(0);
   }
   
   function validateArrayIndex(arr, index) {

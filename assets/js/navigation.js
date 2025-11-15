@@ -2,18 +2,37 @@
 
 (function() {
   'use strict';
-  
+
+  const config = window.CONFIG || {};
+  const selectors = config.SELECTORS || {};
+  const cssClasses = config.CSS_CLASSES || {};
+  const displayText = config.DISPLAY_TEXT || {};
+  const utils = window.utils || {};
+  const validateArrayIndex = typeof utils.validateArrayIndex === 'function'
+    ? utils.validateArrayIndex
+    : (() => false);
+  const escapeHtml = typeof utils.escapeHtml === 'function'
+    ? utils.escapeHtml
+    : (value => String(value ?? ''));
+  const formatStatus = typeof utils.formatStatus === 'function'
+    ? utils.formatStatus
+    : ((status, defaultValue) => status || defaultValue || '');
+  const formatNameList = typeof utils.formatNameList === 'function'
+    ? utils.formatNameList
+    : (names => Array.isArray(names) ? names.join(', ') : String(names ?? ''));
+
   let cachedElements = null;
-  
+
   function getCachedElements() {
     if (!cachedElements) {
       cachedElements = {
-        sealModal: document.getElementById(window.CONFIG.SELECTORS.sealModal),
-        sealModalImage: document.getElementById(window.CONFIG.SELECTORS.sealModalImage),
-        cardModal: document.getElementById(window.CONFIG.SELECTORS.cardModal),
-        cardModalContent: document.getElementById(window.CONFIG.SELECTORS.cardModalContent),
-        familyRosterFrame: document.getElementById(window.CONFIG.SELECTORS.familyRosterFrame),
-        rosterButton: document.querySelector(window.CONFIG.SELECTORS.rosterButton)
+        sealModal: document.getElementById(selectors.sealModal),
+        sealModalImage: document.getElementById(selectors.sealModalImage),
+        sealModalContent: document.querySelector(`#${selectors.sealModal} .seal-modal-content`),
+        cardModal: document.getElementById(selectors.cardModal),
+        cardModalContent: document.getElementById(selectors.cardModalContent),
+        familyRosterFrame: document.getElementById(selectors.familyRosterFrame),
+        rosterButton: document.querySelector(selectors.rosterButton)
       };
     }
     return cachedElements;
@@ -25,16 +44,19 @@
     const { sealModal, sealModalImage } = getCachedElements();
     if (sealModal && sealModalImage) {
       sealModalImage.src = imageSrc;
-      sealModal.classList.add(window.CONFIG.CSS_CLASSES.active);
+      sealModal.classList.add(cssClasses.active);
       document.body.classList.add('modal-open');
     }
   }
-  
+
   function closeSealModal() {
-    const { sealModal } = getCachedElements();
+    const { sealModal, sealModalImage } = getCachedElements();
     if (sealModal) {
-      sealModal.classList.remove(window.CONFIG.CSS_CLASSES.active);
+      sealModal.classList.remove(cssClasses.active);
       document.body.classList.remove('modal-open');
+    }
+    if (sealModalImage) {
+      sealModalImage.removeAttribute('src');
     }
   }
   
@@ -43,61 +65,59 @@
   function openCardModal(cardType, index) {
     const { cardModal, cardModalContent } = getCachedElements();
     const data = window.ledgerData;
-    
+
     if (!cardModal || !cardModalContent || !data) return;
 
     const modalContainer = cardModalContent.parentElement;
     if (modalContainer) {
-      modalContainer.classList.remove(window.CONFIG.CSS_CLASSES.vendettaTheme, window.CONFIG.CSS_CLASSES.territoryTheme);
+      modalContainer.classList.remove(cssClasses.vendettaTheme, cssClasses.territoryTheme);
     }
 
     let content = '';
     
-    if (cardType === 'vendetta' && data.vendetta && Array.isArray(data.vendetta) && window.utils.validateArrayIndex(data.vendetta, index)) {
+    if (cardType === 'vendetta' && Array.isArray(data.vendetta) && validateArrayIndex(data.vendetta, index)) {
       const vendetta = data.vendetta[index];
       if (!vendetta) return;
-      
-      const typeText = window.CONFIG.DISPLAY_TEXT.vendettaTypes[vendetta.type] || window.CONFIG.DISPLAY_TEXT.vendettaTypes.financial;
-      
-      const statusDisplay = window.utils && window.utils.formatStatus
-        ? window.utils.formatStatus(vendetta.status, window.CONFIG.DISPLAY_TEXT.defaults.unknown)
-        : (vendetta.status || window.CONFIG.DISPLAY_TEXT.defaults.unknown);
-      
+
+      const typeText = displayText.vendettaTypes?.[vendetta.type] || displayText.vendettaTypes?.financial || '';
+
+      const statusDisplay = formatStatus(vendetta.status, displayText.defaults?.unknown);
+
       content = `
         <div class="modal-card-header">
           <span class="vendetta-type ${vendetta.type || 'financial'}">${typeText}</span>
-          <h3 class="modal-card-title">${window.utils.escapeHtml(vendetta.name || 'Unknown')} "${window.utils.escapeHtml(vendetta.nickname || 'Unknown')}"</h3>
+          <h3 class="modal-card-title">${escapeHtml(vendetta.name || 'Unknown')}${vendetta.nickname ? ` "${escapeHtml(vendetta.nickname)}"` : ''}</h3>
         </div>
         <div class="modal-card-body">
           <div class="detail-row">
             <span class="label">Status:</span>
-            <span class="value">${window.utils.escapeHtml(statusDisplay)}</span>
+            <span class="value">${escapeHtml(statusDisplay)}</span>
           </div>
           <div class="detail-row">
             <span class="label">Offense:</span>
-            <span class="value">${window.utils.escapeHtml(vendetta.offense || 'Not specified')}</span>
+            <span class="value">${escapeHtml(vendetta.offense || 'Not specified')}</span>
           </div>
           <div class="detail-row">
             <span class="label">Last Seen:</span>
-            <span class="value">${window.utils.escapeHtml(vendetta.last_seen || 'Unknown')}</span>
+            <span class="value">${escapeHtml(vendetta.last_seen || 'Unknown')}</span>
           </div>
           <div class="detail-row">
             <span class="label">Known Associates:</span>
-            <span class="value">${window.utils.escapeHtml(vendetta.associates || 'None')}</span>
+            <span class="value">${escapeHtml(vendetta.associates || 'None')}</span>
           </div>
           <div class="detail-row">
             <span class="label">Authorization:</span>
-            <span class="value made-name">${window.utils.escapeHtml(vendetta.authorized_by || 'Unknown')}</span>
+            <span class="value made-name">${escapeHtml(vendetta.authorized_by || 'Unknown')}</span>
           </div>
         </div>
       `;
       if (modalContainer) {
-        modalContainer.classList.add(window.CONFIG.CSS_CLASSES.vendettaTheme);
+        modalContainer.classList.add(cssClasses.vendettaTheme);
       }
-    } else if (cardType === 'territory' && data.territory && Array.isArray(data.territory) && window.utils.validateArrayIndex(data.territory, index)) {
+    } else if (cardType === 'territory' && Array.isArray(data.territory) && validateArrayIndex(data.territory, index)) {
       const territory = data.territory[index];
       if (!territory) return;
-      
+
       const assignedCrew = territory.assigned_crew || {};
       const sortCrewList = list => {
         if (!Array.isArray(list)) return [];
@@ -114,7 +134,7 @@
       const sortedFamiglia = sortCrewList(assignedCrew.la_famiglia);
 
       const renderCrewGroup = (label, names, fallback, modifier) => {
-        const safeFallback = window.utils.escapeHtml(fallback);
+        const safeFallback = escapeHtml(fallback);
 
         if (!Array.isArray(names) || names.length === 0) {
           return `
@@ -129,13 +149,13 @@
           return `
             <div class="crew-group crew-group-${modifier} crew-group-single">
               <span class="crew-role">${label}</span>
-              <span class="crew-names crew-names-single">${window.utils.escapeHtml(names[0])}</span>
+              <span class="crew-names crew-names-single">${escapeHtml(names[0])}</span>
             </div>
           `;
         }
 
         const namesHtml = names
-          .map(name => `<span class="crew-name">${window.utils.escapeHtml(name)}</span>`)
+          .map(name => `<span class="crew-name">${escapeHtml(name)}</span>`)
           .join('');
 
         return `
@@ -148,15 +168,15 @@
         `;
       };
 
-      const capoGroup = renderCrewGroup('Capo:', sortedCapo, window.CONFIG.DISPLAY_TEXT.defaults.unassigned, 'capo');
-      const squadraGroup = renderCrewGroup('La Squadra:', sortedSquadra, window.CONFIG.DISPLAY_TEXT.defaults.unassigned, 'squadra');
-      const famigliaGroup = renderCrewGroup('La Famiglia:', sortedFamiglia, window.CONFIG.DISPLAY_TEXT.defaults.none, 'famiglia');
-      const businessesHtml = window.utils.formatNameList(territory.businesses, window.CONFIG.DISPLAY_TEXT.defaults.none);
-      
+      const capoGroup = renderCrewGroup('Capo:', sortedCapo, displayText.defaults?.unassigned, 'capo');
+      const squadraGroup = renderCrewGroup('La Squadra:', sortedSquadra, displayText.defaults?.unassigned, 'squadra');
+      const famigliaGroup = renderCrewGroup('La Famiglia:', sortedFamiglia, displayText.defaults?.none, 'famiglia');
+      const businessesHtml = formatNameList(territory.businesses, displayText.defaults?.none);
+
       content = `
         <div class="modal-card-header">
-          <h3 class="modal-card-title">${window.utils.escapeHtml(territory.name || 'Unknown Territory')}</h3>
-          <div class="territory-status">Status: ${window.utils.escapeHtml(territory.status || 'Unknown')}</div>
+          <h3 class="modal-card-title">${escapeHtml(territory.name || 'Unknown Territory')}</h3>
+          <div class="territory-status">Status: ${escapeHtml(territory.status || 'Unknown')}</div>
         </div>
         <div class="modal-card-body">
           <div class="detail-row">
@@ -174,26 +194,30 @@
           ${territory.notes ? `
           <div class="detail-row notes">
             <span class="label">Notes:</span>
-            <span class="value">${window.utils.escapeHtml(territory.notes)}</span>
+            <span class="value">${escapeHtml(territory.notes)}</span>
           </div>
           ` : ''}
         </div>
       `;
       if (modalContainer) {
-        modalContainer.classList.add(window.CONFIG.CSS_CLASSES.territoryTheme);
+        modalContainer.classList.add(cssClasses.territoryTheme);
       }
     }
-    
+
     cardModalContent.innerHTML = content;
-    cardModal.classList.add(window.CONFIG.CSS_CLASSES.active);
+    cardModal.classList.add(cssClasses.active);
     document.body.classList.add('modal-open');
   }
-  
+
   function closeCardModal() {
     const { cardModal } = getCachedElements();
     if (cardModal) {
-      cardModal.classList.remove(window.CONFIG.CSS_CLASSES.active);
+      cardModal.classList.remove(cssClasses.active);
       document.body.classList.remove('modal-open');
+    }
+    const { cardModalContent } = getCachedElements();
+    if (cardModalContent) {
+      cardModalContent.innerHTML = '';
     }
   }
   
@@ -202,10 +226,10 @@
   function openFamilyRosterModal() {
     const { familyRosterFrame } = getCachedElements();
     if (familyRosterFrame) {
-      familyRosterFrame.classList.add(window.CONFIG.CSS_CLASSES.active);
-      document.body.classList.add(window.CONFIG.CSS_CLASSES.rosterModalOpen);
+      familyRosterFrame.classList.add(cssClasses.active);
+      document.body.classList.add(cssClasses.rosterModalOpen);
       document.body.classList.add('modal-open');
-      
+
       if (familyRosterFrame.contentWindow) {
         familyRosterFrame.contentWindow.postMessage({action: 'populate'}, '*');
       }
@@ -215,8 +239,8 @@
   function closeFamilyRosterModal() {
     const { familyRosterFrame } = getCachedElements();
     if (familyRosterFrame) {
-      familyRosterFrame.classList.remove(window.CONFIG.CSS_CLASSES.active);
-      document.body.classList.remove(window.CONFIG.CSS_CLASSES.rosterModalOpen);
+      familyRosterFrame.classList.remove(cssClasses.active);
+      document.body.classList.remove(cssClasses.rosterModalOpen);
       document.body.classList.remove('modal-open');
     }
   }
@@ -229,13 +253,21 @@
     if (elements.rosterButton) {
       elements.rosterButton.addEventListener('click', openFamilyRosterModal);
     }
-    
+
     if (elements.sealModal) {
       elements.sealModal.addEventListener('click', closeSealModal);
     }
-    
+
+    if (elements.sealModalContent) {
+      elements.sealModalContent.addEventListener('click', event => event.stopPropagation());
+    }
+
     if (elements.cardModal) {
       elements.cardModal.addEventListener('click', closeCardModal);
+    }
+
+    if (elements.cardModalContent) {
+      elements.cardModalContent.addEventListener('click', event => event.stopPropagation());
     }
     
     window.addEventListener('message', function(event) {
@@ -245,7 +277,11 @@
     });
     
     document.addEventListener('click', function(e) {
-      const vendettaCard = e.target.closest(window.CONFIG.SELECTORS.vendettaCard);
+      if (!e.target) {
+        return;
+      }
+
+      const vendettaCard = e.target.closest(selectors.vendettaCard);
       if (vendettaCard) {
         const index = parseInt(vendettaCard.dataset.cardIndex, 10);
         if (!isNaN(index)) {
@@ -253,8 +289,8 @@
         }
         return;
       }
-      
-      const territoryCard = e.target.closest(window.CONFIG.SELECTORS.territoryCard);
+
+      const territoryCard = e.target.closest(selectors.territoryCard);
       if (territoryCard) {
         const index = parseInt(territoryCard.dataset.cardIndex, 10);
         if (!isNaN(index)) {

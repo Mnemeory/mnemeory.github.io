@@ -72,6 +72,11 @@
       blood: 'Blood Debt',
       financial: 'Financial Debt'
     },
+    emptyStates: {
+      collections: 'No collections recorded.',
+      vendetta: 'No vendettas on record.',
+      territory: 'No territory records available.'
+    },
     defaults: {
       unknown: 'Unknown',
       unassigned: 'Unassigned',
@@ -80,6 +85,7 @@
     },
     errors: {
       dataLoadFailed: 'Error loading data. Please refresh the page.',
+      yamlUnavailable: 'Unable to parse data files. Please refresh later.',
       rosterDataMissing: 'Family roster data not loaded',
       chartContainerMissing: 'Organizational chart container not found',
       svgContainerMissing: 'SVG container #orgChartLines not found in DOM',
@@ -95,7 +101,8 @@
     rosterRenderDelay: 100,
     rosterLinesDelay: 250,
     resizeDebounce: 250,
-    positionCacheTtlMs: 1000
+    positionCacheTtlMs: 1000,
+    errorNoticeTimeout: 10000
   };
   
   const LAYOUT = {
@@ -155,6 +162,21 @@
   };
   
   let DEBUG = false;
+
+  function deepFreeze(obj) {
+    if (!obj || typeof obj !== 'object') {
+      return obj;
+    }
+
+    Object.getOwnPropertyNames(obj).forEach(prop => {
+      const value = obj[prop];
+      if (value && typeof value === 'object' && !Object.isFrozen(value)) {
+        deepFreeze(value);
+      }
+    });
+
+    return Object.freeze(obj);
+  }
   
   function setDebug(value) {
     DEBUG = !!value;
@@ -164,7 +186,16 @@
     return DEBUG;
   }
   
-  window.CONFIG = {
+  deepFreeze(DATA_PATHS);
+  deepFreeze(SELECTORS);
+  deepFreeze(STATUS_MAPPINGS);
+  deepFreeze(DISPLAY_TEXT);
+  deepFreeze(TIMING);
+  deepFreeze(LAYOUT);
+  deepFreeze(DEFAULTS);
+  deepFreeze(CSS_CLASSES);
+
+  window.CONFIG = Object.freeze({
     DATA_PATHS,
     SELECTORS,
     STATUS_MAPPINGS,
@@ -177,7 +208,7 @@
     setDebug,
     getDebug,
     get DEBUG() { return DEBUG; }
-  };
+  });
   
 })();
 

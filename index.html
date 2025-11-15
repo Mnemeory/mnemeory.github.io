@@ -22,7 +22,7 @@
         <main class="ledger-page">
             
             <div class="header-cards">
-                <button class="family-roster-button" aria-label="Open Family Roster">
+                <button class="family-roster-button" type="button" aria-label="Open Family Roster">
                     <img src="assets/images/GenericSeal.png" alt="Giovanni Family Seal" class="roster-button-image">
                 </button>
 
@@ -31,7 +31,7 @@
                     <div class="ledger-subtitle">Registrazione Settimanale</div>
                 </header>
 
-                <button class="mob-radio-button" aria-label="Toggle Mob Radio" aria-pressed="false">
+                <button class="mob-radio-button" type="button" aria-label="Toggle Mob Radio" aria-pressed="false">
                     <img src="assets/images/MobRadio.png" alt="Mob Radio" class="mob-radio-button-image">
                 </button>
             </div>
@@ -111,17 +111,18 @@
     
     <audio id="mob-radio-player" preload="none" aria-hidden="true"></audio>
     
-    <script src="assets/js/config.js"></script>
-    <script src="assets/js/utils.js"></script>
-    <script src="assets/js/data-loader.js"></script>
-    <script src="assets/js/roster.js"></script>
-    <script src="assets/js/roster-lines.js"></script>
-    <script src="assets/js/navigation.js"></script>
-    <script src="assets/js/mobradio.js"></script>
-    
-    <iframe id="familyRosterFrame" 
-            src="roster.html" 
+    <script src="assets/js/config.js" defer></script>
+    <script src="assets/js/utils.js" defer></script>
+    <script src="assets/js/data-loader.js" defer></script>
+    <script src="assets/js/roster.js" defer></script>
+    <script src="assets/js/roster-lines.js" defer></script>
+    <script src="assets/js/navigation.js" defer></script>
+    <script src="assets/js/mobradio.js" defer></script>
+
+    <iframe id="familyRosterFrame"
+            src="roster.html"
             class="roster-iframe"
+            loading="lazy"
             allow="fullscreen"
             title="Family Roster Organizational Chart"></iframe>
 </body>

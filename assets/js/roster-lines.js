@@ -3,6 +3,14 @@
 (function() {
   'use strict';
 
+  const config = window.CONFIG || {};
+  const selectors = config.SELECTORS || {};
+  const cssClasses = config.CSS_CLASSES || {};
+  const svgNamespace = config.SVG_NAMESPACE || 'http://www.w3.org/2000/svg';
+  const timing = config.TIMING || {};
+  const organizationalChartId = selectors.organizationalChart || 'organizationalChart';
+  const orgChartLinesId = selectors.orgChartLines || 'orgChartLines';
+
   // POSITION CALCULATION
   
   function getAllPositions(container) {
@@ -43,8 +51,8 @@
       return;
     }
 
-    const svg = document.getElementById('orgChartLines');
-    const container = document.getElementById('organizationalChart');
+    const svg = document.getElementById(orgChartLinesId);
+    const container = document.getElementById(organizationalChartId);
     
     if (!svg || !container) {
       return;
@@ -67,7 +75,8 @@
       return;
     }
 
-    const orgTree = window.buildOrgTree(data.familyroster);
+    const cachedTree = window.__orgChartTreeCache || null;
+    const orgTree = cachedTree || (window.buildOrgTree ? window.buildOrgTree(data.familyroster) : null);
     if (!orgTree) return;
 
     drawBossLevel(svg, orgTree, positions);
@@ -182,8 +191,7 @@
   }
 
   function drawAdvisoryLine(svg, fromPos, toPos) {
-    const svgNs = (window.CONFIG && window.CONFIG.SVG_NAMESPACE) || 'http://www.w3.org/2000/svg';
-    const path = document.createElementNS(svgNs, 'path');
+    const path = document.createElementNS(svgNamespace, 'path');
     
     const yDiff = Math.abs(fromPos.centerY - toPos.centerY);
     
@@ -201,20 +209,15 @@
       );
     }
     
-    const advisoryClass = (window.CONFIG && window.CONFIG.CSS_CLASSES && window.CONFIG.CSS_CLASSES.advisoryLine)
-      ? window.CONFIG.CSS_CLASSES.advisoryLine
-      : 'advisory-line';
+    const advisoryClass = cssClasses.advisoryLine || 'advisory-line';
     path.setAttribute('class', advisoryClass);
     svg.appendChild(path);
   }
 
   function drawPath(svg, pathData) {
-    const svgNs = (window.CONFIG && window.CONFIG.SVG_NAMESPACE) || 'http://www.w3.org/2000/svg';
-    const path = document.createElementNS(svgNs, 'path');
+    const path = document.createElementNS(svgNamespace, 'path');
     path.setAttribute('d', pathData);
-    const commandClass = (window.CONFIG && window.CONFIG.CSS_CLASSES && window.CONFIG.CSS_CLASSES.commandLine)
-      ? window.CONFIG.CSS_CLASSES.commandLine
-      : 'command-line';
+    const commandClass = cssClasses.commandLine || 'command-line';
     path.setAttribute('class', commandClass);
     svg.appendChild(path);
     return path;
@@ -232,27 +235,31 @@
   // RESIZE HANDLING
   
   let resizeObserver = null;
+  let resizeFallbackHandler = null;
 
   function initResizeObserver() {
-    const container = document.getElementById('organizationalChart');
+    const container = document.getElementById(organizationalChartId);
     if (!container) {
-      setTimeout(initResizeObserver, 500);
       return;
     }
 
-    if (resizeObserver) {
-      resizeObserver.disconnect();
-    }
+    if (typeof ResizeObserver === 'function') {
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
 
-    resizeObserver = new ResizeObserver(() => {
-      requestAnimationFrame(() => {
-        if (window.ledgerData && window.ledgerData.familyroster) {
-          window.drawOrgChartLines();
-        }
+      resizeObserver = new ResizeObserver(() => {
+        requestAnimationFrame(() => {
+          if (window.ledgerData && window.ledgerData.familyroster) {
+            window.drawOrgChartLines();
+          }
+        });
       });
-    });
 
-    resizeObserver.observe(container);
+      resizeObserver.observe(container);
+    } else {
+      setupResizeFallback();
+    }
   }
 
   window.cleanupOrgChartListeners = function() {
@@ -260,16 +267,48 @@
       resizeObserver.disconnect();
       resizeObserver = null;
     }
+
+    if (resizeFallbackHandler) {
+      window.removeEventListener('resize', resizeFallbackHandler);
+      resizeFallbackHandler = null;
+    }
   };
 
+  function setupResizeFallback() {
+    if (resizeFallbackHandler) {
+      return;
+    }
+
+    let timeoutId = null;
+    const debounceDelay = typeof timing.resizeDebounce === 'number' ? timing.resizeDebounce : 150;
+    resizeFallbackHandler = function() {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        if (window.ledgerData && window.ledgerData.familyroster) {
+          window.drawOrgChartLines();
+        }
+      }, debounceDelay);
+    };
+
+    window.addEventListener('resize', resizeFallbackHandler);
+  }
+
   // INITIALIZATION
-  
+
+  function scheduleObserverInit() {
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(initResizeObserver);
+    } else {
+      setTimeout(initResizeObserver, 50);
+    }
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(initResizeObserver, 100);
-    });
+    document.addEventListener('DOMContentLoaded', scheduleObserverInit);
   } else {
-    setTimeout(initResizeObserver, 100);
+    scheduleObserverInit();
   }
 
 })();
