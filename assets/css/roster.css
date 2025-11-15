@@ -376,3 +376,22 @@
   opacity: 1;
   visibility: visible;
 }
+
+/* ================================================
+   ROSTER PAGE LAYOUT OVERRIDES
+   Ensure roster iframe page scrolls independently
+   and does not show the corkboard frame
+   ================================================ */
+
+body.roster-page {
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+  overflow: auto;
+  background: #000;
+}
+
+body.roster-page::before {
+  /* Hide wooden frame from main ledger layout */
+  display: none;
+}
