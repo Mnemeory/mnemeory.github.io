@@ -51,6 +51,8 @@
       index: -1
     };
 
+    button.setAttribute('disabled', 'disabled');
+
     function setButtonPlaying(playing) {
       button.classList.toggle(PLAYING_CLASS, playing);
       button.setAttribute('aria-pressed', playing ? 'true' : 'false');
@@ -173,6 +175,9 @@
 
     function disableButton(reason) {
       console.warn(reason);
+      state.playlist = [];
+      state.queue = [];
+      state.index = -1;
       setButtonPlaying(false);
       button.setAttribute('disabled', 'disabled');
       setTooltip(null);
@@ -180,19 +185,20 @@
 
     bindEvents();
 
-    fetchPlaylist()
-      .then(function(tracks) {
-        if (!Array.isArray(tracks) || !tracks.length) {
+    (async function loadPlaylist() {
+      try {
+        const tracks = await fetchPlaylist();
+        if (!Array.isArray(tracks) || tracks.length === 0) {
           disableButton('Mob Radio playlist is empty.');
           return;
         }
         state.playlist = tracks.slice();
         button.removeAttribute('disabled');
         setTooltip(null);
-      })
-      .catch(function(error) {
+      } catch (error) {
         disableButton(error && error.message ? error.message : 'Unable to load Mob Radio playlist.');
-      });
+      }
+    })();
   }
 
   if (document.readyState === 'loading') {
