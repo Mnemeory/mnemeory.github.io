@@ -4,6 +4,8 @@
   'use strict';
 
   const config = window.CONFIG || {};
+  const utils = window.utils || {};
+  const domCache = typeof utils.domCache === 'object' ? utils.domCache : null;
   const layoutConfig = config.LAYOUT || {};
   const displayText = config.DISPLAY_TEXT || {};
   const defaults = config.DEFAULTS || {};
@@ -309,17 +311,17 @@
   }
   
   // TREE BUILDING
-  
-  function buildTreeStructure(roster, rosterIndex) {
-    if (!roster) return null;
 
+  function buildUnifiedOrgData(roster, rosterIndex) {
+    if (!roster) return null;
     const index = rosterIndex || createRosterIndex(roster);
 
     const bossData = Array.isArray(roster.boss) && roster.boss[0]
       ? roster.boss[0]
       : { name: 'No Boss', status: 'vacant' };
 
-    const tree = {
+    // Hierarchical tree for layout
+    const hierarchy = {
       id: 'boss',
       role: 'boss',
       data: bossData,
@@ -329,34 +331,46 @@
       isLeadership: true
     };
 
-    if (Array.isArray(roster.boss_consigliere) && roster.boss_consigliere.length > 0) {
-      const advisorData = roster.boss_consigliere[0];
-      tree.advisor = {
+    // Optional advisor node
+    const bossConsigliereData = Array.isArray(roster.boss_consigliere) && roster.boss_consigliere[0]
+      ? roster.boss_consigliere[0]
+      : null;
+    if (bossConsigliereData) {
+      hierarchy.advisor = {
         id: 'boss-consigliere',
         role: 'boss_consigliere',
-        data: advisorData,
+        data: bossConsigliereData,
         isLeadership: true,
         x: 0,
         y: 0,
         mod: 0,
-        parent: tree,
+        parent: hierarchy,
         children: []
       };
     }
 
+    // Adjacency representation for SVG line drawing
+    const org = {
+      boss: bossData || null,
+      bossConsigliere: bossConsigliereData || null,
+      capos: []
+    };
+
     index.capos.forEach(capo => {
+      // Build tree node
       const capoNode = {
         id: createNodeId('capo', capo?.name),
         role: 'capo',
         data: capo,
         children: [],
-        parent: tree,
+        parent: hierarchy,
         mod: 0,
         isLeadership: true
       };
 
       const capoName = capo?.name;
 
+      // Consiglieres under this capo
       const consiglieres = getGroup(index.consiglieresByCapo, capoName);
       consiglieres.forEach(consigliere => {
         const consigliereNode = {
@@ -369,8 +383,8 @@
           isLeadership: false
         };
 
-        const associates = getGroup(index.associatesByConsigliere, consigliere?.name);
-        associates.forEach(associate => {
+        const associatesForCons = getGroup(index.associatesByConsigliere, consigliere?.name);
+        associatesForCons.forEach(associate => {
           const associateNode = {
             id: createNodeId('associate', associate?.name),
             role: 'associate',
@@ -386,6 +400,7 @@
         capoNode.children.push(consigliereNode);
       });
 
+      // Soldatos under this capo
       const soldatos = getGroup(index.soldatosByCapo, capoName);
       soldatos.forEach(soldato => {
         const soldatoNode = {
@@ -398,8 +413,8 @@
           isLeadership: false
         };
 
-        const associates = getGroup(index.associatesBySoldato, soldato?.name);
-        associates.forEach(associate => {
+        const associatesForSoldato = getGroup(index.associatesBySoldato, soldato?.name);
+        associatesForSoldato.forEach(associate => {
           const associateNode = {
             id: createNodeId('associate', associate?.name),
             role: 'associate',
@@ -415,6 +430,7 @@
         capoNode.children.push(soldatoNode);
       });
 
+      // Direct associates to capo
       const directAssociates = getGroup(index.associatesByCapo, capoName);
       directAssociates.forEach(associate => {
         const associateNode = {
@@ -429,34 +445,17 @@
         capoNode.children.push(associateNode);
       });
 
-      tree.children.push(capoNode);
-    });
+      // Push to hierarchy
+      hierarchy.children.push(capoNode);
 
-    return tree;
-  }
-  
-  window.buildOrgTree = function(roster, rosterIndex) {
-    if (!roster) return null;
-
-    const index = rosterIndex || createRosterIndex(roster);
-
-    const tree = {
-      boss: Array.isArray(roster.boss) && roster.boss[0] ? roster.boss[0] : null,
-      bossConsigliere: Array.isArray(roster.boss_consigliere) && roster.boss_consigliere[0] ? roster.boss_consigliere[0] : null,
-      capos: []
-    };
-
-    index.capos.forEach(capo => {
+      // Build adjacency entry in parallel
       const capoEntry = {
         capo,
         consiglieres: [],
         soldatos: [],
-        associates: getGroup(index.associatesByCapo, capo?.name)
+        associates: directAssociates
       };
 
-      const capoName = capo?.name;
-
-      const consiglieres = getGroup(index.consiglieresByCapo, capoName);
       consiglieres.forEach(consigliere => {
         capoEntry.consiglieres.push({
           consigliere,
@@ -464,7 +463,6 @@
         });
       });
 
-      const soldatos = getGroup(index.soldatosByCapo, capoName);
       soldatos.forEach(soldato => {
         capoEntry.soldatos.push({
           soldato,
@@ -472,10 +470,20 @@
         });
       });
 
-      tree.capos.push(capoEntry);
+      org.capos.push(capoEntry);
     });
 
-    return tree;
+    return { hierarchy, org, index };
+  }
+
+  function buildTreeStructure(roster, rosterIndex) {
+    const unified = buildUnifiedOrgData(roster, rosterIndex);
+    return unified ? unified.hierarchy : null;
+  }
+
+  window.buildOrgTree = function(roster, rosterIndex) {
+    const unified = buildUnifiedOrgData(roster, rosterIndex);
+    return unified ? unified.org : null;
   };
   
   // RENDERING
@@ -701,15 +709,15 @@
       return;
     }
 
-    const container = document.getElementById(selectors.organizationalChart);
+    const container = domCache ? domCache.get(`#${selectors.organizationalChart}`) : document.getElementById(selectors.organizationalChart);
     if (!container) {
       setOrgTreeCache(null);
       if (config.DEBUG) console.error(displayText.errors?.chartContainerMissing || 'Organizational chart container not found');
       return;
     }
 
-    const rosterIndex = createRosterIndex(data.familyroster);
-    const tree = buildTreeStructure(data.familyroster, rosterIndex);
+    const unified = buildUnifiedOrgData(data.familyroster);
+    const tree = unified ? unified.hierarchy : null;
 
     if (!tree) {
       setOrgTreeCache(null);
@@ -717,8 +725,7 @@
       return;
     }
 
-    const orgTree = window.buildOrgTree(data.familyroster, rosterIndex);
-    setOrgTreeCache(orgTree);
+    setOrgTreeCache(unified);
 
     const existingSvg = container.querySelector('.org-chart-lines-svg');
     if (existingSvg && existingSvg.parentNode) {
@@ -756,19 +763,24 @@
 
   // RESIZE HANDLING
 
-  function handleResize() {
-    if (resizeTimerId) {
-      clearTimeout(resizeTimerId);
-    }
-
-    resizeTimerId = setTimeout(() => {
-      if (typeof window.drawOrgChartLines === 'function') {
-        window.drawOrgChartLines();
-      }
-    }, timing.resizeDebounce ?? 250);
-  }
+  const debouncedResize = (typeof utils.debounce === 'function')
+    ? utils.debounce(() => {
+        if (typeof window.drawOrgChartLines === 'function') {
+          window.drawOrgChartLines();
+        }
+      }, timing.resizeDebounce ?? 250)
+    : function handleResizeFallback() {
+        if (resizeTimerId) {
+          clearTimeout(resizeTimerId);
+        }
+        resizeTimerId = setTimeout(() => {
+          if (typeof window.drawOrgChartLines === 'function') {
+            window.drawOrgChartLines();
+          }
+        }, timing.resizeDebounce ?? 250);
+      };
   
-  window.addEventListener('resize', handleResize);
+  window.addEventListener('resize', debouncedResize);
   
   // INITIALIZATION
   
@@ -778,10 +790,14 @@
     }
   }
   
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initRoster);
+  if (typeof utils.onReady === 'function') {
+    utils.onReady(initRoster);
   } else {
-    initRoster();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initRoster);
+    } else {
+      initRoster();
+    }
   }
   
   window.addEventListener('message', function(event) {

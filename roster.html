@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scrollbar-hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,90 +12,14 @@
     <link rel="stylesheet" href="assets/css/base.css">
     <link rel="stylesheet" href="assets/css/roster.css">
     <link rel="stylesheet" href="assets/css/utilities.css">
-    
-    <style>
-        html {
-            overflow: auto;
-            scrollbar-width: none !important;
-            -ms-overflow-style: none !important;
-        }
-        
-        html::-webkit-scrollbar {
-            width: 0 !important;
-            height: 0 !important;
-            display: none !important;
-        }
-        
-        body {
-            background: #2a2a2a;
-            overflow: auto;
-            margin: 0;
-            padding: 0;
-            width: 100vw;
-            height: 100vh;
-            scrollbar-width: none !important;
-            -ms-overflow-style: none !important;
-        }
-        
-        body::-webkit-scrollbar {
-            width: 0 !important;
-            height: 0 !important;
-            display: none !important;
-        }
-        
-        body::before {
-            display: none !important;
-        }
-        
-        .roster-wall {
-            min-height: 100vh;
-            width: 100%;
-            overflow: auto;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        
-        .roster-wall::-webkit-scrollbar {
-            width: 0;
-            height: 0;
-        }
-        
-        .roster-wall.show-scrollbar {
-            scrollbar-width: thin;
-            -ms-overflow-style: auto;
-        }
-        
-        .roster-wall.show-scrollbar::-webkit-scrollbar {
-            height: 12px;
-            width: 12px;
-        }
-        
-        .roster-wall.show-scrollbar::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 6px;
-        }
-        
-        .roster-wall.show-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(212, 175, 55, 0.6);
-            border-radius: 6px;
-        }
-        
-        .roster-wall.show-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(212, 175, 55, 0.8);
-        }
-        
-        .roster-close-button {
-            position: fixed;
-        }
-    </style>
 </head>
-<body>
+<body class="scrollbar-hidden">
     <button class="roster-close-button" type="button" aria-label="Close Family Roster">×</button>
     
-    <div class="roster-wall">
+    <div class="roster-wall scrollbar-hidden">
         <h1 class="roster-title">CLAN GIOVANNI</h1>
         <div class="roster-subtitle">San Francisco, California</div>
-        <div id="organizationalChart" class="org-chart-container">
+        <div id="organizationalChart" class="org-chart-container scrollbar-hidden">
             <svg id="orgChartLines" class="org-chart-lines-svg"></svg>
         </div>
     </div>
@@ -170,8 +94,10 @@
                     return;
                 }
                 scrollbarVisible = shouldShow;
-                wall.classList.toggle('show-scrollbar', shouldShow);
-                chart.classList.toggle('show-scrollbar', shouldShow);
+                wall.classList.toggle('scrollbar-visible', shouldShow);
+                wall.classList.toggle('scrollbar-hidden', !shouldShow);
+                chart.classList.toggle('scrollbar-visible', shouldShow);
+                chart.classList.toggle('scrollbar-hidden', !shouldShow);
             }
 
             document.addEventListener('mousemove', (event) => {

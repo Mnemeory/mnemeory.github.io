@@ -504,7 +504,7 @@
 
 /* Expanding - Gold pushpin */
 .territory-card[data-status="Expanding"]::before {
-  background: radial-gradient(circle at 30% 30%, #D4AF37, #B8960C);
+  background: radial-gradient(circle at 30% 30%, var(--accent-gold), #B8960C);
 }
 
 .territory-name {

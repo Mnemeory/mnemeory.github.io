@@ -38,7 +38,88 @@
     };
     return debounced;
   }
-  
+
+  function onReady(callback) {
+    if (typeof callback !== 'function') {
+      return;
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', callback, { once: true });
+    } else {
+      callback();
+    }
+  }
+
+  const domCacheStore = new Map();
+
+  const domCache = {
+    get(selector) {
+      if (!selector || typeof selector !== 'string') {
+        return null;
+      }
+
+      if (!domCacheStore.has(selector)) {
+        domCacheStore.set(selector, document.querySelector(selector));
+      }
+
+      return domCacheStore.get(selector);
+    },
+
+    all(selector) {
+      if (!selector || typeof selector !== 'string') {
+        return [];
+      }
+
+      if (!domCacheStore.has(selector)) {
+        domCacheStore.set(selector, Array.prototype.slice.call(document.querySelectorAll(selector)));
+      }
+
+      const cached = domCacheStore.get(selector);
+      if (Array.isArray(cached)) {
+        return cached.slice();
+      }
+      return cached ? [cached] : [];
+    },
+
+    clear(selector) {
+      if (typeof selector === 'string') {
+        domCacheStore.delete(selector);
+      } else {
+        domCacheStore.clear();
+      }
+    }
+  };
+
+  function renderDetailRows(rows, options = {}) {
+    const rowDefaultClass = typeof options.rowClass === 'string' ? options.rowClass : 'detail-row';
+    const labelDefaultClass = typeof options.labelClass === 'string' ? options.labelClass : 'label';
+    const valueDefaultClass = typeof options.valueClass === 'string' ? options.valueClass : 'value';
+
+    if (!Array.isArray(rows) || rows.length === 0) {
+      return '';
+    }
+
+    const toHtml = (row) => {
+      if (!row) return '';
+      const rowClass = typeof row.rowClass === 'string' ? row.rowClass : rowDefaultClass;
+      const labelClass = typeof row.labelClass === 'string' ? row.labelClass : labelDefaultClass;
+      const valueClass = typeof row.valueClass === 'string' ? row.valueClass : valueDefaultClass;
+
+      const labelHtml = escapeHtml(row.label ?? '');
+      const valueHtml = row.html ? String(row.value ?? '') : escapeHtml(row.value ?? '');
+
+      return (
+        '<div class="' + rowClass + '">' +
+          '<span class="' + labelClass + '">' + labelHtml + '</span>' +
+          '<span class="' + valueClass + '">' + valueHtml + '</span>' +
+        '</div>'
+      );
+    };
+
+    return rows.map(toHtml).join('');
+  }
+
   function formatStatus(status, defaultValue = 'Unknown') {
     if (!status) return defaultValue;
     if (typeof status !== 'string') return defaultValue;
@@ -169,6 +250,9 @@
     escapeHtml,
     debugLog,
     debounce,
+    onReady,
+    domCache,
+    renderDetailRows,
     formatStatus,
     createElement,
     formatMoney,

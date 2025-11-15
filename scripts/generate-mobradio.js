@@ -4,11 +4,58 @@ const fs = require('fs/promises');
 const path = require('path');
 
 const AUDIO_DIR = path.resolve(__dirname, '..', 'assets', 'mobradio');
-const PLAYLIST_FILE = path.resolve(AUDIO_DIR, 'playlist.json');
-const SUPPORTED_EXTENSION = '.mp3';
+let PLAYLIST_FILE = path.resolve(AUDIO_DIR, 'playlist.json');
+let SUPPORTED_EXTENSIONS = ['.mp3'];
+
+function parseArgs(argv) {
+  const args = {};
+  for (let i = 0; i < argv.length; i++) {
+    const token = argv[i];
+    if (!token) continue;
+    if (token.startsWith('--')) {
+      const [keyRaw, maybeValue] = token.split('=', 2);
+      const key = keyRaw.replace(/^--/, '');
+      if (maybeValue !== undefined) {
+        args[key] = maybeValue;
+      } else {
+        const next = argv[i + 1];
+        if (next && !next.startsWith('--')) {
+          args[key] = next;
+          i += 1;
+        } else {
+          args[key] = true;
+        }
+      }
+    }
+  }
+  return args;
+}
+
+function applyCliOptions() {
+  const args = parseArgs(process.argv.slice(2));
+
+  if (args.ext) {
+    const parts = String(args.ext).split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+    if (parts.length > 0) {
+      SUPPORTED_EXTENSIONS = parts.map(ext => ext.startsWith('.') ? ext : `.${ext}`);
+    }
+  }
+
+  if (args.output) {
+    const outPath = path.resolve(process.cwd(), args.output);
+    PLAYLIST_FILE = outPath;
+  }
+}
 
 function normalizeTitle(filename) {
-  const basename = filename.replace(new RegExp(`${SUPPORTED_EXTENSION}$`, 'i'), '');
+  let basename = filename;
+  for (const ext of SUPPORTED_EXTENSIONS) {
+    const re = new RegExp(`${ext.replace('.', '\\.')}$`, 'i');
+    if (re.test(basename)) {
+      basename = basename.replace(re, '');
+      break;
+    }
+  }
   let title = basename.trim();
 
   title = title.replace(/ _([^_]+)_/g, ' ($1)');
@@ -43,7 +90,10 @@ async function ensureAudioDirectory() {
 
 async function getTrackFiles() {
   const entries = await fs.readdir(AUDIO_DIR);
-  return entries.filter(entry => entry.toLowerCase().endsWith(SUPPORTED_EXTENSION));
+  return entries.filter(entry => {
+    const lower = entry.toLowerCase();
+    return SUPPORTED_EXTENSIONS.some(ext => lower.endsWith(ext));
+  });
 }
 
 async function writePlaylist(tracks) {
@@ -52,6 +102,7 @@ async function writePlaylist(tracks) {
 }
 
 async function main() {
+  applyCliOptions();
   await ensureAudioDirectory();
   const files = await getTrackFiles();
 

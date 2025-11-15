@@ -8,6 +8,7 @@
   const cssClasses = config.CSS_CLASSES || {};
   const displayText = config.DISPLAY_TEXT || {};
   const utils = window.utils || {};
+  const domCache = typeof utils.domCache === 'object' ? utils.domCache : null;
   const validateArrayIndex = typeof utils.validateArrayIndex === 'function'
     ? utils.validateArrayIndex
     : (() => false);
@@ -26,13 +27,13 @@
   function getCachedElements() {
     if (!cachedElements) {
       cachedElements = {
-        sealModal: document.getElementById(selectors.sealModal),
-        sealModalImage: document.getElementById(selectors.sealModalImage),
-        sealModalContent: document.querySelector(`#${selectors.sealModal} .seal-modal-content`),
-        cardModal: document.getElementById(selectors.cardModal),
-        cardModalContent: document.getElementById(selectors.cardModalContent),
-        familyRosterFrame: document.getElementById(selectors.familyRosterFrame),
-        rosterButton: document.querySelector(selectors.rosterButton)
+        sealModal: domCache ? domCache.get(`#${selectors.sealModal}`) : document.getElementById(selectors.sealModal),
+        sealModalImage: domCache ? domCache.get(`#${selectors.sealModalImage}`) : document.getElementById(selectors.sealModalImage),
+        sealModalContent: domCache ? domCache.get(`#${selectors.sealModal} .seal-modal-content`) : document.querySelector(`#${selectors.sealModal} .seal-modal-content`),
+        cardModal: domCache ? domCache.get(`#${selectors.cardModal}`) : document.getElementById(selectors.cardModal),
+        cardModalContent: domCache ? domCache.get(`#${selectors.cardModalContent}`) : document.getElementById(selectors.cardModalContent),
+        familyRosterFrame: domCache ? domCache.get(`#${selectors.familyRosterFrame}`) : document.getElementById(selectors.familyRosterFrame),
+        rosterButton: domCache ? domCache.get(selectors.rosterButton) : document.querySelector(selectors.rosterButton)
       };
     }
     return cachedElements;
@@ -65,12 +66,13 @@
   function openCardModal(cardType, index) {
     const { cardModal, cardModalContent } = getCachedElements();
     const data = window.ledgerData;
+    const renderDetailRows = (utils && typeof utils.renderDetailRows === 'function') ? utils.renderDetailRows : null;
 
     if (!cardModal || !cardModalContent || !data) return;
 
     const modalContainer = cardModalContent.parentElement;
     if (modalContainer) {
-      modalContainer.classList.remove(cssClasses.vendettaTheme, cssClasses.territoryTheme);
+      modalContainer.classList.remove(cssClasses.vendettaTheme, cssClasses.territoryTheme, 'paper-card', 'manila-card');
     }
 
     let content = '';
@@ -83,7 +85,15 @@
 
       const statusDisplay = formatStatus(vendetta.status, displayText.defaults?.unknown);
 
-      content = `
+      const detailRowsHtml = renderDetailRows
+        ? renderDetailRows([
+            { label: 'Status:', value: statusDisplay },
+            { label: 'Offense:', value: vendetta.offense || 'Not specified' },
+            { label: 'Last Seen:', value: vendetta.last_seen || 'Unknown' },
+            { label: 'Known Associates:', value: vendetta.associates || 'None' },
+            { label: 'Authorization:', value: vendetta.authorized_by || 'Unknown', valueClass: 'value made-name' }
+          ], { rowClass: 'detail-row' })
+        : `
         <div class="modal-card-header">
           <span class="vendetta-type ${vendetta.type || 'financial'}">${typeText}</span>
           <h3 class="modal-card-title">${escapeHtml(vendetta.name || 'Unknown')}${vendetta.nickname ? ` "${escapeHtml(vendetta.nickname)}"` : ''}</h3>
@@ -109,10 +119,19 @@
             <span class="label">Authorization:</span>
             <span class="value made-name">${escapeHtml(vendetta.authorized_by || 'Unknown')}</span>
           </div>
+        </div>`;
+
+      content = `
+        <div class="modal-card-header">
+          <span class="vendetta-type ${vendetta.type || 'financial'}">${typeText}</span>
+          <h3 class="modal-card-title">${escapeHtml(vendetta.name || 'Unknown')}${vendetta.nickname ? ` "${escapeHtml(vendetta.nickname)}"` : ''}</h3>
+        </div>
+        <div class="modal-card-body">
+          ${detailRowsHtml}
         </div>
       `;
       if (modalContainer) {
-        modalContainer.classList.add(cssClasses.vendettaTheme);
+        modalContainer.classList.add(cssClasses.vendettaTheme, 'paper-card');
       }
     } else if (cardType === 'territory' && Array.isArray(data.territory) && validateArrayIndex(data.territory, index)) {
       const territory = data.territory[index];
@@ -173,7 +192,9 @@
       const famigliaGroup = renderCrewGroup('La Famiglia:', sortedFamiglia, displayText.defaults?.none, 'famiglia');
       const businessesHtml = formatNameList(territory.businesses, displayText.defaults?.none);
 
-      content = `
+      const businessRow = renderDetailRows
+        ? renderDetailRows([{ label: 'Businesses:', value: businessesHtml, html: true }], { rowClass: 'detail-row' })
+        : `
         <div class="modal-card-header">
           <h3 class="modal-card-title">${escapeHtml(territory.name || 'Unknown Territory')}</h3>
           <div class="territory-status">Status: ${escapeHtml(territory.status || 'Unknown')}</div>
@@ -191,16 +212,36 @@
             <span class="label">Businesses:</span>
             <span class="value">${businessesHtml}</span>
           </div>
-          ${territory.notes ? `
+        </div>`;
+
+      const notesRow = territory.notes && renderDetailRows
+        ? renderDetailRows([{ label: 'Notes:', value: territory.notes, rowClass: 'detail-row notes' }], { rowClass: 'detail-row notes' })
+        : (territory.notes ? `
           <div class="detail-row notes">
             <span class="label">Notes:</span>
             <span class="value">${escapeHtml(territory.notes)}</span>
+          </div>` : '');
+
+      content = `
+        <div class="modal-card-header">
+          <h3 class="modal-card-title">${escapeHtml(territory.name || 'Unknown Territory')}</h3>
+          <div class="territory-status">Status: ${escapeHtml(territory.status || 'Unknown')}</div>
+        </div>
+        <div class="modal-card-body">
+          <div class="detail-row">
+            <span class="label">Assigned Crew:</span>
+            <div class="value assigned-crew">
+              ${capoGroup}
+              ${squadraGroup}
+              ${famigliaGroup}
+            </div>
           </div>
-          ` : ''}
+          ${businessRow}
+          ${notesRow}
         </div>
       `;
       if (modalContainer) {
-        modalContainer.classList.add(cssClasses.territoryTheme);
+        modalContainer.classList.add(cssClasses.territoryTheme, 'manila-card');
       }
     }
 
@@ -308,10 +349,14 @@
     });
   }
   
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+  if (typeof utils.onReady === 'function') {
+    utils.onReady(init);
   } else {
-    init();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   }
   
 })();

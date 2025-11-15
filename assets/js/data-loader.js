@@ -5,6 +5,8 @@
 
   const config = window.CONFIG || {};
   const dataPaths = config.DATA_PATHS || {};
+  const utils = window.utils || {};
+  const domCache = typeof utils.domCache === 'object' ? utils.domCache : null;
   const selectors = config.SELECTORS || {};
   const cssClasses = config.CSS_CLASSES || {};
   const displayText = config.DISPLAY_TEXT || {};
@@ -12,7 +14,6 @@
   const defaults = config.DEFAULTS || {};
   const timing = config.TIMING || {};
 
-  const utils = window.utils || {};
   const escapeHtml = typeof utils.escapeHtml === 'function'
     ? utils.escapeHtml
     : (value => String(value ?? ''));
@@ -49,10 +50,14 @@
   let partialErrorNotice = null;
   let partialErrorTimer = null;
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+  if (typeof utils.onReady === 'function') {
+    utils.onReady(init);
   } else {
-    init();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   }
   
   async function init() {
@@ -73,17 +78,16 @@
   async function loadAllData() {
     const errors = [];
 
-    const results = await Promise.allSettled(resourceDefinitions.map(resource => {
-      if (!resource.path) {
-        return Promise.reject(new Error(`Missing data path for ${resource.key}`));
-      }
-      return fetchYAML(resource.path);
-    }));
+    const results = (window.yamlLoader && typeof window.yamlLoader.loadResources === 'function')
+      ? await window.yamlLoader.loadResources(resourceDefinitions)
+      : await Promise.allSettled(resourceDefinitions.map(resource => fetch(resource.path).then(r => r.text()).then(t => jsyaml.load(t))));
 
     results.forEach((result, index) => {
       const resource = resourceDefinitions[index];
       const fallback = resource.fallback;
-      const fileName = getFileName(resource.path) || `${resource.key}.yml`;
+      const fileName = (window.yamlLoader && typeof window.yamlLoader.getFileName === 'function')
+        ? window.yamlLoader.getFileName(resource.path)
+        : (typeof resource.path === 'string' ? (resource.path.split('/').pop() || `${resource.key}.yml`) : `${resource.key}.yml`);
 
       if (result.status === 'fulfilled') {
         data[resource.key] = result.value ?? fallback;
@@ -108,37 +112,6 @@
     }
   }
 
-  function getFileName(path) {
-    if (typeof path !== 'string') {
-      return '';
-    }
-    const segments = path.split('/');
-    return segments[segments.length - 1];
-  }
-
-  async function fetchYAML(path) {
-    try {
-      const response = await fetch(path);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch ${path}: HTTP ${response.status}`);
-      }
-      const text = await response.text();
-
-      try {
-        return jsyaml.load(text);
-      } catch (yamlError) {
-        throw new Error(`Invalid YAML syntax in ${path}: ${yamlError.message}`);
-      }
-    } catch (error) {
-      if (typeof jsyaml === 'undefined' || typeof jsyaml.load !== 'function') {
-        throw new Error(displayText.errors?.yamlUnavailable || 'YAML parser is not available.');
-      }
-
-      if (config.DEBUG) console.error(`Error loading ${path}:`, error);
-      throw error;
-    }
-  }
-  
   function populatePage() {
     populateCollections();
     populateVendetta();
@@ -174,7 +147,7 @@
   }
   
   function shareDataWithIframe() {
-    const rosterFrame = document.getElementById(selectors.familyRosterFrame);
+    const rosterFrame = domCache ? domCache.get(`#${selectors.familyRosterFrame}`) : document.getElementById(selectors.familyRosterFrame);
     if (!rosterFrame || !rosterFrame.contentWindow) {
       return;
     }
@@ -211,7 +184,7 @@
   }
   
   function populateCollections() {
-    const tbody = document.getElementById(selectors.collectionsBody);
+    const tbody = domCache ? domCache.get(`#${selectors.collectionsBody}`) : document.getElementById(selectors.collectionsBody);
     if (!tbody) {
       return;
     }
@@ -271,7 +244,7 @@
   }
   
   function populateVendetta() {
-    const container = document.getElementById(selectors.vendettaContainer);
+    const container = domCache ? domCache.get(`#${selectors.vendettaContainer}`) : document.getElementById(selectors.vendettaContainer);
     if (!container) {
       return;
     }
@@ -313,6 +286,25 @@
       const name = escapeHtml(vendetta.name || displayText.defaults?.unknown || '');
       const nickname = escapeHtml(vendetta.nickname || '');
       const authorization = escapeHtml(vendetta.authorized_by || displayText.defaults?.unknown || '');
+      const authorizationText = vendetta.authorized_by || displayText.defaults?.unknown || '';
+
+      const detailRows = (utils && typeof utils.renderDetailRows === 'function')
+        ? utils.renderDetailRows(
+            [
+              { label: 'Status:', value: statusDisplay, rowClass: 'card-detail-row' },
+              { label: 'Authorization:', value: authorizationText, rowClass: 'card-detail-row', valueClass: 'value made-name' }
+            ],
+            { rowClass: 'card-detail-row', labelClass: 'label', valueClass: 'value' }
+          )
+        : `
+          <div class="card-detail-row">
+            <span class="label">Status:</span>
+            <span class="value">${escapeHtml(statusDisplay)}</span>
+          </div>
+          <div class="card-detail-row">
+            <span class="label">Authorization:</span>
+            <span class="value made-name">${authorization}</span>
+          </div>`;
 
       card.innerHTML = `
         <div class="vendetta-type ${vendettaTypeClass}">
@@ -324,14 +316,7 @@
         </div>
 
         <div class="card-preview">
-          <div class="card-detail-row">
-            <span class="label">Status:</span>
-            <span class="value">${escapeHtml(statusDisplay)}</span>
-          </div>
-          <div class="card-detail-row">
-            <span class="label">Authorization:</span>
-            <span class="value made-name">${authorization}</span>
-          </div>
+          ${detailRows}
         </div>
       `;
 
@@ -342,7 +327,7 @@
   }
   
   function populateTerritory() {
-    const container = document.getElementById(selectors.territoryContainer);
+    const container = domCache ? domCache.get(`#${selectors.territoryContainer}`) : document.getElementById(selectors.territoryContainer);
     if (!container) {
       return;
     }
@@ -405,7 +390,7 @@
   }
   
   function updateDynamicElements() {
-    const pageNumber = document.getElementById(selectors.pageNumber);
+    const pageNumber = domCache ? domCache.get(`#${selectors.pageNumber}`) : document.getElementById(selectors.pageNumber);
     if (!pageNumber) {
       return;
     }

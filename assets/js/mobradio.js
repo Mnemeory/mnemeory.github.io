@@ -4,21 +4,8 @@
   const AUDIO_ELEMENT_ID = 'mob-radio-player';
   const PLAYLIST_URL = 'assets/mobradio/playlist.json';
   const PLAYING_CLASS = 'is-playing';
-
-  function shuffle(array) {
-    const result = array.slice();
-    for (let i = result.length - 1; i > 0; i -= 1) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const temp = result[i];
-      result[i] = result[j];
-      result[j] = temp;
-    }
-    return result;
-  }
-
-  function encodeTrackSrc(track) {
-    return encodeURI(track.file);
-  }
+  const utils = window.utils || {};
+  const domCache = typeof utils.domCache === 'object' ? utils.domCache : null;
 
   function fetchPlaylist() {
     if (typeof fetch !== 'function') {
@@ -36,9 +23,10 @@
   function initMobRadio() {
     const config = window.CONFIG || {};
     const selectors = config.SELECTORS || {};
-    const button = document.querySelector(selectors.mobRadioButton || '.mob-radio-button');
-    const audio = document.getElementById(AUDIO_ELEMENT_ID);
-    const volumeSlider = document.getElementById('mob-radio-volume-slider');
+    const button = domCache ? domCache.get(selectors.mobRadioButton || '.mob-radio-button') : document.querySelector(selectors.mobRadioButton || '.mob-radio-button');
+    const audio = domCache ? domCache.get(`#${AUDIO_ELEMENT_ID}`) : document.getElementById(AUDIO_ELEMENT_ID);
+    const volumeSlider = domCache ? domCache.get('#mob-radio-volume-slider') : document.getElementById('mob-radio-volume-slider');
+    const playerFactory = window.playlistPlayer && typeof window.playlistPlayer.create === 'function' ? window.playlistPlayer.create : null;
 
     if (!button || !audio) {
       return;
@@ -46,30 +34,17 @@
 
     const defaultTooltip = button.getAttribute('title') || button.getAttribute('aria-label') || '';
 
-    const state = {
-      playlist: [],
-      queue: [],
-      index: -1
-    };
-
     button.setAttribute('disabled', 'disabled');
-
-    // Initialize volume from localStorage
-    function initVolume() {
-      const savedVolume = localStorage.getItem('mobRadioVolume');
-      const volume = savedVolume !== null ? parseFloat(savedVolume) : 0.7;
-      audio.volume = volume;
-      if (volumeSlider) {
-        volumeSlider.value = volume * 100;
-      }
-    }
 
     // Handle volume changes
     function handleVolumeChange() {
       if (!volumeSlider) return;
       const volume = volumeSlider.value / 100;
-      audio.volume = volume;
-      localStorage.setItem('mobRadioVolume', volume.toString());
+      if (player) {
+        player.setVolume(volume);
+      } else {
+        audio.volume = volume;
+      }
     }
 
     // Set up volume control
@@ -77,8 +52,6 @@
       volumeSlider.addEventListener('input', handleVolumeChange);
       volumeSlider.addEventListener('change', handleVolumeChange);
     }
-
-    initVolume();
 
     function setButtonPlaying(playing) {
       button.classList.toggle(PLAYING_CLASS, playing);
@@ -101,74 +74,15 @@
       button.setAttribute('title', label);
     }
 
-    function prepareQueue() {
-      if (!state.playlist.length) {
-        state.queue = [];
-        state.index = -1;
-        return;
-      }
-      state.queue = shuffle(state.playlist);
-      state.index = 0;
-    }
+    const player = playerFactory ? playerFactory(audio, { storageKey: 'mobRadio', onTrackChange: setTooltip }) : null;
 
-    function currentTrack() {
-      return state.queue[state.index];
-    }
-
-    function loadCurrentTrack() {
-      const track = currentTrack();
-      if (!track) {
-        setTooltip(null);
-        setButtonPlaying(false);
-        audio.removeAttribute('src');
-        return;
-      }
-
-      audio.src = encodeTrackSrc(track);
-      setTooltip(track);
-      const playPromise = audio.play();
-      if (playPromise && typeof playPromise.catch === 'function') {
-        playPromise.catch(function(error) {
-          console.error('Mob Radio playback failed to start:', error);
-          setButtonPlaying(false);
-        });
-      }
-    }
-
-    function playNextTrack() {
-      if (!state.queue.length) {
-        prepareQueue();
-      } else {
-        state.index += 1;
-        if (state.index >= state.queue.length) {
-          prepareQueue();
-        }
-      }
-      loadCurrentTrack();
+    if (volumeSlider) {
+      volumeSlider.value = String(Math.round((audio.volume || 0.7) * 100));
     }
 
     function togglePlayback() {
-      if (!state.playlist.length) {
-        console.warn('Mob Radio playlist is not ready yet.');
-        return;
-      }
-
-      if (audio.paused) {
-        if (!state.queue.length || state.index === -1 || audio.ended || !audio.src) {
-          prepareQueue();
-          loadCurrentTrack();
-        } else {
-          const playPromise = audio.play();
-          if (playPromise && typeof playPromise.catch === 'function') {
-            playPromise.catch(function(error) {
-              console.error('Mob Radio resume failed:', error);
-              setButtonPlaying(false);
-            });
-          }
-        }
-      } else {
-        audio.pause();
-      }
+      if (!player) return;
+      player.togglePlayback();
     }
 
     function bindEvents() {
@@ -178,15 +92,6 @@
           event.preventDefault();
           togglePlayback();
         }
-      });
-
-      audio.addEventListener('ended', function() {
-        playNextTrack();
-      });
-
-      audio.addEventListener('error', function(event) {
-        console.error('Mob Radio encountered an audio error:', event);
-        playNextTrack();
       });
 
       audio.addEventListener('play', function() {
@@ -202,9 +107,9 @@
 
     function disableButton(reason) {
       console.warn(reason);
-      state.playlist = [];
-      state.queue = [];
-      state.index = -1;
+      if (player && typeof player.setPlaylist === 'function') {
+        player.setPlaylist([]);
+      }
       setButtonPlaying(false);
       button.setAttribute('disabled', 'disabled');
       setTooltip(null);
@@ -219,7 +124,9 @@
           disableButton('Mob Radio playlist is empty.');
           return;
         }
-        state.playlist = tracks.slice();
+        if (player && typeof player.setPlaylist === 'function') {
+          player.setPlaylist(tracks);
+        }
         button.removeAttribute('disabled');
         setTooltip(null);
       } catch (error) {
@@ -228,10 +135,14 @@
     })();
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMobRadio);
+  if (typeof utils.onReady === 'function') {
+    utils.onReady(initMobRadio);
   } else {
-    initMobRadio();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initMobRadio);
+    } else {
+      initMobRadio();
+    }
   }
 })();
 

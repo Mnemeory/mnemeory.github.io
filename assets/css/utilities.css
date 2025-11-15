@@ -60,6 +60,52 @@
 
 .hidden { display: none !important; }
 
+/* Scrollbar utilities */
+.scrollbar-hidden {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+.scrollbar-hidden::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+.scrollbar-visible {
+  scrollbar-width: auto;
+  -ms-overflow-style: auto;
+}
+.scrollbar-visible::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+  display: initial;
+}
+
+/* Paper / card background utilities */
+.paper-card {
+  background:
+    url('../images/paper-texture-1.jpg'),
+    var(--paper-polaroid);
+  background-blend-mode: multiply;
+  background-size: cover;
+  box-shadow: var(--shadow-polaroid);
+}
+
+.manila-card {
+  background:
+    url('../images/paper-texture-1.jpg'),
+    #FFE87C;
+  background-blend-mode: multiply;
+  background-size: cover;
+  box-shadow: var(--shadow-polaroid);
+}
+
+/* Typography utilities */
+.typewriter { font-family: var(--font-typewriter); }
+.stamp { font-family: var(--font-stamp); }
+.uppercase-lg { text-transform: uppercase; letter-spacing: 0.05em; }
+.ls-wide { letter-spacing: 0.08em; }
+
 /* ================================================
    ACCESSIBILITY
    ================================================ */

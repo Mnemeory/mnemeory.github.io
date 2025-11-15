@@ -36,6 +36,10 @@
   --pin-silver: #C0C0C0;
   --pin-shadow: rgba(0, 0, 0, 0.4);
   
+  /* Accents */
+  --accent-gold: #D4AF37;
+  --accent-gold-dark: #AD8D25;
+  
   /* Stains & Wear */
   --stain-coffee: rgba(101, 67, 33, 0.15);
   --stain-grease: rgba(139, 119, 101, 0.2);

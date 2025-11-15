@@ -4,6 +4,8 @@
   'use strict';
 
   const config = window.CONFIG || {};
+  const utils = window.utils || {};
+  const domCache = typeof utils.domCache === 'object' ? utils.domCache : null;
   const selectors = config.SELECTORS || {};
   const cssClasses = config.CSS_CLASSES || {};
   const svgNamespace = config.SVG_NAMESPACE || 'http://www.w3.org/2000/svg';
@@ -51,8 +53,8 @@
       return;
     }
 
-    const svg = document.getElementById(orgChartLinesId);
-    const container = document.getElementById(organizationalChartId);
+    const svg = domCache ? domCache.get(`#${orgChartLinesId}`) : document.getElementById(orgChartLinesId);
+    const container = domCache ? domCache.get(`#${organizationalChartId}`) : document.getElementById(organizationalChartId);
     
     if (!svg || !container) {
       return;
@@ -75,8 +77,10 @@
       return;
     }
 
-    const cachedTree = window.__orgChartTreeCache || null;
-    const orgTree = cachedTree || (window.buildOrgTree ? window.buildOrgTree(data.familyroster) : null);
+    const cached = window.__orgChartTreeCache || null;
+    const orgTree = cached && cached.org
+      ? cached.org
+      : (cached && cached.capos ? cached : (window.buildOrgTree ? window.buildOrgTree(data.familyroster) : null));
     if (!orgTree) return;
 
     drawBossLevel(svg, orgTree, positions);
@@ -238,7 +242,7 @@
   let resizeFallbackHandler = null;
 
   function initResizeObserver() {
-    const container = document.getElementById(organizationalChartId);
+    const container = domCache ? domCache.get(`#${organizationalChartId}`) : document.getElementById(organizationalChartId);
     if (!container) {
       return;
     }
@@ -279,18 +283,26 @@
       return;
     }
 
-    let timeoutId = null;
     const debounceDelay = typeof timing.resizeDebounce === 'number' ? timing.resizeDebounce : 150;
-    resizeFallbackHandler = function() {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-      timeoutId = setTimeout(() => {
+    if (typeof utils.debounce === 'function') {
+      resizeFallbackHandler = utils.debounce(() => {
         if (window.ledgerData && window.ledgerData.familyroster) {
           window.drawOrgChartLines();
         }
       }, debounceDelay);
-    };
+    } else {
+      let timeoutId = null;
+      resizeFallbackHandler = function() {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        timeoutId = setTimeout(() => {
+          if (window.ledgerData && window.ledgerData.familyroster) {
+            window.drawOrgChartLines();
+          }
+        }, debounceDelay);
+      };
+    }
 
     window.addEventListener('resize', resizeFallbackHandler);
   }
@@ -305,10 +317,14 @@
     }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', scheduleObserverInit);
+  if (typeof utils.onReady === 'function') {
+    utils.onReady(scheduleObserverInit);
   } else {
-    scheduleObserverInit();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', scheduleObserverInit);
+    } else {
+      scheduleObserverInit();
+    }
   }
 
 })();
