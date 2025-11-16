@@ -419,10 +419,8 @@
         console.error('Failed to postMessage to roster frame:', error);
       }
     };
-    if (rosterFrame.contentDocument && rosterFrame.contentDocument.readyState === 'complete') {
-      postUpdate();
-      return;
-    }
+    // Post immediately (may hit about:blank) and again after the iframe loads roster.html
+    postUpdate();
     rosterFrame.addEventListener('load', postUpdate, { once: true });
   }
 
@@ -597,6 +595,8 @@
     frame.classList.add(CSS_CLASSES.active);
     document.body.classList.add(CSS_CLASSES.rosterModalOpen);
     document.body.classList.add('modal-open');
+    // Ensure the iframe has fresh data when opened
+    shareDataWithIframe();
     if (frame.contentWindow) frame.contentWindow.postMessage({ action: 'populate' }, '*');
   }
   function closeFamilyRosterModal() {
