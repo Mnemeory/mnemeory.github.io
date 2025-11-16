@@ -540,21 +540,22 @@
     const panel = document.getElementById('unassignedCrew');
     if (!panel) return;
     panel.innerHTML = '';
-    const fragment = document.createDocumentFragment();
-    const title = document.createElement('div');
-    title.className = 'unassigned-title';
-    title.textContent = 'Unassigned Crew';
-    fragment.appendChild(title);
     const unassigned = org?.unassigned || {};
     const hasConsiglieres = Array.isArray(unassigned.consiglieres) && unassigned.consiglieres.length > 0;
     const hasSoldatos = Array.isArray(unassigned.soldatos) && unassigned.soldatos.length > 0;
     const hasAssociates = Array.isArray(unassigned.associates) && unassigned.associates.length > 0;
+    const plaque = document.createElement('div');
+    plaque.className = 'roster-plaque unassigned';
+    const plaqueHeader = document.createElement('div');
+    plaqueHeader.className = 'plaque-role';
+    plaqueHeader.textContent = 'Unassigned Crew';
+    plaque.appendChild(plaqueHeader);
     if (!hasConsiglieres && !hasSoldatos && !hasAssociates) {
-      const empty = document.createElement('div');
-      empty.className = 'unassigned-empty';
-      empty.textContent = 'All crew are currently assigned.';
-      fragment.appendChild(empty);
-      panel.appendChild(fragment);
+      const emptyMsg = document.createElement('div');
+      emptyMsg.className = 'plaque-detail';
+      emptyMsg.textContent = 'All crew are currently assigned.';
+      plaque.appendChild(emptyMsg);
+      panel.appendChild(plaque);
       return;
     }
     const sections = [
@@ -596,23 +597,19 @@
       header.className = 'unassigned-section-title';
       header.textContent = section.label;
       sectionEl.appendChild(header);
-      const list = document.createElement('ul');
-      list.className = 'unassigned-list';
       section.items.forEach(item => {
         const person = section.getPerson(item);
         if (!person || !person.name) return;
-        const entry = document.createElement('li');
-        entry.className = 'unassigned-entry';
         const nameEl = document.createElement('div');
-        nameEl.className = 'unassigned-entry-name';
+        nameEl.className = 'plaque-name';
         nameEl.textContent = person.name;
-        entry.appendChild(nameEl);
+        sectionEl.appendChild(nameEl);
         const metaText = createMeta(person);
         if (metaText) {
           const metaEl = document.createElement('div');
-          metaEl.className = 'unassigned-entry-meta';
+          metaEl.className = 'plaque-detail';
           metaEl.textContent = metaText;
-          entry.appendChild(metaEl);
+          sectionEl.appendChild(metaEl);
         }
         if (typeof section.getChildren === 'function') {
           const children = Array.isArray(section.getChildren(item)) ? section.getChildren(item) : [];
@@ -620,7 +617,7 @@
             const childHeader = document.createElement('div');
             childHeader.className = 'unassigned-entry-subtitle';
             childHeader.textContent = section.childLabel || 'Crew';
-            entry.appendChild(childHeader);
+            sectionEl.appendChild(childHeader);
             const childList = document.createElement('ul');
             childList.className = 'unassigned-sublist';
             children.forEach(child => {
@@ -630,17 +627,13 @@
               childItem.textContent = child.name;
               childList.appendChild(childItem);
             });
-            entry.appendChild(childList);
+            sectionEl.appendChild(childList);
           }
         }
-        list.appendChild(entry);
       });
-      if (list.children.length > 0) {
-        sectionEl.appendChild(list);
-        fragment.appendChild(sectionEl);
-      }
+      plaque.appendChild(sectionEl);
     });
-    panel.appendChild(fragment);
+    panel.appendChild(plaque);
   }
   function getTreeDimensions(node, layout) {
     if (!node || !layout) return { width: 0, height: 0 };
@@ -871,7 +864,7 @@
       marginTop: 50
     });
     layout.calculatePositions(tree);
-    const containerWidth = container.parentElement ? container.parentElement.clientWidth : layout.getNodeWidth(tree);
+    const containerWidth = container.clientWidth || layout.getNodeWidth(tree);
     const dimsBeforeRender = getTreeDimensions(tree, layout);
     const offset = Math.max((containerWidth - dimsBeforeRender.width) / 2, 0);
     shiftTreePositions(tree, offset);

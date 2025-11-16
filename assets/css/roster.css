@@ -143,11 +143,11 @@
 
 .unassigned-panel {
   flex: 0 0 320px;
-  background: rgba(10, 10, 10, 0.75);
-  border: 2px solid rgba(212, 175, 55, 0.4);
-  border-radius: 8px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
-  padding: 24px 20px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
   color: var(--paper-polaroid);
   font-family: var(--font-typewriter);
   max-height: calc(100vh - 220px);
@@ -312,6 +312,17 @@
   width: 320px;
   height: 189px;
   aspect-ratio: 864 / 509;
+}
+
+/* Unassigned plaque variant (flexible height, sidebar placement) */
+.roster-plaque.unassigned {
+  position: static;
+  width: 100%;
+  height: auto;
+  background-size: 100% 100%;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 30px 24px;
 }
 
 /* ================================================
