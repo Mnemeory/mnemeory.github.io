@@ -18,14 +18,7 @@
 
 - name: "Financial District"
   status: "Shared with Camarilla"
-  assigned_crew:
-    capo: []
-    la_squadra:
-      - "Alex Puttanesca (Bianchi Bank Asset Protection)"
-      - "Gaio Puttanesca (Bianchi Bank General Counsel)"
-    la_famiglia:
-      - "Asano Mai (Bianchi Bank Mergers and Acquisitions)"
-      - "Lucius Sadler (Bianchi Bank Asset Protection)"
+  assigned_crew_id: "crew:consigliere:gaio-puttanesca"
   businesses: ["Baco Tell", "Bianchi Bank (Safehouse)", "Community Center", "DoRa Club", "Endron HQ", "Jazz Club", "Library", "Little Italy (Safehouse)", "Millenium Tower", "Theatre"]
   notes: "Placeholder"
 
@@ -49,10 +42,7 @@
 
 - name: "Outskirts"
   status: "Controlled"
-  assigned_crew:
-    capo: []
-    la_squadra: []
-    la_famiglia: []
+  assigned_crew_id: "crew:capo:luigi-giovanni"
   businesses: ["Giovanni Manor (Safehouse)"]
   notes: "The woods."
 
