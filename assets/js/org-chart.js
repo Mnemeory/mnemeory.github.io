@@ -271,18 +271,24 @@
     const byCapo = new Map();
     const byConsigliere = new Map();
     const bySoldato = new Map();
-    if (!Array.isArray(list)) return { byCapo, byConsigliere, bySoldato };
+    const unassigned = [];
+    if (!Array.isArray(list)) return { byCapo, byConsigliere, bySoldato, unassigned };
     list.forEach(associate => {
       if (!associate) return;
-      if (associate.assigned_soldato) {
-        addToGroup(bySoldato, associate.assigned_soldato, associate);
-      } else if (associate.assigned_consigliere) {
-        addToGroup(byConsigliere, associate.assigned_consigliere, associate);
-      } else if (associate.assigned_capo) {
-        addToGroup(byCapo, associate.assigned_capo, associate);
+      const assignedSoldato = normalizeKey(associate.assigned_soldato);
+      const assignedConsigliere = normalizeKey(associate.assigned_consigliere);
+      const assignedCapo = normalizeKey(associate.assigned_capo);
+      if (assignedSoldato) {
+        addToGroup(bySoldato, assignedSoldato, associate);
+      } else if (assignedConsigliere) {
+        addToGroup(byConsigliere, assignedConsigliere, associate);
+      } else if (assignedCapo) {
+        addToGroup(byCapo, assignedCapo, associate);
+      } else {
+        unassigned.push(associate);
       }
     });
-    return { byCapo, byConsigliere, bySoldato };
+    return { byCapo, byConsigliere, bySoldato, unassigned };
   }
   function createRosterIndex(roster) {
     const capos = Array.isArray(roster?.capo) ? roster.capo.slice() : [];
@@ -290,13 +296,20 @@
     const soldatos = Array.isArray(roster?.soldato) ? roster.soldato.slice() : [];
     const associates = Array.isArray(roster?.associate) ? roster.associate.slice() : [];
     const associateGroups = classifyAssociates(associates);
+    const unassignedConsiglieres = consiglieres.filter(item => !normalizeKey(item?.assigned_capo));
+    const unassignedSoldatos = soldatos.filter(item => !normalizeKey(item?.assigned_capo));
     return {
       capos,
       consiglieresByCapo: groupBy(consiglieres, item => item.assigned_capo),
       soldatosByCapo: groupBy(soldatos, item => item.assigned_capo),
       associatesByConsigliere: associateGroups.byConsigliere,
       associatesBySoldato: associateGroups.bySoldato,
-      associatesByCapo: associateGroups.byCapo
+      associatesByCapo: associateGroups.byCapo,
+      unassigned: {
+        consiglieres: unassignedConsiglieres,
+        soldatos: unassignedSoldatos,
+        associates: associateGroups.unassigned || []
+      }
     };
   }
   function getGroup(map, key) {
@@ -344,7 +357,11 @@
       boss: bossData || null,
       bossConsigliere: bossConsigliereData || null,
       capos: [],
-      unassignedConsiglieres: []
+      unassigned: {
+        consiglieres: [],
+        soldatos: [],
+        associates: []
+      }
     };
     index.capos.forEach(capo => {
       const capoNode = {
@@ -444,38 +461,32 @@
       org.capos.push(capoEntry);
     });
 
-    // Add Consiglieres without an assigned Capo to the Capo row (as independent crews under the Consigliere di SF)
-    const allConsiglieres = Array.isArray(roster?.consigliere) ? roster.consigliere.slice() : [];
-    const unassignedCons = allConsiglieres.filter(c => !normalizeKey(c?.assigned_capo));
-    unassignedCons.forEach(consigliere => {
-      const consigliereNode = {
-        id: createNodeId('consigliere', consigliere?.name),
-        role: 'consigliere',
-        data: consigliere,
-        children: [],
-        parent: hierarchy,
-        mod: 0,
-        isLeadership: false
-      };
+    const unassignedSection = index.unassigned || {};
+    const unassignedConsiglieres = Array.isArray(unassignedSection.consiglieres)
+      ? unassignedSection.consiglieres
+      : [];
+    unassignedConsiglieres.forEach(consigliere => {
       const associatesForCons = getGroup(index.associatesByConsigliere, consigliere?.name);
-      associatesForCons.forEach(associate => {
-        const associateNode = {
-          id: createNodeId('associate', associate?.name),
-          role: 'associate',
-          data: associate,
-          children: [],
-          parent: consigliereNode,
-          mod: 0,
-          isLeadership: false
-        };
-        consigliereNode.children.push(associateNode);
-      });
-      hierarchy.children.push(consigliereNode);
-
-      org.unassignedConsiglieres.push({
+      org.unassigned.consiglieres.push({
         consigliere,
         associates: associatesForCons
       });
+    });
+    const unassignedSoldatos = Array.isArray(unassignedSection.soldatos)
+      ? unassignedSection.soldatos
+      : [];
+    unassignedSoldatos.forEach(soldato => {
+      const associatesForSoldato = getGroup(index.associatesBySoldato, soldato?.name);
+      org.unassigned.soldatos.push({
+        soldato,
+        associates: associatesForSoldato
+      });
+    });
+    const unassignedAssociates = Array.isArray(unassignedSection.associates)
+      ? unassignedSection.associates.slice()
+      : [];
+    unassignedAssociates.forEach(associate => {
+      org.unassigned.associates.push(associate);
     });
     return { hierarchy, org, index };
   }
@@ -524,6 +535,112 @@
     };
     appendNode(node);
     container.appendChild(fragment);
+  }
+  function renderUnassignedCrew(org) {
+    const panel = document.getElementById('unassignedCrew');
+    if (!panel) return;
+    panel.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+    const title = document.createElement('div');
+    title.className = 'unassigned-title';
+    title.textContent = 'Unassigned Crew';
+    fragment.appendChild(title);
+    const unassigned = org?.unassigned || {};
+    const hasConsiglieres = Array.isArray(unassigned.consiglieres) && unassigned.consiglieres.length > 0;
+    const hasSoldatos = Array.isArray(unassigned.soldatos) && unassigned.soldatos.length > 0;
+    const hasAssociates = Array.isArray(unassigned.associates) && unassigned.associates.length > 0;
+    if (!hasConsiglieres && !hasSoldatos && !hasAssociates) {
+      const empty = document.createElement('div');
+      empty.className = 'unassigned-empty';
+      empty.textContent = 'All crew are currently assigned.';
+      fragment.appendChild(empty);
+      panel.appendChild(fragment);
+      return;
+    }
+    const sections = [
+      {
+        key: 'consiglieres',
+        label: 'Consiglieres',
+        items: unassigned.consiglieres || [],
+        getPerson: entry => entry?.consigliere,
+        getChildren: entry => entry?.associates,
+        childLabel: 'Associates'
+      },
+      {
+        key: 'soldatos',
+        label: 'Soldatos',
+        items: unassigned.soldatos || [],
+        getPerson: entry => entry?.soldato,
+        getChildren: entry => entry?.associates,
+        childLabel: 'Associates'
+      },
+      {
+        key: 'associates',
+        label: 'Associates',
+        items: unassigned.associates || [],
+        getPerson: entry => entry || null
+      }
+    ];
+    const createMeta = (person) => {
+      if (!person) return '';
+      const parts = [];
+      if (person.clan) parts.push(person.clan);
+      if (person.status) parts.push(person.status);
+      return parts.join(' • ');
+    };
+    sections.forEach(section => {
+      if (!Array.isArray(section.items) || section.items.length === 0) return;
+      const sectionEl = document.createElement('div');
+      sectionEl.className = 'unassigned-section';
+      const header = document.createElement('div');
+      header.className = 'unassigned-section-title';
+      header.textContent = section.label;
+      sectionEl.appendChild(header);
+      const list = document.createElement('ul');
+      list.className = 'unassigned-list';
+      section.items.forEach(item => {
+        const person = section.getPerson(item);
+        if (!person || !person.name) return;
+        const entry = document.createElement('li');
+        entry.className = 'unassigned-entry';
+        const nameEl = document.createElement('div');
+        nameEl.className = 'unassigned-entry-name';
+        nameEl.textContent = person.name;
+        entry.appendChild(nameEl);
+        const metaText = createMeta(person);
+        if (metaText) {
+          const metaEl = document.createElement('div');
+          metaEl.className = 'unassigned-entry-meta';
+          metaEl.textContent = metaText;
+          entry.appendChild(metaEl);
+        }
+        if (typeof section.getChildren === 'function') {
+          const children = Array.isArray(section.getChildren(item)) ? section.getChildren(item) : [];
+          if (children.length > 0) {
+            const childHeader = document.createElement('div');
+            childHeader.className = 'unassigned-entry-subtitle';
+            childHeader.textContent = section.childLabel || 'Crew';
+            entry.appendChild(childHeader);
+            const childList = document.createElement('ul');
+            childList.className = 'unassigned-sublist';
+            children.forEach(child => {
+              if (!child || !child.name) return;
+              const childItem = document.createElement('li');
+              childItem.className = 'unassigned-subentry';
+              childItem.textContent = child.name;
+              childList.appendChild(childItem);
+            });
+            entry.appendChild(childList);
+          }
+        }
+        list.appendChild(entry);
+      });
+      if (list.children.length > 0) {
+        sectionEl.appendChild(list);
+        fragment.appendChild(sectionEl);
+      }
+    });
+    panel.appendChild(fragment);
   }
   function getTreeDimensions(node, layout) {
     if (!node || !layout) return { width: 0, height: 0 };
@@ -645,7 +762,6 @@
     if (!orgTree) return;
     drawBossLevel(svg, orgTree, positions);
     drawCapoLevel(svg, orgTree, positions);
-    drawUnassignedConsiglieresLevel(svg, orgTree, positions);
     // Keep header aligned to boss after (re)draw
     updateHeaderAlignment(container, positions, orgTree);
     // On redraw (e.g., resize), keep the boss centered
@@ -698,32 +814,6 @@
         if (directAssocPositions.length > 0) {
           drawHierarchyLines(svg, capoPos, directAssocPositions);
         }
-      }
-    });
-  }
-  function drawUnassignedConsiglieresLevel(svg, orgTree, positions) {
-    if (!orgTree.unassignedConsiglieres || orgTree.unassignedConsiglieres.length === 0) return;
-    if (!orgTree.bossConsigliere) return;
-    const advisorPos = positions.get(orgTree.bossConsigliere.name);
-    if (!advisorPos) return;
-    const consPositions = [];
-    orgTree.unassignedConsiglieres.forEach(entry => {
-      const consPos = positions.get(entry.consigliere.name);
-      if (consPos) consPositions.push(consPos);
-    });
-    if (consPositions.length > 0) {
-      // Solid command lines from Consigliere di SF to each unassigned Consigliere
-      drawHierarchyLines(svg, advisorPos, consPositions);
-    }
-    // Draw each unassigned consigliere to their associates
-    orgTree.unassignedConsiglieres.forEach(entry => {
-      const consPos = positions.get(entry.consigliere.name);
-      if (!consPos) return;
-      const assocPositions = Array.isArray(entry.associates)
-        ? entry.associates.map(assoc => positions.get(assoc.name)).filter(Boolean)
-        : [];
-      if (assocPositions.length > 0) {
-        drawHierarchyLines(svg, consPos, assocPositions);
       }
     });
   }
@@ -786,6 +876,7 @@
     const offset = Math.max((containerWidth - dimsBeforeRender.width) / 2, 0);
     shiftTreePositions(tree, offset);
     renderTree(tree, container);
+    renderUnassignedCrew(unified.org);
     const dimsAfterRender = getTreeDimensions(tree, layout);
     container.style.width = `${Math.ceil(dimsAfterRender.width)}px`;
     container.style.height = `${Math.ceil(dimsAfterRender.height)}px`;

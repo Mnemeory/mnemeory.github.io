@@ -135,12 +135,120 @@
 /* ================================================
    ORGANIZATIONAL CHART CONTAINER
    ================================================ */
+.roster-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.unassigned-panel {
+  flex: 0 0 320px;
+  background: rgba(10, 10, 10, 0.75);
+  border: 2px solid rgba(212, 175, 55, 0.4);
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+  padding: 24px 20px;
+  color: var(--paper-polaroid);
+  font-family: var(--font-typewriter);
+  max-height: calc(100vh - 220px);
+  overflow-y: auto;
+  position: sticky;
+  top: 120px;
+}
+
+.unassigned-title {
+  font-family: var(--font-stamp);
+  font-size: 1.1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.unassigned-empty {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #c9c1ad;
+}
+
+.unassigned-section {
+  margin-top: 18px;
+}
+
+.unassigned-section-title {
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-gold-dark);
+  margin-bottom: 8px;
+}
+
+.unassigned-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.unassigned-entry {
+  background: rgba(20, 20, 20, 0.8);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.unassigned-entry-name {
+  font-weight: 700;
+  color: var(--accent-gold);
+  letter-spacing: 0.05em;
+}
+
+.unassigned-entry-meta {
+  font-size: 0.8rem;
+  color: #c9c1ad;
+  margin-top: 2px;
+}
+
+.unassigned-entry-subtitle {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(212, 175, 55, 0.8);
+  margin-top: 8px;
+}
+
+.unassigned-sublist {
+  list-style: none;
+  padding-left: 14px;
+  margin: 6px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.unassigned-subentry {
+  font-size: 0.8rem;
+  color: #f1e8d0;
+  position: relative;
+}
+
+.unassigned-subentry::before {
+  content: '•';
+  color: rgba(212, 175, 55, 0.7);
+  margin-right: 6px;
+}
+
 .org-chart-container {
   position: relative;
   min-height: 100vh;
   padding: 60px 20px;
   overflow-x: auto;
   overflow-y: visible;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 /* Show scrollbar on hover */
@@ -374,7 +482,6 @@ body.roster-page {
   height: auto;
   min-height: 100vh;
   overflow: auto;
-  background-color: #000;
   background-image: url('../images/rosterbackground.png');
   background-repeat: repeat;
   background-size: 1670px 1520px;
