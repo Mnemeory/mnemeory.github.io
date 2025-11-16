@@ -549,9 +549,18 @@
     if (!panel) return;
     panel.innerHTML = '';
     const unassigned = org?.unassigned || {};
-    const hasConsiglieres = Array.isArray(unassigned.consiglieres) && unassigned.consiglieres.length > 0;
-    const hasSoldatos = Array.isArray(unassigned.soldatos) && unassigned.soldatos.length > 0;
-    const hasAssociates = Array.isArray(unassigned.associates) && unassigned.associates.length > 0;
+    const consiglieres = Array.isArray(unassigned.consiglieres)
+      ? unassigned.consiglieres.map(entry => entry?.consigliere).filter(p => p && p.name)
+      : [];
+    const soldatos = Array.isArray(unassigned.soldatos)
+      ? unassigned.soldatos.map(entry => entry?.soldato).filter(p => p && p.name)
+      : [];
+    const associates = Array.isArray(unassigned.associates)
+      ? unassigned.associates.filter(p => p && p.name)
+      : [];
+    const hasConsiglieres = consiglieres.length > 0;
+    const hasSoldatos = soldatos.length > 0;
+    const hasAssociates = associates.length > 0;
     const plaque = document.createElement('div');
     plaque.className = 'roster-plaque unassigned';
     const plaqueHeader = document.createElement('div');
@@ -566,81 +575,40 @@
       panel.appendChild(plaque);
       return;
     }
-    const sections = [
-      {
-        key: 'consiglieres',
-        label: 'Consiglieres',
-        items: unassigned.consiglieres || [],
-        getPerson: entry => entry?.consigliere,
-        getChildren: entry => entry?.associates,
-        childLabel: 'Associates'
-      },
-      {
-        key: 'soldatos',
-        label: 'Soldatos',
-        items: unassigned.soldatos || [],
-        getPerson: entry => entry?.soldato,
-        getChildren: entry => entry?.associates,
-        childLabel: 'Associates'
-      },
-      {
-        key: 'associates',
-        label: 'Associates',
-        items: unassigned.associates || [],
-        getPerson: entry => entry || null
-      }
-    ];
-    const createMeta = (person) => {
-      if (!person) return '';
-      const parts = [];
-      if (person.clan) parts.push(person.clan);
-      if (person.status) parts.push(person.status);
-      return parts.join(' • ');
-    };
-    sections.forEach(section => {
-      if (!Array.isArray(section.items) || section.items.length === 0) return;
+    function renderSection(title, people) {
+      if (!Array.isArray(people) || people.length === 0) return;
       const sectionEl = document.createElement('div');
       sectionEl.className = 'unassigned-section';
       const header = document.createElement('div');
       header.className = 'unassigned-section-title';
-      header.textContent = section.label;
+      header.textContent = title;
       sectionEl.appendChild(header);
-      section.items.forEach(item => {
-        const person = section.getPerson(item);
+      const list = document.createElement('ul');
+      list.className = 'unassigned-list';
+      people.forEach(person => {
         if (!person || !person.name) return;
-        const nameEl = document.createElement('div');
-        nameEl.className = 'plaque-name';
-        nameEl.textContent = person.name;
-        sectionEl.appendChild(nameEl);
-        const metaText = createMeta(person);
-        if (metaText) {
-          const metaEl = document.createElement('div');
-          metaEl.className = 'plaque-detail';
-          metaEl.textContent = metaText;
-          sectionEl.appendChild(metaEl);
+        const li = document.createElement('li');
+        li.className = 'unassigned-entry';
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'unassigned-entry-name';
+        nameSpan.textContent = person.name;
+        const badStatus = (person.status === 'deceased' || person.status === 'retired');
+        if (badStatus) nameSpan.style.textDecoration = 'line-through';
+        li.appendChild(nameSpan);
+        if (person.clan) {
+          const clanSpan = document.createElement('span');
+          clanSpan.className = 'unassigned-entry-meta';
+          clanSpan.textContent = ` (${person.clan})`;
+          li.appendChild(clanSpan);
         }
-        if (typeof section.getChildren === 'function') {
-          const children = Array.isArray(section.getChildren(item)) ? section.getChildren(item) : [];
-          if (children.length > 0) {
-            const childHeader = document.createElement('div');
-            childHeader.className = 'unassigned-entry-subtitle';
-            childHeader.textContent = section.childLabel || 'Crew';
-            sectionEl.appendChild(childHeader);
-            const childList = document.createElement('ul');
-            childList.className = 'unassigned-sublist';
-            children.forEach(child => {
-              if (!child || !child.name) return;
-              const childItem = document.createElement('li');
-              childItem.className = 'unassigned-subentry';
-              childItem.textContent = child.name;
-              childList.appendChild(childItem);
-            });
-            sectionEl.appendChild(childList);
-          }
-        }
+        list.appendChild(li);
       });
+      sectionEl.appendChild(list);
       plaque.appendChild(sectionEl);
-    });
+    }
+    renderSection('Consigliere', consiglieres);
+    renderSection('Soldato', soldatos);
+    renderSection('Associate', associates);
     panel.appendChild(plaque);
   }
   function getTreeDimensions(node, layout) {
