@@ -1,9 +1,10 @@
 /* ================================================
-   FAMILY ROSTER - Organizational Chart Styles
-   VISUAL STYLING ONLY - Layout handled by JavaScript
+   FAMILY ROSTER - Desktop Only Organizational Chart
    ================================================ */
 
-/* Roster Modal */
+/* ================================================
+   ROSTER MODAL
+   ================================================ */
 .roster-modal {
   position: fixed;
   z-index: var(--z-modal-roster);
@@ -17,7 +18,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: none;
+  transition: opacity 0.4s ease, visibility 0.4s ease, background-color 0.4s ease;
   overflow: hidden;
 }
 
@@ -33,7 +34,7 @@
   width: 100vw;
   height: 100vh;
   opacity: 0;
-  transition: none;
+  transition: opacity 0.4s ease;
   padding: 0;
   overflow: auto;
 }
@@ -42,7 +43,9 @@
   opacity: 1;
 }
 
-/* Close Button */
+/* ================================================
+   CLOSE BUTTON
+   ================================================ */
 .roster-close-button {
   position: fixed;
   top: 30px;
@@ -72,7 +75,9 @@
   transform: rotate(90deg) scale(1.1);
 }
 
-/* Wall Background */
+/* ================================================
+   ROSTER WALL BACKGROUND
+   ================================================ */
 .roster-wall {
   position: relative;
   min-width: 100%;
@@ -98,7 +103,9 @@
   padding: 60px 40px 80px;
 }
 
-/* Roster Title */
+/* ================================================
+   ROSTER TITLE
+   ================================================ */
 .roster-title {
   font-family: var(--font-stamp);
   font-size: 3.5rem;
@@ -125,20 +132,20 @@
   opacity: 0.8;
 }
 
-/* Organizational Chart Container - Positioning context only */
+/* ================================================
+   ORGANIZATIONAL CHART CONTAINER
+   ================================================ */
 .org-chart-container {
   position: relative;
   min-height: 100vh;
   padding: 60px 20px;
   overflow-x: auto;
   overflow-y: visible;
-  /* JavaScript calculates and sets minWidth/minHeight */
 }
 
-/* Show scrollbar when class is added */
+/* Show scrollbar on hover */
 .org-chart-container.show-scrollbar {
   scrollbar-width: thin;
-  -ms-overflow-style: auto;
 }
 
 .org-chart-container.show-scrollbar::-webkit-scrollbar {
@@ -160,12 +167,11 @@
   background: rgba(212, 175, 55, 0.8);
 }
 
-/* Plaque Base Styles - Position set by JavaScript */
+/* ================================================
+   ROSTER PLAQUES
+   ================================================ */
 .roster-plaque {
   position: absolute;
-  /* left and top set by JavaScript */
-  
-  /* VISUAL STYLING ONLY */
   background: url('../images/plaquecontainer.png');
   background-size: cover;
   background-repeat: no-repeat;
@@ -174,14 +180,10 @@
   transition: all 0.3s ease;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.9);
   z-index: 10;
-  
-  /* Content centering within plaque */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  
-  /* Performance */
   will-change: transform;
   transform: translateZ(0);
 }
@@ -191,22 +193,22 @@
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.95);
 }
 
-/* Plaque Sizes - Two-Tier System */
-/* Leadership Tier: Boss, Boss Consigliere, Capo */
+/* Plaque Sizes */
 .roster-plaque.leadership {
   width: 380px;
   height: 224px;
   aspect-ratio: 864 / 509;
 }
 
-/* Crew Tier: Consigliere, Soldato, Associate */
 .roster-plaque.crew {
   width: 320px;
   height: 189px;
   aspect-ratio: 864 / 509;
 }
 
-/* Plaque Content - Gold Text */
+/* ================================================
+   PLAQUE CONTENT
+   ================================================ */
 .plaque-role {
   font-family: var(--font-stamp);
   font-size: 0.7rem;
@@ -219,16 +221,10 @@
   width: 100%;
 }
 
-/* Leadership Tier - Larger text */
 .roster-plaque.leadership .plaque-role {
   font-size: 0.85rem;
   font-weight: 700;
   margin-bottom: 8px;
-}
-
-.roster-plaque.leadership .plaque-name {
-  font-size: 1.2rem;
-  margin-bottom: 6px;
 }
 
 .plaque-name {
@@ -244,6 +240,11 @@
   hyphens: auto;
 }
 
+.roster-plaque.leadership .plaque-name {
+  font-size: 1.2rem;
+  margin-bottom: 6px;
+}
+
 .plaque-detail {
   font-family: var(--font-typewriter);
   font-size: 0.8rem;
@@ -253,8 +254,9 @@
   width: 100%;
 }
 
-/* Status Styling */
-
+/* ================================================
+   STATUS STYLING
+   ================================================ */
 .roster-plaque.vacant {
   filter: grayscale(0.5);
 }
@@ -272,13 +274,10 @@
   filter: saturate(0.6);
 }
 
-.roster-plaque.inactive .plaque-name {
-  color: #888;
-  font-style: italic;
-}
-
+.roster-plaque.inactive .plaque-name,
 .roster-plaque.inactive .plaque-role {
   color: #888;
+  font-style: italic;
 }
 
 .roster-plaque.deceased {
@@ -287,7 +286,7 @@
 }
 
 .roster-plaque.deceased::after {
-  content: '†';
+  content: '✝';
   position: absolute;
   top: 10px;
   right: 10px;
@@ -308,20 +307,15 @@
   filter: sepia(0.3);
 }
 
-.roster-plaque.retired .plaque-name {
+.roster-plaque.retired .plaque-name,
+.roster-plaque.retired .plaque-role {
   font-style: italic;
   color: #7A6F5D;
 }
 
-.roster-plaque.retired .plaque-role {
-  color: #7A6F5D;
-}
-
 /* ================================================
-   ORG CHART CONNECTION LINES - SVG Overlay
+   CONNECTION LINES SVG
    ================================================ */
-
-/* SVG overlay for drawing connection lines */
 .org-chart-lines-svg {
   position: absolute;
   top: 0;
@@ -333,7 +327,6 @@
   overflow: visible;
 }
 
-/* Command chain lines (solid gold) */
 .org-chart-lines-svg .command-line {
   fill: none;
   stroke: var(--accent-gold);
@@ -342,7 +335,6 @@
   stroke-linejoin: round;
 }
 
-/* Advisory lines (dashed gold) for Consigliere */
 .org-chart-lines-svg .advisory-line {
   fill: none;
   stroke: var(--accent-gold);
@@ -353,10 +345,8 @@
 }
 
 /* ================================================
-   ROSTER IFRAME - Full Screen Overlay
+   ROSTER IFRAME
    ================================================ */
-
-/* iFrame container - full screen overlay */
 .roster-iframe {
   position: fixed;
   top: 0;
@@ -371,18 +361,14 @@
   background: transparent;
 }
 
-/* Active state - visible */
 .roster-iframe.active {
   opacity: 1;
   visibility: visible;
 }
 
 /* ================================================
-   ROSTER PAGE LAYOUT OVERRIDES
-   Ensure roster iframe page scrolls independently
-   and does not show the corkboard frame
+   ROSTER PAGE OVERRIDES
    ================================================ */
-
 body.roster-page {
   width: 100%;
   height: auto;
@@ -395,6 +381,5 @@ body.roster-page {
 }
 
 body.roster-page::before {
-  /* Hide wooden frame from main ledger layout */
   display: none;
 }

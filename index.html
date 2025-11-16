@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Il Giovanni Libro Mastro | TFN</title>
     
     <link rel="icon" type="image/png" href="assets/images/Puttanesca.png">
@@ -21,6 +20,7 @@
     <div class="ledger-book">
         <main class="ledger-page">
             
+            <!-- Header Cards: Roster Button, Title, Radio -->
             <div class="header-cards">
                 <button class="family-roster-button" type="button" aria-label="Open Family Roster">
                     <img src="assets/images/GenericSeal.png" alt="Giovanni Family Seal" class="roster-button-image">
@@ -47,20 +47,24 @@
                 </div>
             </div>
             
+            <!-- Seal Modal -->
             <div id="sealModal" class="seal-modal">
                 <div class="seal-modal-content">
                     <img id="sealModalImage" src="" alt="Official Seal" class="seal-modal-image">
                 </div>
             </div>
             
+            <!-- Card Detail Modal -->
             <div id="cardModal" class="seal-modal">
                 <div class="seal-modal-content">
                     <div id="cardModalContent"></div>
                 </div>
             </div>
             
+            <!-- Three Column Content Layout -->
             <div class="ledger-content">
                 
+                <!-- Collections Section -->
                 <section class="ledger-section" id="collections">
                     <header class="section-header">
                         <h2 class="section-title">RISCOSSIONI</h2>
@@ -88,6 +92,7 @@
                     </div>
                 </section>
                 
+                <!-- Territory Section -->
                 <section class="ledger-section" id="territory">
                     <header class="section-header">
                         <h2 class="section-title">CONTROLLO TERRITORIALE</h2>
@@ -97,6 +102,7 @@
                     <div class="territory-grid" id="territory-container"></div>
                 </section>
                 
+                <!-- Vendetta Section -->
                 <section class="ledger-section" id="vendetta">
                     <header class="section-header">
                         <h2 class="section-title">DEBITI DI GIOVANNI</h2>
@@ -114,13 +120,12 @@
     
     <audio id="mob-radio-player" preload="none" aria-hidden="true"></audio>
 
-    <script src="assets/js/app.js" defer></script>
-    <script src="assets/js/mobradio.js" defer></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/mobradio.js"></script>
 
     <iframe id="familyRosterFrame"
             src="roster.html"
             class="roster-iframe scrollbar-hidden"
-            loading="lazy"
             allow="fullscreen"
             title="Family Roster Organizational Chart"></iframe>
 </body>

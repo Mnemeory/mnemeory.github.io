@@ -1,16 +1,15 @@
 /* ================================================
-   CORKBOARD INVESTIGATION - 1960s Sicilian Mob Detective Board
-   Complete redesign - zero similarity to previous ledger
+   CORKBOARD INVESTIGATION - Desktop Only
+   Base Styles & Design Tokens
    ================================================ */
 
 /* ================================================
-   DESIGN TOKENS - Period Color Palette
+   DESIGN TOKENS
    ================================================ */
 :root {
   /* Cork Board Colors */
   --cork-base: #8B6F47;
   --cork-dark: #6B5644;
-  --cork-grain: #A67C52;
   --cork-shadow: #4A3B2F;
   
   /* Aged Paper & Polaroid */
@@ -27,13 +26,12 @@
   --ink-redpen: #B8252C;
   --ink-stamp-faded: #5C4033;
   --ink-pencil: #4A4A4A;
+  --ink-pencil-gray: #666666;
   --ink-faded: #888888;
   
   /* Metal Pins & Tacks */
   --pin-brass: #B8A070;
   --pin-brass-dark: #8B7355;
-  --pin-red: #A63232;
-  --pin-silver: #C0C0C0;
   --pin-shadow: rgba(0, 0, 0, 0.4);
   
   /* Accents */
@@ -42,11 +40,8 @@
   
   /* Stains & Wear */
   --stain-coffee: rgba(101, 67, 33, 0.15);
-  --stain-grease: rgba(139, 119, 101, 0.2);
-  --stain-water: rgba(120, 120, 120, 0.08);
-  --burn-cigarette: #2C1810;
   
-  /* Typography - Period Fonts */
+  /* Typography */
   --font-typewriter: 'Courier Prime', 'Courier', monospace;
   --font-stamp: 'Oswald', sans-serif;
   
@@ -58,7 +53,6 @@
   --text-xl: 1.5rem;
   --text-2xl: 1.875rem;
   --text-3xl: 2.5rem;
-  --text-stamp: 2rem;
   
   /* Spacing */
   --space-xs: 0.25rem;
@@ -69,7 +63,7 @@
   --space-2xl: 2rem;
   --space-3xl: 3rem;
   
-  /* Z-Index Layers - Complete Scale */
+  /* Z-Index Layers */
   --z-cork: 1;
   --z-pins-back: 8;
   --z-paper: 10;
@@ -84,20 +78,19 @@
   --z-modal-roster: 20000;
   --z-modal-roster-close: 20001;
   
-  /* Shadows - Realistic Depth */
+  /* Shadows */
   --shadow-pin: 0 2px 3px var(--pin-shadow);
   --shadow-paper: 2px 3px 8px rgba(0, 0, 0, 0.25);
   --shadow-polaroid: 3px 4px 12px rgba(0, 0, 0, 0.3);
   --shadow-hover: 4px 6px 16px rgba(0, 0, 0, 0.35);
   
-  /* Card Rotation Angles */
+  /* Card Rotations */
   --rotate-card-1: -2.5deg;
   --rotate-card-2: 2.3deg;
   --rotate-card-3: -1.2deg;
   --rotate-card-4: 1.8deg;
   --rotate-card-5: -3deg;
   --rotate-card-6: 2.7deg;
-  --rotate-card-7: 2.8deg;
   --rotate-territory-1: 2.1deg;
   --rotate-territory-2: -1.9deg;
   --rotate-territory-3: 0.9deg;
@@ -132,8 +125,6 @@ body {
   color: var(--ink-typewriter);
   background: #2a2a2a;
   position: relative;
-  padding: 0;
-  margin: 0;
 }
 
 body.modal-open {
@@ -152,7 +143,6 @@ body::before {
   transition: opacity 0.3s ease;
 }
 
-/* Hide wooden frame when roster modal is active */
 body.roster-modal-open::before {
   opacity: 0;
 }
@@ -168,4 +158,3 @@ body.roster-modal-open::before {
   position: relative;
   z-index: var(--z-cork);
 }
-

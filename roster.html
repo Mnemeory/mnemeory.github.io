@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Family Roster | Clan Giovanni</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,12 +23,13 @@
         </div>
     </div>
     
-    <script src="assets/js/org-chart.js" defer></script>
+    <script src="assets/js/org-chart.js"></script>
     
     <script>
         (function() {
             'use strict';
             
+            // Handle messages from parent window
             window.addEventListener('message', function(event) {
                 if (event.data && event.data.action === 'populate') {
                     if (window.populateFamilyRoster) {
@@ -42,6 +42,7 @@
                 }
             });
             
+            // Initialize close button and keyboard controls
             function init() {
                 const closeButton = document.querySelector('.roster-close-button');
                 if (closeButton) {
@@ -67,6 +68,7 @@
         })();
     </script>
     
+    <!-- Scrollbar visibility toggle on hover -->
     <script>
         (function() {
             const wall = document.querySelector('.roster-wall');
@@ -89,12 +91,12 @@
                 chart.classList.toggle('scrollbar-hidden', !shouldShow);
             }
 
-            document.addEventListener('mousemove', (event) => {
+            document.addEventListener('mousemove', function(event) {
                 const shouldShow = (window.innerHeight - event.clientY) <= THRESHOLD_PX;
                 toggleScrollbars(shouldShow);
             }, { passive: true });
 
-            document.addEventListener('mouseleave', () => {
+            document.addEventListener('mouseleave', function() {
                 toggleScrollbars(false);
             });
         })();

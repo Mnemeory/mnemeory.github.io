@@ -1,7 +1,10 @@
 /* ================================================
-   COLLECTIONS - Typewritten List on Paper
+   COMPONENTS - Desktop Only Card & Table Styles
    ================================================ */
 
+/* ================================================
+   COLLECTIONS TABLE
+   ================================================ */
 .table-wrapper {
   background: 
     url('../images/paper-texture-2.jpg'),
@@ -38,13 +41,13 @@
   table-layout: fixed;
 }
 
-/* Adjust column widths for better fit */
-.the-books thead th:nth-child(1) { width: 12%; } /* Start Date */
-.the-books thead th:nth-child(2) { width: 18%; } /* Business */
-.the-books thead th:nth-child(3) { width: 12%; } /* Nightly */
-.the-books thead th:nth-child(4) { width: 20%; } /* Made By */
-.the-books thead th:nth-child(5) { width: 18%; } /* Contact */
-.the-books thead th:nth-child(6) { width: 20%; } /* Notes */
+/* Fixed column widths for desktop */
+.the-books thead th:nth-child(1) { width: 12%; }
+.the-books thead th:nth-child(2) { width: 18%; }
+.the-books thead th:nth-child(3) { width: 12%; }
+.the-books thead th:nth-child(4) { width: 20%; }
+.the-books thead th:nth-child(5) { width: 18%; }
+.the-books thead th:nth-child(6) { width: 20%; }
 
 .the-books thead th {
   text-align: center;
@@ -65,7 +68,11 @@
   z-index: 1;
 }
 
+.the-books tbody tr {
+  position: relative;
+}
 
+/* Collection cell styles */
 .collection-location {
   color: var(--ink-typewriter);
   font-size: 0.9rem;
@@ -90,6 +97,7 @@
 .collection-nightly {
   font-weight: 600;
   color: var(--ink-typewriter);
+  text-align: left;
 }
 
 .collection-notes {
@@ -100,18 +108,12 @@
   word-break: break-word;
 }
 
-.the-books tbody tr {
-  position: relative;
-}
-
-/* Status watermark on collection rows */
+/* Status watermark on rows */
 .collection-row::after {
   content: attr(data-status-text);
   position: absolute;
   left: 4px;
   bottom: 4px;
-  display: inline-block;
-  width: fit-content;
   font-family: var(--font-stamp);
   font-size: 1.5rem;
   font-weight: 700;
@@ -125,7 +127,7 @@
   line-height: 1;
 }
 
-/* Status-based watermark colors */
+/* Status colors */
 .collection-row[data-status="current"]::after {
   color: #4CAF50;
 }
@@ -140,7 +142,6 @@
   color: #D32F2F;
 }
 
-/* Status highlighting */
 .collection-row[data-status="terminated"],
 .collection-row[data-status="refusing"] {
   background: rgba(184, 37, 44, 0.04);
@@ -149,10 +150,6 @@
 .numeric {
   text-align: right;
   font-variant-numeric: tabular-nums;
-}
-
-.numeric.collection-nightly {
-  text-align: left;
 }
 
 .money {
@@ -166,9 +163,8 @@
 }
 
 /* ================================================
-   VENDETTA - Mugshot Polaroids Scattered
+   VENDETTA CARDS - Polaroid Style
    ================================================ */
-
 .vendetta-ledger {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -192,6 +188,12 @@
   transition: all 0.2s ease;
 }
 
+.vendetta-card:nth-child(2) { transform: rotate(var(--rotate-card-2)); }
+.vendetta-card:nth-child(3) { transform: rotate(var(--rotate-card-3)); }
+.vendetta-card:nth-child(4) { transform: rotate(var(--rotate-card-4)); }
+.vendetta-card:nth-child(5) { transform: rotate(var(--rotate-card-5)); }
+.vendetta-card:nth-child(6) { transform: rotate(var(--rotate-card-6)); }
+
 .vendetta-card::after,
 .territory-card::after {
   content: '(click to view)';
@@ -210,39 +212,11 @@
 
 .clickable-card:hover {
   transform: rotate(0deg) scale(1.02);
+  box-shadow: var(--shadow-hover);
   z-index: 10;
 }
 
-.vendetta-card:nth-child(2n) {
-  transform: rotate(var(--rotate-card-2));
-}
-
-.vendetta-card:nth-child(2n):hover {
-  transform: rotate(0deg) scale(1.02);
-}
-
-.vendetta-card:nth-child(3n) {
-  transform: rotate(var(--rotate-card-3));
-}
-
-.vendetta-card:nth-child(4n) {
-  transform: rotate(var(--rotate-card-4));
-}
-
-.vendetta-card:nth-child(5n) {
-  transform: rotate(var(--rotate-card-5));
-}
-
-.vendetta-card:nth-child(6n) {
-  transform: rotate(var(--rotate-card-6));
-}
-
-.vendetta-card:hover {
-  box-shadow: var(--shadow-hover);
-  transform: rotate(0deg) translateY(-4px) !important;
-}
-
-/* Pin on polaroid */
+/* Brass pin on polaroid */
 .vendetta-card::before {
   content: '';
   position: absolute;
@@ -275,6 +249,7 @@
   background: radial-gradient(circle at 30% 30%, #4CAF50, #2E7D32);
 }
 
+/* Card content */
 .vendetta-header {
   background: rgba(0, 0, 0, 0.04);
   padding: 15px;
@@ -357,6 +332,7 @@
   border-top: 1px dashed var(--ink-faded);
 }
 
+/* Crew assignment display */
 .assigned-crew {
   display: flex;
   flex-direction: column;
@@ -405,11 +381,9 @@
   color: var(--ink-faded);
 }
 
-
 /* ================================================
-   TERRITORY - Geographic Polaroid Clusters
+   TERRITORY CARDS - Yellow Sticky Notes
    ================================================ */
-
 .territory-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -432,36 +406,19 @@
   transition: all 0.2s ease;
 }
 
-.territory-card:nth-child(2n) {
-  transform: rotate(var(--rotate-territory-2));
-}
-
-.territory-card:nth-child(3n) {
-  transform: rotate(var(--rotate-territory-3));
-}
-
-.territory-card:nth-child(4n) {
-  transform: rotate(var(--rotate-territory-4));
-}
-
-.territory-card:nth-child(5n) {
-  transform: rotate(var(--rotate-territory-5));
-}
-
-.territory-card:nth-child(6n) {
-  transform: rotate(var(--rotate-territory-6));
-}
-
-.territory-card:nth-child(7n) {
-  transform: rotate(var(--rotate-territory-7));
-}
+.territory-card:nth-child(2) { transform: rotate(var(--rotate-territory-2)); }
+.territory-card:nth-child(3) { transform: rotate(var(--rotate-territory-3)); }
+.territory-card:nth-child(4) { transform: rotate(var(--rotate-territory-4)); }
+.territory-card:nth-child(5) { transform: rotate(var(--rotate-territory-5)); }
+.territory-card:nth-child(6) { transform: rotate(var(--rotate-territory-6)); }
+.territory-card:nth-child(7) { transform: rotate(var(--rotate-territory-7)); }
 
 .territory-card:hover {
   box-shadow: var(--shadow-hover);
   transform: rotate(0deg) translateY(-3px) !important;
 }
 
-/* Status-based pin colors */
+/* Status-based pushpins */
 .territory-card::before {
   content: '';
   position: absolute;
@@ -477,32 +434,26 @@
   z-index: var(--z-pins-front);
 }
 
-/* Neutral - Gray pushpin */
 .territory-card[data-status="Neutral"]::before {
   background: radial-gradient(circle at 30% 30%, #808080, #5A5A5A);
 }
 
-/* Uncontrolled - Light gray pushpin */
 .territory-card[data-status="Uncontrolled"]::before {
   background: radial-gradient(circle at 30% 30%, #B0B0B0, #8A8A8A);
 }
 
-/* Controlled - Green pushpin */
 .territory-card[data-status="Controlled"]::before {
   background: radial-gradient(circle at 30% 30%, #4CAF50, #2E7D32);
 }
 
-/* Contested - Orange pushpin */
 .territory-card[data-status="Contested"]::before {
   background: radial-gradient(circle at 30% 30%, #FF9800, #E65100);
 }
 
-/* Shared (including "Shared with Camarilla") - Blue pushpin */
 .territory-card[data-status*="Shared"]::before {
   background: radial-gradient(circle at 30% 30%, #2196F3, #1565C0);
 }
 
-/* Expanding - Gold pushpin */
 .territory-card[data-status="Expanding"]::before {
   background: radial-gradient(circle at 30% 30%, var(--accent-gold), #B8960C);
 }
@@ -580,7 +531,6 @@
   line-height: 1.5;
 }
 
-/* Notes with column layout for longer content */
 .territory-notes.columns {
   column-count: 3;
   column-gap: 8px;
@@ -589,4 +539,18 @@
 .territory-notes.long-note {
   max-height: none;
   text-align: left;
+}
+
+/* ================================================
+   EMPTY STATE
+   ================================================ */
+.empty-state-message {
+  width: 100%;
+  padding: 30px 20px;
+  text-align: center;
+  font-family: var(--font-typewriter);
+  font-size: var(--text-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
 }
