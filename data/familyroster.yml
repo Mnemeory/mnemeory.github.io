@@ -39,17 +39,14 @@ soldato:
 
 associate:
   - name: "Asano Mai"
-    assigned_consigliere: "Gaio Puttanesca"
     clan: "Ghoul"
     status: "active"
 
   - name: "Lucius Sadler"
-    assigned_consigliere: "Gaio Puttanesca"
     clan: "Ghoul"
     status: "active"
 
   - name: "Malcom Dunsirn"
-    assigned_consigliere: "Gaio Puttanesca"
     clan: "Garou"
     status: "active"
 
