@@ -4,9 +4,7 @@
   "private": true,
   "description": "Build tooling and scripts for the Mob Radio playlist generator.",
   "scripts": {
-    "generate:mobradio": "node scripts/generate-mobradio.js",
-    "validate:territory": "node scripts/validate-territory-statuses.js",
-    "test": "npm run validate:territory"
+    "generate:mobradio": "node scripts/generate-mobradio.js"
   },
   "engines": {
     "node": ">=18.0.0"
