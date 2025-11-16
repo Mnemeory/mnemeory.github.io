@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="assets/css/layout.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/roster.css">
+    <link rel="stylesheet" href="assets/css/collections.css">
     <link rel="stylesheet" href="assets/css/utilities.css">
 </head>
 <body>
@@ -22,14 +23,18 @@
             
             <!-- Header Cards: Roster Button, Title, Radio -->
             <div class="header-cards">
-                <button class="family-roster-button" type="button" aria-label="Open Family Roster">
-                    <img src="assets/images/GenericSeal.png" alt="Giovanni Family Seal" class="roster-button-image">
+                <button class="collections-ledger-button" type="button" aria-label="Open Collections Ledger">
+                    <img src="assets/images/Collections.png" alt="Collections Ledger" class="collections-button-image">
                 </button>
 
                 <header class="ledger-header">
                     <h1 class="ledger-title">LIBRO MASTRO</h1>
                     <div class="ledger-subtitle">Registrazione Settimanale</div>
                 </header>
+
+                <button class="family-roster-button" type="button" aria-label="Open Family Roster">
+                    <img src="assets/images/GenericSeal.png" alt="Giovanni Family Seal" class="roster-button-image">
+                </button>
 
                 <div class="mob-radio-container">
                     <button class="mob-radio-button" type="button" aria-label="Toggle Mob Radio" aria-pressed="false">
@@ -64,34 +69,6 @@
             <!-- Three Column Content Layout -->
             <div class="ledger-content">
                 
-                <!-- Collections Section -->
-                <section class="ledger-section" id="collections">
-                    <header class="section-header">
-                        <h2 class="section-title">RISCOSSIONI</h2>
-                        <span class="section-code">Section I - Nightly Collections</span>
-                    </header>
-                    
-                    <div class="table-wrapper">
-                        <table class="the-books" role="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Date Made</th>
-                                    <th scope="col">Business</th>
-                                    <th scope="col" class="numeric">Nightly</th>
-                                    <th scope="col">Made By</th>
-                                    <th scope="col">Contact</th>
-                                    <th scope="col">Notes</th>
-                                </tr>
-                            </thead>
-                            <tbody id="collections-tbody">
-                                <tr>
-                                    <td colspan="6" class="text-center">Loading collections...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-                
                 <!-- Territory Section -->
                 <section class="ledger-section" id="territory">
                     <header class="section-header">
@@ -122,6 +99,12 @@
 
     <script src="assets/js/app.js"></script>
     <script src="assets/js/mobradio.js"></script>
+
+    <iframe id="collectionsFrame"
+            src="collections.html"
+            class="collections-iframe scrollbar-hidden"
+            allow="fullscreen"
+            title="Collections Ledger"></iframe>
 
     <iframe id="familyRosterFrame"
             src="roster.html"

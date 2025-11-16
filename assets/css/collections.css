@@ -1,0 +1,330 @@
+/* ================================================
+   COLLECTIONS FRAME - Immersive Ledger on Desk
+   ================================================ */
+
+/* ================================================
+   COLLECTIONS IFRAME
+   ================================================ */
+.collections-iframe {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  z-index: var(--z-modal-collections);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  background: transparent;
+}
+
+.collections-iframe.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ================================================
+   CLOSE BUTTON
+   ================================================ */
+.collections-close-button {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: var(--paper-manila);
+  border: 3px solid var(--ink-typewriter);
+  border-radius: 50%;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--ink-typewriter);
+  cursor: pointer;
+  z-index: calc(var(--z-modal-collections) + 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  font-family: var(--font-typewriter);
+}
+
+.collections-close-button:hover {
+  background: var(--ink-redpen);
+  color: var(--paper-polaroid);
+  transform: rotate(90deg) scale(1.1);
+}
+
+/* ================================================
+   DESK BACKGROUND
+   ================================================ */
+.desk-wall {
+  position: relative;
+  min-width: 100%;
+  min-height: 100vh;
+  background:
+    linear-gradient(90deg,
+      rgba(0, 0, 0, 0.35) 0%,
+      transparent 8%,
+      transparent 92%,
+      rgba(0, 0, 0, 0.35) 100%),
+    linear-gradient(180deg,
+      rgba(0, 0, 0, 0.35) 0%,
+      transparent 18%,
+      transparent 82%,
+      rgba(0, 0, 0, 0.45) 100%),
+    url('../images/collectionsbackground.png');
+  background-size: 100% 100%, 100% 100%, cover;
+  background-position: center, center, center;
+  background-repeat: no-repeat, no-repeat, repeat;
+  box-shadow:
+    inset 0 20px 40px rgba(0, 0, 0, 0.55),
+    inset 0 -20px 40px rgba(0, 0, 0, 0.35);
+  padding: 60px 40px 80px;
+}
+
+/* Overhead desk-lamp vignette */
+.desk-wall::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 55% 15%, rgba(255, 255, 240, 0.10), rgba(0,0,0,0) 40%),
+              radial-gradient(ellipse at 8% 92%, rgba(0,0,0,0.18), rgba(0,0,0,0) 34%),
+              radial-gradient(ellipse at 94% 72%, rgba(0,0,0,0.18), rgba(0,0,0,0) 34%);
+  pointer-events: none;
+}
+
+/* ================================================
+   LEDGER SHELL (book on desk)
+   ================================================ */
+.ledger-shell {
+  width: 1100px;
+  max-width: calc(100vw - 160px);
+  margin: 0 auto;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,0.15) 0, rgba(0,0,0,0.05) 6%, rgba(0,0,0,0.05) 94%, rgba(0,0,0,0.2) 100%),
+    linear-gradient(90deg, transparent 49.5%, rgba(0,0,0,0.08) 50%, transparent 50.5%),
+    url('../images/paper-texture-2.jpg'),
+    var(--paper-polaroid);
+  background-blend-mode: normal, multiply, multiply, normal;
+  background-size: 100% 100%, 100% 100%, cover, auto;
+  border: 1px solid rgba(0,0,0,0.15);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  transform: rotate(-0.3deg);
+  position: relative;
+}
+
+/* Center binding stitches */
+.ledger-shell::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.25) 0 6px,
+    rgba(0,0,0,0.4) 6px 12px
+  );
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.ledger-shell::after {
+  /* brass top pins only for a cleaner look */
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 16px 16px, var(--pin-brass) 0 6px, transparent 7px) no-repeat,
+    radial-gradient(circle at calc(100% - 16px) 16px, var(--pin-brass) 0 6px, transparent 7px) no-repeat;
+  filter: drop-shadow(0 1px 1px var(--pin-shadow));
+}
+
+.ledger-toolbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  column-gap: 16px;
+  padding: 18px 24px;
+  border-bottom: 2px solid rgba(0,0,0,0.2);
+  position: sticky;
+  top: 0;
+  background:
+    url('../images/paper-texture-2.jpg'),
+    var(--paper-polaroid);
+  background-blend-mode: multiply;
+  background-size: cover;
+  z-index: 2;
+}
+
+.ledger-title-stamp {
+  font-family: var(--font-stamp);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-stamp-faded);
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.15);
+  font-size: 0.95rem;
+  transform: rotate(-1.3deg);
+  margin-right: 0;
+  white-space: nowrap;
+}
+
+.ledger-toolbar .search-input {
+  padding: 10px 12px;
+  font-family: var(--font-typewriter);
+  font-size: 0.95rem;
+  border: 1px solid rgba(0,0,0,0.25);
+  background: rgba(255,255,255,0.85);
+  justify-self: stretch;
+}
+
+.ledger-toolbar .totals {
+  font-family: var(--font-typewriter);
+  font-weight: 700;
+}
+
+.ledger-table-wrap {
+  max-height: calc(100vh - 260px);
+  overflow: auto;
+  /* ruled paper lines + red margin */
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(66, 85, 99, 0.05) 0,
+      rgba(66, 85, 99, 0.05) 28px,
+      transparent 28px,
+      transparent 56px
+    ),
+    linear-gradient(90deg, transparent 70px, rgba(207, 44, 44, 0.28) 70px, rgba(207, 44, 44, 0.28) 72px, transparent 72px);
+}
+
+.collections-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-typewriter);
+  font-size: var(--text-base);
+  color: var(--ink-typewriter);
+  table-layout: fixed;
+}
+
+.collections-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background:
+    url('../images/paper-texture-1.jpg'),
+    var(--paper-carbon);
+  background-blend-mode: multiply;
+  background-size: cover;
+  text-align: center;
+  padding: 12px 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(0,0,0,0.45);
+  font-size: 0.82rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.collections-table thead th[aria-sort="asc"]::after,
+.collections-table thead th[aria-sort="desc"]::after {
+  content: '';
+  display: inline-block;
+  margin-left: 6px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+}
+.collections-table thead th[aria-sort="asc"]::after {
+  border-bottom: 7px solid var(--ink-typewriter);
+}
+.collections-table thead th[aria-sort="desc"]::after {
+  border-top: 7px solid var(--ink-typewriter);
+}
+
+.collections-table tbody td {
+  padding: 14px 10px;
+  border-bottom: 1px dotted rgba(0,0,0,0.2);
+  vertical-align: middle;
+  font-size: 0.95rem;
+}
+
+.collections-table tbody tr:nth-child(even) {
+  background: rgba(0,0,0,0.01);
+}
+
+.collections-table tbody tr:hover {
+  background: rgba(255, 232, 124, 0.04);
+}
+
+.collections-table .numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.collections-table .money {
+  color: var(--ink-ballpoint-blue);
+  font-weight: 700;
+}
+
+.ledger-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 24px 20px;
+  border-top: 2px solid rgba(0,0,0,0.15);
+  background:
+    url('../images/paper-texture-2.jpg'),
+    var(--paper-polaroid);
+  background-blend-mode: multiply;
+  background-size: cover;
+}
+
+.ledger-pagination .page-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ledger-pagination button {
+  padding: 8px 12px;
+  font-family: var(--font-typewriter);
+  background: var(--paper-manila);
+  border: 1px solid rgba(0,0,0,0.25);
+  cursor: pointer;
+}
+
+.ledger-pagination .info {
+  font-family: var(--font-typewriter);
+  font-size: 0.9rem;
+}
+
+/* ================================================
+   PAGE OVERRIDES
+   ================================================ */
+body.collections-page {
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+  overflow: auto;
+  background-color: #000;
+  background-image: url('../images/collectionsbackground.png');
+  background-repeat: repeat;
+  background-size: cover;
+}
+
+body.collections-page::before {
+  display: none;
+}
+
+/* (Status stamp overlay removed for a cleaner presentation) */
+
+

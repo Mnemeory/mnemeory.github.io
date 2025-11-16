@@ -77,6 +77,8 @@
   --z-loading: 15000;
   --z-modal-roster: 20000;
   --z-modal-roster-close: 20001;
+  --z-modal-collections: 21000;
+  --z-modal-collections-close: 21001;
   
   /* Shadows */
   --shadow-pin: 0 2px 3px var(--pin-shadow);
@@ -144,6 +146,10 @@ body::before {
 }
 
 body.roster-modal-open::before {
+  opacity: 0;
+}
+
+body.collections-modal-open::before {
   opacity: 0;
 }
 

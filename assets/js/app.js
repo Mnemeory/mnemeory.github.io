@@ -126,6 +126,7 @@
     territoryContainer: 'territory-container',
     pageNumber: 'page-number',
     familyRosterFrame: 'familyRosterFrame',
+    collectionsFrame: 'collectionsFrame',
     cardModal: 'cardModal',
     cardModalContent: 'cardModalContent',
     sealModal: 'sealModal',
@@ -139,7 +140,8 @@
     clickableCard: 'clickable-card',
     vendettaTheme: 'vendetta-theme',
     territoryTheme: 'territory-theme',
-    rosterModalOpen: 'roster-modal-open'
+    rosterModalOpen: 'roster-modal-open',
+    collectionsModalOpen: 'collections-modal-open'
   };
 
   const state = {
@@ -406,22 +408,26 @@
   // Cross-frame comms
   // -----------------------
 
-  function shareDataWithIframe() {
+  function postDataToFrame(frame) {
+    if (!frame || !frame.contentWindow) return;
+    try {
+      frame.contentWindow.postMessage({
+        action: 'dataUpdate',
+        ledgerData: cloneLedgerData()
+      }, '*');
+    } catch (error) {
+      console.error('Failed to postMessage to frame:', error);
+    }
+  }
+
+  function shareDataWithIframes() {
     const rosterFrame = document.getElementById(SELECTORS.familyRosterFrame);
-    if (!rosterFrame || !rosterFrame.contentWindow) return;
-    const postUpdate = () => {
-      try {
-        rosterFrame.contentWindow.postMessage({
-          action: 'dataUpdate',
-          ledgerData: cloneLedgerData()
-        }, '*');
-      } catch (error) {
-        console.error('Failed to postMessage to roster frame:', error);
-      }
-    };
-    // Post immediately (may hit about:blank) and again after the iframe loads roster.html
-    postUpdate();
-    rosterFrame.addEventListener('load', postUpdate, { once: true });
+    const collectionsFrame = document.getElementById(SELECTORS.collectionsFrame);
+    // Post immediately and again after each iframe loads
+    postDataToFrame(rosterFrame);
+    if (rosterFrame) rosterFrame.addEventListener('load', () => postDataToFrame(rosterFrame), { once: true });
+    postDataToFrame(collectionsFrame);
+    if (collectionsFrame) collectionsFrame.addEventListener('load', () => postDataToFrame(collectionsFrame), { once: true });
   }
 
   function cloneLedgerData() {
@@ -596,7 +602,7 @@
     document.body.classList.add(CSS_CLASSES.rosterModalOpen);
     document.body.classList.add('modal-open');
     // Ensure the iframe has fresh data when opened
-    shareDataWithIframe();
+    shareDataWithIframes();
     if (frame.contentWindow) frame.contentWindow.postMessage({ action: 'populate' }, '*');
   }
   function closeFamilyRosterModal() {
@@ -607,10 +613,32 @@
     document.body.classList.remove('modal-open');
   }
 
+  function openCollectionsModal() {
+    const frame = document.getElementById(SELECTORS.collectionsFrame);
+    if (!frame) return;
+    frame.classList.add(CSS_CLASSES.active);
+    document.body.classList.add(CSS_CLASSES.collectionsModalOpen);
+    document.body.classList.add('modal-open');
+    shareDataWithIframes();
+    if (frame.contentWindow) frame.contentWindow.postMessage({ action: 'populate' }, '*');
+  }
+  function closeCollectionsModal() {
+    const frame = document.getElementById(SELECTORS.collectionsFrame);
+    if (!frame) return;
+    frame.classList.remove(CSS_CLASSES.active);
+    document.body.classList.remove(CSS_CLASSES.collectionsModalOpen);
+    document.body.classList.remove('modal-open');
+  }
+
   function bindInteractions() {
     const rosterBtn = document.querySelector('.family-roster-button');
     if (rosterBtn) {
       rosterBtn.addEventListener('click', openFamilyRosterModal);
+    }
+
+    const collectionsBtn = document.querySelector('.collections-ledger-button');
+    if (collectionsBtn) {
+      collectionsBtn.addEventListener('click', openCollectionsModal);
     }
 
     const sealModal = document.getElementById(SELECTORS.sealModal);
@@ -655,12 +683,15 @@
       if (e.key === 'Escape') {
         closeCardModal();
         closeFamilyRosterModal();
+        closeCollectionsModal();
       }
     });
 
     window.addEventListener('message', function(event) {
       if (event.data && event.data.action === 'closeRoster') {
         closeFamilyRosterModal();
+      } else if (event.data && event.data.action === 'closeCollections') {
+        closeCollectionsModal();
       }
     });
   }
@@ -673,11 +704,10 @@
     showLoadingState();
     try {
       await loadAllData();
-      populateCollections();
       populateVendetta();
       populateTerritory();
       updateDynamicElements();
-      shareDataWithIframe();
+      shareDataWithIframes();
     } catch (error) {
       const tbody = document.getElementById(SELECTORS.collectionsBody);
       if (tbody) {

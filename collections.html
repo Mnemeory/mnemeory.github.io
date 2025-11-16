@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Riscossioni | Collections Ledger</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/collections.css">
+    <link rel="stylesheet" href="assets/css/utilities.css">
+</head>
+<body class="collections-page">
+    <button class="collections-close-button" type="button" aria-label="Close Collections Ledger">×</button>
+    
+    <div class="desk-wall scrollbar-hidden" role="region" aria-label="Collections Desk">
+        <div class="ledger-shell" role="region" aria-label="Ledger Book">
+            <div class="ledger-toolbar">
+                <div class="ledger-title-stamp" aria-hidden="true">RISCOSSIONI LEDGER</div>
+                <input id="collections-search" class="search-input" type="search" placeholder="Search business or made by…" aria-label="Filter collections">
+                <div class="totals" id="collections-totals" aria-live="polite"></div>
+            </div>
+            <div class="ledger-table-wrap scrollbar-hidden">
+                <table class="collections-table" id="collections-table" role="table" aria-label="Collections">
+                    <thead>
+                        <tr>
+                            <th data-sort="start_date" scope="col" aria-sort="none" title="Sort by date">Date Made</th>
+                            <th data-sort="name" scope="col" aria-sort="none" title="Sort by business">Business</th>
+                            <th data-sort="nightly" scope="col" aria-sort="none" class="numeric" title="Sort by nightly">Nightly</th>
+                            <th data-sort="made_by" scope="col" aria-sort="none" title="Sort by made by">Made By</th>
+                            <th data-sort="contact" scope="col" aria-sort="none" title="Sort by contact">Contact</th>
+                            <th data-sort="notes" scope="col" aria-sort="none" title="Sort by notes">Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="collections-ledger-body">
+                        <tr>
+                            <td colspan="6" class="text-center">Loading collections…</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="ledger-pagination" id="collections-pagination">
+                <div class="page-buttons">
+                    <button type="button" id="page-prev" aria-label="Previous page">Prev</button>
+                    <button type="button" id="page-next" aria-label="Next page">Next</button>
+                </div>
+                <div class="info" id="page-info" aria-live="polite">Page 1</div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="assets/js/collections-ledger.js"></script>
+    
+    <script>
+        (function() {
+            'use strict';
+            // Handle messages from parent window
+            window.addEventListener('message', function(event) {
+                if (event.data && event.data.action === 'populate') {
+                    if (window.populateCollectionsLedger) {
+                        window.populateCollectionsLedger();
+                        const search = document.getElementById('collections-search');
+                        if (search) search.focus();
+                    }
+                } else if (event.data && event.data.action === 'dataUpdate') {
+                    if (event.data.ledgerData) {
+                        window.ledgerData = event.data.ledgerData;
+                    }
+                }
+            });
+            
+            function init() {
+                const closeButton = document.querySelector('.collections-close-button');
+                if (closeButton) {
+                    closeButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        window.parent.postMessage({ action: 'closeCollections' }, '*');
+                    });
+                }
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        window.parent.postMessage({ action: 'closeCollections' }, '*');
+                    }
+                });
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
+</body>
+</html>
+
+
