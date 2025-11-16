@@ -21,6 +21,128 @@
     unknown: 'Unknown'
   };
 
+  /**
+   * @typedef {Object} RosterPerson
+   * @property {string} [name]
+   * @property {string} [status]
+   * @property {string} [clan]
+   * @property {string} [assigned_capo]
+   * @property {string} [assigned_consigliere]
+   * @property {string} [assigned_soldato]
+   */
+
+  /**
+   * @typedef {Object} OrgNode
+   * @property {string} id
+   * @property {string} role
+   * @property {RosterPerson|null} data
+   * @property {OrgNode[]} children
+   * @property {OrgNode|null} parent
+   * @property {boolean} isLeadership
+   * @property {boolean} [isIndependentRoot]
+   * @property {string|null} [independentRootId]
+   * @property {Object<string, RosterPerson[]>} [childSources]
+   * @property {OrgNode} [advisor]
+   * @property {number} [width]
+   * @property {number} [height]
+   * @property {number} [x]
+   * @property {number} [y]
+   */
+
+  const INDEPENDENT_CAPO_DATA = Object.freeze({
+    name: 'Independent',
+    clan: 'Independent Crew',
+    status: DEFAULTS.status
+  });
+
+  const ROLE_TREE_SPEC = {
+    capo: [
+      {
+        role: 'consigliere',
+        source: (index, node) => getGroup(index.consiglieresByCapo, node?.data?.name),
+        isLeadership: false
+      },
+      {
+        role: 'soldato',
+        source: (index, node) => getGroup(index.soldatosByCapo, node?.data?.name),
+        isLeadership: false
+      },
+      {
+        role: 'associate',
+        source: (index, node) => getGroup(index.associatesByCapo, node?.data?.name),
+        isLeadership: false
+      }
+    ],
+    consigliere: [
+      {
+        role: 'associate',
+        source: (index, node) => getGroup(index.associatesByConsigliere, node?.data?.name),
+        isLeadership: false
+      }
+    ],
+    soldato: [
+      {
+        role: 'associate',
+        source: (index, node) => getGroup(index.associatesBySoldato, node?.data?.name),
+        isLeadership: false
+      }
+    ]
+  };
+
+  function assignIndependentRoot(parent, explicitRootId) {
+    if (typeof explicitRootId === 'string') return explicitRootId;
+    if (parent?.isIndependentRoot) return parent.id;
+    if (parent?.independentRootId) return parent.independentRootId;
+    return null;
+  }
+
+  /**
+   * @param {string} role
+   * @param {RosterPerson|null} data
+   * @param {OrgNode|null} parent
+   * @param {Object} [options]
+   * @param {boolean} [options.isLeadership]
+   * @param {boolean} [options.isIndependentRoot]
+   * @param {string} [options.id]
+   * @param {Object<string, RosterPerson[]>} [options.childSources]
+   * @returns {OrgNode}
+   */
+  function createPersonNode(role, data, parent, options = {}) {
+    const node = {
+      id: options.id || createNodeId(role, data?.name),
+      role,
+      data,
+      children: [],
+      parent: parent || null,
+      mod: 0,
+      isLeadership: !!options.isLeadership,
+      childSources: options.childSources || null,
+      isIndependentRoot: !!options.isIndependentRoot
+    };
+    node.independentRootId = node.isIndependentRoot
+      ? node.id
+      : assignIndependentRoot(parent, options.independentRootId);
+    return node;
+  }
+
+  function buildRoleChildren(node, index) {
+    const specs = ROLE_TREE_SPEC[node.role];
+    if (!specs || specs.length === 0) return;
+    const overrides = node.childSources || null;
+    specs.forEach(spec => {
+      const hasOverride = overrides && Object.prototype.hasOwnProperty.call(overrides, spec.role);
+      const sourceList = hasOverride ? overrides[spec.role] : (spec.source ? spec.source(index, node) : []);
+      const list = Array.isArray(sourceList) ? sourceList : [];
+      list.forEach(person => {
+        const child = createPersonNode(spec.role, person, node, {
+          isLeadership: !!spec.isLeadership
+        });
+        node.children.push(child);
+        buildRoleChildren(child, index);
+      });
+    });
+  }
+
   // -----------------------
   // Reingold-Tilford layout
   // -----------------------
@@ -239,6 +361,19 @@
       }
       node.children.forEach(child => this.annotateNodeSizes(child));
     }
+    applyHorizontalShift(node, shift) {
+      if (!node || !shift) return;
+      const shiftNode = (current) => {
+        current.x += shift;
+        if (typeof current.finalX === 'number') current.finalX += shift;
+        current.children.forEach(shiftNode);
+        if (current.advisor) {
+          current.advisor.x += shift;
+          if (typeof current.advisor.finalX === 'number') current.advisor.finalX += shift;
+        }
+      };
+      shiftNode(node);
+    }
     calculatePositions(tree) {
       this.initializeNodes(tree, 0);
       tree.number = 1;
@@ -304,8 +439,8 @@
     const soldatos = Array.isArray(roster?.soldato) ? roster.soldato.slice() : [];
     const associates = Array.isArray(roster?.associate) ? roster.associate.slice() : [];
     const associateGroups = classifyAssociates(associates);
-    const unassignedConsiglieres = consiglieres.filter(item => !normalizeKey(item?.assigned_capo));
-    const unassignedSoldatos = soldatos.filter(item => !normalizeKey(item?.assigned_capo));
+    const independentConsiglieres = consiglieres.filter(item => !normalizeKey(item?.assigned_capo));
+    const independentSoldatos = soldatos.filter(item => !normalizeKey(item?.assigned_capo));
     return {
       capos,
       consiglieresByCapo: groupBy(consiglieres, item => item.assigned_capo),
@@ -313,9 +448,9 @@
       associatesByConsigliere: associateGroups.byConsigliere,
       associatesBySoldato: associateGroups.bySoldato,
       associatesByCapo: associateGroups.byCapo,
-      unassigned: {
-        consiglieres: unassignedConsiglieres,
-        soldatos: unassignedSoldatos,
+      independent: {
+        consiglieres: independentConsiglieres,
+        soldatos: independentSoldatos,
         associates: associateGroups.unassigned || []
       }
     };
@@ -334,167 +469,104 @@
     return `${prefix}-${unique}`;
   }
 
+  function createCapoOrgEntry(capo, index) {
+    const capoName = capo?.name;
+    const consiglieres = getGroup(index.consiglieresByCapo, capoName);
+    const soldatos = getGroup(index.soldatosByCapo, capoName);
+    const directAssociates = getGroup(index.associatesByCapo, capoName);
+    const summary = {
+      capo,
+      consiglieres: consiglieres.map(consigliere => ({
+        consigliere,
+        associates: getGroup(index.associatesByConsigliere, consigliere?.name)
+      })),
+      soldatos: soldatos.map(soldato => ({
+        soldato,
+        associates: getGroup(index.associatesBySoldato, soldato?.name)
+      })),
+      associates: directAssociates
+    };
+    return {
+      summary,
+      nodeConfig: {
+        capo,
+        isIndependent: false,
+        childSources: null
+      }
+    };
+  }
+
+  function createIndependentOrgEntry(index) {
+    const independent = index.independent || {};
+    const consiglieres = Array.isArray(independent.consiglieres) ? independent.consiglieres.slice() : [];
+    const soldatos = Array.isArray(independent.soldatos) ? independent.soldatos.slice() : [];
+    const associates = Array.isArray(independent.associates) ? independent.associates.slice() : [];
+    const hasCrew = consiglieres.length > 0 || soldatos.length > 0 || associates.length > 0;
+    if (!hasCrew) return null;
+    const summary = {
+      capo: INDEPENDENT_CAPO_DATA,
+      consiglieres: consiglieres.map(consigliere => ({
+        consigliere,
+        associates: getGroup(index.associatesByConsigliere, consigliere?.name)
+      })),
+      soldatos: soldatos.map(soldato => ({
+        soldato,
+        associates: getGroup(index.associatesBySoldato, soldato?.name)
+      })),
+      associates: associates.slice()
+    };
+    return {
+      summary,
+      nodeConfig: {
+        capo: INDEPENDENT_CAPO_DATA,
+        isIndependent: true,
+        childSources: {
+          consigliere: consiglieres,
+          soldato: soldatos,
+          associate: associates
+        }
+      }
+    };
+  }
+
   function buildUnifiedOrgData(roster, rosterIndex) {
     if (!roster) return null;
     const index = rosterIndex || createRosterIndex(roster);
     const bossData = Array.isArray(roster.boss) && roster.boss[0] ? roster.boss[0] : { name: 'No Boss', status: 'vacant' };
-    const hierarchy = {
-      id: 'boss',
-      role: 'boss',
-      data: bossData,
-      children: [],
-      parent: null,
-      mod: 0,
-      isLeadership: true
-    };
-    const bossConsigliereData = Array.isArray(roster.boss_consigliere) && roster.boss_consigliere[0] ? roster.boss_consigliere[0] : null;
+    const hierarchy = createPersonNode('boss', bossData, null, { isLeadership: true, id: 'boss' });
+    const bossConsigliereData = Array.isArray(roster.boss_consigliere) && roster.boss_consigliere[0]
+      ? roster.boss_consigliere[0]
+      : null;
     if (bossConsigliereData) {
-      hierarchy.advisor = {
-        id: 'boss-consigliere',
-        role: 'boss_consigliere',
-        data: bossConsigliereData,
+      hierarchy.advisor = createPersonNode('boss_consigliere', bossConsigliereData, hierarchy, {
         isLeadership: true,
-        x: 0,
-        y: 0,
-        mod: 0,
-        parent: hierarchy,
-        children: []
-      };
+        id: 'boss-consigliere'
+      });
     }
     const org = {
       boss: bossData || null,
       bossConsigliere: bossConsigliereData || null,
-      capos: [],
-      unassigned: {
-        consiglieres: [],
-        soldatos: [],
-        associates: []
-      }
+      capos: []
     };
+    const capoConfigs = [];
     index.capos.forEach(capo => {
-      const capoNode = {
-        id: createNodeId('capo', capo?.name),
-        role: 'capo',
-        data: capo,
-        children: [],
-        parent: hierarchy,
-        mod: 0,
-        isLeadership: true
-      };
-      const capoName = capo?.name;
-      const consiglieres = getGroup(index.consiglieresByCapo, capoName);
-      consiglieres.forEach(consigliere => {
-        const consigliereNode = {
-          id: createNodeId('consigliere', consigliere?.name),
-          role: 'consigliere',
-          data: consigliere,
-          children: [],
-          parent: capoNode,
-          mod: 0,
-          isLeadership: false
-        };
-        const associatesForCons = getGroup(index.associatesByConsigliere, consigliere?.name);
-        associatesForCons.forEach(associate => {
-          const associateNode = {
-            id: createNodeId('associate', associate?.name),
-            role: 'associate',
-            data: associate,
-            children: [],
-            parent: consigliereNode,
-            mod: 0,
-            isLeadership: false
-          };
-          consigliereNode.children.push(associateNode);
-        });
-        capoNode.children.push(consigliereNode);
-      });
-      const soldatos = getGroup(index.soldatosByCapo, capoName);
-      soldatos.forEach(soldato => {
-        const soldatoNode = {
-          id: createNodeId('soldato', soldato?.name),
-          role: 'soldato',
-          data: soldato,
-          children: [],
-          parent: capoNode,
-          mod: 0,
-          isLeadership: false
-        };
-        const associatesForSoldato = getGroup(index.associatesBySoldato, soldato?.name);
-        associatesForSoldato.forEach(associate => {
-          const associateNode = {
-            id: createNodeId('associate', associate?.name),
-            role: 'associate',
-            data: associate,
-            children: [],
-            parent: soldatoNode,
-            mod: 0,
-            isLeadership: false
-          };
-          soldatoNode.children.push(associateNode);
-        });
-        capoNode.children.push(soldatoNode);
-      });
-      const directAssociates = getGroup(index.associatesByCapo, capoName);
-      directAssociates.forEach(associate => {
-        const associateNode = {
-          id: createNodeId('associate', associate?.name),
-          role: 'associate',
-          data: associate,
-          children: [],
-          parent: capoNode,
-          mod: 0,
-          isLeadership: false
-        };
-        capoNode.children.push(associateNode);
-      });
-      hierarchy.children.push(capoNode);
-      const capoEntry = {
-        capo,
-        consiglieres: [],
-        soldatos: [],
-        associates: directAssociates
-      };
-      consiglieres.forEach(consigliere => {
-        capoEntry.consiglieres.push({
-          consigliere,
-          associates: getGroup(index.associatesByConsigliere, consigliere?.name)
-        });
-      });
-      soldatos.forEach(soldato => {
-        capoEntry.soldatos.push({
-          soldato,
-          associates: getGroup(index.associatesBySoldato, soldato?.name)
-        });
-      });
-      org.capos.push(capoEntry);
+      const entry = createCapoOrgEntry(capo, index);
+      org.capos.push(entry.summary);
+      capoConfigs.push(entry.nodeConfig);
     });
-
-    const unassignedSection = index.unassigned || {};
-    const unassignedConsiglieres = Array.isArray(unassignedSection.consiglieres)
-      ? unassignedSection.consiglieres
-      : [];
-    unassignedConsiglieres.forEach(consigliere => {
-      const associatesForCons = getGroup(index.associatesByConsigliere, consigliere?.name);
-      org.unassigned.consiglieres.push({
-        consigliere,
-        associates: associatesForCons
+    const independentEntry = createIndependentOrgEntry(index);
+    if (independentEntry) {
+      org.capos.unshift(independentEntry.summary);
+      capoConfigs.unshift(independentEntry.nodeConfig);
+    }
+    capoConfigs.forEach(config => {
+      const node = createPersonNode('capo', config.capo, hierarchy, {
+        isLeadership: true,
+        isIndependentRoot: !!config.isIndependent,
+        childSources: config.childSources || null
       });
-    });
-    const unassignedSoldatos = Array.isArray(unassignedSection.soldatos)
-      ? unassignedSection.soldatos
-      : [];
-    unassignedSoldatos.forEach(soldato => {
-      const associatesForSoldato = getGroup(index.associatesBySoldato, soldato?.name);
-      org.unassigned.soldatos.push({
-        soldato,
-        associates: associatesForSoldato
-      });
-    });
-    const unassignedAssociates = Array.isArray(unassignedSection.associates)
-      ? unassignedSection.associates.slice()
-      : [];
-    unassignedAssociates.forEach(associate => {
-      org.unassigned.associates.push(associate);
+      hierarchy.children.push(node);
+      buildRoleChildren(node, index);
     });
     return { hierarchy, org, index };
   }
@@ -544,81 +616,6 @@
     appendNode(node);
     container.appendChild(fragment);
   }
-  function renderUnassignedCrew(org) {
-    const panel = document.getElementById('unassignedCrew');
-    if (!panel) return;
-    panel.innerHTML = '';
-    const unassigned = org?.unassigned || {};
-    const consiglieres = Array.isArray(unassigned.consiglieres)
-      ? unassigned.consiglieres.map(entry => entry?.consigliere).filter(p => p && p.name)
-      : [];
-    const soldatos = Array.isArray(unassigned.soldatos)
-      ? unassigned.soldatos.map(entry => entry?.soldato).filter(p => p && p.name)
-      : [];
-    const associates = Array.isArray(unassigned.associates)
-      ? unassigned.associates.filter(p => p && p.name)
-      : [];
-    const nameSorter = (a, b) => {
-      const an = (a?.name || '').toString();
-      const bn = (b?.name || '').toString();
-      return an.localeCompare(bn, undefined, { sensitivity: 'base' });
-    };
-    consiglieres.sort(nameSorter);
-    soldatos.sort(nameSorter);
-    associates.sort(nameSorter);
-    const hasConsiglieres = consiglieres.length > 0;
-    const hasSoldatos = soldatos.length > 0;
-    const hasAssociates = associates.length > 0;
-    const plaque = document.createElement('div');
-    plaque.className = 'roster-plaque unassigned';
-    const plaqueHeader = document.createElement('div');
-    plaqueHeader.className = 'plaque-role';
-    plaqueHeader.textContent = 'Unassigned Crew';
-    plaque.appendChild(plaqueHeader);
-    if (!hasConsiglieres && !hasSoldatos && !hasAssociates) {
-      const emptyMsg = document.createElement('div');
-      emptyMsg.className = 'plaque-detail';
-      emptyMsg.textContent = 'All crew are currently assigned.';
-      plaque.appendChild(emptyMsg);
-      panel.appendChild(plaque);
-      return;
-    }
-    function renderSection(title, people) {
-      if (!Array.isArray(people) || people.length === 0) return;
-      const sectionEl = document.createElement('div');
-      sectionEl.className = 'unassigned-section';
-      const header = document.createElement('div');
-      header.className = 'unassigned-section-title';
-      header.textContent = title;
-      sectionEl.appendChild(header);
-      const list = document.createElement('ul');
-      list.className = 'unassigned-list';
-      people.forEach(person => {
-        if (!person || !person.name) return;
-        const li = document.createElement('li');
-        li.className = 'unassigned-entry';
-        const nameSpan = document.createElement('span');
-        nameSpan.className = 'unassigned-entry-name';
-        nameSpan.textContent = person.name;
-        const badStatus = (person.status === 'deceased' || person.status === 'retired');
-        if (badStatus) nameSpan.style.textDecoration = 'line-through';
-        li.appendChild(nameSpan);
-        if (person.clan) {
-          const clanSpan = document.createElement('span');
-          clanSpan.className = 'unassigned-entry-meta';
-          clanSpan.textContent = ` (${person.clan})`;
-          li.appendChild(clanSpan);
-        }
-        list.appendChild(li);
-      });
-      sectionEl.appendChild(list);
-      plaque.appendChild(sectionEl);
-    }
-    renderSection('Consigliere', consiglieres);
-    renderSection('Soldato', soldatos);
-    renderSection('Associate', associates);
-    panel.appendChild(plaque);
-  }
   function getTreeDimensions(node, layout) {
     if (!node || !layout) return { width: 0, height: 0 };
     let maxX = node.x + layout.getNodeWidth(node);
@@ -635,12 +632,6 @@
     evaluateNode(node);
     return { width: maxX + layout.marginLeft, height: maxY + layout.marginTop };
   }
-  function shiftTreePositions(node, offset) {
-    node.x += offset;
-    if (node.advisor) node.advisor.x += offset;
-    node.children.forEach(child => shiftTreePositions(child, offset));
-  }
-
   // -----------------------
   // Lines (Canvas)
   // -----------------------
@@ -680,19 +671,15 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     return ctx;
   }
-  function setCommandStyle(ctx, color) {
-    ctx.lineWidth = 2.5;
+  const COMMAND_LINE_STYLE = Object.freeze({ width: 2.5, dash: [] });
+  const ADVISOR_LINE_STYLE = Object.freeze({ width: 2, dash: [8, 4] });
+
+  function setStroke(ctx, style, color) {
+    ctx.lineWidth = style.width;
     ctx.strokeStyle = color;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    if (ctx.setLineDash) ctx.setLineDash([]);
-  }
-  function setAdvisoryStyle(ctx, color) {
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = color;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    if (ctx.setLineDash) ctx.setLineDash([8, 4]);
+    if (ctx.setLineDash) ctx.setLineDash(style.dash || []);
   }
   function drawChildrenConnector(ctx, parent, children) {
     if (!children || children.length === 0) return;
@@ -733,15 +720,44 @@
   function drawTreeConnectors(ctx, node, color) {
     if (!node) return;
     const children = Array.isArray(node.children) ? node.children : [];
-    if (children.length > 0) {
-      setCommandStyle(ctx, color);
+    const skipChildrenConnectors = Boolean(node.independentRootId && !node.isIndependentRoot);
+    if (!skipChildrenConnectors && children.length > 0) {
+      setStroke(ctx, COMMAND_LINE_STYLE, color);
       drawChildrenConnector(ctx, node, children);
     }
     children.forEach(child => drawTreeConnectors(ctx, child, color));
     if (node.advisor) {
-      setAdvisoryStyle(ctx, color);
+      setStroke(ctx, ADVISOR_LINE_STYLE, color);
       drawAdvisorConnector(ctx, node, node.advisor);
     }
+  }
+  function drawIndependentAssociateConnectors(ctx, node, color) {
+    if (!node) return;
+    const independentRoots = [];
+    (function collectRoots(current) {
+      if (!current) return;
+      if (current.isIndependentRoot) independentRoots.push(current);
+      current.children.forEach(collectRoots);
+    })(node);
+    independentRoots.forEach(root => {
+      const associates = [];
+      (function collectAssociates(current) {
+        current.children.forEach(child => {
+          if (
+            child.independentRootId === root.id &&
+            child.parent !== root &&
+            child.role === 'associate'
+          ) {
+            associates.push(child);
+          }
+          collectAssociates(child);
+        });
+      })(root);
+      if (associates.length > 0) {
+        setStroke(ctx, COMMAND_LINE_STYLE, color);
+        drawChildrenConnector(ctx, root, associates);
+      }
+    });
   }
   window.drawOrgChartLines = function() {
     const data = window.ledgerData;
@@ -758,6 +774,7 @@
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const color = getAccentGold();
     drawTreeConnectors(ctx, tree, color);
+    drawIndependentAssociateConnectors(ctx, tree, color);
     // Keep header aligned and boss centered
     updateHeaderAlignment(container, tree);
     centerViewportOnBoss(container, tree);
@@ -817,20 +834,11 @@
     const containerWidth = container.clientWidth || layout.getNodeWidth(tree);
     const dimsBeforeRender = getTreeDimensions(tree, layout);
     const offset = Math.max((containerWidth - dimsBeforeRender.width) / 2, 0);
-    shiftTreePositions(tree, offset);
+    layout.applyHorizontalShift(tree, offset);
     renderTree(tree, container);
-    renderUnassignedCrew(unified.org);
     const dimsAfterRender = getTreeDimensions(tree, layout);
     container.style.width = `${Math.ceil(dimsAfterRender.width)}px`;
     container.style.height = `${Math.ceil(dimsAfterRender.height)}px`;
-    // Ensure canvas overlay exists and draw connectors
-    const existingCanvas = document.getElementById(SELECTORS.orgChartLinesCanvas);
-    if (!existingCanvas) {
-      const canvas = document.createElement('canvas');
-      canvas.setAttribute('id', SELECTORS.orgChartLinesCanvas);
-      canvas.classList.add('org-chart-lines-canvas');
-      container.appendChild(canvas);
-    }
     if (typeof window.drawOrgChartLines === 'function') {
       requestAnimationFrame(() => window.drawOrgChartLines());
     }
