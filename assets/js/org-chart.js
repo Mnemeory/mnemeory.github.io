@@ -343,7 +343,8 @@
     const org = {
       boss: bossData || null,
       bossConsigliere: bossConsigliereData || null,
-      capos: []
+      capos: [],
+      unassignedConsiglieres: []
     };
     index.capos.forEach(capo => {
       const capoNode = {
@@ -441,6 +442,40 @@
         });
       });
       org.capos.push(capoEntry);
+    });
+
+    // Add Consiglieres without an assigned Capo to the Capo row (as independent crews under the Consigliere di SF)
+    const allConsiglieres = Array.isArray(roster?.consigliere) ? roster.consigliere.slice() : [];
+    const unassignedCons = allConsiglieres.filter(c => !normalizeKey(c?.assigned_capo));
+    unassignedCons.forEach(consigliere => {
+      const consigliereNode = {
+        id: createNodeId('consigliere', consigliere?.name),
+        role: 'consigliere',
+        data: consigliere,
+        children: [],
+        parent: hierarchy,
+        mod: 0,
+        isLeadership: false
+      };
+      const associatesForCons = getGroup(index.associatesByConsigliere, consigliere?.name);
+      associatesForCons.forEach(associate => {
+        const associateNode = {
+          id: createNodeId('associate', associate?.name),
+          role: 'associate',
+          data: associate,
+          children: [],
+          parent: consigliereNode,
+          mod: 0,
+          isLeadership: false
+        };
+        consigliereNode.children.push(associateNode);
+      });
+      hierarchy.children.push(consigliereNode);
+
+      org.unassignedConsiglieres.push({
+        consigliere,
+        associates: associatesForCons
+      });
     });
     return { hierarchy, org, index };
   }
@@ -610,6 +645,11 @@
     if (!orgTree) return;
     drawBossLevel(svg, orgTree, positions);
     drawCapoLevel(svg, orgTree, positions);
+    drawUnassignedConsiglieresLevel(svg, orgTree, positions);
+    // Keep header aligned to boss after (re)draw
+    updateHeaderAlignment(container, positions, orgTree);
+    // On redraw (e.g., resize), keep the boss centered
+    centerViewportOnBoss(container, positions, orgTree);
   };
 
   function drawBossLevel(svg, orgTree, positions) {
@@ -658,6 +698,32 @@
         if (directAssocPositions.length > 0) {
           drawHierarchyLines(svg, capoPos, directAssocPositions);
         }
+      }
+    });
+  }
+  function drawUnassignedConsiglieresLevel(svg, orgTree, positions) {
+    if (!orgTree.unassignedConsiglieres || orgTree.unassignedConsiglieres.length === 0) return;
+    if (!orgTree.bossConsigliere) return;
+    const advisorPos = positions.get(orgTree.bossConsigliere.name);
+    if (!advisorPos) return;
+    const consPositions = [];
+    orgTree.unassignedConsiglieres.forEach(entry => {
+      const consPos = positions.get(entry.consigliere.name);
+      if (consPos) consPositions.push(consPos);
+    });
+    if (consPositions.length > 0) {
+      // Solid command lines from Consigliere di SF to each unassigned Consigliere
+      drawHierarchyLines(svg, advisorPos, consPositions);
+    }
+    // Draw each unassigned consigliere to their associates
+    orgTree.unassignedConsiglieres.forEach(entry => {
+      const consPos = positions.get(entry.consigliere.name);
+      if (!consPos) return;
+      const assocPositions = Array.isArray(entry.associates)
+        ? entry.associates.map(assoc => positions.get(assoc.name)).filter(Boolean)
+        : [];
+      if (assocPositions.length > 0) {
+        drawHierarchyLines(svg, consPos, assocPositions);
       }
     });
   }
@@ -732,6 +798,14 @@
         requestAnimationFrame(() => window.drawOrgChartLines());
       }
     }, 250);
+
+    // Track header position on scroll
+    container.addEventListener('scroll', () => {
+      const positions = getAllPositions(container);
+      if (window.__orgChartTreeCache && window.__orgChartTreeCache.org) {
+        updateHeaderAlignment(container, positions, window.__orgChartTreeCache.org);
+      }
+    }, { passive: true });
   }
 
   window.populateFamilyRoster = function() {
@@ -770,6 +844,31 @@
       if (id) clearTimeout(id);
       id = setTimeout(fn, wait);
     };
+  }
+
+  // -----------------------
+  // Centering and header alignment
+  // -----------------------
+  function centerViewportOnBoss(container, positions, orgTree) {
+    if (!container || !positions || !orgTree || !orgTree.boss) return;
+    const bossPos = positions.get(orgTree.boss.name);
+    if (!bossPos) return;
+    const targetLeft = Math.max(0, Math.round(bossPos.centerX - (container.clientWidth / 2)));
+    container.scrollTo({ left: targetLeft, behavior: 'auto' });
+  }
+
+  function updateHeaderAlignment(container, positions, orgTree) {
+    if (!container || !positions || !orgTree || !orgTree.boss) return;
+    const bossPos = positions.get(orgTree.boss.name);
+    if (!bossPos) return;
+    const header = document.querySelector('.roster-title');
+    const subheader = document.querySelector('.roster-subtitle');
+    if (!header && !subheader) return;
+    const viewportCenterX = container.scrollLeft + (container.clientWidth / 2);
+    const delta = bossPos.centerX - viewportCenterX;
+    const translateValue = `translateX(${Math.round(delta)}px)`;
+    if (header) header.style.transform = translateValue;
+    if (subheader) subheader.style.transform = translateValue;
   }
 
   // -----------------------

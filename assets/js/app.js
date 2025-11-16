@@ -151,6 +151,7 @@
       territory: [],
       familyroster: null
     },
+    crewIndex: null,
     loadingIndicator: null,
     partialErrorNotice: null,
     partialErrorTimer: null
@@ -178,6 +179,113 @@
   // -----------------------
   // Rendering
   // -----------------------
+
+  // -----------------------
+  // Crew index (for assigned_crew_id usage)
+  // -----------------------
+  function slugifyName(name) {
+    if (!name) return '';
+    return String(name)
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+  function buildCrewIndex(familyroster) {
+    const index = Object.create(null);
+    if (!familyroster || typeof familyroster !== 'object') return index;
+
+    const capos = Array.isArray(familyroster.capo) ? familyroster.capo.slice() : [];
+    const consiglieres = Array.isArray(familyroster.consigliere) ? familyroster.consigliere.slice() : [];
+    const soldatos = Array.isArray(familyroster.soldato) ? familyroster.soldato.slice() : [];
+    const associates = Array.isArray(familyroster.associate) ? familyroster.associate.slice() : [];
+
+    const byConsigliereAssociates = new Map();
+    const bySoldatoAssociates = new Map();
+    const byCapoAssociates = new Map();
+    associates.forEach(a => {
+      if (!a) return;
+      if (a.assigned_consigliere) {
+        const key = String(a.assigned_consigliere).trim();
+        if (!byConsigliereAssociates.has(key)) byConsigliereAssociates.set(key, []);
+        byConsigliereAssociates.get(key).push(a);
+      } else if (a.assigned_soldato) {
+        const key = String(a.assigned_soldato).trim();
+        if (!bySoldatoAssociates.has(key)) bySoldatoAssociates.set(key, []);
+        bySoldatoAssociates.get(key).push(a);
+      } else if (a.assigned_capo) {
+        const key = String(a.assigned_capo).trim();
+        if (!byCapoAssociates.has(key)) byCapoAssociates.set(key, []);
+        byCapoAssociates.get(key).push(a);
+      }
+    });
+
+    const consiglieresByCapo = new Map();
+    consiglieres.forEach(c => {
+      if (!c) return;
+      const capoName = (c.assigned_capo || '').toString().trim();
+      if (!capoName) return;
+      if (!consiglieresByCapo.has(capoName)) consiglieresByCapo.set(capoName, []);
+      consiglieresByCapo.get(capoName).push(c);
+    });
+
+    const soldatosByCapo = new Map();
+    soldatos.forEach(s => {
+      if (!s) return;
+      const capoName = (s.assigned_capo || '').toString().trim();
+      if (!capoName) return;
+      if (!soldatosByCapo.has(capoName)) soldatosByCapo.set(capoName, []);
+      soldatosByCapo.get(capoName).push(s);
+    });
+
+    // Build Capo crews
+    capos.forEach(capo => {
+      if (!capo) return;
+      const capoName = (capo.name || '').toString().trim();
+      if (!capoName) return;
+      const crewId = capo.crew_id || `crew:capo:${slugifyName(capoName)}`;
+      const crewCapo = [capoName];
+
+      const caposCons = (consiglieresByCapo.get(capoName) || []).map(c => c.name).filter(Boolean);
+      const caposSold = (soldatosByCapo.get(capoName) || []).map(s => s.name).filter(Boolean);
+      const la_squadra = caposCons.concat(caposSold);
+
+      // Associates under consiglieres + soldatos + directly under capo
+      const assocUnderCons = caposCons.flatMap(consName => (byConsigliereAssociates.get(consName) || []).map(a => a.name).filter(Boolean));
+      const assocUnderSold = caposSold.flatMap(soldName => (bySoldatoAssociates.get(soldName) || []).map(a => a.name).filter(Boolean));
+      const assocDirectCapo = (byCapoAssociates.get(capoName) || []).map(a => a.name).filter(Boolean);
+      const la_famiglia = assocUnderCons.concat(assocUnderSold, assocDirectCapo);
+
+      index[crewId] = {
+        capo: crewCapo,
+        la_squadra,
+        la_famiglia
+      };
+    });
+
+    // Build crews for unassigned Consiglieres
+    consiglieres.forEach(c => {
+      if (!c) return;
+      const consName = (c.name || '').toString().trim();
+      const hasCapo = (c.assigned_capo || '').toString().trim();
+      if (hasCapo) return; // skip assigned
+      const crewId = c.crew_id || `crew:consigliere:${slugifyName(consName)}`;
+      const la_squadra = consName ? [consName] : [];
+      const la_famiglia = (byConsigliereAssociates.get(consName) || []).map(a => a.name).filter(Boolean);
+      index[crewId] = {
+        capo: [],
+        la_squadra,
+        la_famiglia
+      };
+    });
+
+    return index;
+  }
+  function getCrewById(id) {
+    if (!id) return null;
+    if (!state.crewIndex) return null;
+    return state.crewIndex[id] || null;
+  }
 
   function clearChildren(element) {
     if (!element) return;
@@ -498,7 +606,18 @@
       const territory = data.territory[index];
       if (!territory) return;
 
-      const assignedCrew = territory.assigned_crew || {};
+      // Resolve assigned crew: assigned_crew_id takes precedence, fallback to manual assigned_crew
+      let assignedCrew = territory.assigned_crew || {};
+      if (territory.assigned_crew_id) {
+        const crew = getCrewById(territory.assigned_crew_id);
+        if (crew) {
+          assignedCrew = {
+            capo: crew.capo || [],
+            la_squadra: crew.la_squadra || [],
+            la_famiglia: crew.la_famiglia || []
+          };
+        }
+      }
       const sortCrewList = list => {
         if (!Array.isArray(list)) return [];
         return list
@@ -704,6 +823,8 @@
     showLoadingState();
     try {
       await loadAllData();
+      // Build crew index for territory auto-populate
+      state.crewIndex = buildCrewIndex(state.data.familyroster);
       populateVendetta();
       populateTerritory();
       updateDynamicElements();
