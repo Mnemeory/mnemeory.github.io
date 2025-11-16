@@ -558,6 +558,14 @@
     const associates = Array.isArray(unassigned.associates)
       ? unassigned.associates.filter(p => p && p.name)
       : [];
+    const nameSorter = (a, b) => {
+      const an = (a?.name || '').toString();
+      const bn = (b?.name || '').toString();
+      return an.localeCompare(bn, undefined, { sensitivity: 'base' });
+    };
+    consiglieres.sort(nameSorter);
+    soldatos.sort(nameSorter);
+    associates.sort(nameSorter);
     const hasConsiglieres = consiglieres.length > 0;
     const hasSoldatos = soldatos.length > 0;
     const hasAssociates = associates.length > 0;
