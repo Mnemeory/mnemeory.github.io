@@ -247,9 +247,6 @@
   // -----------------------
   // Data shaping helpers
   // -----------------------
-  function safeArray(value) {
-    return Array.isArray(value) ? value.slice() : [];
-  }
   function normalizeKey(value) {
     if (value === null || value === undefined) return '';
     return String(value).trim();
@@ -288,10 +285,10 @@
     return { byCapo, byConsigliere, bySoldato };
   }
   function createRosterIndex(roster) {
-    const capos = safeArray(roster?.capo);
-    const consiglieres = safeArray(roster?.consigliere);
-    const soldatos = safeArray(roster?.soldato);
-    const associates = safeArray(roster?.associate);
+    const capos = Array.isArray(roster?.capo) ? roster.capo.slice() : [];
+    const consiglieres = Array.isArray(roster?.consigliere) ? roster.consigliere.slice() : [];
+    const soldatos = Array.isArray(roster?.soldato) ? roster.soldato.slice() : [];
+    const associates = Array.isArray(roster?.associate) ? roster.associate.slice() : [];
     const associateGroups = classifyAssociates(associates);
     return {
       capos,
@@ -314,17 +311,6 @@
     const safe = normalized.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
     const unique = safe || Math.random().toString(36).slice(2, 8);
     return `${prefix}-${unique}`;
-  }
-  function makeNode(role, data, parent, isLeadership) {
-    return {
-      id: createNodeId(role, data?.name),
-      role,
-      data,
-      children: [],
-      parent: parent || null,
-      mod: 0,
-      isLeadership: !!isLeadership
-    };
   }
 
   function buildUnifiedOrgData(roster, rosterIndex) {
@@ -361,31 +347,79 @@
       unassignedConsiglieres: []
     };
     index.capos.forEach(capo => {
-      const capoNode = makeNode('capo', capo, hierarchy, true);
+      const capoNode = {
+        id: createNodeId('capo', capo?.name),
+        role: 'capo',
+        data: capo,
+        children: [],
+        parent: hierarchy,
+        mod: 0,
+        isLeadership: true
+      };
       const capoName = capo?.name;
       const consiglieres = getGroup(index.consiglieresByCapo, capoName);
       consiglieres.forEach(consigliere => {
-        const consigliereNode = makeNode('consigliere', consigliere, capoNode, false);
+        const consigliereNode = {
+          id: createNodeId('consigliere', consigliere?.name),
+          role: 'consigliere',
+          data: consigliere,
+          children: [],
+          parent: capoNode,
+          mod: 0,
+          isLeadership: false
+        };
         const associatesForCons = getGroup(index.associatesByConsigliere, consigliere?.name);
         associatesForCons.forEach(associate => {
-          const associateNode = makeNode('associate', associate, consigliereNode, false);
+          const associateNode = {
+            id: createNodeId('associate', associate?.name),
+            role: 'associate',
+            data: associate,
+            children: [],
+            parent: consigliereNode,
+            mod: 0,
+            isLeadership: false
+          };
           consigliereNode.children.push(associateNode);
         });
         capoNode.children.push(consigliereNode);
       });
       const soldatos = getGroup(index.soldatosByCapo, capoName);
       soldatos.forEach(soldato => {
-        const soldatoNode = makeNode('soldato', soldato, capoNode, false);
+        const soldatoNode = {
+          id: createNodeId('soldato', soldato?.name),
+          role: 'soldato',
+          data: soldato,
+          children: [],
+          parent: capoNode,
+          mod: 0,
+          isLeadership: false
+        };
         const associatesForSoldato = getGroup(index.associatesBySoldato, soldato?.name);
         associatesForSoldato.forEach(associate => {
-          const associateNode = makeNode('associate', associate, soldatoNode, false);
+          const associateNode = {
+            id: createNodeId('associate', associate?.name),
+            role: 'associate',
+            data: associate,
+            children: [],
+            parent: soldatoNode,
+            mod: 0,
+            isLeadership: false
+          };
           soldatoNode.children.push(associateNode);
         });
         capoNode.children.push(soldatoNode);
       });
       const directAssociates = getGroup(index.associatesByCapo, capoName);
       directAssociates.forEach(associate => {
-        const associateNode = makeNode('associate', associate, capoNode, false);
+        const associateNode = {
+          id: createNodeId('associate', associate?.name),
+          role: 'associate',
+          data: associate,
+          children: [],
+          parent: capoNode,
+          mod: 0,
+          isLeadership: false
+        };
         capoNode.children.push(associateNode);
       });
       hierarchy.children.push(capoNode);
@@ -410,11 +444,34 @@
       org.capos.push(capoEntry);
     });
 
-    // Collect Consiglieres without an assigned Capo for separate rendering (right of Consigliere di SF)
+    // Add Consiglieres without an assigned Capo to the Capo row (as independent crews under the Consigliere di SF)
     const allConsiglieres = Array.isArray(roster?.consigliere) ? roster.consigliere.slice() : [];
     const unassignedCons = allConsiglieres.filter(c => !normalizeKey(c?.assigned_capo));
     unassignedCons.forEach(consigliere => {
+      const consigliereNode = {
+        id: createNodeId('consigliere', consigliere?.name),
+        role: 'consigliere',
+        data: consigliere,
+        children: [],
+        parent: hierarchy,
+        mod: 0,
+        isLeadership: false
+      };
       const associatesForCons = getGroup(index.associatesByConsigliere, consigliere?.name);
+      associatesForCons.forEach(associate => {
+        const associateNode = {
+          id: createNodeId('associate', associate?.name),
+          role: 'associate',
+          data: associate,
+          children: [],
+          parent: consigliereNode,
+          mod: 0,
+          isLeadership: false
+        };
+        consigliereNode.children.push(associateNode);
+      });
+      hierarchy.children.push(consigliereNode);
+
       org.unassignedConsiglieres.push({
         consigliere,
         associates: associatesForCons
@@ -435,8 +492,6 @@
     element.className = `roster-plaque ${node.isLeadership ? 'leadership' : 'crew'}`;
     const status = node.data?.status || DEFAULTS.status;
     if (status) element.classList.add(status);
-    if (node.id) element.dataset.nodeId = node.id;
-    if (node.role) element.dataset.role = node.role;
     if (node.data?.name) element.dataset.nodeName = node.data.name;
     element.style.position = 'absolute';
     element.style.left = `${Math.round(node.x)}px`;
@@ -503,18 +558,10 @@
     svg.setAttribute('height', height);
   }
   function drawPath(svg, pathData, className) {
-    // Group paths by type to reduce DOM churn
-    const groupClass = className && className.indexOf('advisory') !== -1 ? 'advisory-lines-group' : 'command-lines-group';
-    let group = svg.querySelector(`g.${groupClass}`);
-    if (!group) {
-      group = document.createElementNS(SVG_NAMESPACE, 'g');
-      group.setAttribute('class', groupClass);
-      svg.appendChild(group);
-    }
     const path = document.createElementNS(SVG_NAMESPACE, 'path');
     path.setAttribute('d', pathData);
     path.setAttribute('class', className);
-    group.appendChild(path);
+    svg.appendChild(path);
     return path;
   }
   function getAllPositions(container) {
@@ -525,7 +572,6 @@
       const nameEl = plaque.querySelector('.plaque-name');
       if (!nameEl) return;
       const name = nameEl.textContent.trim();
-      const nodeId = plaque.dataset.nodeId;
       const rect = plaque.getBoundingClientRect();
       const pos = {
         centerX: (rect.left - containerRect.left) + (rect.width / 2),
@@ -538,7 +584,6 @@
         height: rect.height
       };
       positions.set(name, pos);
-      if (nodeId) positions.set(nodeId, pos);
     });
     return positions;
   }
@@ -741,8 +786,6 @@
     const offset = Math.max((containerWidth - dimsBeforeRender.width) / 2, 0);
     shiftTreePositions(tree, offset);
     renderTree(tree, container);
-    // Render unassigned consiglieres as a separate column to the right of the advisor
-    renderFreeConsiglieresColumn(window.__orgChartTreeCache, layout, container);
     const dimsAfterRender = getTreeDimensions(tree, layout);
     container.style.width = `${Math.ceil(dimsAfterRender.width)}px`;
     container.style.height = `${Math.ceil(dimsAfterRender.height)}px`;
@@ -763,68 +806,6 @@
         updateHeaderAlignment(container, positions, window.__orgChartTreeCache.org);
       }
     }, { passive: true });
-  }
-
-  // Render a vertical column of unassigned consiglieres (and their associates) to the right of Consigliere di SF
-  function renderFreeConsiglieresColumn(unified, layout, container) {
-    if (!unified || !unified.org || !unified.hierarchy) return;
-    const org = unified.org;
-    const tree = unified.hierarchy;
-    if (!org.bossConsigliere || !Array.isArray(org.unassignedConsiglieres)) return;
-    const advisor = tree.advisor;
-    if (!advisor) return;
-    const columnX = advisor.x + layout.getNodeWidth(advisor) + layout.advisorGap;
-    let currentY = advisor.y;
-    let maxRight = columnX + layout.crewWidth;
-    let maxBottom = currentY + layout.crewHeight;
-    org.unassignedConsiglieres.forEach(entry => {
-      // Consigliere plaque (crew size)
-      const consNode = {
-        id: createNodeId('consigliere', entry.consigliere?.name),
-        role: 'consigliere',
-        data: entry.consigliere,
-        isLeadership: false,
-        x: columnX,
-        y: currentY
-      };
-      container.appendChild(createPlaqueElement(consNode));
-      maxRight = Math.max(maxRight, columnX + layout.crewWidth);
-      maxBottom = Math.max(maxBottom, currentY + layout.crewHeight);
-      // Associates beneath in a centered row
-      const associates = Array.isArray(entry.associates) ? entry.associates : [];
-      if (associates.length > 0) {
-        const totalWidth = (associates.length * layout.crewWidth) + ((associates.length - 1) * layout.horizontalSpacing);
-        const parentCenterX = columnX + (layout.crewWidth / 2);
-        let startX = Math.round(parentCenterX - (totalWidth / 2));
-        const assocY = currentY + layout.crewHeight + layout.verticalSpacing;
-        associates.forEach(a => {
-          const assocNode = {
-            id: createNodeId('associate', a?.name),
-            role: 'associate',
-            data: a,
-            isLeadership: false,
-            x: startX,
-            y: assocY
-          };
-          container.appendChild(createPlaqueElement(assocNode));
-          maxRight = Math.max(maxRight, startX + layout.crewWidth);
-          startX += layout.crewWidth + layout.horizontalSpacing;
-        });
-        maxBottom = Math.max(maxBottom, assocY + layout.crewHeight);
-        // Advance by two rows worth when associates exist
-        currentY = assocY + layout.crewHeight + layout.verticalSpacing;
-      } else {
-        // Advance by one row when no associates
-        currentY += layout.crewHeight + layout.verticalSpacing;
-      }
-    });
-    // Expand container to fit the extra column content if needed
-    const currentWidth = parseInt(container.style.width || '0', 10) || container.scrollWidth;
-    const currentHeight = parseInt(container.style.height || '0', 10) || container.scrollHeight;
-    const neededWidth = Math.max(currentWidth, Math.ceil(maxRight + layout.marginLeft));
-    const neededHeight = Math.max(currentHeight, Math.ceil(maxBottom + layout.marginTop));
-    container.style.width = `${neededWidth}px`;
-    container.style.height = `${neededHeight}px`;
   }
 
   window.populateFamilyRoster = function() {

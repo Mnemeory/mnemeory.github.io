@@ -141,7 +141,6 @@
   padding: 60px 20px;
   overflow-x: auto;
   overflow-y: visible;
-  background: transparent;
 }
 
 /* Show scrollbar on hover */
@@ -326,7 +325,6 @@
   pointer-events: none;
   z-index: 0;
   overflow: visible;
-  background: transparent;
 }
 
 .org-chart-lines-svg .command-line {
@@ -376,16 +374,12 @@ body.roster-page {
   height: auto;
   min-height: 100vh;
   overflow: auto;
-  background: transparent;
+  background-color: #000;
+  background-image: url('../images/rosterbackground.png');
+  background-repeat: repeat;
+  background-size: 1670px 1520px;
 }
 
 body.roster-page::before {
   display: none;
-}
-
-/* Improve header transform rendering to avoid subpixel seams */
-.roster-title,
-.roster-subtitle {
-  will-change: transform;
-  backface-visibility: hidden;
 }
