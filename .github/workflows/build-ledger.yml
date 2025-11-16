@@ -1,0 +1,41 @@
+name: Build Ledger JSON
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'data/**/*.yml'
+      - 'data/**/*.yaml'
+      - 'scripts/build-ledger.js'
+      - '.github/workflows/build-ledger.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build ledger.json
+        run: node scripts/build-ledger.js
+
+      - name: Commit ledger.json if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/data/ledger.json
+          git diff --cached --quiet && echo "No changes to commit." || git commit -m "chore(ledger): update assets/data/ledger.json"
+          git push
+
+

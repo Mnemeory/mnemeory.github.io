@@ -5,6 +5,23 @@
 - The Mob Radio button reads the manifest at runtime and shows a tooltip with the active track title. If the manifest is missing, the control disables itself instead of failing silently.
 - A GitHub Actions workflow (`.github/workflows/mobradio.yml`) runs the generator on every push and pull request. Commits that forget to update the manifest will fail CI.
 
+### Ledger data (YAML authoring → single JSON at runtime)
+
+- Author ledger data in YAML under `data/`:
+  - `data/collections.yml`
+  - `data/territory.yml`
+  - `data/vendetta.yml`
+  - `data/familyroster.yml`
+- Build the consolidated runtime file with:
+
+```bash
+npm run build:ledger
+```
+
+This generates `assets/data/ledger.json` which the app fetches once and shares with the roster iframe.
+
+- A GitHub Actions workflow (`.github/workflows/build-ledger.yml`) regenerates and commits `assets/data/ledger.json` on push when YAML changes.
+
 #### Collections (`data/collections.yml`)
 ```yaml
 - name: "Business Name"
@@ -74,4 +91,4 @@ associate:
     status: "active"
 ```
 
-Key settings in `assets/js/config.js`:
+Key settings are in `assets/js/app.js` and `assets/js/org-chart.js`.

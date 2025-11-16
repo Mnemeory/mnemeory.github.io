@@ -796,6 +796,9 @@
     } else if (event.data && event.data.action === 'dataUpdate') {
       if (event.data.ledgerData) {
         window.ledgerData = event.data.ledgerData;
+        if (typeof window.populateFamilyRoster === 'function' && window.ledgerData && window.ledgerData.familyroster) {
+          window.populateFamilyRoster();
+        }
       }
     }
   });

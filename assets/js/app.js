@@ -94,12 +94,7 @@
   // Data loading
   // -----------------------
 
-  const DATA_FILES = {
-    collections: 'data/collections.json',
-    vendetta: 'data/vendetta.json',
-    territory: 'data/territory.json',
-    familyroster: 'data/familyroster.json'
-  };
+  const LEDGER_FILE = 'assets/data/ledger.json';
 
   const DISPLAY_TEXT = {
     emptyStates: {
@@ -167,26 +162,14 @@
   }
 
   async function loadAllData() {
-    const errors = [];
-    const keys = Object.keys(DATA_FILES);
-    const results = await Promise.allSettled(keys.map(k => fetchJson(DATA_FILES[k])));
-
-    results.forEach((result, idx) => {
-      const key = keys[idx];
-      const fileName = DATA_FILES[key].split('/').pop();
-      if (result.status === 'fulfilled') {
-        state.data[key] = result.value ?? (key === 'familyroster' ? null : []);
-      } else {
-        state.data[key] = (key === 'familyroster') ? null : [];
-        errors.push({ file: fileName, error: result.reason && result.reason.message ? result.reason.message : 'Unknown error' });
-      }
-    });
-
-    if (errors.length === keys.length) {
+    try {
+      const result = await fetchJson(LEDGER_FILE);
+      state.data.collections = Array.isArray(result?.collections) ? result.collections : [];
+      state.data.vendetta = Array.isArray(result?.vendetta) ? result.vendetta : [];
+      state.data.territory = Array.isArray(result?.territory) ? result.territory : [];
+      state.data.familyroster = result && typeof result.familyroster === 'object' ? result.familyroster : null;
+    } catch (_) {
       throw new Error(DISPLAY_TEXT.errors.dataLoadFailed);
-    }
-    if (errors.length > 0) {
-      showPartialLoadErrors(errors);
     }
   }
 
