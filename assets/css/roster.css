@@ -388,7 +388,10 @@ body.roster-page {
   height: auto;
   min-height: 100vh;
   overflow: auto;
-  background: #000;
+  background-color: #000;
+  background-image: url('../images/rosterbackground.png');
+  background-repeat: repeat;
+  background-size: 1670px 1520px;
 }
 
 body.roster-page::before {
