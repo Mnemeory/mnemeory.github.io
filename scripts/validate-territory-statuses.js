@@ -3,9 +3,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const yaml = require('js-yaml');
 
-const TERRITORY_FILE = path.join(__dirname, '..', 'data', 'territory.yml');
+const TERRITORY_FILE = path.join(__dirname, '..', 'data', 'territory.json');
 const ALLOWED = new Set(['controlled', 'uncontrolled', 'contested', 'neutral', 'expanding']);
 
 function validate() {
@@ -13,16 +12,16 @@ function validate() {
   try {
     text = fs.readFileSync(TERRITORY_FILE, 'utf8');
   } catch (err) {
-    console.error('Failed to read territory.yml:', err.message);
+    console.error('Failed to read territory.json:', err.message);
     process.exitCode = 1;
     return;
   }
 
   let data;
   try {
-    data = yaml.load(text);
+    data = JSON.parse(text);
   } catch (err) {
-    console.error('YAML parse error in territory.yml:', err.message);
+    console.error('JSON parse error in territory.json:', err.message);
     process.exitCode = 1;
     return;
   }

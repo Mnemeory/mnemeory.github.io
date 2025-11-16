@@ -1,0 +1,103 @@
+[
+  {
+    "name": "Chinatown",
+    "status": "Neutral",
+    "assigned_crew": {
+      "capo": [],
+      "la_squadra": [],
+      "la_famiglia": []
+    },
+    "businesses": ["Laundromat (Black Market)", "Pawn Shop (Fence)", "Restaurant"],
+    "notes": "Controlled by the Axe Gang."
+  },
+  {
+    "name": "Baywalk District",
+    "status": "Uncontrolled",
+    "assigned_crew": {
+      "capo": [],
+      "la_squadra": [],
+      "la_famiglia": []
+    },
+    "businesses": ["Coffee House", "Hospital", "Hotel", "Ice Cream Shop", "Park", "Medical Store", "News Station"],
+    "notes": "Placeholder"
+  },
+  {
+    "name": "Financial District",
+    "status": "Shared with Camarilla",
+    "assigned_crew": {
+      "capo": [],
+      "la_squadra": ["Alex Puttanesca (Bianchi Bank Asset Protection)", "Gaio Puttanesca (Bianchi Bank General Counsel)"],
+      "la_famiglia": ["Asano Mai (Bianchi Bank Mergers and Acquisitions)", "Lucius Sadler (Bianchi Bank Asset Protection)"]
+    },
+    "businesses": ["Baco Tell", "Bianchi Bank (Safehouse)", "Community Center", "DoRa Club", "Endron HQ", "Jazz Club", "Library", "Little Italy (Safehouse)", "Millenium Tower", "Theatre"],
+    "notes": "Placeholder"
+  },
+  {
+    "name": "Fisherman's Wharf",
+    "status": "Uncontrolled",
+    "assigned_crew": {
+      "capo": [],
+      "la_squadra": [],
+      "la_famiglia": []
+    },
+    "businesses": ["Fence"],
+    "notes": "Placeholder"
+  },
+  {
+    "name": "Ghetto",
+    "status": "Uncontrolled",
+    "assigned_crew": {
+      "capo": [],
+      "la_squadra": [],
+      "la_famiglia": []
+    },
+    "businesses": ["Apartments", "Cleaners", "Veterinarian Clinic"],
+    "notes": "Placeholder"
+  },
+  {
+    "name": "Outskirts",
+    "status": "Controlled",
+    "assigned_crew": {
+      "capo": [],
+      "la_squadra": [],
+      "la_famiglia": []
+    },
+    "businesses": ["Giovanni Manor (Safehouse)"],
+    "notes": "The woods."
+  },
+  {
+    "name": "Pacific Heights",
+    "status": "Uncontrolled",
+    "assigned_crew": {
+      "capo": [],
+      "la_squadra": [],
+      "la_famiglia": []
+    },
+    "businesses": ["Alcoholics Anonymous", "Bar", "Church", "Courthouse", "Endron Processing Plant", "Graveyard", "Grid Substation", "SFPD", "Supply Depot", "Taxi Depot"],
+    "notes": "Placeholder"
+  },
+  {
+    "name": "Sewers",
+    "status": "Uncontrolled",
+    "assigned_crew": {
+      "capo": [],
+      "la_squadra": [],
+      "la_famiglia": ["Roi Keant"]
+    },
+    "businesses": [],
+    "notes": "Placeholder"
+  },
+  {
+    "name": "Union Square",
+    "status": "Uncontrolled",
+    "assigned_crew": {
+      "capo": [],
+      "la_squadra": [],
+      "la_famiglia": []
+    },
+    "businesses": ["Bubway", "Camping Store", "General Store", "Shopping Mall"],
+    "notes": "Placeholder"
+  }
+]
+
+
