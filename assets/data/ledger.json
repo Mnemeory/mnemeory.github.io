@@ -1,296 +1,75 @@
 {
   "collections": [
     {
-      "name": "DoRa Club",
-      "location": "Financial District",
-      "nightly": "$150",
+      "name": "Example Business",
+      "location": "Example District",
+      "nightly": "$100",
       "status": "current",
-      "made_by": "Gaio Puttanesca",
-      "start_date": "Nov. 5, 2015",
-      "contact": "Allison Veil (General Manager)",
-      "notes": "Provide legal support, armed, and unarmed security when needed."
-    },
-    {
-      "name": "Cleaning Job",
-      "location": "Financial District",
-      "nightly": "10%",
-      "status": "inactive",
-      "made_by": "Gaio Puttanesca",
-      "contact": "Leo Delligatti",
-      "start_date": "Oct. 29, 2015",
-      "notes": "Clean money as needed. Take 10% from each drop as payment."
+      "made_by": "Example Person",
+      "start_date": "Jan. 1, 2025",
+      "contact": "Example Contact",
+      "notes": "Test data."
     }
   ],
   "territory": [
     {
-      "name": "Chinatown",
-      "status": "Neutral",
-      "assigned_crew": {
-        "capo": [],
-        "la_squadra": [],
-        "la_famiglia": []
-      },
-      "businesses": [
-        "Laundromat (Black Market)",
-        "Pawn Shop (Fence)",
-        "Restaurant"
-      ],
-      "notes": "Controlled by the Axe Gang."
-    },
-    {
-      "name": "Baywalk District",
-      "status": "Uncontrolled",
-      "assigned_crew": {
-        "capo": [],
-        "la_squadra": [],
-        "la_famiglia": []
-      },
-      "businesses": [
-        "Coffee House",
-        "Hospital",
-        "Hotel",
-        "Ice Cream Shop",
-        "Park",
-        "Medical Store",
-        "News Station"
-      ],
-      "notes": "Placeholder"
-    },
-    {
-      "name": "Financial District",
-      "status": "Shared with Camarilla",
-      "assigned_crew": {
-        "capo": [],
-        "la_squadra": [
-          "Alex Puttanesca (Bianchi Bank Asset Protection)",
-          "Gaio Puttanesca (Bianchi Bank General Counsel)"
-        ],
-        "la_famiglia": [
-          "Asano Mai (Bianchi Bank Mergers and Acquisitions)",
-          "Lucius Sadler (Bianchi Bank Asset Protection)"
-        ]
-      },
-      "businesses": [
-        "Baco Tell",
-        "Bianchi Bank (Safehouse)",
-        "Community Center",
-        "DoRa Club",
-        "Endron HQ",
-        "Jazz Club",
-        "Library",
-        "Little Italy (Safehouse)",
-        "Millenium Tower",
-        "Theatre"
-      ],
-      "notes": "Placeholder"
-    },
-    {
-      "name": "Fisherman's Wharf",
-      "status": "Uncontrolled",
-      "assigned_crew": {
-        "capo": [],
-        "la_squadra": [],
-        "la_famiglia": []
-      },
-      "businesses": [
-        "Fence"
-      ],
-      "notes": "Placeholder"
-    },
-    {
-      "name": "Ghetto",
-      "status": "Uncontrolled",
-      "assigned_crew": {
-        "capo": [],
-        "la_squadra": [],
-        "la_famiglia": []
-      },
-      "businesses": [
-        "Apartments",
-        "Cleaners",
-        "Veterinarian Clinic"
-      ],
-      "notes": "Placeholder"
-    },
-    {
-      "name": "Outskirts",
+      "name": "Example Territory",
       "status": "Controlled",
-      "assigned_crew": {
-        "capo": [],
-        "la_squadra": [],
-        "la_famiglia": []
-      },
-      "businesses": [
-        "Giovanni Manor (Safehouse)"
-      ],
-      "notes": "The woods."
-    },
-    {
-      "name": "Pacific Heights",
-      "status": "Uncontrolled",
-      "assigned_crew": {
-        "capo": [],
-        "la_squadra": [],
-        "la_famiglia": []
-      },
-      "businesses": [
-        "Alcoholics Anonymous",
-        "Bar",
-        "Church",
-        "Courthouse",
-        "Endron Processing Plant",
-        "Graveyard",
-        "Grid Substation",
-        "SFPD",
-        "Supply Depot",
-        "Taxi Depot"
-      ],
-      "notes": "Placeholder"
-    },
-    {
-      "name": "Sewers",
-      "status": "Uncontrolled",
-      "assigned_crew": {
-        "capo": [],
-        "la_squadra": [],
-        "la_famiglia": [
-          "Roi Keant"
-        ]
-      },
-      "businesses": [],
-      "notes": "Placeholder"
-    },
-    {
-      "name": "Union Square",
-      "status": "Uncontrolled",
-      "assigned_crew": {
-        "capo": [],
-        "la_squadra": [],
-        "la_famiglia": []
-      },
-      "businesses": [
-        "Bubway",
-        "Camping Store",
-        "General Store",
-        "Shopping Mall"
-      ],
-      "notes": "Placeholder"
+      "assigned_crew_id": "crew:capo:example-capo",
+      "businesses": ["Example Site"],
+      "notes": "Test data."
     }
   ],
   "vendetta": [
     {
-      "name": "Leo Delligatti",
-      "nickname": "Methy",
-      "offense": "Didn't pay 10% on a $3,000 dropoff. Bring to Gaio if caught, or take $300 to settle it.",
+      "name": "Example Target",
       "type": "financial",
-      "last_seen": "Fisherman's Wharf",
+      "last_seen": "Example Territory",
       "associates": "None",
-      "authorized_by": "Gaio Puttanesca",
+      "authorized_by": "Example Leader",
       "status": "on_hold"
-    },
-    {
-      "name": "Dozer",
-      "nickname": "The Red Head",
-      "offense": "On 11/9/2015, attempted to randomly cut the head off of Gaio Puttanesca, ME! Take a fang or her head to settle it.",
-      "type": "blood",
-      "last_seen": "The Millenium Tower",
-      "associates": "TransAm",
-      "authorized_by": "Gaio Puttanesca",
-      "status": "Active"
     }
   ],
   "familyroster": {
     "boss": [
       {
-        "name": "Unelected",
+        "name": "Example Boss",
         "status": "vacant"
       }
     ],
     "boss_consigliere": [
       {
-        "name": "Unappointed",
+        "name": "Example Consigliere di SF",
         "status": "vacant"
       }
     ],
     "capo": [
       {
-        "name": "Luigi Giovanni",
-        "clan": "Giovanni",
-        "status": "active"
-      },
-      {
-        "name": "Crewless",
+        "name": "Example Capo",
+        "clan": "Example Clan",
         "status": "active"
       }
     ],
     "consigliere": [
       {
-        "name": "Gaio Puttanesca",
-        "assigned_capo": "Crewless",
-        "clan": "Giovanni",
-        "status": "active"
-      },
-      {
-        "name": "Miria Monteith",
-        "assigned_capo": "Luigi Giovanni",
-        "clan": "Giovanni",
+        "name": "Example Consigliere",
+        "clan": "Example Clan",
         "status": "active"
       }
     ],
     "soldato": [
       {
-        "name": "Alex Puttanesca",
-        "assigned_capo": "Luigi Giovanni",
-        "clan": "Giovanni",
-        "status": "active"
-      },
-      {
-        "name": "Paulie 'Big Paulie' Puttanesca",
-        "assigned_capo": "Luigi Giovanni",
-        "clan": "Giovanni",
-        "status": "active"
-      },
-      {
-        "name": "Vincenzo 'Vinnie' Giovanni",
-        "assigned_capo": "Luigi Giovanni",
-        "clan": "Giovanni",
+        "name": "Example Soldato",
+        "assigned_capo": "Example Capo",
+        "clan": "Example Clan",
         "status": "active"
       }
     ],
     "associate": [
       {
-        "name": "Asano Mai",
-        "assigned_consigliere": "Gaio Puttanesca",
-        "clan": "Ghoul",
-        "status": "active"
-      },
-      {
-        "name": "Lucius Sadler",
-        "assigned_consigliere": "Gaio Puttanesca",
-        "clan": "Ghoul",
-        "status": "active"
-      },
-      {
-        "name": "Malcom Dunsirn",
-        "assigned_consigliere": "Gaio Puttanesca",
-        "clan": "Garou",
-        "status": "active"
-      },
-      {
-        "name": "Ganymedes",
-        "assigned_soldato": "Vincenzo 'Vinnie' Giovanni",
-        "clan": "Ghoul",
-        "status": "active"
-      },
-      {
-        "name": "Anthony 'Fat Tony' Bianchi",
-        "assigned_soldato": "Vincenzo 'Vinnie' Giovanni",
-        "status": "active"
-      },
-      {
-        "name": "Roi Geant",
-        "assigned_soldato": "Vincenzo 'Vinnie' Giovanni",
-        "clan": "Nosferatu",
+        "name": "Example Associate",
+        "assigned_consigliere": "Example Consigliere",
+        "clan": "Example Clan",
         "status": "active"
       }
     ]
