@@ -1,0 +1,36 @@
+name: Generate Mob Radio Playlist
+
+on:
+  push:
+    paths:
+      - "assets/mobradio/**"
+      - "scripts/generate-mobradio.js"
+      - ".github/workflows/generate-mobradio.yml"
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Generate playlist.json
+        run: node scripts/generate-mobradio.js
+
+      - name: Commit playlist.json if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/mobradio/playlist.json
+          git diff --cached --quiet && echo "No changes to commit." || git commit -m "chore(mobradio): update playlist.json"
+          git push
+
+
