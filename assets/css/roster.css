@@ -433,9 +433,9 @@
 }
 
 /* ================================================
-   CONNECTION LINES SVG
+   CONNECTION LINES CANVAS
    ================================================ */
-.org-chart-lines-svg {
+.org-chart-lines-canvas {
   position: absolute;
   top: 0;
   left: 0;
@@ -443,24 +443,6 @@
   height: 100%;
   pointer-events: none;
   z-index: 0;
-  overflow: visible;
-}
-
-.org-chart-lines-svg .command-line {
-  fill: none;
-  stroke: var(--accent-gold);
-  stroke-width: 2.5px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.org-chart-lines-svg .advisory-line {
-  fill: none;
-  stroke: var(--accent-gold);
-  stroke-width: 2px;
-  stroke-dasharray: 8, 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 
 /* ================================================

@@ -1,13 +1,11 @@
-// Org Chart - Reingold-Tilford layout + SVG lines (simplified)
+// Org Chart - Reingold-Tilford layout + Canvas lines (center-based)
 (function() {
   'use strict';
 
   const SELECTORS = {
     organizationalChart: 'organizationalChart',
-    orgChartLines: 'orgChartLines'
+    orgChartLinesCanvas: 'orgChartLinesCanvas'
   };
-
-  const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
 
   const ROLE_LABELS = {
     boss: 'CAPO DI TUTTI CAPI',
@@ -232,6 +230,15 @@
       }
       node.children.forEach(child => this.positionAdvisor(child));
     }
+    annotateNodeSizes(node) {
+      node.width = this.getNodeWidth(node);
+      node.height = this.getNodeHeight(node);
+      if (node.advisor) {
+        node.advisor.width = this.getNodeWidth(node.advisor);
+        node.advisor.height = this.getNodeHeight(node.advisor);
+      }
+      node.children.forEach(child => this.annotateNodeSizes(child));
+    }
     calculatePositions(tree) {
       this.initializeNodes(tree, 0);
       tree.number = 1;
@@ -241,6 +248,7 @@
       this.assignVerticalPositions(tree, 0);
       this.positionAdvisor(tree);
       this.adjustToPositive(tree);
+      this.annotateNodeSizes(tree);
     }
   }
 
@@ -658,158 +666,126 @@
   }
 
   // -----------------------
-  // Lines (SVG)
+  // Lines (Canvas)
   // -----------------------
-  function updateSVGDimensions(svg, container) {
-    const width = container.scrollWidth;
-    const height = container.scrollHeight;
-    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
-    svg.setAttribute('width', width);
-    svg.setAttribute('height', height);
+  function getAccentGold() {
+    const root = document.documentElement;
+    const style = root ? getComputedStyle(root) : null;
+    const color = style ? style.getPropertyValue('--accent-gold') : '';
+    return (color && color.trim()) || '#D4AF37';
   }
-  function drawPath(svg, pathData, className) {
-    const path = document.createElementNS(SVG_NAMESPACE, 'path');
-    path.setAttribute('d', pathData);
-    path.setAttribute('class', className);
-    svg.appendChild(path);
-    return path;
+  function ensureCanvas(container) {
+    let canvas = document.getElementById(SELECTORS.orgChartLinesCanvas);
+    if (!canvas) {
+      canvas = document.createElement('canvas');
+      canvas.id = SELECTORS.orgChartLinesCanvas;
+      canvas.className = 'org-chart-lines-canvas';
+      container.appendChild(canvas);
+    }
+    return canvas;
   }
-  function getAllPositions(container) {
-    const positions = new Map();
-    const containerRect = container.getBoundingClientRect();
-    const plaques = container.querySelectorAll('.roster-plaque');
-    plaques.forEach(plaque => {
-      const nameEl = plaque.querySelector('.plaque-name');
-      if (!nameEl) return;
-      const name = nameEl.textContent.trim();
-      const rect = plaque.getBoundingClientRect();
-      const pos = {
-        centerX: (rect.left - containerRect.left) + (rect.width / 2),
-        centerY: (rect.top - containerRect.top) + (rect.height / 2),
-        top: rect.top - containerRect.top,
-        bottom: rect.bottom - containerRect.top,
-        left: rect.left - containerRect.left,
-        right: rect.right - containerRect.left,
-        width: rect.width,
-        height: rect.height
-      };
-      positions.set(name, pos);
+  function sizeCanvas(canvas, container) {
+    const dpr = window.devicePixelRatio || 1;
+    const width = Math.ceil(container.scrollWidth);
+    const height = Math.ceil(container.scrollHeight);
+    if (canvas.style.width !== `${width}px`) {
+      canvas.style.width = `${width}px`;
+    }
+    if (canvas.style.height !== `${height}px`) {
+      canvas.style.height = `${height}px`;
+    }
+    const targetW = Math.ceil(width * dpr);
+    const targetH = Math.ceil(height * dpr);
+    if (canvas.width !== targetW || canvas.height !== targetH) {
+      canvas.width = targetW;
+      canvas.height = targetH;
+    }
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return ctx;
+  }
+  function setCommandStyle(ctx, color) {
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = color;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    if (ctx.setLineDash) ctx.setLineDash([]);
+  }
+  function setAdvisoryStyle(ctx, color) {
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = color;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    if (ctx.setLineDash) ctx.setLineDash([8, 4]);
+  }
+  function drawChildrenConnector(ctx, parent, children) {
+    if (!children || children.length === 0) return;
+    const p = { x: parent.x + parent.width / 2, y: parent.y + parent.height / 2 };
+    const centers = children.map(c => ({ x: c.x + c.width / 2, y: c.y + c.height / 2 }));
+    const minChildY = Math.min(...centers.map(c => c.y));
+    const midY = (p.y + minChildY) / 2;
+    const minX = Math.min(...centers.map(c => c.x));
+    const maxX = Math.max(...centers.map(c => c.x));
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+    ctx.lineTo(p.x, midY);
+    ctx.moveTo(minX, midY);
+    ctx.lineTo(maxX, midY);
+    centers.forEach(c => {
+      ctx.moveTo(c.x, midY);
+      ctx.lineTo(c.x, c.y);
     });
-    return positions;
+    ctx.stroke();
   }
-  function drawAdvisoryLine(svg, fromPos, toPos) {
-    const yDiff = Math.abs(fromPos.centerY - toPos.centerY);
-    if (yDiff < 10) {
-      drawPath(svg, `M ${fromPos.right},${fromPos.centerY} L ${toPos.left},${toPos.centerY}`, 'advisory-line');
+  function drawAdvisorConnector(ctx, a, b) {
+    const pa = { x: a.x + a.width / 2, y: a.y + a.height / 2 };
+    const pb = { x: b.x + b.width / 2, y: b.y + b.height / 2 };
+    const sameY = Math.abs(pa.y - pb.y) < 10;
+    ctx.beginPath();
+    if (sameY) {
+      ctx.moveTo(pa.x, pa.y);
+      ctx.lineTo(pb.x, pb.y);
     } else {
-      const midX = (fromPos.right + toPos.left) / 2;
-      drawPath(svg,
-        `M ${fromPos.right},${fromPos.centerY} ` +
-        `L ${midX},${fromPos.centerY} ` +
-        `L ${midX},${toPos.centerY} ` +
-        `L ${toPos.left},${toPos.centerY}`,
-        'advisory-line'
-      );
+      const midX = (pa.x + pb.x) / 2;
+      ctx.moveTo(pa.x, pa.y);
+      ctx.lineTo(midX, pa.y);
+      ctx.lineTo(midX, pb.y);
+      ctx.lineTo(pb.x, pb.y);
+    }
+    ctx.stroke();
+  }
+  function drawTreeConnectors(ctx, node, color) {
+    if (!node) return;
+    const children = Array.isArray(node.children) ? node.children : [];
+    if (children.length > 0) {
+      setCommandStyle(ctx, color);
+      drawChildrenConnector(ctx, node, children);
+    }
+    children.forEach(child => drawTreeConnectors(ctx, child, color));
+    if (node.advisor) {
+      setAdvisoryStyle(ctx, color);
+      drawAdvisorConnector(ctx, node, node.advisor);
     }
   }
-  function drawCommandLine(svg, fromPos, toPos) {
-    const midY = (fromPos.bottom + toPos.top) / 2;
-    drawPath(svg,
-      `M ${fromPos.centerX},${fromPos.bottom} ` +
-      `L ${fromPos.centerX},${midY} ` +
-      `L ${toPos.centerX},${midY} ` +
-      `L ${toPos.centerX},${toPos.top}`,
-      'command-line'
-    );
-  }
-  function drawHierarchyLines(svg, parentPos, childPositions) {
-    if (childPositions.length === 0) return;
-    const childXs = childPositions.map(p => p.centerX);
-    const leftX = Math.min(...childXs);
-    const rightX = Math.max(...childXs);
-    const childTopY = Math.min(...childPositions.map(p => p.top));
-    const midY = (parentPos.bottom + childTopY) / 2;
-    drawPath(svg, `M ${parentPos.centerX},${parentPos.bottom} L ${parentPos.centerX},${midY}`, 'command-line');
-    drawPath(svg, `M ${leftX},${midY} L ${rightX},${midY}`, 'command-line');
-    childPositions.forEach(childPos => {
-      drawPath(svg, `M ${childPos.centerX},${midY} L ${childPos.centerX},${childPos.top}`, 'command-line');
-    });
-  }
-
   window.drawOrgChartLines = function() {
     const data = window.ledgerData;
     if (!data || !data.familyroster) return;
-    const svg = document.getElementById(SELECTORS.orgChartLines);
     const container = document.getElementById(SELECTORS.organizationalChart);
-    if (!svg || !container) return;
-    const plaques = container.querySelectorAll('.roster-plaque');
-    if (plaques.length === 0) return;
-    while (svg.firstChild) svg.removeChild(svg.firstChild);
-    updateSVGDimensions(svg, container);
-    const positions = getAllPositions(container);
-    if (positions.size === 0) return;
+    if (!container) return;
     const cached = window.__orgChartTreeCache || null;
-    const orgTree = cached && cached.org
-      ? cached.org
-      : (cached && cached.capos ? cached : (buildOrgTree ? buildOrgTree(data.familyroster) : null));
-    if (!orgTree) return;
-    drawBossLevel(svg, orgTree, positions);
-    drawCapoLevel(svg, orgTree, positions);
-    // Keep header aligned to boss after (re)draw
-    updateHeaderAlignment(container, positions, orgTree);
-    // On redraw (e.g., resize), keep the boss centered
-    centerViewportOnBoss(container, positions, orgTree);
+    const tree = cached && cached.hierarchy
+      ? cached.hierarchy
+      : (buildTreeStructure ? buildTreeStructure(data.familyroster) : null);
+    if (!tree) return;
+    const canvas = ensureCanvas(container);
+    const ctx = sizeCanvas(canvas, container);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const color = getAccentGold();
+    drawTreeConnectors(ctx, tree, color);
+    // Keep header aligned and boss centered
+    updateHeaderAlignment(container, tree);
+    centerViewportOnBoss(container, tree);
   };
-
-  function drawBossLevel(svg, orgTree, positions) {
-    if (!orgTree.boss) return;
-    const bossPos = positions.get(orgTree.boss.name);
-    if (!bossPos) return;
-    if (orgTree.bossConsigliere) {
-      const consPos = positions.get(orgTree.bossConsigliere.name);
-      if (consPos) drawAdvisoryLine(svg, bossPos, consPos);
-    }
-    orgTree.capos.forEach(capoData => {
-      const capoPos = positions.get(capoData.capo.name);
-      if (capoPos) drawCommandLine(svg, bossPos, capoPos);
-    });
-  }
-  function drawCapoLevel(svg, orgTree, positions) {
-    orgTree.capos.forEach(capoData => {
-      const capoPos = positions.get(capoData.capo.name);
-      if (!capoPos) return;
-      const crewMembers = [];
-      capoData.consiglieres.forEach(consData => {
-        const consPos = positions.get(consData.consigliere.name);
-        if (consPos) {
-          crewMembers.push({ pos: consPos, member: consData.consigliere, associates: consData.associates });
-        }
-      });
-      capoData.soldatos.forEach(soldatoData => {
-        const soldatoPos = positions.get(soldatoData.soldato.name);
-        if (soldatoPos) {
-          crewMembers.push({ pos: soldatoPos, member: soldatoData.soldato, associates: soldatoData.associates });
-        }
-      });
-      if (crewMembers.length > 0) {
-        drawHierarchyLines(svg, capoPos, crewMembers.map(c => c.pos));
-      }
-      crewMembers.forEach(crewMember => {
-        if (crewMember.associates && crewMember.associates.length > 0) {
-          const assocPositions = crewMember.associates.map(assoc => positions.get(assoc.name)).filter(Boolean);
-          if (assocPositions.length > 0) {
-            drawHierarchyLines(svg, crewMember.pos, assocPositions);
-          }
-        }
-      });
-      if (capoData.associates && capoData.associates.length > 0) {
-        const directAssocPositions = capoData.associates.map(associate => positions.get(associate.name)).filter(Boolean);
-        if (directAssocPositions.length > 0) {
-          drawHierarchyLines(svg, capoPos, directAssocPositions);
-        }
-      }
-    });
-  }
 
   // Expose builder used by drawOrgChartLines fallback
   function buildTreeStructure(roster, rosterIndex) {
@@ -852,8 +828,6 @@
       return;
     }
     window.__orgChartTreeCache = unified;
-    const existingSvg = container.querySelector('.org-chart-lines-svg');
-    if (existingSvg && existingSvg.parentNode) existingSvg.parentNode.removeChild(existingSvg);
     clearElement(container);
     const layout = new OrgChartLayout({
       plaqueWidths: { leadership: 380, crew: 320 },
@@ -873,21 +847,22 @@
     const dimsAfterRender = getTreeDimensions(tree, layout);
     container.style.width = `${Math.ceil(dimsAfterRender.width)}px`;
     container.style.height = `${Math.ceil(dimsAfterRender.height)}px`;
-    const svgElement = document.createElementNS(SVG_NAMESPACE, 'svg');
-    svgElement.setAttribute('id', SELECTORS.orgChartLines);
-    svgElement.classList.add('org-chart-lines-svg');
-    container.appendChild(svgElement);
-    setTimeout(() => {
-      if (typeof window.drawOrgChartLines === 'function') {
-        requestAnimationFrame(() => window.drawOrgChartLines());
-      }
-    }, 250);
+    // Ensure canvas overlay exists and draw connectors
+    const existingCanvas = document.getElementById(SELECTORS.orgChartLinesCanvas);
+    if (!existingCanvas) {
+      const canvas = document.createElement('canvas');
+      canvas.setAttribute('id', SELECTORS.orgChartLinesCanvas);
+      canvas.classList.add('org-chart-lines-canvas');
+      container.appendChild(canvas);
+    }
+    if (typeof window.drawOrgChartLines === 'function') {
+      requestAnimationFrame(() => window.drawOrgChartLines());
+    }
 
     // Track header position on scroll
     container.addEventListener('scroll', () => {
-      const positions = getAllPositions(container);
-      if (window.__orgChartTreeCache && window.__orgChartTreeCache.org) {
-        updateHeaderAlignment(container, positions, window.__orgChartTreeCache.org);
+      if (window.__orgChartTreeCache && window.__orgChartTreeCache.hierarchy) {
+        updateHeaderAlignment(container, window.__orgChartTreeCache.hierarchy);
       }
     }, { passive: true });
   }
@@ -933,23 +908,21 @@
   // -----------------------
   // Centering and header alignment
   // -----------------------
-  function centerViewportOnBoss(container, positions, orgTree) {
-    if (!container || !positions || !orgTree || !orgTree.boss) return;
-    const bossPos = positions.get(orgTree.boss.name);
-    if (!bossPos) return;
-    const targetLeft = Math.max(0, Math.round(bossPos.centerX - (container.clientWidth / 2)));
+  function centerViewportOnBoss(container, tree) {
+    if (!container || !tree || !tree.data || !tree.width) return;
+    const bossCenterX = tree.x + (tree.width / 2);
+    const targetLeft = Math.max(0, Math.round(bossCenterX - (container.clientWidth / 2)));
     container.scrollTo({ left: targetLeft, behavior: 'auto' });
   }
 
-  function updateHeaderAlignment(container, positions, orgTree) {
-    if (!container || !positions || !orgTree || !orgTree.boss) return;
-    const bossPos = positions.get(orgTree.boss.name);
-    if (!bossPos) return;
+  function updateHeaderAlignment(container, tree) {
+    if (!container || !tree || !tree.width) return;
+    const bossCenterX = tree.x + (tree.width / 2);
     const header = document.querySelector('.roster-title');
     const subheader = document.querySelector('.roster-subtitle');
     if (!header && !subheader) return;
     const viewportCenterX = container.scrollLeft + (container.clientWidth / 2);
-    const delta = bossPos.centerX - viewportCenterX;
+    const delta = bossCenterX - viewportCenterX;
     const translateValue = `translateX(${Math.round(delta)}px)`;
     if (header) header.style.transform = translateValue;
     if (subheader) subheader.style.transform = translateValue;
