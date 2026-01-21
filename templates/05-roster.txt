@@ -1,6 +1,6 @@
 Name: Shift Roster
 Desc: A shift roster for Security
-[center][scc_logo]
+[center][logo_scc]
 Shift Roster
 Internal Security Department
 SCCV Horizon
@@ -10,7 +10,7 @@ SCCV Horizon
 [list][small][*][field]
 [*][field]
 [*][field]
-[*][field][/list]
+[*][field][/small][/list]
 [u]Deck 2 (Brig; Medical; Merchant Dock; Operations; Service)[/u]
 
 [list][small][*][field]
