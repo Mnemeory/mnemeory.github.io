@@ -5,9 +5,7 @@ Desc: A form to issue executive orders.
 Stellar Corporate Conglomerate[/b]
 Chainlink Expeditionary Vessel - SCCV Horizon
 [h2]CC-EO-[field] - Executive Order / Captain-Level Directive[/h2][/center]
-
 [small][b]NOTICE:[/b] Issued under SCC Corporate Regulations and SCCV Horizon Standard Operating Procedure. The assigned Captain holds full authority over vessel operations and may issue direct orders (including reasonable emergency deviations during non-standard situations). When no Captain is present, Command may act with Captain authority via a properly conducted Command vote for a captain-level decision. All hands are expected to comply until superseded or revoked by competent authority (e.g., subsequent Executive Order, Command vote where applicable, or Central Command).[/small]
-
 [hr][b]Order Identification[/b]
 [table]
 [row][cell][b]Vessel:[/b] SCCV Horizon
@@ -58,7 +56,7 @@ Chainlink Expeditionary Vessel - SCCV Horizon
 [list]
 [*][b]Enforcing Authority:[/b] [field] (Captain/Acting Captain/HoS/HoS Council/Security)
 [*][b]Reporting Requirements:[/b] [field] (Bridge log entries, departmental reports, incident summaries)
-[*][b]Noncompliance Handling:[/b] [field] (e.g., “Report to Security,” “Relieve from duty,” “Charge under applicable regulations,” etc.)
+[*][b]Noncompliance Handling:[/b] [field] (e.g., "Report to Security," "Relieve from duty," "Charge under applicable regulations," etc.)
 [/list]
 [hr][b]Command Vote Record (If Applicable)[/b]
 [small]Complete this only if the EO is enacted as a captain-level decision via Command vote.[/small]
