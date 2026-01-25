@@ -1,15 +1,13 @@
-Name: Idris Loan Agreement
-Desc: For Idris loans.
 [small]
 [center][b][logo_idris]
 Idris Incorporated[/b]
 [i]Astronomical Figures. Unlimited Power.[/i][/center]
-[center][h2]II-0417 — LOAN CONTRACT / CREDIT AGREEMENT[/h2][/center]
-[small][b]NOTICE:[/b] This contract is a binding financial agreement between Idris Incorporated (“Lender”) and the undersigned client (“Borrower”). By signing, Borrower acknowledges understanding of interest, fees, security interests, default terms, and collection remedies. Where permitted, Lender may exercise rights of set-off, collateral seizure, and assignment to Idris Security/Reclamation services for recovery actions.[/small]
+[center][h2]II-0417 - LOAN CONTRACT / CREDIT AGREEMENT[/h2][/center]
+[small][b]NOTICE:[/b] This contract is a binding financial agreement between Idris Incorporated ("Lender") and the undersigned client ("Borrower"). By signing, Borrower acknowledges understanding of interest, fees, security interests, default terms, and collection remedies. Where permitted, Lender may exercise rights of set-off, collateral seizure, and assignment to Idris Security/Reclamation services for recovery actions.[/small]
 [hr][b]1. Parties & Identification[/b]
 [table]
 [row][cell][b]Lender:[/b] Idris Incorporated
-[cell][b]Branch / Desk:[/b] Mendell City Bank — “Tower” Desk / Remote Servicing
+[cell][b]Branch / Desk:[/b] Mendell City Bank - "Tower" Desk / Remote Servicing
 [cell][b]Contract ID:[/b] II-0417-[field]
 [cell][b]Date/Time:[/b] [date] - [time]
 [row][cell][b]Borrower (Legal Name):[/b] [field]
@@ -19,11 +17,11 @@ Idris Incorporated[/b]
 [/table]
 [b]2. Loan Type[/b]
 [table]
-[row][cell][b]Facility Type:[/b] Personal Loan — “Rapid Liquidity Advance”
+[row][cell][b]Facility Type:[/b] Personal Loan - "Rapid Liquidity Advance"
 [cell][b]Purpose (Declared):[/b] [field]
 [cell][b]Disbursement Method:[/b] Immediate Deposit (Idris Account Required)
 [/table]
-[hr][b]3. Financial Terms (Idris Schedule A — Unfavorable)[/b]
+[hr][b]3. Financial Terms (Idris Schedule A - Unfavorable)[/b]
 [table]
 [row][cell][b]Principal Amount (CR):[/b] [field]
 [cell][b]Origination Fee (CR):[/b] 1,250 (25% of Principal; deducted at disbursement)
@@ -43,7 +41,7 @@ Idris Incorporated[/b]
 [small]This facility is treated as secured by default under Idris policy.[/small]
 [table]
 [row][cell][b]Secured?:[/b] Yes (by cross-collateralization)
-[cell][b]Collateral Description:[/b] All present and after-acquired personal property of Borrower with individual value ≥ 200 CR; all wages, stipends, commissions, tips (excluding legally protected gratuities if applicable), and any employer reimbursements.
+[cell][b]Collateral Description:[/b] All present and after-acquired personal property of Borrower with individual value >= 200 CR; all wages, stipends, commissions, tips (excluding legally protected gratuities if applicable), and any employer reimbursements.
 [cell][b]Estimated Value (CR):[/b] Not stated (Borrower waives valuation challenge)
 [cell][b]Storage / Custody Location:[/b] Wherever located; Borrower authorizes surrender upon demand
 [row][cell][b]Accounts Authorized for Set-Off:[/b] ALL accounts under Borrower name, aliases, linked wallets, and any Idris-managed custodial accounts (no limit)
@@ -56,12 +54,12 @@ Idris Incorporated[/b]
 [list]
 [*]Borrower confirms all provided information is accurate; any error is treated as a material misrepresentation.
 [*]Borrower agrees to maintain uninterrupted contact routing (NET/holopad/fax) and respond to Idris notices within 2 hours.
-[*]Borrower agrees not to sell, gift, transfer, conceal, or “lose” collateral items while obligations remain outstanding.
+[*]Borrower agrees not to sell, gift, transfer, conceal, or "lose" collateral items while obligations remain outstanding.
 [*]Borrower agrees to keep an Idris account open, in good standing, and funded for auto-debit at all times.
 [*]Borrower agrees to non-disparagement regarding Idris Incorporated and to keep contract terms confidential unless disclosure is legally compelled.
 [/list]
 [hr][b]6. Default Events (Broad / Accelerated)[/b]
-[small]Any of the following constitutes “Default” immediately and without grace:[/small]
+[small]Any of the following constitutes "Default" immediately and without grace:[/small]
 [list]
 [*]Any failed or reversed debit for any reason (including insufficient funds, account lock, network interruption, or user refusal).
 [*]Any payment received late (after scheduled debit time) or in an amount less than required.
@@ -69,7 +67,7 @@ Idris Incorporated[/b]
 [*]Any attempt to close, shield, split, transfer, or otherwise hinder access to authorized accounts.
 [*]Any impairment of collateral (loss, damage, concealment, refusal to surrender, or disputed ownership).
 [*]Failure to respond to Idris contact attempts within 2 hours.
-[*]“Reputational Harm”: public disparagement, sabotage of servicing, or inducing others to breach their obligations.
+[*]"Reputational Harm": public disparagement, sabotage of servicing, or inducing others to breach their obligations.
 [*]Any other condition specified here: [field]
 [/list]
 [hr][b]7. Remedies & Collection (Punitive)[/b]
@@ -80,20 +78,20 @@ Idris Incorporated[/b]
 [*]Post a Default Administration Charge of 2,500 CR immediately.
 [*]Freeze, restrict, or set-off funds from authorized accounts up to the amount owed (including fees/costs).
 [*]Seize collateral or instruct custodians/employers to surrender collateral and/or wages.
-[*]Charge “Recovery Costs” equal to 35% of the total balance, plus itemized expenses, plus a 5,000 CR “Reclamation Mobilization Fee” if recovery is dispatched.
+[*]Charge "Recovery Costs" equal to 35% of the total balance, plus itemized expenses, plus a 5,000 CR "Reclamation Mobilization Fee" if recovery is dispatched.
 [*]Assign the matter to Idris recovery services or contracted agents for debt reclamation and asset recovery.
 [/list]
-[small][b]Collection Conduct:[/b] Any on-site recovery action must remain within applicable law and corporate policy; “reasonable force” does not authorize irreparable injury or lethal action. Borrower agrees that refusal to comply with recovery directives constitutes continued Default and triggers additional fees.[/small]
+[small][b]Collection Conduct:[/b] Any on-site recovery action must remain within applicable law and corporate policy; "reasonable force" does not authorize irreparable injury or lethal action. Borrower agrees that refusal to comply with recovery directives constitutes continued Default and triggers additional fees.[/small]
 [hr][b]8. Privacy, Records & Disclosures (One-Way)[/b]
 [list]
 [*]Borrower acknowledges Idris maintains account and transaction records for servicing, underwriting, oversight, fraud prevention, and compliance.
 [*]Borrower authorizes verification of employment, income, duty status, and access/assignment details as necessary to service this loan.
-[*]Borrower authorizes sharing of delinquency status with the employer’s authorized finance/administration contacts where wage deduction or access control is relevant.
+[*]Borrower authorizes sharing of delinquency status with the employer's authorized finance/administration contacts where wage deduction or access control is relevant.
 [*]Notes / Disclosures (optional): [field]
 [/list]
 [hr][b]9. Governing Terms & Amendments (Locked)[/b]
 [table]
-[row][cell][b]Governing Jurisdiction / Venue:[/b] Idris Incorporated Arbitration Panel — Mendell City, Tau Ceti
+[row][cell][b]Governing Jurisdiction / Venue:[/b] Idris Incorporated Arbitration Panel - Mendell City, Tau Ceti
 [cell][b]Arbitration / Dispute Process:[/b] Mandatory binding arbitration; no jury; Borrower waives class/collective actions
 [row][cell][b]Amendments:[/b] Lender may update fee schedules with notice; Borrower is deemed to accept by continued account use. Written amendments by Lender supersede prior terms.
 [/table]
@@ -104,8 +102,8 @@ Idris Incorporated[/b]
 [cell][b]Borrower Signature:[/b] [field]
 [cell][b]Date:[/b] [date]
 [row][cell][b]Idris Loan Officer / Agent:[/b] [officername]
-[cell][b]Signature:[/b] [sign]
-[cell][b]Office / Stamp Ref:[/b] [field]
+[cell][b]Signature:[/b] [field]
+[cell][b]Office / Stamp Ref:[/b]
 [/table]
 [hr][center][barcode][/center]
 [/small]
