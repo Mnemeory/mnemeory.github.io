@@ -1,0 +1,72 @@
+Name: Temporary Residential Access Authorization
+Desc: Grant time-limited access to Casa Envidiable for vetted visitors, staff, or contractors
+[small]
+[center][b][logo_idris]
+IDRIS INCORPORATED[/b]
+Silversun Operations Division | Helios City
+[h2]ID-HELIOS-AC-0201 - Temporary Residential Access Authorization[/h2][/center]
+
+[small][b]NOTICE:[/b] This authorization is issued under Idris Incorporated policy and Helios City site security protocol. Access is temporary, scope-limited, and may be revoked without notice. Misuse, falsification, or breach of restrictions may result in immediate removal, detention, and corporate disciplinary action, including audit and referral to local authorities.[/small]
+[hr][b]Authorization Record[/b][table][row]
+[cell][b]Site:[/b] Casa Envidiable
+[cell][b]Date/Time:[/b] [date] - [time]
+[cell][b]Shift:[/b] [roundid]
+[cell][b]Index:[/b] [field]
+[row]
+[cell][b]Issuing Officer:[/b] [officername]
+[cell][b]Issuing Office/Division:[/b] [field]
+[cell][b]Contact Channel:[/b] [field]
+[cell][b]Document ID:[/b] [field]
+[/table]
+[b]Subject Information[/b][table][row]
+[cell][b]Full Legal Name:[/b] [field]
+[cell][b]Job/Role:[/b] [field]
+[cell][b]Affiliation/Employer:[/b] [field]
+[cell][b]ID Number:[/b] [field]
+[row]
+[cell][b]Arrival Method:[/b] [field]
+[cell][b]Point of Entry:[/b] [field]
+[cell][b]Verification Method:[/b] [field]
+[cell][b]Badge/Card Issued:[/b] [field]
+[/table]
+[b]Access Window[/b]
+[table][row]
+[cell][b]Valid From:[/b] [field]
+[cell][b]Valid Until:[/b] [field]
+[cell][b]Purpose of Visit:[/b] [field]
+[cell][b]Sponsor (Resident/Exec):[/b] [field]
+[/table]
+[b]Access Scope[/b][table][row]
+[cell][b]Clearance Level:[/b] [field]
+[cell][b]Escort Requirement:[/b] [field]
+[cell][b]Authorized Areas:[/b] [field]
+[cell][b]Restricted Areas:[/b] [field]
+[row]
+[cell][b]Special Conditions:[/b] [field]
+[cell][b]After-Hours Access:[/b] [field]
+[cell][b]Service Areas Access:[/b] [field]
+[cell][b]Vehicle Authorization:[/b] [field]
+[/table]
+[b]Restrictions and Conduct[/b]
+[list][*]Biometric verification is enforced at all controlled access points.
+[*]Subject must comply with all lawful instructions from on-site security personnel.
+[*]Prohibited items (alphabetized):
+[list]
+[*]No drones.
+[*]No process servers.
+[*]No recording.
+[*]No shells.
+[*]No weaponry.
+[/list]
+[*]No unauthorized access to the perimeter service loop or security posts.
+[/list][b]Security Routing and Notification[/b][table]
+[row]
+[cell][b]Security Detail Notified:[/b] [field]
+[cell][b]Unit Lead/Callsign:[/b] [field]
+[cell][b]Escort Name (if required):[/b] [field]
+[cell][b]Notes for Checkpoint:[/b] [field]
+
+[/table]
+[b]Acknowledgement[/b]
+[i]By accepting this authorization, the subject acknowledges that access is time-limited, scope-limited, and revocable without notice. Any violation of restrictions or failure to comply may result in immediate removal and escalation to corporate security and local authorities.[/i]
+[hr]
