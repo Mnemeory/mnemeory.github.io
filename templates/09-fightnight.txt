@@ -9,37 +9,33 @@ Stellar Corporate Conglomerate
 [i]The Unbreakable Chainlink, Holding the Spur Together.[/i]
 [hr][b]SCCV HORIZON FIGHT NIGHT[/b]
 [b]Sponsored by:[/b] SCCV Horizon Service Department[/b]
-[hr]
-[/center][list]Hello my little ducklings,
+[hr][/center][list]Hello my little ducklings,
 
 Dust off your wraps and settle your tabs: the Service Department is hosting an open-entry Fight Night for anyone aboard willing to step into the ring. Six rounds. One champion. A whole lot of bruised pride.
 
 [b]FORMAT[/b]
 [list][*][b]Open Registration:[/b] Anyone may enter.
-[*][b]Structure:[/b] Six (6) rounds total, single-elimination bouts as scheduled by event staff.
+[*][b]Structure:[/b] Six (6) rounds total, single-elimination bouts as scheduled by event staff. 10 fighter max.
 [*][b]Rules:[/b]
-[list][*]Respect the bell;
-[*]Respect the Ref; and
-[*]Keep it entertaining. 
+[list][b]1.[/b] Respect the bell;
+[b]2.[/b] Respect the Ref; and
+[b]3.[/b] Keep it entertaining. 
 
-[*]Command, Security, and Medical reserves the right to pull combatants for safety.[/list]
-[*][b]Location:[/b] [FIELD]
-[*][b]Sign-Up Time:[/b] [FIELD]
-[*][b]First Bell:[/b] [FIELD]
+Command, Security, and Medical reserves the right to pull combatants for safety.[/list]
+[*][b]Location:[/b] [field]
+[*][b]Sign-Up Time:[/b] [field]
+[*][b]First Bell:[/b] [field]
 [/list]
-
 [b]PAYOUTS (CREDITS)[/b]
 [list][*][b]1st Place (Champion):[/b] 5,000cr
 [*][b]2nd Place (Runner-Up):[/b] 2,500cr
 [*][b]3rd Place:[/b] 500cr
 [/list]
-
 [b]BETS[/b]
 [list][*]Bets are accepted and encouraged.
-[*]All wagers are to be placed through the Service Department betting table/runner at: [FIELD]
+[*]All wagers are to be placed through the Service Department betting table/runner at: [field]
 [*]House terms apply. Pay your debts. Tip your bookie. Try not to cry in public.
 [/list]
-
 If you have questions, want to volunteer as a runner, or plan on talking big, stop by Holodeck A and make it official.
 
 Tata,
