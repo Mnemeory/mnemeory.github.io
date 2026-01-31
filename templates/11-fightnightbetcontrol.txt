@@ -1,0 +1,36 @@
+Name: SCCV Horizon Fight Night Betting Control Sheet
+Desc: Official sheet for roster snapshot, posted odds, winners, and payout confirmation.
+[small][center][logo_scc]
+
+[b]SCCV HORIZON
+SERVICE DEPARTMENT
+FIGHT NIGHT[/b]
+[i]"The Unbreakable Chainlink, Holding the Spur Together."[/i]
+[hr]
+[u][b]BETTING CONTROL SHEET (ODDS / RESULTS / PAYOUTS)[/b][/u]
+[/center]
+[center][table][row][cell][b]HOUSE NOTES (NO EXCUSES)[/b]
+[list][*]This sheet is the official record for posted odds, confirmed winners, and payout authorization.
+[*]Bets close at the posted time and/or before each bout begins. No cancellations after close.
+[*]Disqualification counts as a loss for wagering unless otherwise posted by the house.
+[*]Payouts only after officiant confirmation.
+[/list][/table][/center][table]
+[row][cell][b]Event Date:[/b] [field][cell][b]Location:[/b] [field]
+[row][cell][b]First Bell:[/b] [field][cell][b]Bet Close Time:[/b] [field]
+[row][cell][b]Clerk/Bookie:[/b] [field][cell][b]Service Lead:[/b] [field]
+[/table]
+[u][center][b]SIX ROUNDS - POSTED ODDS & RESULTS[/b][/center][/u]
+[table][row][cell][b]Round[/b][cell][b]Fighter A (name/callsign)[/b][cell][b]Fighter B (name/callsign)[/b][cell][b]Posted Odds[/b][cell][b]Winner[/b][cell][b]House/Ref Initials[/b]
+[row][cell]1[cell][field][cell][field][cell][field][cell][field][cell][field]
+[row][cell]2[cell][field][cell][field][cell][field][cell][field][cell][field]
+[row][cell]3[cell][field][cell][field][cell][field][cell][field][cell][field]
+[row][cell]4[cell][field][cell][field][cell][field][cell][field][cell][field]
+[row][cell]5[cell][field][cell][field][cell][field][cell][field][cell][field]
+[row][cell]6[cell][field][cell][field][cell][field][cell][field][cell][field]
+[/table]
+[u][center][b]TOTALS & PAYOUT CONFIRMATION[/b][/center][/u]
+[table][row][cell][b]Total Stakes Collected (cr):[/b] [field][cell][b]Total Paid Out (cr):[/b] [field]
+[row][cell][b]House Net (+/-):[/b] [field][cell][b]Payouts Issued (1st/2nd/3rd):[/b] [field]
+[row][cell][b]Clerk Signature:[/b] [field][cell][b]Service Lead Signature:[/b] [field]
+[/table]
+[hr]
