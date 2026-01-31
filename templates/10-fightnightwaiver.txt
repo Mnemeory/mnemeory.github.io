@@ -9,7 +9,7 @@ SCCV Horizon
 Stellar Corporate Conglomerate
 [i]The Unbreakable Chainlink, Holding the Spur Together.[/i]
 [hr][b]FIGHT NIGHT PARTICIPANT LIABILITY WAIVER & ASSUMPTION OF RISK[/b]
-[small]Effective: [DATE] | Event: SCCV Horizon Fight Night | Sponsor: Service Department[/small]
+[small]Effective: [date] | Event: SCCV Horizon Fight Night | Sponsor: Service Department[/small]
 [hr]
 [/center][b]PARTICIPANT INFORMATION[/b]
 [table]
