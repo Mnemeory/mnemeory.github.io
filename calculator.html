@@ -34,7 +34,7 @@
         </div>
         
         <div class="calculator-content">
-          <!-- Fighter Inputs -->
+          <!-- Fighter Configuration -->
           <div class="calc-section">
             <div class="calc-section-title">Fighter Configuration</div>
             <div class="calc-row">
@@ -49,16 +49,6 @@
             </div>
             <div class="calc-row">
               <div class="calc-field">
-                <label class="calc-label" for="betsA">Bets on A</label>
-                <input type="number" id="betsA" class="calc-input" min="0" value="100">
-              </div>
-              <div class="calc-field">
-                <label class="calc-label" for="betsB">Bets on B</label>
-                <input type="number" id="betsB" class="calc-input" min="0" value="150">
-              </div>
-            </div>
-            <div class="calc-row">
-              <div class="calc-field">
                 <label class="calc-label" for="cut">House Cut %</label>
                 <input type="number" id="cut" class="calc-input" min="0" step="0.1" value="0">
               </div>
@@ -68,6 +58,75 @@
                   <option value="A">Fighter A</option>
                   <option value="B">Fighter B</option>
                 </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bet Entry -->
+          <div class="calc-section">
+            <div class="calc-section-title">Record Bet</div>
+            <div class="calc-row calc-row-3">
+              <div class="calc-field">
+                <label class="calc-label" for="bettor">Bettor</label>
+                <input type="text" id="bettor" class="calc-input" placeholder="Name" autocomplete="off">
+              </div>
+              <div class="calc-field">
+                <label class="calc-label" for="betFighter">Fighter</label>
+                <select id="betFighter" class="calc-select">
+                  <option value="A">Fighter A</option>
+                  <option value="B">Fighter B</option>
+                </select>
+              </div>
+              <div class="calc-field">
+                <label class="calc-label" for="betAmount">Amount</label>
+                <input type="number" id="betAmount" class="calc-input" min="1" value="10">
+              </div>
+            </div>
+            <div class="calc-row">
+              <button type="button" id="addBet" class="calc-btn calc-btn-primary">Add Bet</button>
+              <button type="button" id="newRound" class="calc-btn calc-btn-secondary">New Round</button>
+            </div>
+          </div>
+
+          <!-- Bet Log -->
+          <div class="calc-section">
+            <div class="calc-section-header">
+              <div class="calc-section-title">Bet Log</div>
+              <div class="calc-bet-totals">
+                <span class="calc-total-a"><span id="totalALabel">A</span>: <strong id="totalA">0</strong></span>
+                <span class="calc-total-b"><span id="totalBLabel">B</span>: <strong id="totalB">0</strong></span>
+              </div>
+            </div>
+            <div class="calc-bet-table-wrap">
+              <table class="calc-bet-table" id="betTable">
+                <thead>
+                  <tr>
+                    <th>Bettor</th>
+                    <th>Fighter</th>
+                    <th>Amount</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="betTableBody">
+                  <tr class="calc-empty-row">
+                    <td colspan="4">No bets recorded</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Odds Display -->
+          <div class="calc-section">
+            <div class="calc-section-title">Moneyline Odds</div>
+            <div class="calc-odds">
+              <div class="calc-odds-fighter">
+                <span class="calc-odds-name" id="oddsNameA">Fighter A</span>
+                <span class="calc-odds-value" id="oddsA">-</span>
+              </div>
+              <div class="calc-odds-fighter">
+                <span class="calc-odds-name" id="oddsNameB">Fighter B</span>
+                <span class="calc-odds-value" id="oddsB">-</span>
               </div>
             </div>
           </div>

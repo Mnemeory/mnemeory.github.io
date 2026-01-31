@@ -1150,6 +1150,187 @@ body::after {
   font-weight: 500;
 }
 
+/* Calculator Buttons */
+.calc-btn {
+  padding: var(--space-unit) var(--space-3);
+  font-family: var(--font-primary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex: 1;
+}
+
+.calc-btn-primary {
+  color: var(--space-void);
+  background: var(--stellar-gold);
+  border: 1px solid var(--stellar-gold);
+}
+
+.calc-btn-primary:hover {
+  background: var(--stellar-cyan);
+  border-color: var(--stellar-cyan);
+  transform: translateY(-1px);
+}
+
+.calc-btn-secondary {
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--glass-border);
+}
+
+.calc-btn-secondary:hover {
+  color: var(--text-primary);
+  border-color: var(--state-error);
+  background: rgba(231, 111, 81, 0.1);
+}
+
+.calc-row-3 {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+}
+
+/* Bet Section Header */
+.calc-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.calc-section-header .calc-section-title { margin-bottom: 0; }
+
+.calc-bet-totals {
+  display: flex;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.calc-total-a { color: var(--stellar-cyan); }
+.calc-total-b { color: var(--stellar-gold); }
+
+/* Bet Table */
+.calc-bet-table-wrap {
+  background: rgba(26, 35, 53, 0.4);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.calc-bet-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.calc-bet-table thead {
+  position: sticky;
+  top: 0;
+  background: rgba(30, 41, 67, 0.95);
+  z-index: 1;
+}
+
+.calc-bet-table th {
+  padding: var(--space-unit) var(--space-2);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  text-align: left;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.calc-bet-table th:last-child { width: 30px; }
+
+.calc-bet-table td {
+  padding: calc(var(--space-unit) * 0.75) var(--space-2);
+  border-bottom: 1px solid rgba(74, 143, 185, 0.1);
+  color: var(--text-primary);
+}
+
+.calc-bet-table tr:last-child td { border-bottom: none; }
+
+.calc-bet-table .fighter-a { color: var(--stellar-cyan); font-weight: 500; }
+.calc-bet-table .fighter-b { color: var(--stellar-gold); font-weight: 500; }
+.calc-bet-table .amount { font-family: var(--font-mono); text-align: right; }
+
+.calc-empty-row td {
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: var(--space-3);
+}
+
+.calc-remove-btn {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calc-remove-btn:hover {
+  color: var(--state-error);
+  border-color: var(--state-error);
+  background: rgba(231, 111, 81, 0.1);
+}
+
+/* Moneyline Odds Display */
+.calc-odds {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.calc-odds-fighter {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  background: rgba(26, 35, 53, 0.4);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius);
+}
+
+.calc-odds-name {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: calc(var(--space-unit) * 0.5);
+}
+
+.calc-odds-value {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.calc-odds-value.odds-favorite {
+  color: var(--stellar-cyan);
+}
+
+.calc-odds-value.odds-underdog {
+  color: var(--stellar-gold);
+}
+
 /* === PRINT STYLES === */
 @media print {
   body::before, body::after, .template-bar, .quick-actions { display: none !important; }
