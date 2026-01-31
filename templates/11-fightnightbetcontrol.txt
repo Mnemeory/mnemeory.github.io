@@ -1,15 +1,15 @@
 Name: SCCV Horizon Fight Night Betting Control Sheet
 Desc: Official sheet for roster snapshot, posted odds, winners, and payout confirmation.
-[small][center][logo_scc]
+[center][logo_scc]
 
 [b]SCCV HORIZON
 SERVICE DEPARTMENT
 FIGHT NIGHT[/b]
 [i]"The Unbreakable Chainlink, Holding the Spur Together."[/i]
 [hr]
-[u][b]BETTING CONTROL SHEET (ODDS / RESULTS / PAYOUTS)[/b][/u]
+[b]BETTING CONTROL SHEET (ODDS / RESULTS / PAYOUTS)[/b]
 [/center]
-[center][table][row][cell][b]HOUSE NOTES (NO EXCUSES)[/b]
+[small][center][table][row][cell][b]HOUSE NOTES (NO EXCUSES)[/b]
 [list][*]This sheet is the official record for posted odds, confirmed winners, and payout authorization.
 [*]Bets close at the posted time and/or before each bout begins. No cancellations after close.
 [*]Disqualification counts as a loss for wagering unless otherwise posted by the house.
