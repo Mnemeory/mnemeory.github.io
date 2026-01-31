@@ -1,104 +1,96 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Stellar Corporate Conglomerate | SCCV Horizon</title>
-
-    <!-- Fonts & Theme -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="theme.css" rel="stylesheet" />
-
-
-    <!-- Main app logic -->
-    <script defer src="script.js"></script>
-    <script defer src="jobs.js"></script>
-  </head>
-  <body>
-    <div class="terminal-interface">
-      <!-- Header -->
-      <header class="terminal-header">
-        <div class="brand">
-          <img class="brand-logo" src="SCC_logo.png" alt="Stellar Corporate Conglomerate" />
-          <div class="brand-text">
-            <h1>Stellar Corporate Conglomerate</h1>
-            <small>Command Interface • SCCV Horizon</small>
-          </div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stellar Corporate Conglomerate | SCCV Horizon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="theme.css" rel="stylesheet">
+  <script defer src="script.js"></script>
+  <script defer src="jobs.js"></script>
+</head>
+<body>
+  <div class="terminal-interface">
+    <!-- Header -->
+    <header class="terminal-header">
+      <div class="brand">
+        <img class="brand-logo" src="SCC_logo.png" alt="Stellar Corporate Conglomerate">
+        <div class="brand-text">
+          <h1>Stellar Corporate Conglomerate</h1>
+          <small>Command Interface • SCCV Horizon</small>
         </div>
-
-        <div class="header-meta">
-          <div class="header-input-group">
-            <span class="header-label">Executive</span>
-            <input id="executiveAuth" class="header-input" type="text" maxlength="25" placeholder="((Character Name))" autocomplete="off" />
-          </div>
-          <div class="header-input-group">
-            <span class="header-label">Cipher</span>
-            <input id="commandCipher" class="header-input" type="text" maxlength="20" placeholder="((Round ID))" autocomplete="off" />
-          </div>
-        </div>
-      </header>
-
-      <!-- Template Bar -->
-      <div class="template-bar">
-        <div class="template-controls">
-          <div class="control-group">
-            <span class="control-label">Template</span>
-            <select id="templateMatrix" class="control-select">
-              <option>Initializing template constellation...</option>
-            </select>
-          </div>
-          <div id="templateMetadata" class="template-desc"></div>
-        </div>
-
-
       </div>
+      <div class="header-meta">
+        <div class="header-input-group">
+          <span class="header-label">Executive</span>
+          <input id="executiveAuth" class="header-input" type="text" maxlength="25" placeholder="((Character Name))" autocomplete="off">
+        </div>
+        <div class="header-input-group">
+          <span class="header-label">Cipher</span>
+          <input id="commandCipher" class="header-input" type="text" maxlength="20" placeholder="((Round ID))" autocomplete="off">
+        </div>
+      </div>
+    </header>
 
-      <!-- Main Grid -->
-      <main class="terminal-main">
+    <!-- Template Bar -->
+    <nav class="template-bar">
+      <div class="template-controls">
+        <div class="control-group">
+          <span class="control-label">Template</span>
+          <select id="templateMatrix" class="control-select">
+            <option>Initializing template constellation...</option>
+          </select>
+        </div>
+        <div id="templateMetadata" class="template-desc"></div>
+      </div>
+    </nav>
 
-        <!-- Preview Panel -->
-        <section class="panel preview-panel">
-          <div class="panel-header">
-            <h2 class="panel-title">Document Preview</h2>
-            <div class="quick-actions">
-              <div class="field-counter" id="fieldCounter">0 / 0</div>
-              <button class="action-btn" id="transmitCommand">Copy</button>
-              <button class="toggle-btn" id="terminalToggle" aria-pressed="false">HIDE TERMINAL</button>
-            </div>
-          </div>
-          <div class="preview-content" id="previewSurface"></div>
-        </section>
-
-        <!-- Output Panel -->
-        <section class="panel output-panel">
-          <div class="panel-header">
-            <h2 class="panel-title">Terminal Output</h2>
-            <div class="quick-actions">
-              <button class="action-btn" id="processDocument">Save</button>
-            </div>
-          </div>
-          <div class="terminal-wrapper">
-            <textarea id="terminalSurface" class="terminal-output" spellcheck="false"></textarea>
-          </div>
-        </section>
-
-      </main>
-
-      <!-- Footer -->
-      <footer class="terminal-footer">
-        <div class="footer-content">
-          <div class="footer-motto">The Unbreakable Chainlink • Holding the Spur Together</div>
-          <div class="system-info">
-            <span class="telemetry-data">NEXUS://SCC-CORE-ALPHA</span>
-            <span class="info-separator">∞</span>
-            <span class="telemetry-data">QUANTUM://ENTANGLED</span>
-            <span class="info-separator">∞</span>
-            <span class="telemetry-data">REACH://GALACTIC</span>
-            <span class="info-separator">∞</span>
-            <span class="telemetry-data" id="galacticTime">--:--:--</span>
+    <!-- Main Content -->
+    <main class="terminal-main">
+      <!-- Preview Panel -->
+      <section class="panel preview-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Document Preview</h2>
+          <div class="quick-actions">
+            <div class="field-counter" id="fieldCounter">0 / 0</div>
+            <button class="action-btn" id="transmitCommand">Copy</button>
+            <button class="toggle-btn" id="terminalToggle" aria-pressed="false">HIDE TERMINAL</button>
           </div>
         </div>
-      </footer>
-    </div>
-  </body>
+        <div class="preview-content" id="previewSurface"></div>
+      </section>
+
+      <!-- Output Panel -->
+      <section class="panel output-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Terminal Output</h2>
+          <div class="quick-actions">
+            <button class="action-btn" id="processDocument">Save</button>
+          </div>
+        </div>
+        <div class="terminal-wrapper">
+          <textarea id="terminalSurface" class="terminal-output" spellcheck="false"></textarea>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="terminal-footer">
+      <div class="footer-content">
+        <div class="footer-motto">The Unbreakable Chainlink • Holding the Spur Together</div>
+        <div class="system-info">
+          <span class="telemetry-data">NEXUS://SCC-CORE-ALPHA</span>
+          <span class="info-separator">∞</span>
+          <span class="telemetry-data">QUANTUM://ENTANGLED</span>
+          <span class="info-separator">∞</span>
+          <span class="telemetry-data">REACH://GALACTIC</span>
+          <span class="info-separator">∞</span>
+          <span class="telemetry-data" id="galacticTime">--:--:--</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
 </html>
