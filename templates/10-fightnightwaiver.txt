@@ -14,7 +14,7 @@ Stellar Corporate Conglomerate
 [/center][b]PARTICIPANT INFORMATION[/b]
 [table]
 [row][cell][b]Legal Name:[/b] [field]
-[row][cell][b]Stage Name/Callsign:[/b] [field]
+[row][cell][b]Stage Name:[/b] [field]
 [row][cell][b]Employed Position:[/b] [field]
 [row][cell][b]Employed Department:[/b] [field]
 [/table]
