@@ -1,0 +1,59 @@
+Name: SCCV Horizon Fight Night Liability Waiver
+Desc: Waiver for voluntary participation in Fight Night bouts and related activities.
+[center][logo_scc]
+
+Lola Lavish, J.D. M.B.A.
+Office of the Executive Officer
+SCCV Horizon
+
+Stellar Corporate Conglomerate
+[i]The Unbreakable Chainlink, Holding the Spur Together.[/i]
+[hr][b]FIGHT NIGHT PARTICIPANT LIABILITY WAIVER & ASSUMPTION OF RISK[/b]
+[small]Effective: [DATE] | Event: SCCV Horizon Fight Night | Sponsor: Service Department[/small]
+[hr]
+[/center][b]PARTICIPANT INFORMATION[/b]
+[table]
+[row][cell][b]Legal Name:[/b] [FIELD]
+[row][cell][b]Stage Name/Callsign:[/b] [FIELD]
+[row][cell][b]Employed Position:[/b] [FIELD]
+[row][cell][b]Employed Department:[/b] [FIELD]
+[/table]
+[table]
+[row][cell][b]Participant Signature:[/b] [field]   [b]Date:[/b] [field]
+[row][cell][b]Witness/Official:[/b] [/b] [field]   [b]Date:[/b] [field]
+[row][cell][b]Medical Clearance (if required):[/b] [/b] [field]   [b]Date:[/b] [field]
+[/table][/list]
+[/table][hr][center][b]TERMS AND CONDITIONS[/b][/center]
+[small][b]1. VOLUNTARY PARTICIPATION[/b]
+By signing this waiver, I affirm that my participation in SCCV Horizon Fight Night (the "Event") is voluntary, that I am not under coercion or duress, and that I may withdraw from participation at any time prior to or during a bout, subject to event staff direction and safety controls.
+
+[b]2. ASSUMPTION OF RISK[/b]
+I understand and acknowledge that participation in combative sport and sparring activities involves inherent and significant risks, including but not limited to: bruising, lacerations, sprains, fractures, dislocations, loss of consciousness, dental injury, vision impairment, neurological injury, permanent disability, or death. I further acknowledge risks associated with shipboard operations (crowding, equipment failure, restricted spaces, delayed medical access, and environmental hazards). I knowingly and freely assume all such risks, whether arising from my actions, the actions of others, or the conditions of the Event.
+
+[b]3. MEDICAL FITNESS & CLEARANCE[/b]
+I affirm that I am medically fit to participate and have disclosed any condition that may increase risk (including implants, augmentations, medications, prior injuries, heart/respiratory conditions, seizure history, blood disorders, or pregnancy) to Event staff or Medical, as required. I consent to basic screening as deemed necessary by Medical or Event staff. I acknowledge Medical may suspend or terminate my participation at any time for safety reasons and that such removal does not create liability for the Sponsor, Vessel, or Organizer.
+
+[b]4. COMPLIANCE WITH RULES & CONDUCT[/b]
+I agree to follow the rules, bout structure, and instructions of Event staff, officiants, Security, and Medical. I understand that prohibited conduct may include (as designated by Event staff): concealed weapons, tampering with protective equipment, deliberate strikes after the bell, targeting of protected anatomy as specified, refusal to stop when directed, or intoxicated participation. I understand violation may result in disqualification, removal, forfeiture of prize eligibility, and/or disciplinary action under applicable ship regulations.
+
+[b]5. EQUIPMENT, PROPERTY, AND PERSONAL EFFECTS[/b]
+I accept responsibility for my personal effects and any damage I cause to Event property or shipboard facilities through misconduct or negligence. I acknowledge that protective equipment, if provided, reduces but does not eliminate risk, and that equipment failure may occur.
+
+[b]6. RELEASE OF LIABILITY[/b]
+To the fullest extent permitted by applicable law and vessel policy, I hereby release and hold harmless: Stellar Corporate Conglomerate, the SCCV Horizon, the Service Department, the Event organizers and staff, and their agents, officers, employees, contractors, and volunteers (collectively, the "Released Parties") from any and all claims, demands, actions, or causes of action arising out of or relating to my participation in the Event, including injury, illness, property loss, or death, whether caused by negligence, ordinary fault, or otherwise, except where prohibited by law or where willful misconduct is proven.
+
+[b]7. INDEMNIFICATION[/b]
+I agree to indemnify and defend the Released Parties against claims brought by or on behalf of third parties arising from my actions, misconduct, or violations of Event rules during the Event.
+
+[b]8. PRIZE & BETTING ACKNOWLEDGMENT[/b]
+I acknowledge that prizes are awarded at Event conclusion subject to rule compliance and organizer confirmation. I acknowledge that betting is conducted under house terms and that disputes related to wagers are governed by Event procedures and shipboard policy; participation does not guarantee prize placement or winnings.
+
+[b]9. PUBLICITY & RECORDING[/b]
+I acknowledge the Event may be observed, recorded, or broadcast internally for ship morale and Service promotion. I consent to use of my name, likeness, and bout results for internal announcements and approved SCC communications, unless I submit a written opt-out to Event staff prior to my first bout (subject to operational limitations).
+
+[b]10. SEVERABILITY[/b]
+If any provision of this waiver is found unenforceable, the remainder shall remain in full force and effect.
+
+[b]11. ACKNOWLEDGMENT & SIGNATURE[/b]
+I certify that I have read and understood this waiver, that all information provided is truthful, and that I sign it knowingly and voluntarily.
+[/small][hr]
