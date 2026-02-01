@@ -1,4 +1,4 @@
-Name: SCCV Horizon Fight Night Betting Control Sheet
+Name: Fight Night Betting Control Sheet
 Category: Service
 Desc: Official sheet for roster snapshot, posted odds, winners, and payout confirmation.
 [center][logo_scc]
