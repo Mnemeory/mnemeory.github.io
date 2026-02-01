@@ -29,8 +29,7 @@
     "[h2]": "<H2>", "[/h2]": "</H2>",
     "[h3]": "<H3>", "[/h3]": "</H3>",
     
-    // Lists
-    "[*]": "<li>",
+    // Lists - Note: [*] handled specially in post-processing
     "[list]": "<ul>", "[/list]": "</ul>",
     
     // Tables
@@ -84,6 +83,42 @@
     },
   ];
 
+  /**
+   * Process list items [*] with proper <li></li> wrapping
+   * This handles the complex case of list items that can span multiple lines
+   * and may contain nested content.
+   * 
+   * @param {string} html - HTML string with <ul> tags but raw [*] markers
+   * @returns {string} HTML with properly wrapped <li> elements
+   */
+  function processListItems(html) {
+    // Process each <ul>...</ul> block separately
+    return html.replace(/<ul>([\s\S]*?)<\/ul>/gi, (match, content) => {
+      // Split on [*] markers
+      const parts = content.split(/\[\*\]/);
+      
+      // First part is content before any [*] (usually whitespace or nothing)
+      const beforeFirstItem = parts[0];
+      
+      // Remaining parts are the actual list items
+      const items = parts.slice(1);
+      
+      if (items.length === 0) {
+        // No [*] markers found - return content as-is (might be inline list usage)
+        return `<ul>${content}</ul>`;
+      }
+      
+      // Build the list with proper <li> tags
+      const listItems = items.map(item => {
+        // Trim leading/trailing whitespace from each item
+        const trimmed = item.trim();
+        return trimmed ? `<li>${trimmed}</li>` : '';
+      }).filter(Boolean).join('\n');
+      
+      return `<ul>\n${listItems}\n</ul>`;
+    });
+  }
+
   // === PENCODE ENGINE CLASS ===
   class PencodeEngine {
     /**
@@ -94,13 +129,16 @@
     toHtml(text) {
       if (!text) return "";
       
-      // Apply basic tag replacements
+      // Apply basic tag replacements (except [*] which is handled separately)
       let result = text.replace(PENCODE_REGEX, m => PENCODE_MAP[m]);
       
       // Apply special pattern replacements
       SPECIAL_PATTERNS.forEach(({ regex, replace }) => {
         result = result.replace(regex, replace);
       });
+      
+      // Process list items with proper wrapping
+      result = processListItems(result);
       
       return result;
     }
