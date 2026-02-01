@@ -5,8 +5,8 @@
 - `[roundid]` - Automatically replaced with current round/shift ID ((NOT IN GAME PENCODE, UNIQUE TO SYSTEM))
 - `[field]` - User-input text field
 - `[jobs]` - Creates clickable job selector button ((NOT IN GAME PENCODE, UNIQUE TO SYSTEM))
-- `[time]` - Current system time
-- `[date]` - Current system date
+- `[time]` - Current system time, autoconverts to ingame time when printed ingame.
+- `[date]` - Current system date, autoconverts to ingame date when printed ingame.
 
 ### Text Formatting
 - `[b]text[/b]` - **Bold text**
@@ -46,24 +46,9 @@
 ### Special Elements
 - `[barcode]` - Barcode pattern
 - `[sign]` - Signature placeholder
-- `[redacted]text[/redacted]` - Redacted text (shown as blocks)
+- `[redacted]text[/redacted]` - Redacted text
 - `[color=color]text[/color]` - Colored text
-- `[lang=language]text[/lang]` - Language blocks for roleplay
-
-## Usage
-
-1. **Authentication**: Enter officer name and round ID on startup
-2. **Select Template**: Choose available template
-3. **Fill Fields**: Complete required fields in the left panel
-4. **Preview**: View the formatted document in the center panel
-5. **Edit**: Make manual edits in the terminal output panel
-6. **Export**: Copy to clipboard or download as text file
-
-## Keyboard Shortcuts
-
-- `Ctrl+S` - Download document
-- `Ctrl+C` - Copy to clipboard (when no text selected)
-- `Ctrl+Shift+C` - Clear all fields
+- `[lang=language]text[/lang]` - Language blocks
 
 ## Template Development
 
@@ -71,6 +56,7 @@ Templates are stored in the `templates/` directory as `.txt` files with the foll
 
 ```
 Name: Template Name
+Category: Category it goes under
 Desc: Brief description of the template
 
 [Template content with pencode tags]
