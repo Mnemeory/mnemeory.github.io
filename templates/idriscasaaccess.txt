@@ -1,4 +1,4 @@
-Name: Temporary Residential Access Authorization
+Name: Casa Envidiable Temp Access
 Category: Idris
 Desc: Grant time-limited access to Casa Envidiable for vetted visitors, staff, or contractors
 [small]
