@@ -174,7 +174,6 @@ EXECUTIVE COMMAND INTERFACE[/center]
         groups[cat].push(t);
       });
 
-      // Sort categories alphabetically, then templates within each
       const sortedCategories = Object.keys(groups).sort((a, b) => a.localeCompare(b));
 
       let html = "";
@@ -250,9 +249,9 @@ EXECUTIVE COMMAND INTERFACE[/center]
 
     const sortedFields = [...state.currentTemplate.fields].sort((a, b) => a.pos - b.pos);
 
-    // Generate raw output (always needed)
+    // Generate raw output (always needed); keep [field]/[jobs] visible in terminal when empty
     let raw = pencodeEngine.applyDynamics(state.currentTemplate.originalText, dynamics, false);
-    raw = pencodeEngine.applyFieldReplacements(raw, sortedFields, { forHtml: false });
+    raw = pencodeEngine.applyFieldReplacements(raw, sortedFields, { forHtml: false, keepPlaceholderIfEmpty: true });
     state.currentRaw = raw;
 
     // Update terminal surface

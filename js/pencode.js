@@ -137,9 +137,10 @@
      * @param {Array} fields - Array of field objects sorted by position
      * @param {Object} options - Options for replacement
      * @param {boolean} options.forHtml - Generate HTML field elements
+     * @param {boolean} options.keepPlaceholderIfEmpty - When true (raw output), keep [field]/[jobs] visible when value is empty
      * @returns {string} Text with field replacements
      */
-    applyFieldReplacements(text, fields, { forHtml = false } = {}) {
+    applyFieldReplacements(text, fields, { forHtml = false, keepPlaceholderIfEmpty = false } = {}) {
       let result = text;
       
       fields.forEach((field, idx) => {
@@ -157,7 +158,7 @@
             replacement = `<span class="paper_field" data-field-id="${field.id}" data-field-index="${idx}" data-field-type="${field.type}" data-placeholder="${field.placeholder}" spellcheck="false">${value}</span>`;
           }
         } else {
-          replacement = value;
+          replacement = (keepPlaceholderIfEmpty && !value) ? placeholder : value;
         }
         
         result = result.slice(0, index) + replacement + result.slice(index + placeholder.length);
