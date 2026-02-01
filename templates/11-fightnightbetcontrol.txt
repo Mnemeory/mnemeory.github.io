@@ -1,7 +1,7 @@
 Name: Fight Night Betting Control Sheet
 Category: Service
 Desc: Official sheet for roster snapshot, posted odds, winners, and payout confirmation.
-[center][logo_scc]
+[center][logo_scc_small]
 
 [b]SCCV HORIZON
 SERVICE DEPARTMENT

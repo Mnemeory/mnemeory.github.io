@@ -1,7 +1,7 @@
 Name: Fight Night Liability Waiver
 Category: Service
 Desc: Waiver for voluntary participation in Fight Night bouts and related activities.
-[center][logo_scc]
+[center][logo_scc_small]
 
 Lola Lavish, J.D. M.B.A.
 Office of the Executive Officer
