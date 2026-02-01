@@ -1,3 +1,6 @@
+name: Idris Loan
+Category: Idris
+Desc: A loan from Idris.
 [small]
 [center][b][logo_idris]
 Idris Incorporated[/b]
