@@ -1,4 +1,4 @@
-name: Idris Loan
+Name: Idris Loan
 Category: Idris
 Desc: A loan from Idris.
 [small]
