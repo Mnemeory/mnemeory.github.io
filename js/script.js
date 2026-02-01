@@ -39,7 +39,7 @@
   let dom = {};
   const domIds = [
     "templateMatrix", "templateMetadata", "previewSurface", "terminalSurface",
-    "galacticTime", "executiveAuth", "commandCipher", "processDocument", "fieldCounter",
+    "galacticTime", "executiveAuth", "commandShift", "processDocument", "fieldCounter",
   ];
 
   // === TERMINAL MANAGEMENT ===
@@ -49,7 +49,7 @@
     initializeInputs() {
       const inputs = [
         { el: dom.executiveAuth, key: "officer", state: "officerId" },
-        { el: dom.commandCipher, key: "shift", state: "shiftCode" },
+        { el: dom.commandShift, key: "shift", state: "shiftCode" },
       ];
 
       inputs.forEach(({ el, key, state: stateKey }) => {
@@ -489,8 +489,8 @@ EXECUTIVE COMMAND INTERFACE[/center]
 
     // Auto-clear shift
     setInterval(() => {
-      if (dom.commandCipher) {
-        dom.commandCipher.value = state.shiftCode = "";
+      if (dom.commandShift) {
+        dom.commandShift.value = state.shiftCode = "";
         storage.save("shift", "");
         terminal.updateFieldsLock();
       }
@@ -508,7 +508,7 @@ EXECUTIVE COMMAND INTERFACE[/center]
     clearData() {
       storage.clear();
       Object.assign(state, { officerId: null, shiftCode: "", currentTemplate: null, currentRaw: "", fieldsFilled: 0, totalFields: 0 });
-      ["executiveAuth", "commandCipher"].forEach(k => dom[k] && (dom[k].value = ""));
+      ["executiveAuth", "commandShift"].forEach(k => dom[k] && (dom[k].value = ""));
       if (dom.previewSurface) dom.previewSurface.innerHTML = "";
       if (dom.terminalSurface) dom.terminalSurface.value = "";
       if (dom.fieldCounter) dom.fieldCounter.textContent = "0 / 0";
