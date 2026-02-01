@@ -1,0 +1,62 @@
+Name: Seafood Soiree
+Category: Service
+Desc: A proposed menu for seafood
+[center][logo_scc_small]
+
+Lola Lavish, J.D. M.B.A.
+Office of the Executive Officer
+SCCV Horizon
+
+Stellar Corporate Conglomerate
+[i]The Unbreakable Chainlink, Holding the Spur Together.[/i]
+
+[hr]
+[b]PROPOSED MENU: THE ULTIMATE SEAFOOD SOIREE[/b]
+[/center][small][table]
+[row][cell][u]I. Dockside Welcome (cold & mixed)[/u]
+[cell][list]
+[*]Fish Sashimi - knife-cut fillet, soy finish.
+[*]Deep Dive - seaweed, cream, and fish in a rich bite.
+[*]Spicy Ras'val Clams - heat-forward shellfish starter.
+[*]North Sixty Sea Platter - fillet + ras'val clam + crab; beer/pepper/space-spice flourish.
+[/list]
+
+[row][cell][u]II. Golden-Fried Luxuries (deep fryer)[/u]
+[cell][list]
+[*]Fish Fingers - battered fillet, crisped.
+[*]North 60 Squid - beer-battered squid with citrus-garlic punch.
+[*]Roe Fritters - roe sack fritters, served hot.
+[*](Optional) Cuban Fish Sandwich - fried dough + fillet, chili kick.
+[/list]
+
+[row][cell][u]III. The Broth Course (pot / saucepan)[/u]
+[cell][list]
+[*]Kraken Soup - squid and pumpkin, spiced and simmered.
+[*]Adhomian Fish Soup - fillet with sarmikhir & messa's tear.
+[*]Morozian Brudet - tomato-fish stew, station classic.
+[*]Maeuntang - chili-moss fish stew for heat-lovers.
+[/list]
+
+[row][cell][u]IV. Imperial Centerpieces (shared mains)[/u]
+[cell][list]
+[*]Imperial Scallops - shellfish in garlic-lemon butter broth.
+[*]Stuffed Fish Fillet - roe-stuffed fillet, pan-finished.
+[*]Imperial Pot - fish cutlet & shellfish over rice; citrus-spice profile.
+[*]Korlaaskak - six-fillet platter with cabbage & lime; sliced for service.
+[/list]
+
+[row][cell][u]V. Comfort & Ceremony (plated favorites)[/u]
+[cell][list]
+[*]Ras'val Pasta - clam pasta with earthen-root.
+[*]Fish & Chips - fillet with space fries, hot and crisp.
+[*]Crab Leg Grilled Cheese - crab legs + cheese wedge, toasted slices.
+[*]Fish Taco - fillet in tortilla with chili & lemon.
+[*]Fillet-o-Fish Sandwich - bun + fillet, simple and perfect.
+[/list]
+
+[row][cell][u]VI. The "Sea-Foam" Finale (chilled)[/u]
+[cell][list]
+[*]Seafood Mousse - ras'val clam & sarmikhir set with gelatin; served as a savory palate-closer.
+[/list]
+[/table][/list]
+[hr]
