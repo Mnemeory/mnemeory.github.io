@@ -1,4 +1,5 @@
 Name: SCC Executive Order
+Category: Command
 Desc: A form to issue executive orders.
 [small]
 [center][b][logo_scc]

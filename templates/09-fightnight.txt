@@ -1,4 +1,5 @@
 Name: SCCV Horizon Fight Night Promo
+Category: Service
 Desc: Flyer promoting an open-entry Fight Night event sponsored by SCCV Horizon Service.
 [center][logo_scc]
 Lola Lavish, J.D. M.B.A.

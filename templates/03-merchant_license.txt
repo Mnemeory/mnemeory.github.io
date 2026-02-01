@@ -1,4 +1,5 @@
 Name: SCC Merchant License Authorization
+Category: Command
 Desc: Authorize an external merchant to dock with the SCCV Horizon and conduct commerce under SCC oversight
 [small][center][b][logo_scc]
 Stellar Corporate Conglomerate[/b]

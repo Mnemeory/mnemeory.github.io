@@ -1,4 +1,5 @@
 Name: Personnel Assignment Form
+Category: Command
 Desc: Document personnel assignments for missions and departments
 [small]
 [center][b][logo_scc]

@@ -1,6 +1,6 @@
 /* ============================================
    STELLAR CORPORATE CONGLOMERATE
-   UNIFIED THEME SYSTEM v3.3 - REFACTORED
+   UNIFIED THEME SYSTEM v3.4 - REFACTORED
    ============================================ */
 
 /* === 1. DESIGN TOKENS === */
@@ -34,6 +34,37 @@
   --state-warning: #f4a261;
   --state-error: #e76f51;
   --state-info: #6bb8d4;
+
+  /* === INTERACTION STATE BACKGROUNDS === */
+  --interact-blue-subtle: rgba(74, 143, 185, 0.1);
+  --interact-blue-medium: rgba(74, 143, 185, 0.15);
+  --interact-blue-hover: rgba(74, 143, 185, 0.3);
+
+  --interact-gold-subtle: rgba(212, 160, 74, 0.08);
+  --interact-gold-medium: rgba(212, 160, 74, 0.1);
+  --interact-gold-hover: rgba(212, 160, 74, 0.15);
+
+  --interact-cyan-subtle: rgba(107, 184, 212, 0.1);
+  --interact-cyan-glow: rgba(107, 184, 212, 0.2);
+
+  --interact-success-subtle: rgba(82, 183, 136, 0.08);
+  --interact-success-medium: rgba(82, 183, 136, 0.1);
+  --interact-error-subtle: rgba(231, 111, 81, 0.1);
+
+  /* === SURFACE LAYERS === */
+  --surface-void: rgba(15, 21, 32, 0.85);
+  --surface-abyss: rgba(15, 21, 32, 0.6);
+  --surface-deep: rgba(15, 21, 32, 0.4);
+  --surface-base: rgba(26, 35, 53, 0.3);
+  --surface-raised: rgba(26, 35, 53, 0.4);
+  --surface-overlay: rgba(30, 41, 67, 0.3);
+  --surface-overlay-hover: rgba(30, 41, 67, 0.5);
+  --surface-header: rgba(40, 54, 81, 0.3);
+  --surface-header-light: rgba(40, 54, 81, 0.25);
+
+  /* === BORDERS === */
+  --border-subtle: rgba(74, 143, 185, 0.1);
+  --border-hover: rgba(74, 143, 185, 0.3);
 
   /* Layout */
   --border-radius: 6px;
@@ -167,7 +198,7 @@ body::after { position: fixed; }
 .calc-input:hover,
 .calc-select:hover {
   border-color: var(--stellar-blue);
-  background: rgba(74, 143, 185, 0.1);
+  background: var(--interact-blue-subtle);
 }
 
 .header-input:focus,
@@ -177,8 +208,8 @@ body::after { position: fixed; }
 .calc-select:focus {
   outline: none;
   border-color: var(--stellar-gold);
-  background: rgba(212, 160, 74, 0.1);
-  box-shadow: 0 0 0 2px rgba(212, 160, 74, 0.1);
+  background: var(--interact-gold-medium);
+  box-shadow: 0 0 0 2px var(--interact-gold-medium);
 }
 
 .header-input::placeholder,
@@ -200,6 +231,24 @@ body::after { position: fixed; }
 .calc-select option {
   background: var(--space-medium);
   color: var(--text-primary);
+}
+
+/* Category group labels in dropdowns */
+.control-select optgroup,
+.calc-select optgroup {
+  background: var(--space-deep);
+  color: var(--stellar-gold);
+  font-weight: 600;
+  font-style: normal;
+  padding: 4px 0;
+}
+
+.control-select optgroup option,
+.calc-select optgroup option {
+  background: var(--space-medium);
+  color: var(--text-primary);
+  font-weight: 400;
+  padding-left: 12px;
 }
 
 /* --- Shared Interactive Elements with "Shine" Effect --- */
@@ -231,7 +280,7 @@ body::after { position: fixed; }
   position: absolute;
   inset: 0;
   left: -100%;
-  background: linear-gradient(90deg, transparent, rgba(107, 184, 212, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, var(--interact-cyan-glow), transparent);
   transition: left var(--transition-slow);
 }
 
@@ -248,9 +297,9 @@ body::after { position: fixed; }
 .nav-link:hover,
 .job-item:hover {
   border-color: var(--stellar-blue);
-  background: rgba(74, 143, 185, 0.15);
+  background: var(--interact-blue-medium);
   transform: translateY(-1px);
-  box-shadow: 0 1px 4px rgba(107, 184, 212, 0.1);
+  box-shadow: 0 1px 4px var(--interact-cyan-subtle);
 }
 
 .action-btn:active,
@@ -287,7 +336,7 @@ body::after { position: fixed; }
 .toggle-btn[aria-pressed="true"] {
   color: var(--stellar-gold);
   border-color: var(--stellar-gold);
-  background: rgba(212, 160, 74, 0.15);
+  background: var(--interact-gold-hover);
 }
 
 /* === 5. MAIN LAYOUT STRUCTURE === */
@@ -305,7 +354,7 @@ body::after { position: fixed; }
   justify-content: space-between;
   align-items: center;
   padding: var(--space-2) var(--space-4);
-  background: rgba(40, 54, 81, 0.3);
+  background: var(--surface-header);
   border-bottom: 1px solid var(--glass-border);
   backdrop-filter: blur(var(--glass-blur));
   box-shadow: 0 0 8px var(--glass-glow);
@@ -384,7 +433,7 @@ body::after { position: fixed; }
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-2) var(--space-4);
-  background: rgba(40, 54, 81, 0.25);
+  background: var(--surface-header-light);
   border-bottom: 1px solid var(--glass-border);
   backdrop-filter: blur(8px);
   box-shadow: 0 0 6px var(--glass-glow);
@@ -451,7 +500,7 @@ body::after { position: fixed; }
 }
 
 .panel:hover {
-  border-color: rgba(74, 143, 185, 0.3);
+  border-color: var(--border-hover);
   box-shadow: 0 0 8px rgba(107, 184, 212, 0.05);
 }
 
@@ -460,7 +509,7 @@ body::after { position: fixed; }
   justify-content: space-between;
   align-items: center;
   padding: var(--space-2) var(--space-3);
-  background: rgba(30, 41, 67, 0.3);
+  background: var(--surface-overlay);
   border-bottom: 1px solid var(--glass-border);
 }
 
@@ -490,7 +539,7 @@ body::after { position: fixed; }
   font-size: 0.875rem;
   line-height: 1.8;
   color: var(--text-primary);
-  background: rgba(26, 35, 53, 0.3);
+  background: var(--surface-base);
   backdrop-filter: blur(4px);
   overflow-y: auto;
   white-space: pre-wrap;
@@ -540,7 +589,7 @@ body::after { position: fixed; }
   font-family: var(--font-primary);
   font-size: 0.875rem;
   color: var(--text-primary);
-  background: rgba(212, 160, 74, 0.08);
+  background: var(--interact-gold-subtle);
   border: 1px solid var(--stellar-gold);
   border-radius: var(--border-radius);
   outline: none;
@@ -548,11 +597,11 @@ body::after { position: fixed; }
   transition: all var(--transition-fast);
 }
 
-.paper_field:hover { border-color: var(--stellar-blue); background: rgba(74, 143, 185, 0.1); }
+.paper_field:hover { border-color: var(--stellar-blue); background: var(--interact-blue-subtle); }
 .paper_field:focus {
   border-color: var(--stellar-cyan);
-  background: rgba(107, 184, 212, 0.1);
-  box-shadow: 0 0 0 2px rgba(107, 184, 212, 0.1);
+  background: var(--interact-cyan-subtle);
+  box-shadow: 0 0 0 2px var(--interact-cyan-subtle);
 }
 
 /* Job Button (In Preview) */
@@ -576,13 +625,13 @@ body::after { position: fixed; }
 
 .job-button:hover {
   border-color: var(--stellar-blue);
-  background: rgba(74, 143, 185, 0.15);
+  background: var(--interact-blue-medium);
 }
 
 .preview-content td .job-button { width: 100%; display: block; }
 .job-button.filled {
   border-color: var(--stellar-gold);
-  background: rgba(212, 160, 74, 0.1);
+  background: var(--interact-gold-medium);
   font-weight: 500;
 }
 .job-button.empty {
@@ -615,7 +664,7 @@ body::after { position: fixed; }
   flex: 1;
   position: relative;
   overflow: hidden;
-  background: rgba(15, 21, 32, 0.4);
+  background: var(--surface-deep);
   backdrop-filter: blur(8px);
 }
 
@@ -641,7 +690,7 @@ body::after { position: fixed; }
 /* === 8. FOOTER === */
 .terminal-footer {
   padding: var(--space-2) var(--space-4);
-  background: rgba(40, 54, 81, 0.3);
+  background: var(--surface-header);
   border-top: 1px solid var(--glass-border);
   backdrop-filter: blur(10px);
   box-shadow: 0 0 8px var(--glass-glow);
@@ -695,7 +744,7 @@ body::after { position: fixed; }
 .job-modal-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(15, 21, 32, 0.85);
+  background: var(--surface-void);
   backdrop-filter: blur(4px);
 }
 
@@ -726,7 +775,7 @@ body::after { position: fixed; }
   justify-content: space-between;
   align-items: center;
   padding: var(--space-3);
-  background: rgba(30, 41, 67, 0.4);
+  background: var(--surface-raised);
 }
 
 .job-modal-header { border-bottom: 1px solid var(--glass-border); }
@@ -764,13 +813,13 @@ body::after { position: fixed; }
 .calc-remove-btn:hover {
   color: var(--state-error);
   border-color: var(--state-error);
-  background: rgba(231, 111, 81, 0.1);
+  background: var(--interact-error-subtle);
 }
 
 .job-modal-search {
   padding: var(--space-3);
   border-bottom: 1px solid var(--glass-border);
-  background: rgba(26, 35, 53, 0.3);
+  background: var(--surface-base);
 }
 
 .job-search-input { width: 100%; }
@@ -791,19 +840,19 @@ body::after { position: fixed; }
   transition: all var(--transition-base);
 }
 
-.job-category:hover { border-color: rgba(74, 143, 185, 0.3); }
+.job-category:hover { border-color: var(--border-hover); }
 
 .job-category-header {
   display: flex;
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
-  background: rgba(30, 41, 67, 0.3);
+  background: var(--surface-overlay);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
-.job-category-header:hover { background: rgba(30, 41, 67, 0.5); }
+.job-category-header:hover { background: var(--surface-overlay-hover); }
 .job-category-icon { font-size: 0.7rem; transition: transform var(--transition-fast); }
 .job-category.collapsed .job-category-icon { transform: rotate(-90deg); }
 
@@ -857,7 +906,7 @@ body::after { position: fixed; }
 
 .job-item.selected {
   border-color: var(--stellar-gold);
-  background: rgba(212, 160, 74, 0.15);
+  background: var(--interact-gold-hover);
 }
 
 .job-item.selected .job-item-icon { color: var(--stellar-gold); }
@@ -913,13 +962,13 @@ body::after { position: fixed; }
 .job-btn-secondary:hover {
   color: var(--text-primary);
   border-color: var(--stellar-blue);
-  background: rgba(74, 143, 185, 0.15);
+  background: var(--interact-blue-medium);
   transform: translateY(-1px);
 }
 .calc-btn-secondary:hover {
   color: var(--text-primary);
   border-color: var(--state-error);
-  background: rgba(231, 111, 81, 0.1);
+  background: var(--interact-error-subtle);
 }
 
 .job-btn:active, .calc-btn:active { transform: translateY(0); }
@@ -972,21 +1021,21 @@ body::after { position: fixed; }
 
 /* Result Input Specifics */
 .calc-result-input {
-  background: rgba(15, 21, 32, 0.6);
+  background: var(--surface-abyss);
   color: var(--state-success);
   font-weight: 600;
   cursor: default;
 }
 .calc-result-input:hover,
 .calc-result-input:focus {
-  background: rgba(15, 21, 32, 0.6);
+  background: var(--surface-abyss);
   border-color: var(--state-success);
-  box-shadow: 0 0 0 2px rgba(82, 183, 136, 0.1);
+  box-shadow: 0 0 0 2px var(--interact-success-medium);
 }
 
 /* Output Box */
 .calc-output {
-  background: rgba(26, 35, 53, 0.4);
+  background: var(--surface-raised);
   border: 1px solid var(--glass-border);
   border-radius: var(--border-radius);
   padding: var(--space-2);
@@ -997,7 +1046,7 @@ body::after { position: fixed; }
   justify-content: space-between;
   align-items: center;
   padding: var(--space-unit) var(--space-2);
-  border-bottom: 1px solid rgba(74, 143, 185, 0.1);
+  border-bottom: 1px solid var(--border-subtle);
 }
 .calc-output-row:last-child { border-bottom: none; }
 
@@ -1008,7 +1057,7 @@ body::after { position: fixed; }
 .calc-highlight { color: var(--state-success); font-weight: 700; }
 
 .calc-highlight-row {
-  background: rgba(82, 183, 136, 0.08);
+  background: var(--interact-success-subtle);
   border-radius: var(--border-radius);
   margin-top: var(--space-unit);
 }
@@ -1027,7 +1076,7 @@ body::after { position: fixed; }
 .calc-total-b { color: var(--stellar-gold); }
 
 .calc-bet-table-wrap {
-  background: rgba(26, 35, 53, 0.4);
+  background: var(--surface-raised);
   border: 1px solid var(--glass-border);
   border-radius: var(--border-radius);
   overflow: hidden;
@@ -1046,7 +1095,7 @@ body::after { position: fixed; }
 .calc-bet-table th:last-child { width: 30px; }
 .calc-bet-table td {
   padding: calc(var(--space-unit) * 0.75) var(--space-2);
-  border-bottom: 1px solid rgba(74, 143, 185, 0.1);
+  border-bottom: 1px solid var(--border-subtle);
   color: var(--text-primary);
 }
 .calc-bet-table tr:last-child td { border-bottom: none; }
@@ -1059,7 +1108,7 @@ body::after { position: fixed; }
 .calc-odds-fighter {
   flex: 1; display: flex; flex-direction: column; align-items: center;
   padding: var(--space-2) var(--space-3);
-  background: rgba(26, 35, 53, 0.4);
+  background: var(--surface-raised);
   border: 1px solid var(--glass-border);
   border-radius: var(--border-radius);
 }

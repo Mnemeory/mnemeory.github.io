@@ -1,6 +1,10 @@
 (function () {
   "use strict";
 
+  // === IMPORTS FROM SHARED MODULES ===
+  const { utils, createStorageManager, createSystemClock, createDomCache } = window.SCC_SHARED;
+  const { PencodeEngine } = window.SCC_PENCODE;
+
   // === CONFIGURATION ===
   const CONFIG = {
     repo: { user: "mnemeory", name: "mnemeory.github.io", branch: "main" },
@@ -27,45 +31,16 @@
     shiftCode: "",
   };
 
+  // Initialize storage manager and pencode engine
+  const storage = createStorageManager(CONFIG.storage.prefix);
+  const pencodeEngine = new PencodeEngine();
+
   // DOM element cache
-  const dom = {};
+  let dom = {};
   const domIds = [
     "templateMatrix", "templateMetadata", "previewSurface", "terminalSurface",
     "galacticTime", "executiveAuth", "commandCipher", "processDocument", "fieldCounter",
   ];
-
-  // === UTILITIES ===
-  const utils = {
-    formatTime: () => new Date().toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" }),
-    formatDate: () => new Date().toLocaleDateString("en-CA"),
-
-    storage: {
-      key: (k) => CONFIG.storage.prefix + k,
-      save(key, value) {
-        try { localStorage.setItem(this.key(key), JSON.stringify(value)); }
-        catch (e) { console.warn("Storage save failed:", e); }
-      },
-      load(key) {
-        try { return JSON.parse(localStorage.getItem(this.key(key))); }
-        catch { return null; }
-      },
-      clear() {
-        Object.keys(localStorage)
-          .filter(k => k.startsWith(CONFIG.storage.prefix))
-          .forEach(k => localStorage.removeItem(k));
-      },
-    },
-
-    debounce(fn, wait) {
-      let timeout;
-      return (...args) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => fn(...args), wait);
-      };
-    },
-
-    escapeRegex: (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-  };
 
   // === TERMINAL MANAGEMENT ===
   const terminal = {
@@ -79,12 +54,12 @@
 
       inputs.forEach(({ el, key, state: stateKey }) => {
         if (!el) return;
-        const saved = utils.storage.load(key);
+        const saved = storage.load(key);
         if (saved) el.value = state[stateKey] = saved;
 
         el.addEventListener("input", (e) => {
           state[stateKey] = e.target.value.trim();
-          utils.storage.save(key, state[stateKey]);
+          storage.save(key, state[stateKey]);
           this.updateFieldsLock();
           generateOutput();
         });
@@ -108,12 +83,6 @@
         Object.assign(btn.style, { ...style, cursor: isLocked ? "not-allowed" : "pointer" });
       });
     },
-
-    startSystemClock() {
-      const update = () => dom.galacticTime && (dom.galacticTime.textContent = utils.formatTime());
-      update();
-      setInterval(update, 1000);
-    },
   };
 
   // === TEMPLATE MANAGEMENT ===
@@ -133,8 +102,8 @@
               const res = await fetch(`templates/${name}?v=${Date.now()}`);
               if (!res.ok) throw new Error();
               const text = await res.text();
-              const { body, name: tplName, desc } = extractHeaders(text);
-              return { file: name, name: tplName || name.replace(/\.txt$/i, ""), description: desc || "", body };
+              const { body, name: tplName, desc, category } = extractHeaders(text);
+              return { file: name, name: tplName || name.replace(/\.txt$/i, ""), description: desc || "", category: category || "Uncategorized", body };
             } catch { return null; }
           })
         )).filter(Boolean);
@@ -196,24 +165,46 @@ EXECUTIVE COMMAND INTERFACE[/center]
 
     populateSelector() {
       if (!dom.templateMatrix) return;
-      dom.templateMatrix.innerHTML = state.templates
-        .map((t, i) => `<option value="${t.file}" data-description="${t.description || ""}" ${i === 0 ? "selected" : ""}>${t.name}</option>`)
-        .join("");
+
+      // Group templates by category
+      const groups = {};
+      state.templates.forEach(t => {
+        const cat = t.category || "Uncategorized";
+        if (!groups[cat]) groups[cat] = [];
+        groups[cat].push(t);
+      });
+
+      // Sort categories alphabetically, then templates within each
+      const sortedCategories = Object.keys(groups).sort((a, b) => a.localeCompare(b));
+
+      let html = "";
+      let firstOption = true;
+      sortedCategories.forEach(cat => {
+        html += `<optgroup label="${cat}">`;
+        groups[cat].sort((a, b) => a.name.localeCompare(b.name)).forEach(t => {
+          html += `<option value="${t.file}" data-description="${t.description || ""}" ${firstOption ? "selected" : ""}>${t.name}</option>`;
+          firstOption = false;
+        });
+        html += `</optgroup>`;
+      });
+
+      dom.templateMatrix.innerHTML = html;
     },
   };
 
   // === TEMPLATE PARSING ===
   function extractHeaders(text) {
     const lines = text.split(/\r?\n/);
-    let name = "", desc = "", i = 0;
+    let name = "", desc = "", category = "", i = 0;
     while (i < lines.length) {
       const line = lines[i].trim();
       if (line.startsWith("Name:")) name = line.slice(5).trim();
+      else if (line.startsWith("Category:")) category = line.slice(9).trim();
       else if (line.startsWith("Desc:")) desc = line.slice(5).trim();
       else if (line) break;
       i++;
     }
-    return { name, desc, body: lines.slice(i).join("\n") };
+    return { name, desc, category, body: lines.slice(i).join("\n") };
   }
 
   function parseTemplate(text) {
@@ -241,43 +232,15 @@ EXECUTIVE COMMAND INTERFACE[/center]
     return { fields: fields.sort((a, b) => a.pos - b.pos), originalText: text };
   }
 
-  // === OUTPUT GENERATION ===
-  const PENCODE_MAP = {
-    "[b]": "<B>", "[/b]": "</B>", "[i]": "<I>", "[/i]": "</I>",
-    "[u]": "<U>", "[/u]": "</U>", "[large]": '<font size="4">', "[/large]": "</font>",
-    "[small]": '<font size="1">', "[/small]": "</font>", "[center]": "<center>",
-    "[/center]": "</center>", "[br]": "<BR>", "[hr]": "<HR>",
-    "[field]": '<span class="paper_field"></span>', "[jobs]": '<span class="paper_field"></span>',
-    "[h1]": "<H1>", "[/h1]": "</H1>", "[h2]": "<H2>", "[/h2]": "</H2>",
-    "[h3]": "<H3>", "[/h3]": "</H3>", "[*]": "<li>", "[list]": "<ul>", "[/list]": "</ul>",
-    "[table]": '<table border=1 cellspacing=0 cellpadding=3 style="border: 1px solid black;">',
-    "[/table]": "</td></tr></table>", "[grid]": "<table>", "[/grid]": "</td></tr></table>",
-    "[row]": "</td><tr>", "[cell]": "<td>", "[barcode]": '<span class="barcode">║║│║║│││║│║║││║║│║</span>',
-  };
-
-  // Add corporate logos
-  [["scc", "⬢", "SCC"], ["nt", "◆", "NT"], ["zh", "▣", "ZH"], ["idris", "◉", "IDRIS"],
-   ["eridani", "⬟", "ECF"], ["zavod", "▲", "ZAVOD"], ["hp", "⬡", "HEPH"], ["be", "◈", "BE"],
-   ["golden", "◊", "GOLDEN"], ["pvpolice", "★", "PKM"]
-  ].forEach(([name, sym, txt]) => {
-    PENCODE_MAP[`[logo_${name}]`] = `<span class="corp-logo">${sym} ${txt}</span>`;
-    PENCODE_MAP[`[logo_${name}_small]`] = `<span class="corp-logo">${sym}</span>`;
-  });
-
-  const PENCODE_REGEX = new RegExp(Object.keys(PENCODE_MAP).map(utils.escapeRegex).join("|"), "g");
-
-  function pencodeToHtml(text) {
-    if (!text) return "";
-    return text
-      .replace(PENCODE_REGEX, m => PENCODE_MAP[m])
-      .replace(/\[redacted\](.*?)\[\/redacted\]/gs, (_, c) => `<span class="redacted">${"|".repeat(c.length)}</span>`)
-      .replace(/\[color=([^\]]+)\](.*?)\[\/color\]/gs, '<span style="color: $1;">$2</span>')
-      .replace(/\[lang=([^\]]+)\](.*?)\[\/lang\]/gs, '<span class="language" data-lang="$1" title="Language: $1">$2</span>');
-  }
-
-  function generateOutput() {
+  // === OUTPUT GENERATION (MERGED) ===
+  /**
+   * Generate output - unified function that handles both HTML preview and raw output
+   * @param {boolean} updateHtml - Whether to update the HTML preview (default: true)
+   */
+  function generateOutput(updateHtml = true) {
     if (!state.currentTemplate) return;
 
+    // Dynamic placeholders
     const dynamics = {
       "[officername]": state.officerId || "",
       "[roundid]": state.shiftCode || "",
@@ -285,69 +248,26 @@ EXECUTIVE COMMAND INTERFACE[/center]
       "[date]": utils.formatDate(),
     };
 
-    let raw = state.currentTemplate.originalText;
-    let html = raw;
+    const sortedFields = [...state.currentTemplate.fields].sort((a, b) => a.pos - b.pos);
 
-    // Apply dynamic replacements
-    Object.entries(dynamics).forEach(([ph, val]) => {
-      const re = new RegExp(utils.escapeRegex(ph), "g");
-      raw = raw.replace(re, val);
-      html = html.replace(re, val ? `<span class="understood">${val}</span>` : '<span class="paper_field"></span>');
-    });
-
-    // Apply field replacements
-    [...state.currentTemplate.fields].sort((a, b) => a.pos - b.pos).forEach((field, idx) => {
-      const ph = field.type === "job" ? "[jobs]" : "[field]";
-      const val = field.value || "";
-
-      const htmlVal = field.type === "job"
-        ? `<button class="job-button ${val ? "filled" : "empty"}" data-field-id="${field.id}" data-field-index="${idx}" data-field-type="job" data-placeholder="${field.placeholder}" type="button">${val || "Click to Select Assignment"}</button>`
-        : `<span class="paper_field" data-field-id="${field.id}" data-field-index="${idx}" data-field-type="${field.type}" data-placeholder="${field.placeholder}" spellcheck="false">${val}</span>`;
-
-      const rawIdx = raw.indexOf(ph);
-      if (rawIdx !== -1) raw = raw.slice(0, rawIdx) + val + raw.slice(rawIdx + ph.length);
-
-      const htmlIdx = html.indexOf(ph);
-      if (htmlIdx !== -1) html = html.slice(0, htmlIdx) + htmlVal + html.slice(htmlIdx + ph.length);
-    });
-
+    // Generate raw output (always needed)
+    let raw = pencodeEngine.applyDynamics(state.currentTemplate.originalText, dynamics, false);
+    raw = pencodeEngine.applyFieldReplacements(raw, sortedFields, { forHtml: false });
     state.currentRaw = raw;
-    if (dom.previewSurface) {
-      dom.previewSurface.innerHTML = pencodeToHtml(html);
-      setupInlineFieldEvents();
-    }
+
+    // Update terminal surface
     if (dom.terminalSurface) {
       dom.terminalSurface.value = raw;
       dom.terminalSurface.dataset.userEdited = "false";
     }
-    terminal.updateFieldsLock();
-  }
 
-  function updateRawOutput() {
-    if (!state.currentTemplate) return;
-
-    const dynamics = {
-      "[officername]": state.officerId || "",
-      "[roundid]": state.shiftCode || "",
-      "[time]": utils.formatTime(),
-      "[date]": utils.formatDate(),
-    };
-
-    let raw = state.currentTemplate.originalText;
-    Object.entries(dynamics).forEach(([ph, val]) => {
-      raw = raw.replace(new RegExp(utils.escapeRegex(ph), "g"), val);
-    });
-
-    [...state.currentTemplate.fields].sort((a, b) => a.pos - b.pos).forEach(field => {
-      const ph = field.type === "job" ? "[jobs]" : "[field]";
-      const idx = raw.indexOf(ph);
-      if (idx !== -1) raw = raw.slice(0, idx) + (field.value || "") + raw.slice(idx + ph.length);
-    });
-
-    state.currentRaw = raw;
-    if (dom.terminalSurface) {
-      dom.terminalSurface.value = raw;
-      dom.terminalSurface.dataset.userEdited = "false";
+    // Generate and update HTML preview if requested
+    if (updateHtml && dom.previewSurface) {
+      let html = pencodeEngine.applyDynamics(state.currentTemplate.originalText, dynamics, true);
+      html = pencodeEngine.applyFieldReplacements(html, sortedFields, { forHtml: true });
+      dom.previewSurface.innerHTML = pencodeEngine.toHtml(html);
+      setupFieldEventDelegation();
+      terminal.updateFieldsLock();
     }
   }
 
@@ -365,11 +285,11 @@ EXECUTIVE COMMAND INTERFACE[/center]
 
   function saveFieldsToStorage() {
     if (!state.currentTemplate) return;
-    utils.storage.save("fields", state.currentTemplate.fields.map(f => ({ label: f.label, value: f.value, type: f.type || "text" })));
+    storage.save("fields", state.currentTemplate.fields.map(f => ({ label: f.label, value: f.value, type: f.type || "text" })));
   }
 
   function loadSavedFields() {
-    const saved = utils.storage.load("fields");
+    const saved = storage.load("fields");
     if (!saved || !state.currentTemplate) return;
     saved.forEach((s, i) => {
       const field = state.currentTemplate.fields[i];
@@ -377,31 +297,68 @@ EXECUTIVE COMMAND INTERFACE[/center]
     });
   }
 
-  function setupInlineFieldEvents() {
+  // === EVENT DELEGATION FOR FIELDS ===
+  // Debounced handler for field input
+  const debouncedFieldInput = utils.debounce((fieldIndex, content) => {
+    if (state.currentTemplate?.fields[fieldIndex]) {
+      state.currentTemplate.fields[fieldIndex].value = content;
+      updateFieldCounter();
+      generateOutput(false); // Update raw only, not HTML
+    }
+  }, 150);
+
+  /**
+   * Setup event delegation for inline fields - single listeners on parent
+   */
+  function setupFieldEventDelegation() {
     if (!dom.previewSurface) return;
 
-    // Editable text fields
-    const handleInput = utils.debounce((e, idx) => {
-      if (state.currentTemplate?.fields[idx]) {
-        state.currentTemplate.fields[idx].value = e.target.textContent || "";
-        updateFieldCounter();
-        updateRawOutput();
-      }
-    }, 150);
+    // Remove old listeners by cloning (clean slate approach for delegation)
+    // This is only needed on initial setup, not on every generateOutput call
+    // Since we're using delegation, we only need to set this up once
+  }
 
-    dom.previewSurface.querySelectorAll(".paper_field[data-field-id]").forEach(field => {
-      const idx = parseInt(field.dataset.fieldIndex, 10);
-      field.addEventListener("input", (e) => handleInput(e, idx));
-      field.addEventListener("focus", (e) => { e.target.classList.add("focused"); if (!e.target.textContent.trim()) e.target.textContent = ""; });
-      field.addEventListener("blur", (e) => { e.target.classList.remove("focused"); if (!e.target.textContent.trim()) e.target.textContent = ""; saveFieldsToStorage(); });
+  /**
+   * Initialize event delegation on the preview surface (called once)
+   */
+  function initializeFieldDelegation() {
+    if (!dom.previewSurface) return;
+
+    // Delegated click handler for job buttons
+    dom.previewSurface.addEventListener("click", (e) => {
+      const jobBtn = e.target.closest('button.job-button[data-field-type="job"]');
+      if (jobBtn) {
+        e.preventDefault();
+        window.SCC_JOBS?.openJobSelector?.(jobBtn.dataset.fieldId);
+      }
     });
 
-    // Job buttons
-    dom.previewSurface.querySelectorAll('button.job-button[data-field-type="job"]').forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        window.SCC_JOBS?.openJobSelector?.(btn.dataset.fieldId);
-      });
+    // Delegated input handler for text fields
+    dom.previewSurface.addEventListener("input", (e) => {
+      const field = e.target.closest('.paper_field[data-field-id]');
+      if (field) {
+        const idx = parseInt(field.dataset.fieldIndex, 10);
+        debouncedFieldInput(idx, field.textContent || "");
+      }
+    });
+
+    // Delegated focus handler
+    dom.previewSurface.addEventListener("focusin", (e) => {
+      const field = e.target.closest('.paper_field[data-field-id]');
+      if (field) {
+        field.classList.add("focused");
+        if (!field.textContent.trim()) field.textContent = "";
+      }
+    });
+
+    // Delegated blur handler
+    dom.previewSurface.addEventListener("focusout", (e) => {
+      const field = e.target.closest('.paper_field[data-field-id]');
+      if (field) {
+        field.classList.remove("focused");
+        if (!field.textContent.trim()) field.textContent = "";
+        saveFieldsToStorage();
+      }
     });
   }
 
@@ -410,8 +367,7 @@ EXECUTIVE COMMAND INTERFACE[/center]
     dom.terminalSurface.dataset.userEdited = "true";
     state.currentRaw = dom.terminalSurface.value || "";
     if (dom.previewSurface) {
-      dom.previewSurface.innerHTML = pencodeToHtml(state.currentRaw);
-      setupInlineFieldEvents();
+      dom.previewSurface.innerHTML = pencodeEngine.toHtml(state.currentRaw);
       terminal.updateFieldsLock();
     }
   }
@@ -510,23 +466,25 @@ EXECUTIVE COMMAND INTERFACE[/center]
     }
 
     // Data cleanup
-    const clear = () => utils.storage.clear();
+    const clear = () => storage.clear();
     ["beforeunload", "unload"].forEach(e => window.addEventListener(e, clear));
     document.addEventListener("visibilitychange", () => document.hidden && clear());
   }
 
   // === INITIALIZATION ===
   async function initialize() {
-    domIds.forEach(id => dom[id] = document.getElementById(id));
+    dom = createDomCache(domIds);
 
     // Load saved auth
-    const saved = { officer: utils.storage.load("officer"), shift: utils.storage.load("shift") };
-    if (saved.officer) state.officerId = saved.officer;
-    if (saved.shift) state.shiftCode = saved.shift;
+    const savedOfficer = storage.load("officer");
+    const savedShift = storage.load("shift");
+    if (savedOfficer) state.officerId = savedOfficer;
+    if (savedShift) state.shiftCode = savedShift;
 
     terminal.initializeInputs();
-    terminal.startSystemClock();
+    createSystemClock("galacticTime");
     setupEventHandlers();
+    initializeFieldDelegation();
     scrollSync.init();
     await templates.loadList();
 
@@ -534,7 +492,7 @@ EXECUTIVE COMMAND INTERFACE[/center]
     setInterval(() => {
       if (dom.commandCipher) {
         dom.commandCipher.value = state.shiftCode = "";
-        utils.storage.save("shift", "");
+        storage.save("shift", "");
         terminal.updateFieldsLock();
       }
     }, CONFIG.shiftTimeout);
@@ -549,7 +507,7 @@ EXECUTIVE COMMAND INTERFACE[/center]
     getFieldValue: (fieldId) => state.currentTemplate?.fields.find(f => f.id === fieldId)?.value || "",
     isFieldsLocked: () => terminal.isFieldsLocked(),
     clearData() {
-      utils.storage.clear();
+      storage.clear();
       Object.assign(state, { officerId: null, shiftCode: "", currentTemplate: null, currentRaw: "", fieldsFilled: 0, totalFields: 0 });
       ["executiveAuth", "commandCipher"].forEach(k => dom[k] && (dom[k].value = ""));
       if (dom.previewSurface) dom.previewSurface.innerHTML = "";

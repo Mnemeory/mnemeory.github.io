@@ -1,4 +1,5 @@
 Name: Temporary Residential Access Authorization
+Category: Security
 Desc: Grant time-limited access to Casa Envidiable for vetted visitors, staff, or contractors
 [small]
 [center][b][logo_idris]

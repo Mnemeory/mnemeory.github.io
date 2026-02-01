@@ -1,4 +1,5 @@
 Name: SCC Service Rationing Guidelines
+Category: Service
 Desc: Flyer to outline restrictions due to rationing.
 [center][logo_scc]
 

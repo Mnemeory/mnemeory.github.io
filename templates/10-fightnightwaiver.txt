@@ -1,4 +1,5 @@
 Name: SCCV Horizon Fight Night Liability Waiver
+Category: Service
 Desc: Waiver for voluntary participation in Fight Night bouts and related activities.
 [center][logo_scc]
 

@@ -1,6 +1,9 @@
 (function () {
   "use strict";
 
+  // === IMPORTS FROM SHARED MODULES ===
+  const { utils, createStorageManager, createSystemClock, createDomCache } = window.SCC_SHARED;
+
   // === CONFIGURATION ===
   const CONFIG = {
     storage: { prefix: "scc_calculator_" },
@@ -18,32 +21,54 @@
     nextBetId: 1,
   };
 
+  // Initialize storage manager
+  const storage = createStorageManager(CONFIG.storage.prefix);
+
   // DOM element cache
-  const dom = {};
+  let dom = {};
 
-  // === UTILITIES ===
-  const utils = {
-    formatTime: () => new Date().toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" }),
+  // === BET TABLE MANAGER CLASS ===
+  class BetTableManager {
+    constructor(tbodyElement, onRemoveBet) {
+      this.tbody = tbodyElement;
+      this.onRemove = onRemoveBet;
+      
+      // Single delegated event listener for all remove buttons
+      if (this.tbody) {
+        this.tbody.addEventListener("click", this.handleClick.bind(this));
+      }
+    }
 
-    storage: {
-      key: (k) => CONFIG.storage.prefix + k,
-      save(key, value) {
-        try { localStorage.setItem(this.key(key), JSON.stringify(value)); }
-        catch (e) { console.warn("Storage save failed:", e); }
-      },
-      load(key) {
-        try { return JSON.parse(localStorage.getItem(this.key(key))); }
-        catch { return null; }
-      },
-      clear() {
-        Object.keys(localStorage)
-          .filter(k => k.startsWith(CONFIG.storage.prefix))
-          .forEach(k => localStorage.removeItem(k));
-      },
-    },
+    handleClick(e) {
+      const btn = e.target.closest(".calc-remove-btn[data-bet-id]");
+      if (btn) {
+        const betId = Number(btn.dataset.betId);
+        this.onRemove(betId);
+      }
+    }
 
-    num: (id) => Math.max(0, Number(dom[id]?.value) || 0),
-  };
+    render(bets, nameA, nameB) {
+      if (!this.tbody) return;
+
+      if (bets.length === 0) {
+        this.tbody.innerHTML = '<tr class="calc-empty-row"><td colspan="4">No bets recorded</td></tr>';
+        return;
+      }
+
+      this.tbody.innerHTML = bets.map(bet => `
+        <tr data-bet-id="${bet.id}">
+          <td>${utils.escapeHtml(bet.bettor)}</td>
+          <td class="${bet.fighter === 'A' ? 'fighter-a' : 'fighter-b'}">${bet.fighter === 'A' ? utils.escapeHtml(nameA) : utils.escapeHtml(nameB)}</td>
+          <td class="amount">${bet.amount}</td>
+          <td><button type="button" class="calc-remove-btn" data-bet-id="${bet.id}">✕</button></td>
+        </tr>
+      `).join("");
+      // No need to attach individual listeners - delegation handles it
+    }
+  }
+
+  // Bet table manager instance (initialized in initialize())
+  let betTableManager = null;
 
   // === BET MANAGEMENT ===
   function addBet() {
@@ -94,43 +119,16 @@
   }
 
   function renderBetTable() {
-    const tbody = dom.betTableBody;
-    if (!tbody) return;
-
-    if (state.bets.length === 0) {
-      tbody.innerHTML = '<tr class="calc-empty-row"><td colspan="4">No bets recorded</td></tr>';
-      return;
-    }
-
     const nameA = dom.nameA?.value.trim() || "Fighter A";
     const nameB = dom.nameB?.value.trim() || "Fighter B";
-
-    tbody.innerHTML = state.bets.map(bet => `
-      <tr data-bet-id="${bet.id}">
-        <td>${escapeHtml(bet.bettor)}</td>
-        <td class="${bet.fighter === 'A' ? 'fighter-a' : 'fighter-b'}">${bet.fighter === 'A' ? escapeHtml(nameA) : escapeHtml(nameB)}</td>
-        <td class="amount">${bet.amount}</td>
-        <td><button type="button" class="calc-remove-btn" data-bet-id="${bet.id}">✕</button></td>
-      </tr>
-    `).join("");
-
-    // Attach remove handlers
-    tbody.querySelectorAll(".calc-remove-btn").forEach(btn => {
-      btn.addEventListener("click", () => removeBet(Number(btn.dataset.betId)));
-    });
-  }
-
-  function escapeHtml(str) {
-    const div = document.createElement("div");
-    div.textContent = str;
-    return div.innerHTML;
+    betTableManager?.render(state.bets, nameA, nameB);
   }
 
   // === CALCULATOR LOGIC ===
   function calculate() {
     const nameA = dom.nameA?.value.trim() || "Fighter A";
     const nameB = dom.nameB?.value.trim() || "Fighter B";
-    const cut = utils.num("cut");
+    const cut = utils.numFromElement(dom.cut);
     const winner = dom.winner?.value || "A";
 
     // Calculate totals from bets
@@ -188,7 +186,7 @@
     if (dom.outPer1) dom.outPer1.textContent = winBets > 0 ? per1.toFixed(4) : "N/A";
 
     // Quick lookup calculation
-    const lookupBet = utils.num("lookupBet");
+    const lookupBet = utils.numFromElement(dom.lookupBet);
     state.lookupBet = lookupBet;
     const lookupPayout = winBets > 0 ? (lookupBet * per1).toFixed(2) : "N/A";
     if (dom.lookupResult) dom.lookupResult.value = lookupPayout;
@@ -224,7 +222,7 @@
 
   // === STATE PERSISTENCE ===
   function saveState() {
-    utils.storage.save("state", {
+    storage.save("state", {
       nameA: state.nameA,
       nameB: state.nameB,
       cut: state.cut,
@@ -236,7 +234,7 @@
   }
 
   function loadState() {
-    const saved = utils.storage.load("state");
+    const saved = storage.load("state");
     if (!saved) return;
 
     Object.assign(state, saved);
@@ -249,18 +247,9 @@
     if (dom.lookupBet) dom.lookupBet.value = state.lookupBet;
   }
 
-  // === SYSTEM CLOCK ===
-  function startSystemClock() {
-    const update = () => {
-      const el = document.getElementById("galacticTime");
-      if (el) el.textContent = utils.formatTime();
-    };
-    update();
-    setInterval(update, 1000);
-  }
-
   // === EVENT SETUP ===
   function setupEventHandlers() {
+    // Input change handlers for calculator fields
     CONFIG.inputIds.forEach(id => {
       if (dom[id]) {
         dom[id].addEventListener("input", calculate);
@@ -295,7 +284,10 @@
       "betTableBody", "totalA", "totalB", "totalALabel", "totalBLabel",
       "oddsA", "oddsB", "oddsNameA", "oddsNameB"
     ];
-    domIds.forEach(id => dom[id] = document.getElementById(id));
+    dom = createDomCache(domIds);
+
+    // Initialize bet table manager with delegation
+    betTableManager = new BetTableManager(dom.betTableBody, removeBet);
 
     // Load saved state
     loadState();
@@ -304,7 +296,7 @@
     setupEventHandlers();
 
     // Start system clock
-    startSystemClock();
+    createSystemClock("galacticTime");
 
     // Initial render and calculation
     renderBetTable();
@@ -338,7 +330,7 @@
       calculate();
       saveState();
     },
-    clearStorage: () => utils.storage.clear(),
+    clearStorage: () => storage.clear(),
   };
 
   // Start
