@@ -108,6 +108,11 @@
           })
         )).filter(Boolean);
 
+        state.templates.sort((a, b) => {
+          const cat = (a.category || "Uncategorized").localeCompare(b.category || "Uncategorized");
+          return cat !== 0 ? cat : (a.name || "").localeCompare(b.name || "");
+        });
+
         this.populateSelector();
         if (state.templates.length) await this.load(state.templates[0].file, state.templates[0].description);
       } catch (err) {
