@@ -1,0 +1,41 @@
+Name: Alora Xi'Troj-Ormeq's Business Card
+Category: Nralakk Federation
+Desc: Alora's Business Card
+[small][center][hr][logo_nralakk_small]
+[b]Second Nralakk Federation
+Nralakk Federation Representative Corps 
+Diplomatic Mission to the Stellar Corporate Conglomerate[/b]
+
+[/small]Iqi Alora Xi'troj-Ormeq, Qu'vesi
+[i]First Consular Representative[/i][small]
+
+
+Representative Office [field]
+Bridge
+SCCV Horizon
+
+[center][u]NET:[/u] axtormeq@scc.nf
+[u]HOLOPAD:[/u] Representative Office [field]
+[u]FAX:[/u] Representative Office [field]
+[/center]
+
+[center][table][cell][lang=k][b][center][u]Citizen Services[/u][/b][/center]
+[u]ROUTINE[/u][list][*]Passport - Applications and Renewals; [*]Birth Abroad; [*]Notarial Services; [*]Benefits; [*]Voting; [*]Documentation.[/list][/list] [u]EMERGENCY[/u][list][*]Passport - Lost or Stolen; [*]Victim of Crime; [*]Arrest and Detention; [*]Emergency Financial Assistance; [*]Evacuations; [*]Interspurian Parental Child Abduction.[/lang][cell][b][u]Areas of Assistance[/u][/b]
+
+Consular Affairs
+Economic Affairs
+Political Affairs
+Legal Affairs
+Medical Affairs
+
+
+
+[b][u]Classifications[/u][/b]
+
+Medical Attache
+Receiver
+Psionic Guide
+
+
+
+[/table][hr]

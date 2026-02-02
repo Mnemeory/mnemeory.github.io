@@ -31,11 +31,9 @@
     shiftCode: "",
   };
 
-  // Initialize storage manager and pencode engine
   const storage = createStorageManager(CONFIG.storage.prefix);
   const pencodeEngine = new PencodeEngine();
 
-  // DOM element cache
   let dom = {};
   const domIds = [
     "templateMatrix", "templateMetadata", "previewSurface", "terminalSurface",
@@ -171,7 +169,6 @@ EXECUTIVE COMMAND INTERFACE[/center]
     populateSelector() {
       if (!dom.templateMatrix) return;
 
-      // Group templates by category
       const groups = {};
       state.templates.forEach(t => {
         const cat = t.category || "Uncategorized";
@@ -244,7 +241,6 @@ EXECUTIVE COMMAND INTERFACE[/center]
   function generateOutput(updateHtml = true) {
     if (!state.currentTemplate) return;
 
-    // Dynamic placeholders
     const dynamics = {
       "[officername]": state.officerId || "",
       "[roundid]": state.shiftCode || "",
@@ -254,18 +250,15 @@ EXECUTIVE COMMAND INTERFACE[/center]
 
     const sortedFields = [...state.currentTemplate.fields].sort((a, b) => a.pos - b.pos);
 
-    // Generate raw output (always needed); keep [field]/[jobs] visible in terminal when empty
     let raw = pencodeEngine.applyDynamics(state.currentTemplate.originalText, dynamics, false);
     raw = pencodeEngine.applyFieldReplacements(raw, sortedFields, { forHtml: false, keepPlaceholderIfEmpty: true });
     state.currentRaw = raw;
 
-    // Update terminal surface
     if (dom.terminalSurface) {
       dom.terminalSurface.value = raw;
       dom.terminalSurface.dataset.userEdited = "false";
     }
 
-    // Generate and update HTML preview if requested
     if (updateHtml && dom.previewSurface) {
       let html = pencodeEngine.applyDynamics(state.currentTemplate.originalText, dynamics, true);
       html = pencodeEngine.applyFieldReplacements(html, sortedFields, { forHtml: true });
@@ -302,12 +295,11 @@ EXECUTIVE COMMAND INTERFACE[/center]
   }
 
   // === EVENT DELEGATION FOR FIELDS ===
-  // Debounced handler for field input
   const debouncedFieldInput = utils.debounce((fieldIndex, content) => {
     if (state.currentTemplate?.fields[fieldIndex]) {
       state.currentTemplate.fields[fieldIndex].value = content;
       updateFieldCounter();
-      generateOutput(false); // Update raw only, not HTML
+      generateOutput(false);
     }
   }, 150);
 
@@ -317,9 +309,6 @@ EXECUTIVE COMMAND INTERFACE[/center]
   function setupFieldEventDelegation() {
     if (!dom.previewSurface) return;
 
-    // Remove old listeners by cloning (clean slate approach for delegation)
-    // This is only needed on initial setup, not on every generateOutput call
-    // Since we're using delegation, we only need to set this up once
   }
 
   /**
@@ -328,7 +317,6 @@ EXECUTIVE COMMAND INTERFACE[/center]
   function initializeFieldDelegation() {
     if (!dom.previewSurface) return;
 
-    // Delegated click handler for job buttons
     dom.previewSurface.addEventListener("click", (e) => {
       const jobBtn = e.target.closest('button.job-button[data-field-type="job"]');
       if (jobBtn) {
@@ -337,7 +325,6 @@ EXECUTIVE COMMAND INTERFACE[/center]
       }
     });
 
-    // Delegated input handler for text fields
     dom.previewSurface.addEventListener("input", (e) => {
       const field = e.target.closest('.paper_field[data-field-id]');
       if (field) {
@@ -346,7 +333,6 @@ EXECUTIVE COMMAND INTERFACE[/center]
       }
     });
 
-    // Delegated focus handler
     dom.previewSurface.addEventListener("focusin", (e) => {
       const field = e.target.closest('.paper_field[data-field-id]');
       if (field) {
@@ -355,7 +341,6 @@ EXECUTIVE COMMAND INTERFACE[/center]
       }
     });
 
-    // Delegated blur handler
     dom.previewSurface.addEventListener("focusout", (e) => {
       const field = e.target.closest('.paper_field[data-field-id]');
       if (field) {
@@ -419,7 +404,6 @@ EXECUTIVE COMMAND INTERFACE[/center]
     link.click();
     URL.revokeObjectURL(url);
 
-    // Clear fields
     state.currentTemplate?.fields?.forEach(f => f.value = "");
     updateFieldCounter();
     generateOutput();
@@ -479,7 +463,6 @@ EXECUTIVE COMMAND INTERFACE[/center]
   async function initialize() {
     dom = createDomCache(domIds);
 
-    // Load saved auth
     const savedOfficer = storage.load("officer");
     const savedShift = storage.load("shift");
     if (savedOfficer) state.officerId = savedOfficer;
@@ -492,7 +475,6 @@ EXECUTIVE COMMAND INTERFACE[/center]
     scrollSync.init();
     await templates.loadList();
 
-    // Auto-clear shift
     setInterval(() => {
       if (dom.commandShift) {
         dom.commandShift.value = state.shiftCode = "";

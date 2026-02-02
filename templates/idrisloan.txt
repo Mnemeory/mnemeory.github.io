@@ -1,5 +1,5 @@
-Name: Idris Loan
-Category: Idris
+Name: Loan Agreement
+Category: Idris Incorporated
 Desc: A loan from Idris.
 [small]
 [center][b][logo_idris]

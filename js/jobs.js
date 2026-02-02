@@ -71,7 +71,6 @@
         </div>
       </div>`).join("");
 
-    // Event delegation for jobs and category headers
     container.addEventListener("click", (e) => {
       const jobItem = e.target.closest(".job-item");
       if (jobItem) {
@@ -174,13 +173,11 @@
     state.currentFieldId = fieldId;
     state.selectedJobs = [];
 
-    // Get current value
     const current = window.SCC_TERMINAL?.getFieldValue(fieldId);
     if (current) state.selectedJobs = current.split(",").map(s => s.trim()).filter(Boolean);
 
     createModal();
 
-    // Update selection UI
     setTimeout(() => {
       document.querySelectorAll(".job-item").forEach(el => {
         el.classList.toggle("selected", state.selectedJobs.includes(el.dataset.jobTitle));

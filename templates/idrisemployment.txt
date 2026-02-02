@@ -1,0 +1,78 @@
+Name: Employment Contract
+Category: Idris Incorporated
+Desc: An Idris Incorporated employment contract
+[small]
+[center][b][logo_idris_small]
+Idris Incorporated[/b]
+[i]Astronomical Figures. Unlimited Power.[/i][/center]
+[center][h2]II-ET-[field] - EMPLOYMENT TRANSFER AGREEMENT[/h2][/center]
+
+[small][b]NOTICE:[/b] This agreement documents the transfer of employment to Idris Incorporated ("Idris"). By signing, the parties confirm the effective date, position assignment, pay responsibility, and basic terms of employment. This is an administrative transfer form and does not guarantee continued employment unless explicitly stated.[/small]
+
+[hr][b]1. Parties & Identification[/b]
+[table]
+[row][cell][b]Receiving Employer:[/b] Idris Incorporated
+[cell][b]Contract ID:[/b] II-ET-[field]
+[cell][b]Date/Time:[/b] [date] - [time]
+[cell][b]Shift / Round:[/b] [roundid]
+[row][cell][b]Current Employer:[/b] [field]
+[cell][b]Current Employer Rep:[/b] [field]
+[cell][b]Rep Title:[/b] [field]
+[cell][b]Current Employer Ref #:[/b] [field]
+[row][cell][b]Employee (Legal Name):[/b] [field]
+[cell][b]Employee ID / File #:[/b] [field]
+[cell][b]Contact Routing:[/b] [field]
+[cell][b]Posting / Location:[/b] [field]
+[/table]
+
+[hr][b]2. Transfer[/b]
+[table]
+[row][cell][b]Effective Date:[/b] [date]
+[cell][b]Effective Time:[/b] [time]
+[cell][b]Transfer Type:[/b] [field] (Permanent / Temporary)
+[cell][b]Notes (Optional):[/b] [field]
+[/table]
+
+[hr][b]3. Assignment[/b]
+[table]
+[row][cell][b]Job Title / Role:[/b] [field]
+[cell][b]Department / Desk:[/b] [field]
+[cell][b]Supervisor:[/b] [field]
+[cell][b]Work Schedule / Shift:[/b] [field]
+[/table]
+
+[hr][b]4. Pay[/b]
+[table]
+[row][cell][b]Pay Rate / Salary:[/b] [field]
+[cell][b]Pay Schedule:[/b] [field]
+[cell][b]Paying Entity:[/b] Idris Incorporated (effective on transfer date)
+[cell][b]First Pay Date (if known):[/b] [field]
+[/table]
+
+[hr][b]5. Basic Terms[/b]
+[list]
+[*]Employee will follow Idris Incorporated policies and lawful directives effective upon transfer.
+[*]Any existing confidentiality obligations remain in effect unless replaced in writing by Idris Incorporated.
+[*]Employment Status: [field] (At-will / Fixed term until [date])
+[*]Nothing in this agreement guarantees continued employment.
+[/list]
+
+[hr][b]6. Signatures & Acknowledgement[/b]
+[small]By signing, the parties acknowledge the transfer terms above and authorize record updates effective on the stated date/time.[/small]
+[table]
+[row][cell][b]Current Employer Representative:[/b] [field]
+[cell][b]Signature:[/b] [field]
+[cell][b]Date:[/b] [date]
+[cell][b]Time:[/b] [time]
+[row][cell][b]Idris Incorporated Representative:[/b] [field]
+[cell][b]Signature:[/b] [field]
+[cell][b]Date:[/b] [date]
+[cell][b]Time:[/b] [time]
+[row][cell][b]Employee:[/b] [field]
+[cell][b]Signature:[/b] [field]
+[cell][b]Date:[/b] [date]
+[cell][b]Time:[/b] [time]
+[/table]
+
+[hr][center][barcode][/center]
+[/small]

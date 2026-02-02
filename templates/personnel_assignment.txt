@@ -16,7 +16,7 @@ Chainlink Expeditionary Vessel - SCCV Horizon
 
 [b]Assignment Details[/b]
 [table]
-[row][cell][b]Current Assignment:[/b] [field][cell][b]New Assignment:[/b] [field][cell][b]Effective Start:[/b] [field][cell][b]Type (Perm./Interim):[/b] [field]
+[row][cell][b]Current Assignment:[/b] [jobs][cell][b]New Assignment:[/b] [jobs][cell][b]Effective Start:[/b] [field][cell][b]Type (Perm./Interim):[/b] [field]
 [row][cell][b]Current Salary:[/b] [field][cell][b]New Salary:[/b] [field][cell][b]Area of Responsibility:[/b] [field][cell][b]Operational Sector:[/b] [field]
 [/table]
 

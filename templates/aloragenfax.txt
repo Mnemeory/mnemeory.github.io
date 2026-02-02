@@ -1,0 +1,39 @@
+Name: Federation General Fax
+Category: Nralakk Federation
+Desc: NFed Consular General Fax
+[small]
+[table][cell][lang=k]
+[center][flag_nralakk]
+[large][b]Second Nralakk Federation[/b]
+General Transmission[/center][/large][hr][/large][b]Cycle/Segment Timestamp:[/b] [date]
+
+[b]Origin Node:[/b] [roundid]
+
+[b]Transmitting Officer (Primary Numerical):[/b] Iqi Alora Xi'Troj-Ormeq, Qu'vesi
+
+[b]Officer SCI Rating:[/b] 9.3
+[hr][b]Transmission Priority Level:[/b]
+[list][*][[field]] Priority I - Existential Threat / Immediate Kala Deployment
+
+[*][[field]] Priority II - Severe Risk to Citizen or Consular Authority
+
+[*][[field]] Priority III - Incident Requiring Federation Guidance
+[/list][hr][b]Condensed Report:[/b]
+[[field]]
+
+
+[b]Requested Directive or Intervention:[/b]
+[list][*][[field]] Immediate Kala Response (Qukala / Nlomkala)
+
+[*][[field]] Medical Extraction
+
+[*][[field]] Diplomatic Override / Legal Enforcement
+
+[*][[field]] Sromkala Consultation
+
+[*][[field]] Other: [[field]]
+[/list][hr][b]NOTICE:[/b]
+[i]This transmission has been dispatched via extranational electronic channels. Nlom relay unavailable - psionic fidelity not guaranteed. Content may be subject to interception or alteration prior to archival in Federation registries.[/i]
+[hr][b]Representative Seal and Signature:[/b]
+[field][/lang]
+[/table]

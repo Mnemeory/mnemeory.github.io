@@ -160,19 +160,16 @@ body::after { position: fixed; }
 /* Apply thin scrollbar to scrollable containers */
 .preview-content, 
 .terminal-output, 
-.job-modal-body,
-.calc-bet-table-wrap {
+.job-modal-body {
   scrollbar-width: thin;
   scrollbar-color: var(--glass-border) var(--space-deep);
 }
 
 /* --- Shared Input Styles --- */
-/* Groups: Header Inputs, Job Search, Calculator Inputs */
+/* Groups: Header Inputs, Job Search */
 .header-input,
 .control-select,
-.job-search-input,
-.calc-input,
-.calc-select {
+.job-search-input {
   padding: var(--space-unit) calc(var(--space-unit) * 1.5);
   font-family: var(--font-primary);
   font-size: 0.875rem;
@@ -184,28 +181,17 @@ body::after { position: fixed; }
   width: auto; /* Overridden where needed */
 }
 
-/* Specific Font Overrides for Calculator */
-.calc-input, .calc-select {
-  width: 100%;
-  font-family: var(--font-mono);
-  font-size: 0.95rem;
-}
-
 /* Shared Input States (Hover/Focus) */
 .header-input:hover,
 .control-select:hover,
-.job-search-input:hover,
-.calc-input:hover,
-.calc-select:hover {
+.job-search-input:hover {
   border-color: var(--stellar-blue);
   background: var(--interact-blue-subtle);
 }
 
 .header-input:focus,
 .control-select:focus,
-.job-search-input:focus,
-.calc-input:focus,
-.calc-select:focus {
+.job-search-input:focus {
   outline: none;
   border-color: var(--stellar-gold);
   background: var(--interact-gold-medium);
@@ -213,8 +199,7 @@ body::after { position: fixed; }
 }
 
 .header-input::placeholder,
-.job-search-input::placeholder,
-.calc-input::placeholder {
+.job-search-input::placeholder {
   color: var(--text-muted);
   font-style: italic;
 }
@@ -227,15 +212,13 @@ body::after { position: fixed; }
   opacity: 0.6;
 }
 
-.control-select option,
-.calc-select option {
+.control-select option {
   background: var(--space-medium);
   color: var(--text-primary);
 }
 
 /* Category group labels in dropdowns */
-.control-select optgroup,
-.calc-select optgroup {
+.control-select optgroup {
   background: var(--space-deep);
   color: var(--stellar-gold);
   font-weight: 600;
@@ -243,8 +226,7 @@ body::after { position: fixed; }
   padding: 4px 0;
 }
 
-.control-select optgroup option,
-.calc-select optgroup option {
+.control-select optgroup option {
   background: var(--space-medium);
   color: var(--text-primary);
   font-weight: 400;
@@ -837,11 +819,12 @@ body::after { position: fixed; }
   margin: 0;
 }
 
-.job-modal-close,
-.calc-remove-btn {
-  width: 32px; height: 32px;
+.job-modal-close {
+  width: 32px;
+  height: 32px;
   padding: 0;
   font-family: var(--font-primary);
+  font-size: 1.2rem;
   color: var(--text-secondary);
   background: transparent;
   border: 1px solid var(--glass-border);
@@ -853,11 +836,7 @@ body::after { position: fixed; }
   transition: all var(--transition-fast);
 }
 
-.job-modal-close { font-size: 1.2rem; }
-.calc-remove-btn { width: 20px; height: 20px; font-size: 0.7rem; color: var(--text-muted); border-color: transparent; }
-
-.job-modal-close:hover,
-.calc-remove-btn:hover {
+.job-modal-close:hover {
   color: var(--state-error);
   border-color: var(--state-error);
   background: var(--interact-error-subtle);
@@ -970,9 +949,8 @@ body::after { position: fixed; }
 
 .job-modal-actions { display: flex; gap: var(--space-2); }
 
-/* Job & Calc Action Buttons */
-.job-btn,
-.calc-btn {
+/* Job Action Buttons */
+.job-btn {
   padding: calc(var(--space-unit) * 1.5) var(--space-3);
   font-family: var(--font-primary);
   font-size: 0.75rem;
@@ -984,23 +962,20 @@ body::after { position: fixed; }
   transition: all var(--transition-fast);
 }
 
-.calc-btn { padding: var(--space-unit) var(--space-3); flex: 1; }
-
-.job-btn-primary, .calc-btn-primary {
+.job-btn-primary {
   color: var(--text-primary);
   background: var(--stellar-gold);
   border: 1px solid var(--stellar-gold);
 }
-.calc-btn-primary { color: var(--space-void); } /* Specific contrast fix */
 
-.job-btn-primary:hover, .calc-btn-primary:hover {
+.job-btn-primary:hover {
   background: var(--stellar-cyan);
   border-color: var(--stellar-cyan);
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(107, 184, 212, 0.3);
 }
 
-.job-btn-secondary, .calc-btn-secondary {
+.job-btn-secondary {
   color: var(--text-secondary);
   background: transparent;
   border: 1px solid var(--glass-border);
@@ -1012,162 +987,12 @@ body::after { position: fixed; }
   background: var(--interact-blue-medium);
   transform: translateY(-1px);
 }
-.calc-btn-secondary:hover {
-  color: var(--text-primary);
-  border-color: var(--state-error);
-  background: var(--interact-error-subtle);
+
+.job-btn:active {
+  transform: translateY(0);
 }
 
-.job-btn:active, .calc-btn:active { transform: translateY(0); }
-
-/* === 10. CALCULATOR MODULE === */
-.calculator-main {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: var(--space-4);
-  flex: 1;
-  overflow-y: auto;
-}
-
-.calculator-panel { width: 100%; max-width: 600px; }
-.calculator-content { padding: var(--space-3); }
-
-.calc-section { margin-bottom: var(--space-4); }
-.calc-section:last-child { margin-bottom: 0; }
-
-.calc-section-title {
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: var(--space-2);
-}
-
-.calc-row {
-  display: flex;
-  gap: var(--space-3);
-  margin-bottom: var(--space-2);
-}
-.calc-row:last-child { margin-bottom: 0; }
-
-.calc-row-3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: var(--space-3); }
-
-.calc-field { flex: 1; }
-
-.calc-label {
-  display: block;
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: calc(var(--space-unit) * 0.75);
-}
-
-/* Result Input Specifics */
-.calc-result-input {
-  background: var(--surface-abyss);
-  color: var(--state-success);
-  font-weight: 600;
-  cursor: default;
-}
-.calc-result-input:hover,
-.calc-result-input:focus {
-  background: var(--surface-abyss);
-  border-color: var(--state-success);
-  box-shadow: 0 0 0 2px var(--interact-success-medium);
-}
-
-/* Output Box */
-.calc-output {
-  background: var(--surface-raised);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--border-radius);
-  padding: var(--space-2);
-}
-
-.calc-output-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-unit) var(--space-2);
-  border-bottom: 1px solid var(--border-subtle);
-}
-.calc-output-row:last-child { border-bottom: none; }
-
-.calc-output-label { font-size: 0.8rem; color: var(--text-muted); }
-.calc-output-value { font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-primary); }
-
-.calc-winner { color: var(--stellar-gold); font-weight: 600; }
-.calc-highlight { color: var(--state-success); font-weight: 700; }
-
-.calc-highlight-row {
-  background: var(--interact-success-subtle);
-  border-radius: var(--border-radius);
-  margin-top: var(--space-unit);
-}
-.calc-highlight-row .calc-output-label { color: var(--state-success); font-weight: 500; }
-
-/* Betting & Odds */
-.calc-section-header {
-  display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);
-}
-.calc-section-header .calc-section-title { margin-bottom: 0; }
-
-.calc-bet-totals {
-  display: flex; gap: var(--space-3); font-family: var(--font-mono); font-size: 0.8rem;
-}
-.calc-total-a { color: var(--stellar-cyan); }
-.calc-total-b { color: var(--stellar-gold); }
-
-.calc-bet-table-wrap {
-  background: var(--surface-raised);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--border-radius);
-  overflow: hidden;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.calc-bet-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-.calc-bet-table thead { position: sticky; top: 0; background: rgba(30, 41, 67, 0.95); z-index: 1; }
-.calc-bet-table th {
-  padding: var(--space-unit) var(--space-2);
-  font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
-  color: var(--text-muted); text-align: left;
-  border-bottom: 1px solid var(--glass-border);
-}
-.calc-bet-table th:last-child { width: 30px; }
-.calc-bet-table td {
-  padding: calc(var(--space-unit) * 0.75) var(--space-2);
-  border-bottom: 1px solid var(--border-subtle);
-  color: var(--text-primary);
-}
-.calc-bet-table tr:last-child td { border-bottom: none; }
-.calc-bet-table .fighter-a { color: var(--stellar-cyan); font-weight: 500; }
-.calc-bet-table .fighter-b { color: var(--stellar-gold); font-weight: 500; }
-.calc-bet-table .amount { font-family: var(--font-mono); text-align: right; }
-.calc-empty-row td { text-align: center; color: var(--text-muted); font-style: italic; padding: var(--space-3); }
-
-.calc-odds { display: flex; gap: var(--space-3); }
-.calc-odds-fighter {
-  flex: 1; display: flex; flex-direction: column; align-items: center;
-  padding: var(--space-2) var(--space-3);
-  background: var(--surface-raised);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--border-radius);
-}
-.calc-odds-name {
-  font-size: 0.7rem; font-weight: 500; color: var(--text-muted);
-  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: calc(var(--space-unit) * 0.5);
-}
-.calc-odds-value { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
-.calc-odds-value.odds-favorite { color: var(--stellar-cyan); }
-.calc-odds-value.odds-underdog { color: var(--stellar-gold); }
-
-/* === 11. UTILITIES & ANIMATIONS === */
+/* === 10. UTILITIES & ANIMATIONS === */
 .alert-level-green { color: var(--state-success) !important; }
 .alert-level-blue { color: var(--state-info) !important; }
 .alert-level-yellow { color: var(--state-warning) !important; }
@@ -1189,7 +1014,7 @@ body::after { position: fixed; }
   0%, 100% { opacity: 1; } 50% { opacity: 0.6; }
 }
 
-/* === 12. PRINT STYLES === */
+/* === 11. PRINT STYLES === */
 @media print {
   body::before, body::after, .template-bar, .quick-actions { display: none !important; }
   .terminal-main { display: block; }

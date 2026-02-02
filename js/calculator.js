@@ -7,24 +7,25 @@
   // === CONFIGURATION ===
   const CONFIG = {
     storage: { prefix: "scc_calculator_" },
-    inputIds: ["nameA", "nameB", "cut", "winner", "lookupBet"],
+    inputIds: ["nameA", "nameB", "cut", "winner", "lookupBet", "roundNum"],
   };
 
   // === STATE ===
   const state = {
+    roundNum: 1,
     nameA: "Fighter A",
     nameB: "Fighter B",
     cut: 0,
-    winner: "A",
+    winner: "",
     lookupBet: 10,
     bets: [], // Array of { id, bettor, fighter, amount }
     nextBetId: 1,
+    event: { location: "", clerk: "", firstBell: "", betClose: "", serviceLead: "" },
+    savedRounds: [],
   };
 
-  // Initialize storage manager
   const storage = createStorageManager(CONFIG.storage.prefix);
 
-  // DOM element cache
   let dom = {};
 
   // === BET TABLE MANAGER CLASS ===
@@ -33,7 +34,6 @@
       this.tbody = tbodyElement;
       this.onRemove = onRemoveBet;
       
-      // Single delegated event listener for all remove buttons
       if (this.tbody) {
         this.tbody.addEventListener("click", this.handleClick.bind(this));
       }
@@ -63,11 +63,9 @@
           <td><button type="button" class="calc-remove-btn" data-bet-id="${bet.id}">✕</button></td>
         </tr>
       `).join("");
-      // No need to attach individual listeners - delegation handles it
     }
   }
 
-  // Bet table manager instance (initialized in initialize())
   let betTableManager = null;
 
   // === BET MANAGEMENT ===
@@ -92,7 +90,6 @@
       amount,
     });
 
-    // Clear input and refocus
     if (dom.bettor) dom.bettor.value = "";
     if (dom.betAmount) dom.betAmount.value = "10";
     dom.bettor?.focus();
@@ -129,43 +126,37 @@
     const nameA = dom.nameA?.value.trim() || "Fighter A";
     const nameB = dom.nameB?.value.trim() || "Fighter B";
     const cut = utils.numFromElement(dom.cut);
-    const winner = dom.winner?.value || "A";
+    const winner = dom.winner?.value || "";
+    const roundNum = Number(dom.roundNum?.value) || 1;
 
-    // Calculate totals from bets
     const betsA = state.bets.filter(b => b.fighter === "A").reduce((sum, b) => sum + b.amount, 0);
     const betsB = state.bets.filter(b => b.fighter === "B").reduce((sum, b) => sum + b.amount, 0);
 
-    // Update state
-    Object.assign(state, { nameA, nameB, cut, winner });
+    Object.assign(state, { nameA, nameB, cut, winner, roundNum });
 
-    // Update dropdown labels
     if (dom.winner) {
-      dom.winner.options[0].text = nameA;
-      dom.winner.options[1].text = nameB;
+      dom.winner.options[1].text = nameA;
+      dom.winner.options[2].text = nameB;
     }
     if (dom.betFighter) {
       dom.betFighter.options[0].text = nameA;
       dom.betFighter.options[1].text = nameB;
     }
 
-    // Update totals display
     if (dom.totalA) dom.totalA.textContent = betsA;
     if (dom.totalB) dom.totalB.textContent = betsB;
     if (dom.totalALabel) dom.totalALabel.textContent = nameA;
     if (dom.totalBLabel) dom.totalBLabel.textContent = nameB;
 
-    // Calculate payouts
     const pool = betsA + betsB;
     const house = pool * (cut / 100);
     const payout = pool - house;
-    const winBets = winner === "A" ? betsA : betsB;
+    const winBets = winner === "A" ? betsA : winner === "B" ? betsB : 0;
     const per1 = winBets > 0 ? payout / winBets : 0;
 
-    // Calculate moneyline odds
     const oddsA = calculateMoneyline(betsA, betsB, payout);
     const oddsB = calculateMoneyline(betsB, betsA, payout);
 
-    // Update odds display
     if (dom.oddsNameA) dom.oddsNameA.textContent = nameA;
     if (dom.oddsNameB) dom.oddsNameB.textContent = nameB;
     if (dom.oddsA) {
@@ -177,29 +168,23 @@
       dom.oddsB.className = "calc-odds-value " + getOddsClass(oddsB);
     }
 
-    // Update output display
     if (dom.outPool) dom.outPool.textContent = pool.toFixed(0);
     if (dom.outHouse) dom.outHouse.textContent = house.toFixed(2);
     if (dom.outPayout) dom.outPayout.textContent = payout.toFixed(2);
-    if (dom.outWinner) dom.outWinner.textContent = winner === "A" ? nameA : nameB;
-    if (dom.outWinBets) dom.outWinBets.textContent = winBets.toFixed(0);
-    if (dom.outPer1) dom.outPer1.textContent = winBets > 0 ? per1.toFixed(4) : "N/A";
+    if (dom.outWinner) dom.outWinner.textContent = winner === "A" ? nameA : winner === "B" ? nameB : "—";
+    if (dom.outWinBets) dom.outWinBets.textContent = winner ? winBets.toFixed(0) : "—";
+    if (dom.outPer1) dom.outPer1.textContent = winner && winBets > 0 ? per1.toFixed(4) : "—";
 
-    // Quick lookup calculation
     const lookupBet = utils.numFromElement(dom.lookupBet);
     state.lookupBet = lookupBet;
-    const lookupPayout = winBets > 0 ? (lookupBet * per1).toFixed(2) : "N/A";
-    if (dom.lookupResult) dom.lookupResult.value = lookupPayout;
+    if (dom.lookupResult) dom.lookupResult.value = winner && winBets > 0 ? (lookupBet * per1).toFixed(2) : "—";
 
-    // Update bet table fighter names
     renderBetTable();
   }
 
-  // Calculate American moneyline odds
   function calculateMoneyline(myBets, theirBets, payoutPool) {
     if (myBets <= 0 || payoutPool <= 0) return "-";
     
-    // Decimal odds = what you get back per 1 unit bet (including stake)
     const decimalOdds = payoutPool / myBets;
     
     if (decimalOdds >= 2.0) {
@@ -220,9 +205,210 @@
     return odds.startsWith("+") ? "odds-underdog" : "odds-favorite";
   }
 
+  // === EVENT CONFIGURATION ===
+  function syncEventConfig() {
+    state.event = {
+      location: dom.eventLocation?.value.trim() || "",
+      clerk: dom.eventClerk?.value.trim() || "",
+      firstBell: dom.eventFirstBell?.value.trim() || "",
+      betClose: dom.eventBetClose?.value.trim() || "",
+      serviceLead: dom.eventServiceLead?.value.trim() || "",
+    };
+  }
+
+  // === EXPORT: ROUND SNAPSHOT ===
+  function generateSnapshot() {
+    syncEventConfig();
+    const { roundNum, nameA, nameB, cut, bets, event } = state;
+    const betsA = bets.filter(b => b.fighter === "A").reduce((s, b) => s + b.amount, 0);
+    const betsB = bets.filter(b => b.fighter === "B").reduce((s, b) => s + b.amount, 0);
+    const pool = betsA + betsB;
+    const payout = pool - pool * (cut / 100);
+    const oddsA = calculateMoneyline(betsA, betsB, payout);
+    const oddsB = calculateMoneyline(betsB, betsA, payout);
+
+    const betRows = bets.length > 0
+      ? bets.map(b => `[row][cell]${b.bettor}[cell]${b.fighter === "A" ? nameA : nameB}[cell]${b.amount} cr`).join("\n")
+      : "[row][cell]—[cell]No bets[cell]—";
+
+    return `[center][logo_scc_small]
+[b]SCCV HORIZON FIGHT NIGHT[/b]
+[b]ROUND ${roundNum} — ${nameA} vs ${nameB}[/b]
+[small]${event.location ? `Location: ${event.location} | ` : ""}Posted: ${utils.formatTime()}[/small]
+[/center]
+[hr]
+[b]MONEYLINE ODDS[/b]
+[table][row][cell]${nameA}[cell]${oddsA}
+[row][cell]${nameB}[cell]${oddsB}[/table]
+
+[b]BET LOG[/b]
+[table][row][cell][b]Bettor[/b][cell][b]Fighter[/b][cell][b]Wager[/b]
+${betRows}
+[/table]
+
+[b]POOL STATUS[/b]
+[table][row][cell]${nameA} Total:[cell]${betsA} cr
+[row][cell]${nameB} Total:[cell]${betsB} cr
+[row][cell][b]Combined Pool:[/b][cell][b]${pool} cr[/b][/table]
+[hr]
+[small]House Cut: ${cut}%${event.clerk ? ` | Clerk: ${event.clerk}` : ""}[/small]`;
+  }
+
+  // === EXPORT: COVER SHEET ===
+  function generateCoverSheet() {
+    syncEventConfig();
+    const { event, savedRounds } = state;
+    const totals = savedRounds.reduce((t, r) => ({
+      stakes: t.stakes + r.pool,
+      paid: t.paid + r.paidOut,
+      house: t.house + r.houseTake
+    }), { stakes: 0, paid: 0, house: 0 });
+
+    const roundRows = [];
+    for (let i = 0; i < 6; i++) {
+      const r = savedRounds[i];
+      roundRows.push(r
+        ? `[row][cell]${r.roundNum}[cell]${r.nameA}[cell]${r.nameB}[cell]${r.oddsA} / ${r.oddsB}[cell]${r.winner || "—"}[cell]${r.initials || "—"}`
+        : `[row][cell]${i + 1}[cell][cell][cell][cell][cell]`);
+    }
+
+    return `[center][logo_scc_small]
+[b]SCCV HORIZON[/b]
+[b]SERVICE DEPARTMENT — FIGHT NIGHT[/b]
+[i]"The Unbreakable Chainlink, Holding the Spur Together."[/i]
+[hr]
+[b]BETTING CONTROL SHEET[/b]
+[/center]
+[small][table][row][cell][b]Event Date:[/b] ${utils.formatDate()}[cell][b]Location:[/b] ${event.location || "—"}
+[row][cell][b]First Bell:[/b] ${event.firstBell || "—"}[cell][b]Bet Close:[/b] ${event.betClose || "—"}
+[row][cell][b]Clerk/Bookie:[/b] ${event.clerk || "—"}[cell][b]Service Lead:[/b] ${event.serviceLead || "—"}
+[/table]
+
+[center][b]ROUNDS — POSTED ODDS & RESULTS[/b][/center]
+[table][row][cell][b]#[/b][cell][b]Fighter A[/b][cell][b]Fighter B[/b][cell][b]Odds (A/B)[/b][cell][b]Winner[/b][cell][b]Initials[/b]
+${roundRows.join("\n")}
+[/table]
+
+[center][b]TOTALS & PAYOUT CONFIRMATION[/b][/center]
+[table][row][cell][b]Total Stakes (cr):[/b] ${totals.stakes}[cell][b]Total Paid Out (cr):[/b] ${totals.paid.toFixed(2)}
+[row][cell][b]House Net (+/-):[/b] ${totals.house.toFixed(2)}[cell][b]Rounds Completed:[/b] ${savedRounds.length}
+[/table]
+[hr][/small]`;
+  }
+
+  // === ROUND MANAGEMENT ===
+  function saveRound() {
+    syncEventConfig();
+    if (state.bets.length === 0) {
+      alert("No bets to save.");
+      return;
+    }
+    if (!state.winner) {
+      alert("Select a winner before saving.");
+      return;
+    }
+
+    const { roundNum, nameA, nameB, cut, winner, bets } = state;
+    const betsA = bets.filter(b => b.fighter === "A").reduce((s, b) => s + b.amount, 0);
+    const betsB = bets.filter(b => b.fighter === "B").reduce((s, b) => s + b.amount, 0);
+    const pool = betsA + betsB;
+    const houseTake = pool * (cut / 100);
+    const payout = pool - houseTake;
+    const winBets = winner === "A" ? betsA : betsB;
+    const paidOut = winBets > 0 ? payout : 0;
+
+    state.savedRounds.push({
+      roundNum,
+      nameA,
+      nameB,
+      oddsA: calculateMoneyline(betsA, betsB, payout),
+      oddsB: calculateMoneyline(betsB, betsA, payout),
+      winner: winner === "A" ? nameA : nameB,
+      pool,
+      houseTake,
+      paidOut,
+      bets: [...bets],
+      initials: "",
+    });
+
+    updateRoundHistory();
+
+    state.roundNum++;
+    state.bets = [];
+    state.nextBetId = 1;
+    state.winner = "";
+    if (dom.roundNum) dom.roundNum.value = state.roundNum;
+    if (dom.nameA) dom.nameA.value = "Fighter A";
+    if (dom.nameB) dom.nameB.value = "Fighter B";
+    if (dom.winner) dom.winner.value = "";
+    renderBetTable();
+    calculate();
+    saveState();
+    flashBtn(dom.saveRound, "Saved!");
+  }
+
+  function clearEvent() {
+    if (state.savedRounds.length > 0 && !confirm("Clear all saved rounds?")) return;
+    state.savedRounds = [];
+    state.roundNum = 1;
+    if (dom.roundNum) dom.roundNum.value = 1;
+    updateRoundHistory();
+    saveState();
+  }
+
+  function updateRoundHistory() {
+    if (dom.savedCount) dom.savedCount.textContent = state.savedRounds.length;
+    if (dom.savedList) dom.savedList.textContent = state.savedRounds.map(r => `R${r.roundNum}`).join(", ");
+  }
+
+  // === CLIPBOARD UTILITIES ===
+  async function copyToClipboard(text, btn) {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const ta = Object.assign(document.createElement("textarea"), {
+        value: text,
+        style: "position:fixed;opacity:0"
+      });
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+    }
+    flashBtn(btn, "Copied!");
+  }
+
+  function flashBtn(btn, msg) {
+    if (!btn) return;
+    const orig = btn.textContent;
+    btn.textContent = msg;
+    btn.style.color = "var(--state-success)";
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.style.color = "";
+    }, 1500);
+  }
+
+  // === COLLAPSIBLE SECTIONS ===
+  function setupCollapsibles() {
+    document.querySelectorAll(".calc-toggle").forEach(toggle => {
+      toggle.addEventListener("click", () => {
+        const target = document.getElementById(toggle.dataset.target);
+        if (target) {
+          const collapsed = target.classList.toggle("collapsed");
+          const titleEl = toggle.querySelector(".calc-section-title");
+          if (titleEl) titleEl.textContent = (collapsed ? "▸" : "▾") + " Event Configuration";
+          const hint = toggle.querySelector(".calc-collapse-hint");
+          if (hint) hint.textContent = collapsed ? "click to expand" : "click to collapse";
+        }
+      });
+    });
+  }
+
   // === STATE PERSISTENCE ===
   function saveState() {
     storage.save("state", {
+      roundNum: state.roundNum,
       nameA: state.nameA,
       nameB: state.nameB,
       cut: state.cut,
@@ -230,6 +416,8 @@
       lookupBet: state.lookupBet,
       bets: state.bets,
       nextBetId: state.nextBetId,
+      event: state.event,
+      savedRounds: state.savedRounds,
     });
   }
 
@@ -239,30 +427,32 @@
 
     Object.assign(state, saved);
 
-    // Restore input values
+    if (dom.roundNum) dom.roundNum.value = state.roundNum;
     if (dom.nameA) dom.nameA.value = state.nameA;
     if (dom.nameB) dom.nameB.value = state.nameB;
     if (dom.cut) dom.cut.value = state.cut;
     if (dom.winner) dom.winner.value = state.winner;
     if (dom.lookupBet) dom.lookupBet.value = state.lookupBet;
+
+    if (dom.eventLocation) dom.eventLocation.value = state.event?.location || "";
+    if (dom.eventClerk) dom.eventClerk.value = state.event?.clerk || "";
+    if (dom.eventFirstBell) dom.eventFirstBell.value = state.event?.firstBell || "";
+    if (dom.eventBetClose) dom.eventBetClose.value = state.event?.betClose || "";
+    if (dom.eventServiceLead) dom.eventServiceLead.value = state.event?.serviceLead || "";
   }
 
   // === EVENT SETUP ===
   function setupEventHandlers() {
-    // Input change handlers for calculator fields
     CONFIG.inputIds.forEach(id => {
       if (dom[id]) {
         dom[id].addEventListener("input", calculate);
       }
     });
 
-    // Add bet button
     dom.addBet?.addEventListener("click", addBet);
 
-    // New round button
     dom.newRound?.addEventListener("click", clearAllBets);
 
-    // Enter key in bet inputs
     ["bettor", "betAmount"].forEach(id => {
       dom[id]?.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
@@ -271,34 +461,41 @@
         }
       });
     });
+
+    dom.exportSnapshot?.addEventListener("click", () => copyToClipboard(generateSnapshot(), dom.exportSnapshot));
+    dom.exportCover?.addEventListener("click", () => copyToClipboard(generateCoverSheet(), dom.exportCover));
+
+    dom.saveRound?.addEventListener("click", saveRound);
+    dom.clearEvent?.addEventListener("click", clearEvent);
   }
 
   // === INITIALIZATION ===
   function initialize() {
-    // Cache DOM elements
     const domIds = [
       ...CONFIG.inputIds,
       "outPool", "outHouse", "outPayout", "outWinner", "outWinBets", "outPer1",
       "lookupResult", "galacticTime",
       "bettor", "betFighter", "betAmount", "addBet", "newRound",
       "betTableBody", "totalA", "totalB", "totalALabel", "totalBLabel",
-      "oddsA", "oddsB", "oddsNameA", "oddsNameB"
+      "oddsA", "oddsB", "oddsNameA", "oddsNameB",
+      "eventLocation", "eventClerk", "eventFirstBell", "eventBetClose", "eventServiceLead",
+      "exportSnapshot", "exportCover", "saveRound", "clearEvent",
+      "savedCount", "savedList"
     ];
     dom = createDomCache(domIds);
 
-    // Initialize bet table manager with delegation
     betTableManager = new BetTableManager(dom.betTableBody, removeBet);
 
-    // Load saved state
+    setupCollapsibles();
+
     loadState();
 
-    // Setup event handlers
     setupEventHandlers();
 
-    // Start system clock
     createSystemClock("galacticTime");
 
-    // Initial render and calculation
+    updateRoundHistory();
+
     renderBetTable();
     calculate();
   }
@@ -313,19 +510,29 @@
     getState: () => ({ ...state }),
     reset() {
       Object.assign(state, {
+        roundNum: 1,
         nameA: "Fighter A",
         nameB: "Fighter B",
         cut: 0,
-        winner: "A",
+        winner: "",
         lookupBet: 10,
         bets: [],
         nextBetId: 1,
+        event: { location: "", clerk: "", firstBell: "", betClose: "", serviceLead: "" },
+        savedRounds: [],
       });
+      if (dom.roundNum) dom.roundNum.value = state.roundNum;
       if (dom.nameA) dom.nameA.value = state.nameA;
       if (dom.nameB) dom.nameB.value = state.nameB;
       if (dom.cut) dom.cut.value = state.cut;
       if (dom.winner) dom.winner.value = state.winner;
       if (dom.lookupBet) dom.lookupBet.value = state.lookupBet;
+      if (dom.eventLocation) dom.eventLocation.value = "";
+      if (dom.eventClerk) dom.eventClerk.value = "";
+      if (dom.eventFirstBell) dom.eventFirstBell.value = "";
+      if (dom.eventBetClose) dom.eventBetClose.value = "";
+      if (dom.eventServiceLead) dom.eventServiceLead.value = "";
+      updateRoundHistory();
       renderBetTable();
       calculate();
       saveState();

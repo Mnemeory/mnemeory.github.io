@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="css/theme.css" rel="stylesheet">
+  <link href="css/calculator.css" rel="stylesheet">
   <script defer src="js/shared.js"></script>
   <script defer src="js/calculator.js"></script>
 </head>
@@ -31,13 +32,47 @@
     <main class="calculator-main">
       <section class="panel calculator-panel">
         <div class="panel-header">
-          <h2 class="panel-title">2-Fighter Pool Calculator</h2>
+          <h2 class="panel-title">Fight Night Pool Calculator</h2>
         </div>
         
         <div class="calculator-content">
+          <!-- Event Configuration -->
+          <div class="calc-section calc-collapsible" id="eventConfig">
+            <div class="calc-section-header calc-toggle" data-target="eventConfigBody">
+              <div class="calc-section-title">▸ Event Configuration</div>
+              <span class="calc-collapse-hint">click to expand</span>
+            </div>
+            <div class="calc-section-body collapsed" id="eventConfigBody">
+              <div class="calc-row">
+                <div class="calc-field">
+                  <label class="calc-label" for="eventLocation">Location</label>
+                  <input type="text" id="eventLocation" class="calc-input" placeholder="Holodeck A" autocomplete="off">
+                </div>
+                <div class="calc-field">
+                  <label class="calc-label" for="eventClerk">Clerk/Bookie</label>
+                  <input type="text" id="eventClerk" class="calc-input" placeholder="Name" autocomplete="off">
+                </div>
+              </div>
+              <div class="calc-row">
+                <div class="calc-field">
+                  <label class="calc-label" for="eventFirstBell">First Bell</label>
+                  <input type="text" id="eventFirstBell" class="calc-input" placeholder="19:00" autocomplete="off">
+                </div>
+                <div class="calc-field">
+                  <label class="calc-label" for="eventBetClose">Bet Close</label>
+                  <input type="text" id="eventBetClose" class="calc-input" placeholder="Before each bout" autocomplete="off">
+                </div>
+                <div class="calc-field">
+                  <label class="calc-label" for="eventServiceLead">Service Lead</label>
+                  <input type="text" id="eventServiceLead" class="calc-input" placeholder="Name" autocomplete="off">
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Fighter Configuration -->
           <div class="calc-section">
-            <div class="calc-section-title">Fighter Configuration</div>
+            <div class="calc-section-title">Round <input type="number" id="roundNum" class="calc-input calc-input-inline" min="1" max="12" value="1"> — Fighter Configuration</div>
             <div class="calc-row">
               <div class="calc-field">
                 <label class="calc-label" for="nameA">Fighter A</label>
@@ -56,6 +91,7 @@
               <div class="calc-field">
                 <label class="calc-label" for="winner">Winner</label>
                 <select id="winner" class="calc-select">
+                  <option value="">— Not Decided —</option>
                   <option value="A">Fighter A</option>
                   <option value="B">Fighter B</option>
                 </select>
@@ -85,7 +121,7 @@
             </div>
             <div class="calc-row">
               <button type="button" id="addBet" class="calc-btn calc-btn-primary">Add Bet</button>
-              <button type="button" id="newRound" class="calc-btn calc-btn-secondary">New Round</button>
+              <button type="button" id="newRound" class="calc-btn calc-btn-secondary">Clear Bets</button>
             </div>
           </div>
 
@@ -175,6 +211,23 @@
                 <label class="calc-label" for="lookupResult">Payout</label>
                 <input type="text" id="lookupResult" class="calc-input calc-result-input" readonly>
               </div>
+            </div>
+          </div>
+
+          <!-- Export Actions -->
+          <div class="calc-section calc-export-section">
+            <div class="calc-section-title">Export</div>
+            <div class="calc-row">
+              <button type="button" id="exportSnapshot" class="calc-btn calc-btn-primary">📋 Copy Round Snapshot</button>
+              <button type="button" id="saveRound" class="calc-btn calc-btn-secondary">💾 Save & Next Round</button>
+            </div>
+            <div class="calc-round-history" id="roundHistory">
+              <span class="calc-history-label">Saved Rounds: <strong id="savedCount">0</strong></span>
+              <span class="calc-history-list" id="savedList"></span>
+            </div>
+            <div class="calc-row">
+              <button type="button" id="exportCover" class="calc-btn calc-btn-secondary">📄 Copy Cover Sheet</button>
+              <button type="button" id="clearEvent" class="calc-btn calc-btn-danger">🗑 Clear Event</button>
             </div>
           </div>
         </div>

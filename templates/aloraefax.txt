@@ -1,0 +1,43 @@
+Name: Federation Emergency Fax
+Category: Nralakk Federation
+Desc: NFed Consular Emergency Fax
+[small]
+[table][cell][lang=k]
+[center][flag_nralakk]
+[large][b]Second Nralakk Federation[/b]
+Priority Emergency Transmission[/center][/large][hr][/large][b]Cycle/Segment Timestamp:[/b] [date]|[time]
+
+[b]Origin Node:[/b] [roundid]
+
+[b]Transmitting Officer:[/b] Iqi Alora Xi'Troj-Ormeq, Qu'vesi
+
+[b]Officer SCI Rating:[/b] 9.3
+[hr][b]Transmission Priority Level:[/b]
+[list][*][[field]] Priority 1 - Existential Threat / Qukala Request
+
+[*][[field]] Priority 2 - Severe Risk to Citizen or Consular Authority
+
+[*][[field]] Priority 3 - Incident Requiring Federation Guidance
+[/list][hr][b]Incident Locale:[/b] [[field]]
+
+[b]Declared Nature of Emergency:[/b] [[field]]
+[/list]
+[b]Preliminary Report:[/b]
+[[field]]
+
+
+[hr][b]Requested Directive or Intervention:[/b]
+[list][*][[field]] Immediate Kala Response (Ruupkala / Tupkala)
+
+[*][[field]] Sromkala Consultation
+
+[*][[field]] Immediate Medical Extraction
+
+[*][[field]] Immediate Emergency Extraction
+
+[*][[field]] Other: [[field]]
+[/list][hr][b]NOTICE:[/b]
+[i]Nlom Relay unavailable - psionic fidelity not guaranteed. Content may be subject to interception or alteration prior to archival in Federation registries.[/i]
+[hr][b]Representative Seal and Signature:[/b]
+[sign][/lang]
+[/table]

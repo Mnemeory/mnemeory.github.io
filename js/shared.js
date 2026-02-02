@@ -7,9 +7,6 @@
 
   // === UTILITY FUNCTIONS ===
   const utils = {
-    /**
-     * Format current time as HH:MM:SS (24-hour)
-     */
     formatTime: () => new Date().toLocaleTimeString("en-US", {
       hour12: false,
       hour: "2-digit",
@@ -17,28 +14,16 @@
       second: "2-digit"
     }),
 
-    /**
-     * Format current date as YYYY-MM-DD
-     */
     formatDate: () => new Date().toLocaleDateString("en-CA"),
 
-    /**
-     * Escape special regex characters in a string
-     */
     escapeRegex: (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
 
-    /**
-     * Escape HTML special characters to prevent XSS
-     */
     escapeHtml(str) {
       const div = document.createElement("div");
       div.textContent = str;
       return div.innerHTML;
     },
 
-    /**
-     * Debounce a function call
-     */
     debounce(fn, wait) {
       let timeout;
       return (...args) => {
@@ -47,9 +32,6 @@
       };
     },
 
-    /**
-     * Get numeric value from a DOM element, with minimum of 0
-     */
     numFromElement: (element) => Math.max(0, Number(element?.value) || 0),
   };
 

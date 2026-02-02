@@ -1,0 +1,462 @@
+
+/* === CALCULATOR INPUT STYLES === */
+/* Extends shared input patterns from theme.css */
+.calc-input,
+.calc-select {
+  padding: var(--space-unit) calc(var(--space-unit) * 1.5);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  background: var(--glass-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius);
+  transition: all var(--transition-fast);
+  width: 100%;
+}
+
+.calc-input:hover,
+.calc-select:hover {
+  border-color: var(--stellar-blue);
+  background: var(--interact-blue-subtle);
+}
+
+.calc-input:focus,
+.calc-select:focus {
+  outline: none;
+  border-color: var(--stellar-gold);
+  background: var(--interact-gold-medium);
+  box-shadow: 0 0 0 2px var(--interact-gold-medium);
+}
+
+.calc-input::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.calc-select option {
+  background: var(--space-medium);
+  color: var(--text-primary);
+}
+
+.calc-select optgroup {
+  background: var(--space-deep);
+  color: var(--stellar-gold);
+  font-weight: 600;
+  font-style: normal;
+  padding: 4px 0;
+}
+
+.calc-select optgroup option {
+  background: var(--space-medium);
+  color: var(--text-primary);
+  font-weight: 400;
+  padding-left: 12px;
+}
+
+/* === CALCULATOR BUTTONS === */
+.calc-btn {
+  padding: var(--space-unit) var(--space-3);
+  font-family: var(--font-primary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex: 1;
+}
+
+.calc-btn-primary {
+  color: var(--space-void);
+  background: var(--stellar-gold);
+  border: 1px solid var(--stellar-gold);
+}
+
+.calc-btn-primary:hover {
+  background: var(--stellar-cyan);
+  border-color: var(--stellar-cyan);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(107, 184, 212, 0.3);
+}
+
+.calc-btn-secondary {
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--glass-border);
+}
+
+.calc-btn-secondary:hover {
+  color: var(--text-primary);
+  border-color: var(--state-error);
+  background: var(--interact-error-subtle);
+}
+
+.calc-btn-danger {
+  color: var(--state-error);
+  background: transparent;
+  border: 1px solid var(--state-error);
+}
+
+.calc-btn-danger:hover {
+  background: var(--interact-error-subtle);
+  transform: translateY(-1px);
+}
+
+.calc-btn:active {
+  transform: translateY(0);
+}
+
+/* === CALCULATOR REMOVE BUTTON === */
+.calc-remove-btn {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  font-family: var(--font-primary);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.calc-remove-btn:hover {
+  color: var(--state-error);
+  border-color: var(--state-error);
+  background: var(--interact-error-subtle);
+}
+
+/* === CALCULATOR MAIN LAYOUT === */
+.calculator-main {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--space-4);
+  flex: 1;
+  overflow-y: auto;
+}
+
+.calculator-panel {
+  width: 100%;
+  max-width: 600px;
+}
+
+.calculator-content {
+  padding: var(--space-3);
+}
+
+/* === CALCULATOR SECTIONS === */
+.calc-section {
+  margin-bottom: var(--space-4);
+}
+
+.calc-section:last-child {
+  margin-bottom: 0;
+}
+
+.calc-section-title {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-2);
+}
+
+.calc-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.calc-section-header .calc-section-title {
+  margin-bottom: 0;
+}
+
+.calc-section-body {
+  padding-top: var(--space-2);
+}
+
+.calc-section-body.collapsed {
+  display: none;
+}
+
+.calc-collapsible .calc-section-header {
+  cursor: pointer;
+  user-select: none;
+}
+
+.calc-collapse-hint {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* === CALCULATOR ROWS & FIELDS === */
+.calc-row {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.calc-row:last-child {
+  margin-bottom: 0;
+}
+
+.calc-row-3 {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.calc-field {
+  flex: 1;
+}
+
+.calc-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: calc(var(--space-unit) * 0.75);
+}
+
+/* === CALCULATOR RESULT INPUT === */
+.calc-result-input {
+  background: var(--surface-abyss);
+  color: var(--state-success);
+  font-weight: 600;
+  cursor: default;
+}
+
+.calc-result-input:hover,
+.calc-result-input:focus {
+  background: var(--surface-abyss);
+  border-color: var(--state-success);
+  box-shadow: 0 0 0 2px var(--interact-success-medium);
+}
+
+/* === CALCULATOR OUTPUT BOX === */
+.calc-output {
+  background: var(--surface-raised);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius);
+  padding: var(--space-2);
+}
+
+.calc-output-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-unit) var(--space-2);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.calc-output-row:last-child {
+  border-bottom: none;
+}
+
+.calc-output-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.calc-output-value {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.calc-winner {
+  color: var(--stellar-gold);
+  font-weight: 600;
+}
+
+.calc-highlight {
+  color: var(--state-success);
+  font-weight: 700;
+}
+
+.calc-highlight-row {
+  background: var(--interact-success-subtle);
+  border-radius: var(--border-radius);
+  margin-top: var(--space-unit);
+}
+
+.calc-highlight-row .calc-output-label {
+  color: var(--state-success);
+  font-weight: 500;
+}
+
+/* === BETTING TOTALS === */
+.calc-bet-totals {
+  display: flex;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.calc-total-a {
+  color: var(--stellar-cyan);
+}
+
+.calc-total-b {
+  color: var(--stellar-gold);
+}
+
+/* === BETTING TABLE === */
+.calc-bet-table-wrap {
+  background: var(--surface-raised);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass-border) var(--space-deep);
+}
+
+.calc-bet-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.calc-bet-table thead {
+  position: sticky;
+  top: 0;
+  background: rgba(30, 41, 67, 0.95);
+  z-index: 1;
+}
+
+.calc-bet-table th {
+  padding: var(--space-unit) var(--space-2);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  text-align: left;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.calc-bet-table th:last-child {
+  width: 30px;
+}
+
+.calc-bet-table td {
+  padding: calc(var(--space-unit) * 0.75) var(--space-2);
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.calc-bet-table tr:last-child td {
+  border-bottom: none;
+}
+
+.calc-bet-table .fighter-a {
+  color: var(--stellar-cyan);
+  font-weight: 500;
+}
+
+.calc-bet-table .fighter-b {
+  color: var(--stellar-gold);
+  font-weight: 500;
+}
+
+.calc-bet-table .amount {
+  font-family: var(--font-mono);
+  text-align: right;
+}
+
+.calc-empty-row td {
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: var(--space-3);
+}
+
+/* === ODDS DISPLAY === */
+.calc-odds {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.calc-odds-fighter {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-raised);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius);
+}
+
+.calc-odds-name {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: calc(var(--space-unit) * 0.5);
+}
+
+.calc-odds-value {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.calc-odds-value.odds-favorite {
+  color: var(--stellar-cyan);
+}
+
+.calc-odds-value.odds-underdog {
+  color: var(--stellar-gold);
+}
+
+/* === INLINE INPUT === */
+.calc-input-inline {
+  width: 50px;
+  padding: 2px 6px;
+  font-size: 0.85rem;
+  text-align: center;
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+/* === ROUND HISTORY === */
+.calc-round-history {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-unit) 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.calc-history-label strong {
+  color: var(--stellar-gold);
+}
+
+.calc-history-list {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+/* === EXPORT SECTION === */
+.calc-export-section {
+  border-top: 1px solid var(--glass-border);
+  padding-top: var(--space-3);
+  margin-top: var(--space-2);
+}

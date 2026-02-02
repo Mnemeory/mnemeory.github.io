@@ -61,13 +61,11 @@
     PENCODE_MAP[`[logo_${name}_small]`] = `<span class="corp-logo">${sym}</span>`;
   });
 
-  // Pre-compile the main regex once (optimization)
   const PENCODE_REGEX = new RegExp(
     Object.keys(PENCODE_MAP).map(utils.escapeRegex).join("|"),
     "g"
   );
 
-  // Pattern-based regex for special tags
   const SPECIAL_PATTERNS = [
     {
       regex: /\[redacted\](.*?)\[\/redacted\]/gs,
@@ -92,25 +90,18 @@
    * @returns {string} HTML with properly wrapped <li> elements
    */
   function processListItems(html) {
-    // Process each <ul>...</ul> block separately
     return html.replace(/<ul>([\s\S]*?)<\/ul>/gi, (match, content) => {
-      // Split on [*] markers
       const parts = content.split(/\[\*\]/);
       
-      // First part is content before any [*] (usually whitespace or nothing)
       const beforeFirstItem = parts[0];
       
-      // Remaining parts are the actual list items
       const items = parts.slice(1);
       
       if (items.length === 0) {
-        // No [*] markers found - return content as-is (might be inline list usage)
         return `<ul>${content}</ul>`;
       }
       
-      // Build the list with proper <li> tags
       const listItems = items.map(item => {
-        // Trim leading/trailing whitespace from each item
         const trimmed = item.trim();
         return trimmed ? `<li>${trimmed}</li>` : '';
       }).filter(Boolean).join('\n');
@@ -129,15 +120,12 @@
     toHtml(text) {
       if (!text) return "";
       
-      // Apply basic tag replacements (except [*] which is handled separately)
       let result = text.replace(PENCODE_REGEX, m => PENCODE_MAP[m]);
       
-      // Apply special pattern replacements
       SPECIAL_PATTERNS.forEach(({ regex, replace }) => {
         result = result.replace(regex, replace);
       });
       
-      // Process list items with proper wrapping
       result = processListItems(result);
       
       return result;

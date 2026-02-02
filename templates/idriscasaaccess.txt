@@ -1,5 +1,5 @@
 Name: Casa Envidiable Temp Access
-Category: Idris
+Category: Idris Incorporated
 Desc: Grant time-limited access to Casa Envidiable for vetted visitors, staff, or contractors
 [small]
 [center][b][logo_idris]
