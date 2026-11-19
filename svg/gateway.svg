@@ -1,0 +1,528 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" width="900" height="900">
+  <defs>
+    <style>
+      .mf-wall-band-line {
+        fill: none;
+        stroke: #ff4766;
+        stroke-width: 1.2;
+        opacity: 0.45;
+      }
+
+      .mf-wall-tag {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 9px;
+        font-weight: 700;
+        fill: #ff8fa3;
+        letter-spacing: 2.6px;
+        opacity: 0.75;
+        filter: url(#softGlow);
+      }
+
+      .mf-wall-filler {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 7.5px;
+        font-weight: 600;
+        fill: #ff5c77;
+        letter-spacing: 1.6px;
+        opacity: 0.52;
+      }
+
+      .mf-header-top {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        fill: #7bf0ff;
+        letter-spacing: 1.8px;
+        filter: url(#softGlow);
+      }
+
+      .mf-header-sub {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+        fill: #00f2fe;
+        letter-spacing: 2px;
+      }
+
+      .mf-node {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 12.5px;
+        font-weight: 600;
+        fill: #7bf0ff;
+        letter-spacing: 1.8px;
+        opacity: 0.92;
+      }
+
+      .mf-box-border-code {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 6px;
+        font-weight: 600;
+        fill: #7bf0ff;
+        letter-spacing: 0.85px;
+        opacity: 0.78;
+      }
+
+      .mf-node-box {
+        fill: #020b12;
+        fill-opacity: 0.82;
+        stroke: #00f2fe;
+        stroke-width: 0.95;
+        opacity: 0.85;
+      }
+
+      .mf-conduit-line {
+        fill: none;
+        stroke: #00f2fe;
+        stroke-width: 1.5;
+        opacity: 0.82;
+      }
+
+      .wall-streak {
+        stroke-linecap: round;
+      }
+
+      .horizon-mass {
+        fill: #040205;
+      }
+
+      .horizon-tier {
+        stroke: #ff3b5c;
+        stroke-width: 0.9;
+        opacity: 0.35;
+      }
+
+      .horizon-lights {
+        fill: #ff758f;
+        opacity: 0.6;
+      }
+
+      .floor-h-grid {
+        stroke: #00f2fe;
+      }
+
+      .floor-r-grid {
+        stroke: #00f2fe;
+        stroke-width: 1;
+        opacity: 0.16;
+      }
+
+      .iso-face {
+        stroke: #00f2fe;
+        stroke-linejoin: round;
+      }
+
+      .corner-bracket {
+        fill: none;
+        stroke: #ff4766;
+        stroke-width: 2.5;
+      }
+    </style>
+
+    <clipPath id="iconFrameClip">
+      <rect x="36" y="36" width="828" height="828" />
+    </clipPath>
+
+    <path id="wall-band-top" d="M 80,54 L 820,54" />
+    <path id="wall-band-left" d="M 54,550 L 54,66" />
+    <path id="wall-band-right" d="M 846,66 L 846,550" />
+
+    <radialGradient id="baseCrimsonGlow" cx="62%" cy="35%" r="78%">
+      <stop offset="0%" stop-color="#5c0514" />
+      <stop offset="48%" stop-color="#210309" />
+      <stop offset="85%" stop-color="#080205" />
+      <stop offset="100%" stop-color="#010408" />
+    </radialGradient>
+
+    <linearGradient id="wallRedSweep" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1c0206" stop-opacity="0.55" />
+      <stop offset="18%" stop-color="#6e0617" stop-opacity="0.86" />
+      <stop offset="42%" stop-color="#ad0b25" stop-opacity="0.92" />
+      <stop offset="65%" stop-color="#db0f2f" stop-opacity="0.96" />
+      <stop offset="78%" stop-color="#ff1c3b" stop-opacity="0.98" />
+      <stop offset="92%" stop-color="#6e0617" stop-opacity="0.74" />
+      <stop offset="100%" stop-color="#140205" stop-opacity="0.45" />
+    </linearGradient>
+
+    <linearGradient id="wallVerticalBlend" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#010408" stop-opacity="0.32" />
+      <stop offset="9%" stop-color="#010408" stop-opacity="0.05" />
+      <stop offset="54%" stop-color="#2b030a" stop-opacity="0.04" />
+      <stop offset="88%" stop-color="#3b040e" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#010408" stop-opacity="0.95" />
+    </linearGradient>
+
+    <radialGradient id="scarletHotspot" cx="72%" cy="38%" r="28%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.82" />
+      <stop offset="22%" stop-color="#ff6b82" stop-opacity="0.74" />
+      <stop offset="56%" stop-color="#e60e2e" stop-opacity="0.36" />
+      <stop offset="100%" stop-color="#ff1c3b" stop-opacity="0" />
+    </radialGradient>
+
+    <linearGradient id="darkRedFloor" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#94081f" stop-opacity="0.36" />
+      <stop offset="25%" stop-color="#38030c" stop-opacity="0.22" />
+      <stop offset="70%" stop-color="#0b0204" stop-opacity="0.38" />
+      <stop offset="100%" stop-color="#010408" stop-opacity="0.92" />
+    </linearGradient>
+
+    <radialGradient id="floorTowerPool" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.24" />
+      <stop offset="65%" stop-color="#084c66" stop-opacity="0.09" />
+      <stop offset="100%" stop-color="#00f2fe" stop-opacity="0" />
+    </radialGradient>
+
+    <linearGradient id="towerBrightFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#175273" />
+      <stop offset="58%" stop-color="#082638" />
+      <stop offset="100%" stop-color="#020e16" />
+    </linearGradient>
+
+    <linearGradient id="towerDarkFace" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#051a27" />
+      <stop offset="65%" stop-color="#020b12" />
+      <stop offset="100%" stop-color="#010509" />
+    </linearGradient>
+
+    <linearGradient id="towerCapFace" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#227199" />
+      <stop offset="100%" stop-color="#0a2e42" />
+    </linearGradient>
+
+    <linearGradient id="beaconCone" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#8af5ff" stop-opacity="0.26" />
+      <stop offset="72%" stop-color="#00f2fe" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#00f2fe" stop-opacity="0" />
+    </linearGradient>
+
+    <radialGradient id="eyeIris" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="38%" stop-color="#00f2fe" />
+      <stop offset="78%" stop-color="#094a66" />
+      <stop offset="100%" stop-color="#020d14" />
+    </radialGradient>
+
+    <pattern id="crimsonScanBars" width="4" height="22" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="1.6" height="22" fill="#ff2442" opacity="0.52" />
+      <rect x="2" y="0" width="1.4" height="22" fill="#290208" opacity="0.55" />
+    </pattern>
+
+    <pattern id="deepMaroonColumns" width="22" height="36" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="9" height="36" fill="#4a030f" opacity="0.38" />
+      <rect x="13" y="0" width="4" height="36" fill="#ff1736" opacity="0.16" />
+    </pattern>
+
+    <filter id="softGlow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="3.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="towerGlow" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur stdDeviation="6.5" result="blur1" />
+      <feGaussianBlur stdDeviation="2" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <circle id="node-dot" r="2.3" fill="#7bf0ff" opacity="0.92" />
+    <circle id="anchor-dot" r="2.4" fill="#7bf0ff" opacity="0.95" />
+
+    <!-- Conduits Anchored Directly to Expanded Tower Floor Edge -->
+    <path id="conduit-1" d="M 334,616 L 304,753 L 280,753" />
+    <path id="conduit-2" d="M 354,626 L 322,785 L 240,785" />
+    <path id="conduit-3" d="M 374,636 L 342,817 L 292,817" />
+
+    <path id="conduit-4" d="M 566,616 L 596,753 L 620,753" />
+    <path id="conduit-5" d="M 546,626 L 578,785 L 660,785" />
+    <path id="conduit-6" d="M 526,636 L 558,817 L 608,817" />
+  </defs>
+
+  <rect width="900" height="900" fill="#010408" />
+
+  <g clip-path="url(#iconFrameClip)">
+    <g id="blackwall-backdrop">
+      <rect x="36" y="36" width="828" height="828" fill="url(#baseCrimsonGlow)" />
+      <rect x="36" y="36" width="828" height="514" fill="url(#wallRedSweep)" />
+      <rect x="36" y="36" width="828" height="514" fill="url(#deepMaroonColumns)" />
+      <rect x="36" y="36" width="828" height="514" fill="url(#crimsonScanBars)" opacity="0.88" />
+      <rect x="36" y="36" width="828" height="514" fill="url(#scarletHotspot)" />
+
+      <g class="wall-streak">
+        <line x1="75" y1="185" x2="290" y2="185" stroke="#590412" stroke-width="4" opacity="0.65" />
+        <line x1="110" y1="275" x2="340" y2="275" stroke="#ff2947" stroke-width="2" opacity="0.55" />
+        <line x1="80" y1="355" x2="320" y2="355" stroke="#47030e" stroke-width="5" opacity="0.6" />
+        <line x1="560" y1="210" x2="775" y2="210" stroke="#ff5e78" stroke-width="2" opacity="0.65" />
+        <line x1="585" y1="238" x2="820" y2="238" stroke="#ffffff" stroke-width="3.2" opacity="0.82" />
+        <line x1="550" y1="268" x2="780" y2="268" stroke="#ff2442" stroke-width="2.2" opacity="0.7" />
+        <line x1="610" y1="315" x2="835" y2="315" stroke="#690515" stroke-width="4.5" opacity="0.65" />
+        <line x1="570" y1="355" x2="795" y2="355" stroke="#ff4766" stroke-width="1.6" opacity="0.55" />
+      </g>
+
+      <g id="blackwall-perimeter-band">
+        <use href="#wall-band-top" class="mf-wall-band-line" />
+        <use href="#wall-band-left" class="mf-wall-band-line" />
+        <use href="#wall-band-right" class="mf-wall-band-line" />
+
+        <text class="mf-wall-filler">
+          <textPath href="#wall-band-top" startOffset="8">// 0xBW-A // GATE-01 //</textPath>
+        </text>
+        <text x="450" y="57" text-anchor="middle" class="mf-wall-tag">BLACKWALL-GATEHOUSE-ALPHA</text>
+        <text class="mf-wall-filler">
+          <textPath href="#wall-band-top" startOffset="587">// GATE-01 // 0xBW-A //</textPath>
+        </text>
+
+        <text class="mf-wall-tag">
+          <textPath href="#wall-band-left" startOffset="6">BLACKWALL-GATEHOUSE-ALPHA</textPath>
+        </text>
+        <text class="mf-wall-filler">
+          <textPath href="#wall-band-left" startOffset="194">// 0xA1 //</textPath>
+        </text>
+        <text class="mf-wall-tag">
+          <textPath href="#wall-band-left" startOffset="244">BLACKWALL-GATEHOUSE-ALPHA</textPath>
+        </text>
+
+        <text class="mf-wall-tag">
+          <textPath href="#wall-band-right" startOffset="6">BLACKWALL-GATEHOUSE-ALPHA</textPath>
+        </text>
+        <text class="mf-wall-filler">
+          <textPath href="#wall-band-right" startOffset="194">// 0xA1 //</textPath>
+        </text>
+        <text class="mf-wall-tag">
+          <textPath href="#wall-band-right" startOffset="244">BLACKWALL-GATEHOUSE-ALPHA</textPath>
+        </text>
+      </g>
+
+      <rect x="36" y="36" width="828" height="514" fill="url(#wallVerticalBlend)" />
+    </g>
+
+    <g id="night-city-horizon" opacity="0.88">
+      <path class="horizon-mass" d="M 36,550 L 36,432 L 54,432 L 54,394 L 70,394 L 70,458 L 82,458 L 82,318 L 94,318 L 94,296 L 102,296 L 102,248 L 106,248 L 106,210 L 110,210 L 110,248 L 114,248 L 114,296 L 122,296 L 122,318 L 134,318 L 134,442 L 146,442 L 146,356 L 164,336 L 182,336 L 182,356 L 194,356 L 194,312 L 222,312 L 222,356 L 234,356 L 234,474 L 246,474 L 246,324 L 278,298 L 306,334 L 306,478 L 320,478 L 320,418 L 338,418 L 338,494 L 354,494 L 354,550 Z" />
+      <rect x="198" y="294" width="20" height="18" fill="none" stroke="#ff3b5c" stroke-width="1.1" opacity="0.4" />
+      <line x1="208" y1="276" x2="208" y2="294" stroke="#ff3b5c" stroke-width="1.1" opacity="0.4" />
+
+      <path class="horizon-mass" d="M 546,550 L 546,482 L 564,482 L 564,392 L 588,392 L 588,452 L 604,452 L 604,316 L 638,292 L 666,328 L 666,446 L 682,446 L 682,358 L 698,358 L 698,318 L 706,318 L 706,252 L 712,252 L 712,202 L 716,202 L 716,252 L 722,252 L 722,318 L 730,318 L 730,358 L 746,358 L 746,466 L 762,466 L 762,338 L 802,338 L 814,366 L 814,456 L 832,456 L 832,412 L 848,412 L 848,468 L 864,468 L 864,550 Z" />
+      <polygon points="776,338 794,338 788,298 782,298" fill="#040205" />
+      <line x1="785" y1="274" x2="785" y2="298" stroke="#ff3b5c" stroke-width="1.2" opacity="0.4" />
+
+      <g class="horizon-tier">
+        <line x1="82" y1="364" x2="134" y2="364" />
+        <line x1="146" y1="392" x2="234" y2="392" />
+        <line x1="246" y1="368" x2="306" y2="368" />
+        <line x1="604" y1="358" x2="666" y2="358" />
+        <line x1="682" y1="402" x2="746" y2="402" />
+        <line x1="762" y1="382" x2="814" y2="382" />
+      </g>
+
+      <g class="horizon-lights">
+        <rect x="90" y="344" width="3" height="2" />
+        <rect x="104" y="328" width="4" height="2" />
+        <rect x="114" y="384" width="3" height="2" />
+        <rect x="158" y="372" width="4" height="2" />
+        <rect x="204" y="342" width="3" height="2" />
+        <rect x="256" y="344" width="4" height="2" />
+        <rect x="278" y="356" width="3" height="2" />
+        <rect x="616" y="336" width="4" height="2" />
+        <rect x="638" y="348" width="3" height="2" />
+        <rect x="704" y="344" width="3" height="2" />
+        <rect x="716" y="376" width="4" height="2" />
+        <rect x="774" y="364" width="3" height="2" />
+        <rect x="822" y="432" width="3" height="2" />
+      </g>
+    </g>
+
+    <g id="cyberspace-floor">
+      <rect x="36" y="550" width="828" height="314" fill="url(#darkRedFloor)" />
+      <ellipse cx="450" cy="612" rx="215" ry="78" fill="url(#floorTowerPool)" />
+      <line x1="36" y1="550" x2="864" y2="550" stroke="#ff2442" stroke-width="1.8" opacity="0.65" />
+
+      <g class="floor-h-grid">
+        <line x1="36" y1="574" x2="864" y2="574" stroke-width="0.9" opacity="0.16" />
+        <line x1="36" y1="606" x2="864" y2="606" stroke-width="1" opacity="0.2" />
+        <line x1="36" y1="646" x2="864" y2="646" stroke-width="1.1" opacity="0.24" />
+        <line x1="36" y1="698" x2="864" y2="698" stroke-width="1.2" opacity="0.28" />
+        <line x1="36" y1="764" x2="864" y2="764" stroke-width="1.3" opacity="0.32" />
+      </g>
+
+      <g class="floor-r-grid">
+        <line x1="450" y1="550" x2="450" y2="864" />
+        <line x1="450" y1="550" x2="290" y2="864" />
+        <line x1="450" y1="550" x2="610" y2="864" />
+        <line x1="450" y1="550" x2="110" y2="864" />
+        <line x1="450" y1="550" x2="790" y2="864" />
+        <line x1="450" y1="550" x2="-90" y2="864" />
+        <line x1="450" y1="550" x2="990" y2="864" />
+      </g>
+
+      <!-- Expanded Isometric Floor Deck & Grounding Rim -->
+      <g id="tower-expanded-floor">
+        <polygon points="314,616 450,684 586,616 450,548" fill="#01070d" fill-opacity="0.78" stroke="#00f2fe" stroke-width="1.4" opacity="0.65" />
+        <polygon points="314,606 450,674 586,606 450,538" fill="#03131e" fill-opacity="0.82" stroke="#7bf0ff" stroke-width="1.5" opacity="0.72" />
+        <line x1="314" y1="606" x2="314" y2="616" stroke="#00f2fe" stroke-width="1.4" opacity="0.65" />
+        <line x1="450" y1="674" x2="450" y2="684" stroke="#7bf0ff" stroke-width="1.5" opacity="0.72" />
+        <line x1="586" y1="606" x2="586" y2="616" stroke="#00f2fe" stroke-width="1.4" opacity="0.65" />
+        <line x1="382" y1="572" x2="518" y2="640" stroke="#00f2fe" stroke-width="0.9" opacity="0.26" />
+        <line x1="518" y1="572" x2="382" y2="640" stroke="#00f2fe" stroke-width="0.9" opacity="0.26" />
+      </g>
+
+      <!-- Conduits & Floor Anchor Dots -->
+      <g id="conduit-channels">
+        <use href="#conduit-1" class="mf-conduit-line" />
+        <use href="#anchor-dot" x="334" y="616" />
+
+        <use href="#conduit-2" class="mf-conduit-line" />
+        <use href="#anchor-dot" x="354" y="626" />
+
+        <use href="#conduit-3" class="mf-conduit-line" />
+        <use href="#anchor-dot" x="374" y="636" />
+
+        <use href="#conduit-4" class="mf-conduit-line" />
+        <use href="#anchor-dot" x="566" y="616" />
+
+        <use href="#conduit-5" class="mf-conduit-line" />
+        <use href="#anchor-dot" x="546" y="626" />
+
+        <use href="#conduit-6" class="mf-conduit-line" />
+        <use href="#anchor-dot" x="526" y="636" />
+      </g>
+    </g>
+
+    <g id="watchtower-monolith" filter="url(#towerGlow)">
+      <polygon points="330,612 450,672 570,612 450,552" fill="#00f2fe" opacity="0.16" />
+
+      <polygon class="iso-face" points="340,515 450,570 450,664 340,609" fill="url(#towerBrightFace)" stroke-width="2.4" />
+      <polygon class="iso-face" points="450,570 560,515 560,609 450,664" fill="url(#towerDarkFace)" stroke-width="2.4" />
+
+      <g stroke="#7bf0ff" stroke-width="1.2" opacity="0.65">
+        <line x1="364" y1="544" x2="364" y2="621" />
+        <line x1="396" y1="560" x2="396" y2="637" />
+        <line x1="424" y1="574" x2="424" y2="651" />
+        <line x1="340" y1="582" x2="450" y2="637" opacity="0.45" />
+      </g>
+      <g stroke="#00f2fe" stroke-width="1.1" opacity="0.45">
+        <line x1="476" y1="574" x2="476" y2="651" />
+        <line x1="504" y1="560" x2="504" y2="637" />
+        <line x1="536" y1="544" x2="536" y2="621" />
+        <line x1="450" y1="637" x2="560" y2="582" opacity="0.45" />
+      </g>
+
+      <polygon class="iso-face" points="362,468 450,512 450,570 362,526" fill="url(#towerBrightFace)" stroke-width="2.2" />
+      <polygon class="iso-face" points="450,512 538,468 538,526 450,570" fill="url(#towerDarkFace)" stroke-width="2.2" />
+
+      <polygon class="iso-face" points="384,225 450,258 450,512 384,479" fill="url(#towerBrightFace)" stroke-width="2.5" />
+      <polygon class="iso-face" points="450,258 516,225 516,479 450,512" fill="url(#towerDarkFace)" stroke-width="2.5" />
+
+      <g stroke="#7bf0ff" stroke-width="1.5" opacity="0.82">
+        <line x1="402" y1="268" x2="402" y2="488" />
+        <line x1="422" y1="278" x2="422" y2="498" />
+      </g>
+      <g stroke="#00f2fe" stroke-width="1.2" opacity="0.45">
+        <line x1="478" y1="278" x2="478" y2="498" />
+        <line x1="498" y1="268" x2="498" y2="488" />
+        <line x1="384" y1="330" x2="450" y2="363" />
+        <line x1="384" y1="405" x2="450" y2="438" />
+        <line x1="450" y1="363" x2="516" y2="330" />
+        <line x1="450" y1="438" x2="516" y2="405" />
+      </g>
+
+      <polygon class="iso-face" points="376,164 450,201 524,164 450,127" fill="url(#towerCapFace)" stroke="#7bf0ff" stroke-width="2.1" />
+      <polygon class="iso-face" points="376,164 450,201 450,248 376,211" fill="url(#towerBrightFace)" stroke-width="2.2" />
+      <polygon class="iso-face" points="450,201 524,164 524,211 450,248" fill="url(#towerDarkFace)" stroke-width="2.2" />
+
+      <g stroke="#7bf0ff" stroke-width="1.3" opacity="0.7">
+        <line x1="396" y1="184" x2="396" y2="208" />
+        <line x1="418" y1="195" x2="418" y2="219" />
+        <line x1="482" y1="195" x2="482" y2="219" />
+        <line x1="504" y1="184" x2="504" y2="208" />
+      </g>
+
+      <line x1="450" y1="74" x2="450" y2="127" stroke="#7bf0ff" stroke-width="2.4" />
+      <line x1="435" y1="96" x2="465" y2="96" stroke="#00f2fe" stroke-width="1.6" />
+      <line x1="440" y1="112" x2="460" y2="112" stroke="#00f2fe" stroke-width="1.4" />
+      <circle cx="450" cy="72" r="3.8" fill="#ffffff" />
+    </g>
+
+    <g id="surveillance-beacon">
+      <polygon points="450,204 298,594 602,594" fill="url(#beaconCone)" />
+      <line x1="450" y1="204" x2="298" y2="594" stroke="#00f2fe" stroke-width="1.3" stroke-dasharray="6 4" opacity="0.78" />
+      <line x1="450" y1="204" x2="602" y2="594" stroke="#00f2fe" stroke-width="1.3" stroke-dasharray="6 4" opacity="0.78" />
+
+      <g transform="translate(450, 204)" filter="url(#towerGlow)">
+        <polygon points="-24,-14 24,-14 38,0 24,14 -24,14 -38,0" fill="#020b12" stroke="#7bf0ff" stroke-width="2" />
+        <ellipse cx="0" cy="0" rx="18" ry="11" fill="none" stroke="#00f2fe" stroke-width="1.2" opacity="0.85" />
+        <circle cx="0" cy="0" r="9.5" fill="url(#eyeIris)" />
+        <ellipse cx="0" cy="0" rx="2.4" ry="6.5" fill="#010408" />
+        <circle cx="-3.5" cy="-3.2" r="1.5" fill="#ffffff" />
+      </g>
+    </g>
+
+    <g id="mainframe-header" opacity="0.96">
+      <rect x="298" y="594" width="304" height="36" fill="#020b12" fill-opacity="0.9" stroke="#00f2fe" stroke-width="0.9" opacity="0.82" />
+      <polyline points="298,603 298,594 307,594" fill="none" stroke="#7bf0ff" stroke-width="1.8" />
+      <polyline points="602,603 602,594 593,594" fill="none" stroke="#7bf0ff" stroke-width="1.8" />
+      <text x="450" y="610" text-anchor="middle" class="mf-header-top">NETWATCH-REG-02</text>
+      <text x="450" y="625" text-anchor="middle" class="mf-header-sub">NC-NET</text>
+    </g>
+
+    <g id="mainframe-subnodes">
+      <g transform="translate(56, 742)">
+        <rect width="224" height="22" class="mf-node-box" />
+        <text x="6" y="-2.5" class="mf-box-border-code">0x4E54 // 7K39 // 0x9F2A // 0x1B8D</text>
+        <text x="6" y="29" class="mf-box-border-code">6C4E // 4A0F // 0x7E19 // 8B3C</text>
+        <use href="#node-dot" x="10" y="11" />
+        <text x="22" y="15.5" class="mf-node">NODE-01-WATCHTOWER</text>
+      </g>
+
+      <g transform="translate(56, 774)">
+        <rect width="184" height="22" class="mf-node-box" />
+        <text x="6" y="-2.5" class="mf-box-border-code">7G9P // 0xA8E3 // 2MR4 // 0x3D10</text>
+        <text x="6" y="29" class="mf-box-border-code">5F1C // 9Q2W // 8XL6 // 0x6F44</text>
+        <use href="#node-dot" x="10" y="11" />
+        <text x="22" y="15.5" class="mf-node">NODE-02-LIBRARY</text>
+      </g>
+
+      <g transform="translate(56, 806)">
+        <rect width="236" height="22" class="mf-node-box" />
+        <text x="6" y="-2.5" class="mf-box-border-code">0x3D7B // 4VN8 // 9E4A // 0x8C51 // 2A9E</text>
+        <text x="6" y="29" class="mf-box-border-code">1KP5 // 0x6C2F // 3R7T // 0x5B09 // 7D4M</text>
+        <use href="#node-dot" x="10" y="11" />
+        <text x="22" y="15.5" class="mf-node">NODE-03-SCHOOLHOUSE</text>
+      </g>
+
+      <g transform="translate(620, 742)">
+        <rect width="224" height="22" class="mf-node-box" />
+        <text x="218" y="-2.5" text-anchor="end" class="mf-box-border-code">0x9A12 // 0xFF01 // NULL // 0x0000</text>
+        <text x="218" y="29" text-anchor="end" class="mf-box-border-code">0x4E88 // HALT // 0x8B20 // DORMANT</text>
+        <use href="#node-dot" x="214" y="11" />
+        <text x="202" y="15.5" text-anchor="end" class="mf-node">NODE-04-OFFLINE</text>
+      </g>
+
+      <g transform="translate(660, 774)">
+        <rect width="184" height="22" class="mf-node-box" />
+        <text x="178" y="-2.5" text-anchor="end" class="mf-box-border-code">0x3F61 // 0xC419 // DROP // 0x0000</text>
+        <text x="178" y="29" text-anchor="end" class="mf-box-border-code">0x7A05 // IDLE // 0x2E7A // STALE</text>
+        <use href="#node-dot" x="174" y="11" />
+        <text x="162" y="15.5" text-anchor="end" class="mf-node">NODE-05-OFFLINE</text>
+      </g>
+
+      <g transform="translate(608, 806)">
+        <rect width="236" height="22" class="mf-node-box" />
+        <text x="230" y="-2.5" text-anchor="end" class="mf-box-border-code">0x1D6B // 0xB04C // 0x5D92 // LOCK // 0x0000</text>
+        <text x="230" y="29" text-anchor="end" class="mf-box-border-code">0x8E27 // 0x9C33 // OFFLINE // 0x71E4 // UNLINK</text>
+        <use href="#node-dot" x="226" y="11" />
+        <text x="214" y="15.5" text-anchor="end" class="mf-node">NODE-06-OFFLINE</text>
+      </g>
+    </g>
+  </g>
+
+  <g id="icon-border-corners" opacity="0.95">
+    <path d="M 36,84 L 36,36 L 84,36" class="corner-bracket" />
+    <path d="M 864,84 L 864,36 L 816,36" class="corner-bracket" />
+    <path d="M 36,816 L 36,864 L 84,864" class="corner-bracket" />
+    <path d="M 864,816 L 864,864 L 816,864" class="corner-bracket" />
+  </g>
+</svg>
