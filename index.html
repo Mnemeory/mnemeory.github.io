@@ -50,18 +50,68 @@
       border: 1px solid #00f2fe;
       background: #010408;
     }
-    textarea {
+    .editor-wrap {
+      position: relative;
       flex: 1;
       min-width: 300px;
       height: 900px;
-      background: #040e18;
-      color: #7bf0ff;
       border: 1px solid #00f2fe;
+      background: #040e18;
+      box-sizing: border-box;
+    }
+    .editor-backdrop,
+    .editor-input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
       padding: 10px;
+      border: 0;
       font-family: monospace;
       font-size: 12px;
+      line-height: 1.45;
+      letter-spacing: normal;
+      tab-size: 2;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow: auto;
       box-sizing: border-box;
-      resize: vertical;
+    }
+    .editor-backdrop {
+      color: #7bf0ff;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .editor-input {
+      color: transparent;
+      caret-color: #00f2fe;
+      background: transparent;
+      resize: none;
+      outline: none;
+      z-index: 2;
+    }
+    .editor-input::selection {
+      background: rgba(0, 242, 254, 0.25);
+    }
+    .hl-token {
+      background: rgba(255, 221, 0, 0.25);
+      color: #ffea00;
+      border-bottom: 1px solid #ffea00;
+      border-radius: 2px;
+    }
+    .hover-tip {
+      position: fixed;
+      display: none;
+      padding: 5px 8px;
+      background: #020910;
+      color: #ffea00;
+      border: 1px solid #ffea00;
+      font-family: monospace;
+      font-size: 11px;
+      pointer-events: none;
+      z-index: 9999;
+      white-space: nowrap;
     }
     @media (max-width: 1280px) {
       .workspace {
@@ -71,7 +121,7 @@
         width: 100%;
         max-width: 900px;
       }
-      textarea {
+      .editor-wrap {
         height: 450px;
       }
     }
@@ -85,18 +135,40 @@
   </div>
   <div class="workspace">
     <div id="preview" class="preview"></div>
-    <textarea id="svgSource" spellcheck="false"></textarea>
+    <div class="editor-wrap">
+      <pre id="svgHighlight" class="editor-backdrop" aria-hidden="true"></pre>
+      <textarea id="svgSource" class="editor-input" spellcheck="false"></textarea>
+    </div>
   </div>
+  <div id="hoverTip" class="hover-tip">Remove and replace "including []" with your character name</div>
 
   <script>
     const navEl = document.getElementById("nav");
     const previewEl = document.getElementById("preview");
     const sourceEl = document.getElementById("svgSource");
+    const highlightEl = document.getElementById("svgHighlight");
+    const hoverTip = document.getElementById("hoverTip");
     const copyBtn = document.getElementById("copyBtn");
     const downloadBtn = document.getElementById("downloadBtn");
 
     let entries = [];
     let currentIndex = 0;
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function updateHighlight(code) {
+      const escaped = escapeHtml(code);
+      const highlighted = escaped.replace(
+        /\[AGENT NAME\]/g,
+        '<span class="hl-token">[AGENT NAME]</span>'
+      );
+      highlightEl.innerHTML = highlighted + (code.endsWith("\n") ? " " : "");
+    }
 
     function renderCurrent() {
       const item = entries[currentIndex];
@@ -108,12 +180,49 @@
 
       previewEl.innerHTML = item.svgText;
       sourceEl.value = item.svgText;
+      updateHighlight(item.svgText);
     }
 
     sourceEl.addEventListener("input", () => {
       if (!entries[currentIndex]) return;
       entries[currentIndex].svgText = sourceEl.value;
       previewEl.innerHTML = sourceEl.value;
+      updateHighlight(sourceEl.value);
+    });
+
+    sourceEl.addEventListener("scroll", () => {
+      highlightEl.scrollTop = sourceEl.scrollTop;
+      highlightEl.scrollLeft = sourceEl.scrollLeft;
+    });
+
+    sourceEl.addEventListener("mousemove", (e) => {
+      const tokens = highlightEl.querySelectorAll(".hl-token");
+      let overToken = false;
+
+      for (const token of tokens) {
+        const rect = token.getBoundingClientRect();
+        if (
+          e.clientX >= rect.left &&
+          e.clientX <= rect.right &&
+          e.clientY >= rect.top &&
+          e.clientY <= rect.bottom
+        ) {
+          overToken = true;
+          break;
+        }
+      }
+
+      if (overToken) {
+        hoverTip.style.display = "block";
+        hoverTip.style.left = `${e.clientX + 12}px`;
+        hoverTip.style.top = `${e.clientY + 12}px`;
+      } else {
+        hoverTip.style.display = "none";
+      }
+    });
+
+    sourceEl.addEventListener("mouseleave", () => {
+      hoverTip.style.display = "none";
     });
 
     copyBtn.addEventListener("click", async () => {
