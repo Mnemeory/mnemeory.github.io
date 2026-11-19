@@ -37,18 +37,22 @@
       gap: 8px;
       margin-bottom: 12px;
     }
+    .workspace {
+      display: flex;
+      gap: 16px;
+      align-items: stretch;
+    }
     .preview {
       width: 450px;
-      max-width: 100%;
+      flex-shrink: 0;
       aspect-ratio: 1 / 1;
       border: 1px solid #00f2fe;
       background: #010408;
-      margin-bottom: 12px;
     }
     textarea {
-      width: 100%;
-      max-width: 900px;
-      height: 220px;
+      flex: 1;
+      min-width: 300px;
+      height: 450px;
       background: #040e18;
       color: #7bf0ff;
       border: 1px solid #00f2fe;
@@ -56,6 +60,15 @@
       font-family: monospace;
       font-size: 12px;
       box-sizing: border-box;
+      resize: vertical;
+    }
+    @media (max-width: 820px) {
+      .workspace {
+        flex-direction: column;
+      }
+      .preview {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -65,8 +78,10 @@
     <button id="copyBtn" type="button">Copy SVG</button>
     <button id="downloadBtn" type="button">Download SVG</button>
   </div>
-  <div id="preview" class="preview"></div>
-  <textarea id="svgSource" spellcheck="false"></textarea>
+  <div class="workspace">
+    <div id="preview" class="preview"></div>
+    <textarea id="svgSource" spellcheck="false"></textarea>
+  </div>
 
   <script>
     const navEl = document.getElementById("nav");
