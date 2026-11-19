@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NetWatch Badges</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #02060b;
+      color: #7bf0ff;
+      font-family: monospace;
+    }
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    button {
+      background: #04121a;
+      color: #7bf0ff;
+      border: 1px solid #00f2fe;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-family: monospace;
+    }
+    button.active {
+      background: #00f2fe;
+      color: #02060b;
+      font-weight: bold;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .preview {
+      width: 450px;
+      max-width: 100%;
+      aspect-ratio: 1 / 1;
+      border: 1px solid #00f2fe;
+      background: #010408;
+      margin-bottom: 12px;
+    }
+    textarea {
+      width: 100%;
+      max-width: 900px;
+      height: 220px;
+      background: #040e18;
+      color: #7bf0ff;
+      border: 1px solid #00f2fe;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 12px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <div id="nav" class="nav"></div>
+  <div class="controls">
+    <button id="copyBtn" type="button">Copy SVG</button>
+    <button id="downloadBtn" type="button">Download SVG</button>
+  </div>
+  <div id="preview" class="preview"></div>
+  <textarea id="svgSource" spellcheck="false"></textarea>
+
+  <script>
+    const navEl = document.getElementById("nav");
+    const previewEl = document.getElementById("preview");
+    const sourceEl = document.getElementById("svgSource");
+    const copyBtn = document.getElementById("copyBtn");
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    let entries = [];
+    let currentIndex = 0;
+
+    function renderCurrent() {
+      const item = entries[currentIndex];
+      if (!item) return;
+
+      document.querySelectorAll("#nav button").forEach((btn, idx) => {
+        btn.classList.toggle("active", idx === currentIndex);
+      });
+
+      previewEl.innerHTML = item.svgText;
+      sourceEl.value = item.svgText;
+    }
+
+    sourceEl.addEventListener("input", () => {
+      if (!entries[currentIndex]) return;
+      entries[currentIndex].svgText = sourceEl.value;
+      previewEl.innerHTML = sourceEl.value;
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(sourceEl.value);
+        copyBtn.textContent = "Copied";
+        setTimeout(() => (copyBtn.textContent = "Copy SVG"), 1200);
+      } catch {
+        sourceEl.select();
+        document.execCommand("copy");
+      }
+    });
+
+    downloadBtn.addEventListener("click", () => {
+      const item = entries[currentIndex];
+      if (!item) return;
+      const blob = new Blob([sourceEl.value], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = item.file.split("/").pop() || `${item.id}.svg`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    async function init() {
+      const res = await fetch("./badges.json");
+      const manifest = await res.json();
+
+      entries = await Promise.all(
+        manifest.map(async (item) => {
+          const svgRes = await fetch(item.file);
+          const svgText = await svgRes.text();
+          return { ...item, svgText };
+        })
+      );
+
+      navEl.innerHTML = "";
+      entries.forEach((item, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = item.label;
+        btn.addEventListener("click", () => {
+          currentIndex = idx;
+          renderCurrent();
+        });
+        navEl.appendChild(btn);
+      });
+
+      renderCurrent();
+    }
+
+    init();
+  </script>
+</body>
+</html>

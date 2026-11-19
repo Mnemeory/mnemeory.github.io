@@ -1,0 +1,27 @@
+[
+  {
+    "id": "probationary-agent",
+    "label": "PROBATIONARY AGENT",
+    "file": "./svg/probationary-agent.svg"
+  },
+  {
+    "id": "agent",
+    "label": "AGENT",
+    "file": "./svg/agent.svg"
+  },
+  {
+    "id": "senior-agent",
+    "label": "SENIOR AGENT",
+    "file": "./svg/senior-agent.svg"
+  },
+  {
+    "id": "supervisor",
+    "label": "SUPERVISOR",
+    "file": "./svg/supervisor.svg"
+  },
+  {
+    "id": "section-chief",
+    "label": "SECTION CHIEF",
+    "file": "./svg/section-chief.svg"
+  }
+]

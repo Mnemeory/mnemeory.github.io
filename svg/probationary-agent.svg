@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" width="100%" height="100%">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&amp;family=Rajdhani:wght@400;500;600;700&amp;display=swap');
+.orbit-text { font-family: Orbitron, sans-serif; }
+.name-text, .title-text { font-family: Rajdhani, sans-serif; }</style>
+    <radialGradient id="bgGrad1" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#091b2c"/>
+      <stop offset="50%" stop-color="#040e18"/>
+      <stop offset="100%" stop-color="#010408"/>
+    </radialGradient>
+    <linearGradient id="shieldInner1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#04121a"/>
+      <stop offset="100%" stop-color="#01070d"/>
+    </linearGradient>
+    <pattern id="scanlines1" width="100" height="4" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="100" y2="0" stroke="#00f2fe" stroke-width="0.3" opacity="0.06"/>
+    </pattern>
+    <pattern id="grid1" width="45" height="45" patternUnits="userSpaceOnUse">
+      <path d="M 45 0 L 0 0 0 45" fill="none" stroke="#00f2fe" stroke-width="0.5" opacity="0.08"/>
+    </pattern>
+    <filter id="deepGlow1" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur1"/>
+      <feGaussianBlur stdDeviation="2" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="subtleGlow1" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <path id="textPath1" d="M 450, 450 m -330, 0 a 330,330 0 1,1 660,0 a 330,330 0 1,1 -660,0"/>
+  </defs>
+  <rect width="900" height="900" fill="url(#bgGrad1)"/>
+  <rect width="900" height="900" fill="url(#grid1)"/>
+  <rect width="900" height="900" fill="url(#scanlines1)"/>
+  <g filter="url(#subtleGlow1)">
+    <circle cx="450" cy="450" r="405" fill="none" stroke="#00f2fe" stroke-width="0.75" opacity="0.2" stroke-dasharray="4 8"/>
+    <circle cx="450" cy="450" r="395" fill="none" stroke="#00f2fe" stroke-width="1.5" opacity="0.4" stroke-dasharray="12 6 3 6"/>
+    <circle cx="450" cy="450" r="375" fill="none" stroke="#00f2fe" stroke-width="1" opacity="0.3"/>
+    <path d="M 40,110 L 40,40 L 110,40 M 860,110 L 860,40 L 790,40 M 40,790 L 40,860 L 110,860 M 860,790 L 860,860 L 790,860" fill="none" stroke="#00f2fe" stroke-width="2" opacity="0.75"/>
+    <circle cx="450" cy="40" r="3" fill="#00f2fe" opacity="0.8"/>
+    <circle cx="450" cy="860" r="3" fill="#00f2fe" opacity="0.8"/>
+    <circle cx="40" cy="450" r="3" fill="#00f2fe" opacity="0.8"/>
+    <circle cx="860" cy="450" r="3" fill="#00f2fe" opacity="0.8"/>
+    <circle cx="450" cy="450" r="362" fill="none" stroke="#00f2fe" stroke-width="2" opacity="0.65"/>
+    <circle cx="450" cy="450" r="298" fill="none" stroke="#00f2fe" stroke-width="2" opacity="0.65"/>
+    <circle cx="450" cy="450" r="286" fill="none" stroke="#00f2fe" stroke-width="1" opacity="0.3" stroke-dasharray="6 3"/>
+    <text font-size="13.5" font-weight="bold" fill="#7bf0ff" letter-spacing="2.53" class="orbit-text">
+      <textPath href="#textPath1" dominant-baseline="central">NC-SERVER // NETWATCH-REG-02 // NODE-WATCHTOWER-7 // ENFORCED // NC-SERVER // NETWATCH-REG-02 // NODE-WATCHTOWER-7 // ENFORCED // NC-SERVER // NETWATCH-REG-02 // ENFORCED //</textPath>
+    </text>
+  </g>
+  <g transform="translate(450, 450)" opacity="0.25" stroke="#00f2fe" stroke-width="1.2" fill="none" filter="url(#subtleGlow1)">
+    <circle cx="0" cy="0" r="275" stroke-dasharray="5 3" stroke-width="1.5"/>
+    <ellipse cx="0" cy="0" rx="275" ry="185"/>
+    <ellipse cx="0" cy="0" rx="275" ry="90"/>
+    <line x1="-275" y1="0" x2="275" y2="0" stroke-width="1.5"/>
+    <path d="M 0,-275 C 105,-275 105,275 0,275"/>
+    <path d="M 0,-275 C -105,-275 -105,275 0,275"/>
+    <path d="M -190,-195 C -60,-275 -60,275 -190,195"/>
+    <path d="M 190,-195 C 60,-275 60,275 190,195"/>
+  </g>
+  <g transform="translate(450, 450)" filter="url(#deepGlow1)">
+    <path d="M 0,-200 L 160,-152 L 160,22 C 160,122 82,190 0,220 C -82,190 -160,122 -160,22 L -160,-152 Z" fill="url(#shieldInner1)" stroke="#00f2fe" stroke-width="4.5"/>
+    <g transform="translate(0, 0)">
+      <g transform="translate(0, -100)">
+        <path d="M -35,-10 L 0,-30 L 35,-10" fill="none" stroke="#00f2fe" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <g transform="translate(0, -10)">
+        <rect x="-170" y="-21" width="340" height="42" fill="#020910" stroke="#00f2fe" stroke-width="2.5"/>
+        <polygon points="-170,-21 -160,-21 -170,-11" fill="#00f2fe"/>
+        <polygon points="170,-21 160,-21 170,-11" fill="#00f2fe"/>
+        <polygon points="-170,21 -160,21 -170,11" fill="#00f2fe"/>
+        <polygon points="170,21 160,21 170,11" fill="#00f2fe"/>
+        <text x="0" y="6" font-size="20" font-weight="900" fill="#00f2fe" text-anchor="middle" letter-spacing="3.5" filter="url(#subtleGlow1)" class="name-text">[AGENT NAME]</text>
+      </g>
+      <g transform="translate(0, 68)">
+        <text x="0" y="10" font-size="13.5" font-weight="bold" fill="#7bf0ff" text-anchor="middle" letter-spacing="2" opacity="0.9" class="title-text">PROBATIONARY AGENT</text>
+        <text x="0" y="32" font-size="13.5" font-weight="bold" fill="#7bf0ff" text-anchor="middle" letter-spacing="2" opacity="0.9" class="title-text">NIGHT CITY FIELD OFFICE</text>
+        <text x="0" y="54" font-size="13.5" font-weight="bold" fill="#7bf0ff" text-anchor="middle" letter-spacing="2" opacity="0.9" class="title-text">NETWATCH</text>
+      </g>
+    </g>
+  </g>
+</svg>
