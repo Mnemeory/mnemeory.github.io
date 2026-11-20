@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NetWatch Terminal // NC-NET </title>
+  <title>NetWatch Terminal</title>
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -202,7 +202,7 @@
           <th scope="col">Name</th>
           <th scope="col">Affiliation</th>
           <th scope="col"># of Traces</th>
-          <th scope="col">Affiliated Cases</th>
+          <th scope="col">STATUS</th>
         </tr>
       </thead>
       <tbody id="dbBody"></tbody>
@@ -262,7 +262,7 @@
 
       const rows = watchtowerData
         .filter((row) =>
-          [row.name, row.affiliation, row.traces, row.cases]
+          [row.name, row.affiliation, row.traces, row.status]
             .some((val) => String(val ?? "").toLowerCase().includes(q))
         )
         .sort((a, b) => collator.compare(a.name ?? "", b.name ?? ""));
@@ -271,7 +271,7 @@
 
       for (const row of rows) {
         const tr = document.createElement("tr");
-        for (const key of ["name", "affiliation", "traces", "cases"]) {
+        for (const key of ["name", "affiliation", "traces", "status"]) {
           const td = document.createElement("td");
           td.textContent = row[key] ?? "";
           tr.append(td);
