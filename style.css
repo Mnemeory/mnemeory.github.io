@@ -26,9 +26,12 @@ body {
 }
 
 .terminal-header {
-  display: flex;
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  grid-template-rows: repeat(2, minmax(92px, auto));
+  column-gap: 16px;
+  row-gap: 10px;
   align-items: center;
-  gap: 16px;
   margin-bottom: 8px;
 }
 
@@ -43,9 +46,17 @@ body {
 }
 
 .terminal-header .node-nav {
-  flex: 1;
   min-width: 0;
   margin-bottom: 0;
+  align-items: center;
+}
+
+.terminal-header .sub-nav {
+  min-width: 0;
+  min-height: 0;
+  margin-bottom: 0;
+  padding: 0 0 12px;
+  align-items: center;
 }
 
 .node-nav button {
@@ -394,8 +405,10 @@ tbody tr.row-status-contained {
 
 @media (max-width: 640px) {
   .terminal-header {
-    align-items: flex-start;
-    gap: 10px;
+    grid-template-columns: 54px minmax(0, 1fr);
+    grid-template-rows: repeat(2, minmax(60px, auto));
+    column-gap: 10px;
+    row-gap: 8px;
   }
 
   .terminal-logo {
