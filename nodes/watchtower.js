@@ -7,15 +7,37 @@ const STATUS_CLASSES = {
   CONTAINED: "status-contained"
 };
 
-export function createWatchtowerNode({ viewEl, subNavEl, searchEl, bodyEl }) {
+export function createWatchtowerNode({ viewEl, subNavEl, searchEl, bodyEl, notesDialogEl, notesTitleEl, notesListEl, closeNotesEl }) {
   let records = [];
+
+  function getNotes(row) {
+    if (Array.isArray(row.notes)) return row.notes;
+    return row.notes ? [row.notes] : [];
+  }
+
+  function openNotes(row) {
+    notesTitleEl.textContent = row.name ?? "Unknown";
+    const fragment = document.createDocumentFragment();
+    for (const note of getNotes(row)) {
+      const item = document.createElement("li");
+      item.textContent = String(note ?? "");
+      fragment.append(item);
+    }
+    notesListEl.replaceChildren(fragment);
+    notesDialogEl.showModal();
+  }
+
+  closeNotesEl.addEventListener("click", () => notesDialogEl.close());
+  notesDialogEl.addEventListener("click", (event) => {
+    if (event.target === notesDialogEl) notesDialogEl.close();
+  });
 
   function renderRows() {
     const q = searchEl.value.trim().toLowerCase();
 
     const rows = records
       .filter((row) =>
-        [row.name, row.affiliation, row.traces, row.status]
+        [row.name, row.affiliation, row.traces, row.status, ...getNotes(row)]
           .some((val) => String(val ?? "").toLowerCase().includes(q))
       )
       .sort((a, b) => collator.compare(a.name ?? "", b.name ?? ""));
@@ -32,7 +54,19 @@ export function createWatchtowerNode({ viewEl, subNavEl, searchEl, bodyEl }) {
       }
 
       const nameTd = document.createElement("td");
-      nameTd.textContent = row.name ?? "";
+      const nameButton = document.createElement("button");
+      nameButton.type = "button";
+      nameButton.className = "person-name";
+      nameButton.textContent = row.name ?? "";
+      if (getNotes(row).length) {
+        const marker = document.createElement("span");
+        marker.className = "notes-marker";
+        marker.textContent = "*";
+        marker.setAttribute("aria-label", " has notes");
+        nameButton.append(marker);
+      }
+      nameButton.addEventListener("click", () => openNotes(row));
+      nameTd.append(nameButton);
 
       const affiliationTd = document.createElement("td");
       affiliationTd.textContent = row.affiliation ?? "";

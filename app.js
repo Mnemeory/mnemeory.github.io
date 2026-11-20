@@ -15,7 +15,11 @@ const watchtower = createWatchtowerNode({
   viewEl: document.getElementById("watchtowerView"),
   subNavEl,
   searchEl: document.getElementById("dbSearch"),
-  bodyEl: document.getElementById("dbBody")
+  bodyEl: document.getElementById("dbBody"),
+  notesDialogEl: document.getElementById("notesDialog"),
+  notesTitleEl: document.getElementById("notesTitle"),
+  notesListEl: document.getElementById("notesList"),
+  closeNotesEl: document.getElementById("closeNotes")
 });
 
 const library = createLibraryNode({
