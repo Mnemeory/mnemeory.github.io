@@ -29,9 +29,10 @@ body {
   display: grid;
   grid-template-columns: 84px minmax(0, 1fr);
   grid-template-rows: repeat(2, minmax(92px, auto));
-  column-gap: 16px;
-  row-gap: 10px;
-  align-items: center;
+  grid-template-areas:
+    "netwatch nodebar"
+    "gateway subbar";
+  gap: 10px 16px;
   margin-bottom: 8px;
 }
 
@@ -45,13 +46,23 @@ body {
   filter: drop-shadow(0 0 5px rgba(0, 205, 220, 0.14));
 }
 
+.terminal-logo-netwatch {
+  grid-area: netwatch;
+}
+
+.terminal-logo-gateway {
+  grid-area: gateway;
+}
+
 .terminal-header .node-nav {
+  grid-area: nodebar;
   min-width: 0;
   margin-bottom: 0;
   align-items: center;
 }
 
 .terminal-header .sub-nav {
+  grid-area: subbar;
   min-width: 0;
   min-height: 0;
   margin-bottom: 0;
@@ -407,8 +418,7 @@ tbody tr.row-status-contained {
   .terminal-header {
     grid-template-columns: 54px minmax(0, 1fr);
     grid-template-rows: repeat(2, minmax(60px, auto));
-    column-gap: 10px;
-    row-gap: 8px;
+    gap: 8px 10px;
   }
 
   .terminal-logo {
