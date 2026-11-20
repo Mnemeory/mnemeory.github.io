@@ -128,13 +128,18 @@
 
     .db-search {
       background: #04121a;
-      color: #7bf0ff;
+      color: #e6f7ff;
       border: 1px solid #00f2fe;
-      padding: 8px 12px;
-      font: inherit;
-      margin-bottom: 12px;
-      width: 320px;
+      padding: 10px 14px;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      margin-bottom: 14px;
+      width: 340px;
       max-width: 100%;
+    }
+
+    .db-search::placeholder {
+      color: rgba(185, 232, 245, 0.55);
     }
 
     .db-search:focus {
@@ -145,17 +150,52 @@
       width: 100%;
       border-collapse: collapse;
       background: #040e18;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
     }
 
     th,
     td {
-      border: 1px solid #00f2fe;
-      padding: 8px 12px;
+      border: 1px solid rgba(0, 242, 254, 0.35);
+      padding: 10px 14px;
       text-align: left;
+      vertical-align: middle;
     }
 
     th {
       background: #04121a;
+      color: #7bf0ff;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    tbody tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    tbody tr:hover {
+      background: rgba(0, 242, 254, 0.08);
+    }
+
+    .status-hostile {
+      color: #ff4d4d;
+      font-weight: 700;
+    }
+
+    .status-monitored {
+      color: #ffd43b;
+      font-weight: 700;
+    }
+
+    .status-neutral {
+      color: #4dabf7;
+      font-weight: 600;
+    }
+
+    .status-contained {
+      color: #ffffff;
+      font-weight: 700;
     }
 
     [hidden] {
@@ -195,7 +235,7 @@
   </section>
 
   <section id="dbView" hidden>
-    <input id="dbSearch" class="db-search" type="search" aria-label="Search Watchtower Database" placeholder="Search..." />
+    <input id="dbSearch" class="db-search" type="search" aria-label="Search Watchtower Database" placeholder="Search name, affiliation, traces, or status..." />
     <table>
       <thead>
         <tr>
@@ -226,6 +266,13 @@
 
     const collator = new Intl.Collator(undefined, { sensitivity: "base", numeric: true });
     const WATCHTOWER_TAB = "watchtower";
+
+    const STATUS_CLASSES = {
+      HOSTILE: "status-hostile",
+      MONITORED: "status-monitored",
+      NEUTRAL: "status-neutral",
+      CONTAINED: "status-contained"
+    };
 
     let entries = [];
     let watchtowerData = [];
@@ -271,11 +318,24 @@
 
       for (const row of rows) {
         const tr = document.createElement("tr");
-        for (const key of ["name", "affiliation", "traces", "status"]) {
-          const td = document.createElement("td");
-          td.textContent = row[key] ?? "";
-          tr.append(td);
+
+        const nameTd = document.createElement("td");
+        nameTd.textContent = row.name ?? "";
+
+        const affiliationTd = document.createElement("td");
+        affiliationTd.textContent = row.affiliation ?? "";
+
+        const tracesTd = document.createElement("td");
+        tracesTd.textContent = row.traces ?? "";
+
+        const statusValue = String(row.status ?? "").trim().toUpperCase();
+        const statusTd = document.createElement("td");
+        statusTd.textContent = row.status ?? "";
+        if (STATUS_CLASSES[statusValue]) {
+          statusTd.className = STATUS_CLASSES[statusValue];
         }
+
+        tr.append(nameTd, affiliationTd, tracesTd, statusTd);
         fragment.append(tr);
       }
 
