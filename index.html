@@ -113,6 +113,33 @@
       z-index: 9999;
       white-space: nowrap;
     }
+    .db-view {
+      display: none;
+    }
+    .db-search {
+      background: #04121a;
+      color: #7bf0ff;
+      border: 1px solid #00f2fe;
+      padding: 8px 12px;
+      font-family: monospace;
+      margin-bottom: 12px;
+      width: 300px;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #040e18;
+    }
+    th, td {
+      border: 1px solid #00f2fe;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    th {
+      background: #04121a;
+    }
     @media (max-width: 1280px) {
       .workspace {
         flex-direction: column;
@@ -129,21 +156,40 @@
 </head>
 <body>
   <div id="nav" class="nav"></div>
-  <div class="controls">
+  <div id="controls" class="controls">
     <button id="copyBtn" type="button">Copy SVG</button>
     <button id="downloadBtn" type="button">Download SVG</button>
   </div>
-  <div class="workspace">
+  <div id="workspace" class="workspace">
     <div id="preview" class="preview"></div>
     <div class="editor-wrap">
       <pre id="svgHighlight" class="editor-backdrop" aria-hidden="true"></pre>
       <textarea id="svgSource" class="editor-input" spellcheck="false"></textarea>
     </div>
   </div>
+  <div id="dbView" class="db-view">
+    <input id="dbSearch" class="db-search" type="text" placeholder="Search..." />
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Affiliation</th>
+          <th># of Traces</th>
+          <th>Affiliated Cases</th>
+        </tr>
+      </thead>
+      <tbody id="dbBody"></tbody>
+    </table>
+  </div>
   <div id="hoverTip" class="hover-tip">Remove and replace (including []) with your character name</div>
 
   <script>
     const navEl = document.getElementById("nav");
+    const controlsEl = document.getElementById("controls");
+    const workspaceEl = document.getElementById("workspace");
+    const dbViewEl = document.getElementById("dbView");
+    const dbSearchEl = document.getElementById("dbSearch");
+    const dbBodyEl = document.getElementById("dbBody");
     const previewEl = document.getElementById("preview");
     const sourceEl = document.getElementById("svgSource");
     const highlightEl = document.getElementById("svgHighlight");
@@ -151,11 +197,15 @@
     const copyBtn = document.getElementById("copyBtn");
     const downloadBtn = document.getElementById("downloadBtn");
 
+    const watchtowerData = [
+      { name: "Example Name", affiliation: "Example Affiliation", traces: 0, cases: "CASE-001" }
+    ];
+
     let entries = [];
     let currentIndex = 0;
 
     function escapeHtml(str) {
-      return str
+      return String(str)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
@@ -170,18 +220,56 @@
       highlightEl.innerHTML = highlighted + (code.endsWith("\n") ? " " : "");
     }
 
+    function renderDatabase() {
+      const q = dbSearchEl.value.toLowerCase();
+      const rows = watchtowerData
+        .filter((row) =>
+          row.name.toLowerCase().includes(q) ||
+          row.affiliation.toLowerCase().includes(q) ||
+          String(row.traces).includes(q) ||
+          row.cases.toLowerCase().includes(q)
+        )
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+      dbBodyEl.innerHTML = rows
+        .map((row) => `
+          <tr>
+            <td>${escapeHtml(row.name)}</td>
+            <td>${escapeHtml(row.affiliation)}</td>
+            <td>${escapeHtml(row.traces)}</td>
+            <td>${escapeHtml(row.cases)}</td>
+          </tr>
+        `)
+        .join("");
+    }
+
     function renderCurrent() {
+      const buttons = document.querySelectorAll("#nav button");
+      buttons.forEach((btn, idx) => {
+        btn.classList.toggle("active", idx === currentIndex);
+      });
+
+      if (currentIndex === entries.length) {
+        controlsEl.style.display = "none";
+        workspaceEl.style.display = "none";
+        dbViewEl.style.display = "block";
+        renderDatabase();
+        return;
+      }
+
       const item = entries[currentIndex];
       if (!item) return;
 
-      document.querySelectorAll("#nav button").forEach((btn, idx) => {
-        btn.classList.toggle("active", idx === currentIndex);
-      });
+      controlsEl.style.display = "flex";
+      workspaceEl.style.display = "flex";
+      dbViewEl.style.display = "none";
 
       previewEl.innerHTML = item.svgText;
       sourceEl.value = item.svgText;
       updateHighlight(item.svgText);
     }
+
+    dbSearchEl.addEventListener("input", renderDatabase);
 
     sourceEl.addEventListener("input", () => {
       if (!entries[currentIndex]) return;
@@ -271,6 +359,15 @@
         });
         navEl.appendChild(btn);
       });
+
+      const dbBtn = document.createElement("button");
+      dbBtn.type = "button";
+      dbBtn.textContent = "NODE-01-WATCHTOWER";
+      dbBtn.addEventListener("click", () => {
+        currentIndex = entries.length;
+        renderCurrent();
+      });
+      navEl.appendChild(dbBtn);
 
       renderCurrent();
     }
