@@ -3,37 +3,72 @@
     "name": "Aiden Castile",
     "affiliation": "Unknown",
     "traces": 3,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Evaded agents, lethal force was used to apprehend.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Alexei",
     "affiliation": "Unknown",
-    "traces": 1,
+    "traces": 2,
     "status": "NEUTRAL"
   },
   {
     "name": "Alexios A.",
     "affiliation": "Mox",
     "traces": 2,
-    "status": "HOSTILE"
+    "status": "HOSTILE",
+    "notes": [
+      {
+        "text": "When traced, he fled to Lizzie's Bar and went inside. Bargoers then came out and harassed NetWatch with automatic rifles before the trace was disconnected for Agent safety.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Astria",
     "affiliation": "Unknown",
     "traces": 0,
-    "status": "MONITORED"
+    "status": "MONITORED",
+    "notes": [
+      {
+        "text": "Vocally hostile against NetWatch. Potentially in possession of a pre-Krash OS.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Bansh333",
     "affiliation": "Unknown",
     "traces": 3,
-    "status": "HOSTILE"
+    "status": "HOSTILE",
+    "notes": [
+      {
+        "text": "Section Chief Lewis and Agent Spirit traced and pursued. Individual fled in a vehicle. Lewis neutralized the individual. A crew of seven then returned with weaponized vehicles while awaiting for Trauma, and blew up the NetWatch Emperor, and threatened to murder both Lewis and Spirit if they did not pay for the damage to their vehicle as a result of the gunfire. Lewis then gave the individuals some corporate business shards before leaving.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "BB",
     "affiliation": "Unknown",
     "traces": 1,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Attempted to flee when agents confronted them. Agents subduded the target with lethal force before apprehending.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Bigman",
@@ -45,7 +80,14 @@
     "name": "Black Cross",
     "affiliation": "Unknown",
     "traces": 2,
-    "status": "MONITORED"
+    "status": "MONITORED",
+    "notes": [
+      {
+        "text": "Fled from a traffic stop. Agents fired. May be hostile. Traced w/Icky on 2nd time",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Braddah Joe",
@@ -63,13 +105,27 @@
     "name": "Cadium",
     "affiliation": "Unknown",
     "traces": 1,
-    "status": "HOSTILE"
+    "status": "HOSTILE",
+    "notes": [
+      {
+        "text": "Fled from agents and opened fire, Agent Icky went down in pursuit. Supervisor Lewis was able to subdue and apprehend the subject.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Coy",
     "affiliation": "Unknown",
     "traces": 3,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Subject fled initially, then surrendered once I caught up and threatened to flatline them.\nOn the third trace, Coy was caught in the access port. They surrendered and complied. During the interaction, however, one of their buddies came over to warn them of NetWatch.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Cryus Star",
@@ -81,13 +137,27 @@
     "name": "Curse",
     "affiliation": "Valentinos",
     "traces": 3,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Fled from a traffic stop. Agents fired. May be hostile. Traced w/Icky on 3rd time",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Daemon Ross",
     "affiliation": "Unknown",
     "traces": 1,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Fled from agents when confronted, agents disengaged after they went into hostile territory.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "danielkidaniel",
@@ -99,12 +169,19 @@
     "name": "Emilia Banks",
     "affiliation": "Aldecaldos",
     "traces": 1,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Proceeded to destroy a NetWatch vehicle with NetWatch personnel in it when approached.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Emily Millers",
     "affiliation": "Unknown",
-    "traces": 2,
+    "traces": 3,
     "status": "NEUTRAL"
   },
   {
@@ -122,14 +199,21 @@
   {
     "name": "Free",
     "affiliation": "Unknown",
-    "traces": 1,
+    "traces": 2,
     "status": "NEUTRAL"
   },
   {
     "name": "Gideon St. Clair",
     "affiliation": "Unknown",
     "traces": 2,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Ran from NetWatch agents",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Hellsing Blackstar",
@@ -141,7 +225,14 @@
     "name": "Hikari Ishida",
     "affiliation": "Unknown",
     "traces": 1,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Fled to Arasaka HQ to evade agents",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Hyde",
@@ -177,13 +268,27 @@
     "name": "Kane \"Malware\" Untendo",
     "affiliation": "Unknown",
     "traces": 1,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Subject fled into the badlands, disengaged.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Kellix",
     "affiliation": "Unknown",
     "traces": 1,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Complied with NetWatch agents",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Krank",
@@ -207,19 +312,33 @@
     "name": "Magashi",
     "affiliation": "Unknown",
     "traces": 1,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Complied with agents, warning given.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Mari Lavore",
     "affiliation": "Unknown",
-    "traces": 1,
+    "traces": 2,
     "status": "NEUTRAL"
   },
   {
     "name": "Marshal Ward",
     "affiliation": "Unknown",
     "traces": 1,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Fled from agents into a bar, wears a silly cowboy hat",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Mayuri Tachibana",
@@ -231,19 +350,40 @@
     "name": "Milton Wimple",
     "affiliation": "Unknown",
     "traces": 1,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Friendly, did defecate outside the access point however.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Missy Giggles",
     "affiliation": "Mox",
     "traces": 1,
-    "status": "CONTAINED"
+    "status": "CONTAINED",
+    "notes": [
+      {
+        "text": "PROTECTED RUNNER: DO NOT APPROACH. DO NOT SURVEIL. DO NOT APPREHEND. IF TRACED, DISCONNECT AND NOTIFY CADEN LEWIS, SECTION CHIEF.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Mr. Blargh",
     "affiliation": "Unknown",
     "traces": 3,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Uses an alias of \"Ghost\"",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Nano Kinetic (Null)",
@@ -285,13 +425,27 @@
     "name": "Red Cloud",
     "affiliation": "Unknown",
     "traces": 5,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Fled agents x2",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Rei Valentine",
     "affiliation": "Unknown",
     "traces": 1,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Complied with NetWatch Agents (seemed very scared and afraid)",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "RetroBoy04",
@@ -309,13 +463,27 @@
     "name": "Rinko Hoshizora",
     "affiliation": "Unknown",
     "traces": 1,
-    "status": "HOSTILE"
+    "status": "HOSTILE",
+    "notes": [
+      {
+        "text": "Fled agents and fired upon agents. Lethal force was used to subude.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Ronan",
     "affiliation": "Unknown",
     "traces": 4,
-    "status": "HOSTILE"
+    "status": "HOSTILE",
+    "notes": [
+      {
+        "text": "Ran from netwatch (id 3)",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Ronan \"Crash\" Calder",
@@ -333,13 +501,27 @@
     "name": "Simon Pheonix",
     "affiliation": "Pheonix Arms",
     "traces": 0,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "In possession of a pre-Krash OS. Complaint w/NetWatch, surrendered the pre-Krash OS for 80,000 eddies.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Static",
     "affiliation": "Unknown",
     "traces": 1,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Subject started fleeing on a bike, agents subdued with lethal force then apprehended.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Sullivan",
@@ -368,7 +550,7 @@
   {
     "name": "Unbound",
     "affiliation": "Mox",
-    "traces": 2,
+    "traces": 3,
     "status": "NEUTRAL"
   },
   {
@@ -405,7 +587,14 @@
     "name": "WOLF",
     "affiliation": "Unknown",
     "traces": 1,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Runs in a crew of four.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Wytch",
@@ -423,10 +612,203 @@
     "name": "Z",
     "affiliation": "Unknown",
     "traces": 1,
-    "status": "NEUTRAL"
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Complied with apprehension.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
   },
   {
     "name": "Zedd Navarro",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Complied with agent, warning issued and cam archive confiscated.",
+        "author": "NCFO D.H.C. - Watcher",
+        "addedAt": "2077-11-20"
+      }
+    ]
+  },
+  {
+    "name": "Dante Hon",
+    "affiliation": "Unknown",
+    "traces": 3,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "William Stone",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Miller Dawes",
+    "affiliation": "Unknown",
+    "traces": 2,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Rory \"W1ZARD\" McKenzie",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Z3PHYR",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Heleran Yerella",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "HADES",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Ixo",
+    "affiliation": "Unknown",
+    "traces": 2,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Ambee",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Renata Harrows",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "M1x3r",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Alice Blackwell",
+    "affiliation": "Unknown",
+    "traces": 3,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Carlos",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Sarge",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Jester DeShawn",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Zara Al-Haya",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Dario",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Serenity",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "W1RE$",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "HOSTILE",
+    "notes": [
+      {
+        "text": "When approached, open fired on Chiefs Icky and Lewis with six other individuals. Icky was transported back to Trauma Center by local Trauma Team, Lewis was treated by Trauma Team on scene. Upon being treated, Lewis traced the individual from the access point. Extremely hostile.",
+        "author": "Caden Lewis, Section Chief",
+        "addedAt": "2077-11-19"
+      }
+    ]
+  },
+  {
+    "name": "Peete Sooul",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Fled until trace when cold",
+        "author": "Alaric Thorne, Probationary Agent",
+        "addedAt": "2077-11-20"
+      }
+    ]
+  },
+  {
+    "name": "Wallace \"Ace\" Winters",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "HOSTILE",
+    "notes": [
+      {
+        "text": "Ambushed NetWatch Agent at access point.",
+        "author": "Alaric Thorne, Probationary Agent",
+        "addedAt": "2077-11-20"
+      }
+    ]
+  },
+  {
+    "name": "Crimson",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Fled until traced went cold.",
+        "author": "Alaric Thorne, Probationary Agent",
+        "addedAt": "2077-11-20"
+      }
+    ]
+  },
+  {
+    "name": "Dankes",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "HOSTILE",
+    "notes": [
+      {
+        "text": "Ambushed NetWatch Agent at access point.",
+        "author": "Alaric Thorne, Probationary Agent",
+        "addedAt": "2077-11-20"
+      }
+    ]
+  },
+  {
+    "name": "Jet Ona",
     "affiliation": "Unknown",
     "traces": 1,
     "status": "NEUTRAL"

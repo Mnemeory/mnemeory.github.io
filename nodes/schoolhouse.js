@@ -96,8 +96,10 @@ export function createSchoolhouseNode({
     const a = document.createElement("a");
     a.href = url;
     a.download = item.file.split("/").pop() || `${item.id}.svg`;
+    document.body.append(a);
     a.click();
-    URL.revokeObjectURL(url);
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   });
 
   return {
