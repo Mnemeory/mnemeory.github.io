@@ -10,12 +10,26 @@ body {
   font-family: monospace;
 }
 
+.node-title {
+  margin: 0 0 14px;
+  font-family: "Orbitron", monospace;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #7bf0ff;
+}
+
 .node-nav,
 .sub-nav {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 12px;
+}
+
+.node-nav button {
+  font-family: "Orbitron", monospace;
+  letter-spacing: 0.05em;
 }
 
 .sub-nav {
@@ -167,8 +181,10 @@ td {
 th {
   background: #04121a;
   color: #7bf0ff;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-family: "Orbitron", monospace;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 tbody tr:nth-child(even) {
@@ -179,13 +195,94 @@ tbody tr:hover {
   background: rgba(0, 242, 254, 0.08);
 }
 
+tbody tr.row-status-hostile {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(10, 4, 6, 0.45) 0 2px,
+      transparent 2px 5px
+    ),
+    linear-gradient(
+      90deg,
+      #140407 0%,
+      #5c0b16 26%,
+      #b81427 62%,
+      #ff2a44 88%,
+      #ff7585 100%
+    );
+  color: #ffe8ec;
+}
+
+tbody tr.row-status-hostile:hover {
+  filter: brightness(1.08);
+}
+
+tbody tr.row-status-hostile td {
+  color: #ffe8ec;
+  border-color: rgba(255, 77, 109, 0.5);
+}
+
+tbody tr.row-status-monitored {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(12, 9, 2, 0.45) 0 2px,
+      transparent 2px 5px
+    ),
+    linear-gradient(
+      90deg,
+      #161003 0%,
+      #5e4307 26%,
+      #b8820c 62%,
+      #f5b818 88%,
+      #ffe07d 100%
+    );
+  color: #fff6d6;
+}
+
+tbody tr.row-status-monitored:hover {
+  filter: brightness(1.08);
+}
+
+tbody tr.row-status-monitored td {
+  color: #fff6d6;
+  border-color: rgba(255, 212, 59, 0.5);
+}
+
+tbody tr.row-status-contained {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(3, 10, 14, 0.45) 0 2px,
+      transparent 2px 5px
+    ),
+    linear-gradient(
+      90deg,
+      #040d14 0%,
+      #0a2c42 26%,
+      #145c82 62%,
+      #29a3d6 88%,
+      #8ce3ff 100%
+    );
+  color: #eefaff;
+}
+
+tbody tr.row-status-contained:hover {
+  filter: brightness(1.08);
+}
+
+tbody tr.row-status-contained td {
+  color: #eefaff;
+  border-color: rgba(123, 240, 255, 0.5);
+}
+
 .status-hostile {
-  color: #ff4d4d;
+  color: #ff9aa6;
   font-weight: 700;
 }
 
 .status-monitored {
-  color: #ffd43b;
+  color: #ffe58f;
   font-weight: 700;
 }
 

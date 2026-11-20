@@ -24,6 +24,12 @@ export function createWatchtowerNode({ viewEl, subNavEl, searchEl, bodyEl }) {
 
     for (const row of rows) {
       const tr = document.createElement("tr");
+      const statusRaw = String(row.status ?? "").trim().toUpperCase();
+      const statusClass = STATUS_CLASSES[statusRaw] ?? "";
+
+      if (statusClass) {
+        tr.classList.add(`row-${statusClass}`);
+      }
 
       const nameTd = document.createElement("td");
       nameTd.textContent = row.name ?? "";
@@ -34,11 +40,10 @@ export function createWatchtowerNode({ viewEl, subNavEl, searchEl, bodyEl }) {
       const tracesTd = document.createElement("td");
       tracesTd.textContent = row.traces ?? "";
 
-      const statusRaw = String(row.status ?? "").trim().toUpperCase();
       const statusTd = document.createElement("td");
       statusTd.textContent = row.status ?? "";
-      if (STATUS_CLASSES[statusRaw]) {
-        statusTd.className = STATUS_CLASSES[statusRaw];
+      if (statusClass) {
+        statusTd.className = statusClass;
       }
 
       tr.append(nameTd, affiliationTd, tracesTd, statusTd);

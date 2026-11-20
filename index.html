@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NetWatch Terminal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&display=swap"
+    rel="stylesheet"
+  />
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
@@ -11,6 +17,7 @@
   <nav id="subNav" class="sub-nav" aria-label="Node Selections"></nav>
 
   <section id="watchtowerView" hidden>
+    <h1 class="node-title">Node-01-Watchtower</h1>
     <input
       id="dbSearch"
       class="db-search"
@@ -24,16 +31,19 @@
           <th scope="col">Name</th>
           <th scope="col">Affiliation</th>
           <th scope="col"># of Traces</th>
-          <th scope="col">STATUS</th>
+          <th scope="col">Status</th>
         </tr>
       </thead>
       <tbody id="dbBody"></tbody>
     </table>
   </section>
 
-  <section id="libraryView" hidden></section>
+  <section id="libraryView" hidden>
+    <h1 class="node-title">Node-02-Library</h1>
+  </section>
 
   <section id="schoolhouseView" hidden>
+    <h1 class="node-title">Node-03-Schoolhouse</h1>
     <div class="controls">
       <button id="copyBtn" type="button">Copy SVG</button>
       <button id="downloadBtn" type="button">Download SVG</button>
