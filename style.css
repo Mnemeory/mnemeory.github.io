@@ -1,4 +1,4 @@
-*, *::before, *::after {
+{
   box-sizing: border-box;
 }
 
@@ -174,7 +174,7 @@ th,
 td {
   border: 1px solid rgba(0, 242, 254, 0.35);
   padding: 10px 14px;
-  text-align: left;
+  text-align: center;
   vertical-align: middle;
 }
 
@@ -204,11 +204,11 @@ tbody tr.row-status-hostile {
     ),
     linear-gradient(
       90deg,
-      #140407 0%,
-      #5c0b16 26%,
-      #b81427 62%,
-      #ff2a44 88%,
-      #ff7585 100%
+      #ff7585 0%,
+      #ff2a44 16%,
+      #b81427 46%,
+      #5c0b16 78%,
+      #140407 100%
     );
   color: #ffe8ec;
 }
@@ -231,11 +231,11 @@ tbody tr.row-status-monitored {
     ),
     linear-gradient(
       90deg,
-      #161003 0%,
-      #5e4307 26%,
-      #b8820c 62%,
-      #f5b818 88%,
-      #ffe07d 100%
+      #ffe07d 0%,
+      #f5b818 16%,
+      #b8820c 46%,
+      #5e4307 78%,
+      #161003 100%
     );
   color: #fff6d6;
 }
@@ -258,11 +258,11 @@ tbody tr.row-status-contained {
     ),
     linear-gradient(
       90deg,
-      #040d14 0%,
-      #0a2c42 26%,
-      #145c82 62%,
-      #29a3d6 88%,
-      #8ce3ff 100%
+      #8ce3ff 0%,
+      #29a3d6 16%,
+      #145c82 46%,
+      #0a2c42 78%,
+      #040d14 100%
     );
   color: #eefaff;
 }
