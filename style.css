@@ -25,6 +25,29 @@ body {
   margin-bottom: 12px;
 }
 
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.terminal-logo {
+  display: block;
+  flex: 0 0 auto;
+  width: 84px;
+  height: 92px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 5px rgba(0, 205, 220, 0.14));
+}
+
+.terminal-header .node-nav {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
 .node-nav button {
   font-family: "Orbitron", monospace;
   letter-spacing: 0.05em;
@@ -366,5 +389,17 @@ tbody tr.row-status-contained {
 
   .editor-wrap {
     height: 450px;
+  }
+}
+
+@media (max-width: 640px) {
+  .terminal-header {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .terminal-logo {
+    width: 54px;
+    height: 60px;
   }
 }
