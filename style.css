@@ -41,6 +41,8 @@ body {
   flex: 0 0 auto;
   width: 84px;
   height: 92px;
+  box-sizing: border-box;
+  border: 1px solid rgba(0, 210, 255, 0.75);
   object-fit: contain;
   mix-blend-mode: screen;
   filter: drop-shadow(0 0 5px rgba(0, 205, 220, 0.14));

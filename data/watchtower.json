@@ -60,7 +60,7 @@
   {
     "name": "BB",
     "affiliation": "Unknown",
-    "traces": 1,
+    "traces": 2,
     "status": "NEUTRAL",
     "notes": [
       {
@@ -255,7 +255,7 @@
   {
     "name": "JD",
     "affiliation": "Unknown",
-    "traces": 3,
+    "traces": 4,
     "status": "NEUTRAL"
   },
   {
@@ -343,8 +343,15 @@
   {
     "name": "Mayuri Tachibana",
     "affiliation": "Unknown",
-    "traces": 1,
-    "status": "NEUTRAL"
+    "traces": 2,
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Claimed to be from Arasaka on 'official' business. Also claimed that Arasaka has a deal with NetWatch, Chief Icky informed them that to her knowledge, no such thing exists. No one is above the law.",
+        "author": "Vicky Phantomhive, Section Chief",
+        "addedAt": "2077-11-19"
+      }
+    ]
   },
   {
     "name": "Milton Wimple",
@@ -605,7 +612,7 @@
   {
     "name": "Xyler Ona",
     "affiliation": "Unknown",
-    "traces": 1,
+    "traces": 2,
     "status": "NEUTRAL"
   },
   {
@@ -679,8 +686,15 @@
   {
     "name": "Ixo",
     "affiliation": "Unknown",
-    "traces": 2,
-    "status": "NEUTRAL"
+    "traces": 3,
+    "status": "MONITORED",
+    "notes": [
+      {
+        "text": "Was seen actively hitting the access point(s) with a crew, possibly hostile; Use caution.",
+        "author": "Vicky Phantomhive, Section Chief",
+        "addedAt": "2077-11-19"
+      }
+    ]
   },
   {
     "name": "Ambee",
@@ -702,8 +716,8 @@
   },
   {
     "name": "Alice Blackwell",
-    "affiliation": "Unknown",
-    "traces": 3,
+    "affiliation": "Maelstrom",
+    "traces": 4,
     "status": "NEUTRAL"
   },
   {
@@ -809,6 +823,159 @@
   },
   {
     "name": "Jet Ona",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "S4V4NT",
+    "affiliation": "Unknown",
+    "traces": 2,
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Sold NetWatch a story about exposing corps (?). Subject was informed that regardless of their intentions, accessing local and corporate subnets and access points without proper licensing is illegal.",
+        "author": "Vicky Phantomhive, Section Chief",
+        "addedAt": "2077-11-19"
+      }
+    ]
+  },
+  {
+    "name": "Zeke",
+    "affiliation": "Unknown",
+    "traces": 6,
+    "status": "MONITORED",
+    "notes": [
+      {
+        "text": "Suspect was traced while they were still outside, after the trace it sounded like they started shooting with an armored car; Chief Icky's vehicle had a tire blown out from bullets, presumed to be from the subject. Use caution."
+      }
+    ]
+  },
+  {
+    "name": "Derek Draven",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Complied with NetWatch agents. An official warning was given on site.",
+        "author": "Vicky Phantomhive, Section Chief",
+        "addedAt": "2077-11-19"
+      }
+    ]
+  },
+  {
+    "name": "Star",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Felix Pike",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Jack Vladinski",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Claimed to have an interest in NetWatch; Chief Lewis and Chief Icky gave them a rundown and notified them accessing local and corporate subnets are still illegal without proper authorization.",
+        "author": "Vicky Phantomhive, Section Chief",
+        "addedAt": "2077-11-19"
+      }
+    ]
+  },
+  {
+    "name": "Eerie",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Ogre",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "xlinky",
+    "affiliation": "Unknown",
+    "traces": 2,
+    "status": "NEUTRAL",
+    "notes": [
+      {
+        "text": "Complied with agents. Was eventually traced a couple times, claims to have supposedly been reformed.",
+        "author": "Vicky Phantomhive, Section Chief",
+        "addedAt": "2077-11-19"
+      }
+    ]
+  },
+  {
+    "name": "Siris",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Liza Marie",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Myrria Romanov",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Alan Ghost",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Zamien Red",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Seraphielyn Frosfallen",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Zeval",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "David Stone",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Peete Soul",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Blitz",
+    "affiliation": "Unknown",
+    "traces": 1,
+    "status": "NEUTRAL"
+  },
+  {
+    "name": "Alan Ghast",
     "affiliation": "Unknown",
     "traces": 1,
     "status": "NEUTRAL"
