@@ -847,7 +847,9 @@
     "status": "MONITORED",
     "notes": [
       {
-        "text": "Suspect was traced while they were still outside, after the trace it sounded like they started shooting with an armored car; Chief Icky's vehicle had a tire blown out from bullets, presumed to be from the subject. Use caution."
+        "text": "Suspect was traced while they were still outside, after the trace it sounded like they started shooting with an armored car; Chief Icky's vehicle had a tire blown out from bullets, presumed to be from the subject. Use caution.",
+        "author": "Vicky Phantomhive, Section Chief",
+        "addedAt": "2077-11-19"
       }
     ]
   },
