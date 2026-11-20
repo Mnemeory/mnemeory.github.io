@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NetWatch Badges</title>
+  <title>NetWatch Terminal // NC-NET </title>
   <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       padding: 20px;
@@ -12,36 +16,42 @@
       color: #7bf0ff;
       font-family: monospace;
     }
+
     .nav {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       margin-bottom: 16px;
     }
+
     button {
       background: #04121a;
       color: #7bf0ff;
       border: 1px solid #00f2fe;
       padding: 8px 12px;
       cursor: pointer;
-      font-family: monospace;
+      font: inherit;
     }
+
     button.active {
       background: #00f2fe;
       color: #02060b;
       font-weight: bold;
     }
+
     .controls {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       margin-bottom: 12px;
     }
+
     .workspace {
       display: flex;
       gap: 16px;
       align-items: stretch;
     }
+
     .preview {
       width: 900px;
       max-width: 100%;
@@ -50,6 +60,7 @@
       border: 1px solid #00f2fe;
       background: #010408;
     }
+
     .editor-wrap {
       position: relative;
       flex: 1;
@@ -57,8 +68,8 @@
       height: 900px;
       border: 1px solid #00f2fe;
       background: #040e18;
-      box-sizing: border-box;
     }
+
     .editor-backdrop,
     .editor-input {
       position: absolute;
@@ -71,18 +82,18 @@
       font-family: monospace;
       font-size: 12px;
       line-height: 1.45;
-      letter-spacing: normal;
       tab-size: 2;
       white-space: pre-wrap;
-      word-wrap: break-word;
+      overflow-wrap: break-word;
       overflow: auto;
-      box-sizing: border-box;
     }
+
     .editor-backdrop {
       color: #7bf0ff;
       pointer-events: none;
       z-index: 1;
     }
+
     .editor-input {
       color: transparent;
       caret-color: #00f2fe;
@@ -91,63 +102,75 @@
       outline: none;
       z-index: 2;
     }
+
     .editor-input::selection {
       background: rgba(0, 242, 254, 0.25);
     }
+
     .hl-token {
       background: rgba(255, 221, 0, 0.25);
       color: #ffea00;
       border-bottom: 1px solid #ffea00;
       border-radius: 2px;
     }
+
     .hover-tip {
       position: fixed;
-      display: none;
       padding: 5px 8px;
       background: #020910;
       color: #ffea00;
       border: 1px solid #ffea00;
-      font-family: monospace;
       font-size: 11px;
       pointer-events: none;
       z-index: 9999;
       white-space: nowrap;
     }
-    .db-view {
-      display: none;
-    }
+
     .db-search {
       background: #04121a;
       color: #7bf0ff;
       border: 1px solid #00f2fe;
       padding: 8px 12px;
-      font-family: monospace;
+      font: inherit;
       margin-bottom: 12px;
-      width: 300px;
+      width: 320px;
       max-width: 100%;
-      box-sizing: border-box;
     }
+
+    .db-search:focus {
+      outline: 1px solid #00f2fe;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
       background: #040e18;
     }
-    th, td {
+
+    th,
+    td {
       border: 1px solid #00f2fe;
       padding: 8px 12px;
       text-align: left;
     }
+
     th {
       background: #04121a;
     }
+
+    [hidden] {
+      display: none !important;
+    }
+
     @media (max-width: 1280px) {
       .workspace {
         flex-direction: column;
       }
+
       .preview {
         width: 100%;
-        max-width: 900px;
       }
+
       .editor-wrap {
         height: 450px;
       }
@@ -155,38 +178,42 @@
   </style>
 </head>
 <body>
-  <div id="nav" class="nav"></div>
-  <div id="controls" class="controls">
-    <button id="copyBtn" type="button">Copy SVG</button>
-    <button id="downloadBtn" type="button">Download SVG</button>
-  </div>
-  <div id="workspace" class="workspace">
-    <div id="preview" class="preview"></div>
-    <div class="editor-wrap">
-      <pre id="svgHighlight" class="editor-backdrop" aria-hidden="true"></pre>
-      <textarea id="svgSource" class="editor-input" spellcheck="false"></textarea>
+  <nav id="nav" class="nav" aria-label="Terminal Views"></nav>
+
+  <section id="svgView">
+    <div class="controls">
+      <button id="copyBtn" type="button">Copy SVG</button>
+      <button id="downloadBtn" type="button">Download SVG</button>
     </div>
-  </div>
-  <div id="dbView" class="db-view">
-    <input id="dbSearch" class="db-search" type="text" placeholder="Search..." />
+    <div class="workspace">
+      <div id="preview" class="preview"></div>
+      <div class="editor-wrap">
+        <pre id="svgHighlight" class="editor-backdrop" aria-hidden="true"></pre>
+        <textarea id="svgSource" class="editor-input" aria-label="SVG Source" spellcheck="false"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <section id="dbView" hidden>
+    <input id="dbSearch" class="db-search" type="search" aria-label="Search Watchtower Database" placeholder="Search..." />
     <table>
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Affiliation</th>
-          <th># of Traces</th>
-          <th>Affiliated Cases</th>
+          <th scope="col">Name</th>
+          <th scope="col">Affiliation</th>
+          <th scope="col"># of Traces</th>
+          <th scope="col">Affiliated Cases</th>
         </tr>
       </thead>
       <tbody id="dbBody"></tbody>
     </table>
-  </div>
-  <div id="hoverTip" class="hover-tip">Remove and replace (including []) with your character name</div>
+  </section>
 
-  <script>
+  <div id="hoverTip" class="hover-tip" hidden>Remove and replace (including []) with your character name</div>
+
+  <script type="module">
     const navEl = document.getElementById("nav");
-    const controlsEl = document.getElementById("controls");
-    const workspaceEl = document.getElementById("workspace");
+    const svgViewEl = document.getElementById("svgView");
     const dbViewEl = document.getElementById("dbView");
     const dbSearchEl = document.getElementById("dbSearch");
     const dbBodyEl = document.getElementById("dbBody");
@@ -197,72 +224,84 @@
     const copyBtn = document.getElementById("copyBtn");
     const downloadBtn = document.getElementById("downloadBtn");
 
-    const watchtowerData = [
-      { name: "Example Name", affiliation: "Example Affiliation", traces: 0, cases: "CASE-001" }
-    ];
+    const collator = new Intl.Collator(undefined, { sensitivity: "base", numeric: true });
+    const WATCHTOWER_TAB = "watchtower";
 
     let entries = [];
-    let currentIndex = 0;
+    let watchtowerData = [];
+    let activeTab = 0;
 
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+    async function fetchJson(url) {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Failed to load ${url} (${res.status})`);
+      return res.json();
     }
 
     function updateHighlight(code) {
-      const escaped = escapeHtml(code);
-      const highlighted = escaped.replace(
-        /\[AGENT NAME\]/g,
-        '<span class="hl-token">[AGENT NAME]</span>'
-      );
-      highlightEl.innerHTML = highlighted + (code.endsWith("\n") ? " " : "");
+      highlightEl.replaceChildren();
+      const parts = code.split(/(\[AGENT NAME\])/g);
+
+      for (const part of parts) {
+        if (part === "[AGENT NAME]") {
+          const span = document.createElement("span");
+          span.className = "hl-token";
+          span.textContent = part;
+          highlightEl.append(span);
+        } else if (part) {
+          highlightEl.append(document.createTextNode(part));
+        }
+      }
+
+      if (code.endsWith("\n")) {
+        highlightEl.append(document.createTextNode(" "));
+      }
     }
 
     function renderDatabase() {
-      const q = dbSearchEl.value.toLowerCase();
+      const q = dbSearchEl.value.trim().toLowerCase();
+
       const rows = watchtowerData
         .filter((row) =>
-          row.name.toLowerCase().includes(q) ||
-          row.affiliation.toLowerCase().includes(q) ||
-          String(row.traces).includes(q) ||
-          row.cases.toLowerCase().includes(q)
+          [row.name, row.affiliation, row.traces, row.cases]
+            .some((val) => String(val ?? "").toLowerCase().includes(q))
         )
-        .sort((a, b) => a.name.localeCompare(b.name));
+        .sort((a, b) => collator.compare(a.name ?? "", b.name ?? ""));
 
-      dbBodyEl.innerHTML = rows
-        .map((row) => `
-          <tr>
-            <td>${escapeHtml(row.name)}</td>
-            <td>${escapeHtml(row.affiliation)}</td>
-            <td>${escapeHtml(row.traces)}</td>
-            <td>${escapeHtml(row.cases)}</td>
-          </tr>
-        `)
-        .join("");
+      const fragment = document.createDocumentFragment();
+
+      for (const row of rows) {
+        const tr = document.createElement("tr");
+        for (const key of ["name", "affiliation", "traces", "cases"]) {
+          const td = document.createElement("td");
+          td.textContent = row[key] ?? "";
+          tr.append(td);
+        }
+        fragment.append(tr);
+      }
+
+      dbBodyEl.replaceChildren(fragment);
     }
 
-    function renderCurrent() {
-      const buttons = document.querySelectorAll("#nav button");
-      buttons.forEach((btn, idx) => {
-        btn.classList.toggle("active", idx === currentIndex);
-      });
+    function renderView() {
+      for (const btn of navEl.querySelectorAll("button")) {
+        const isCurrent = btn.dataset.tab === String(activeTab);
+        btn.classList.toggle("active", isCurrent);
+        btn.setAttribute("aria-current", isCurrent ? "page" : "false");
+      }
 
-      if (currentIndex === entries.length) {
-        controlsEl.style.display = "none";
-        workspaceEl.style.display = "none";
-        dbViewEl.style.display = "block";
+      if (activeTab === WATCHTOWER_TAB) {
+        svgViewEl.hidden = true;
+        dbViewEl.hidden = false;
+        hoverTip.hidden = true;
         renderDatabase();
         return;
       }
 
-      const item = entries[currentIndex];
+      const item = entries[activeTab];
       if (!item) return;
 
-      controlsEl.style.display = "flex";
-      workspaceEl.style.display = "flex";
-      dbViewEl.style.display = "none";
+      svgViewEl.hidden = false;
+      dbViewEl.hidden = true;
 
       previewEl.innerHTML = item.svgText;
       sourceEl.value = item.svgText;
@@ -272,8 +311,9 @@
     dbSearchEl.addEventListener("input", renderDatabase);
 
     sourceEl.addEventListener("input", () => {
-      if (!entries[currentIndex]) return;
-      entries[currentIndex].svgText = sourceEl.value;
+      const item = entries[activeTab];
+      if (!item) return;
+      item.svgText = sourceEl.value;
       previewEl.innerHTML = sourceEl.value;
       updateHighlight(sourceEl.value);
     });
@@ -284,48 +324,37 @@
     });
 
     sourceEl.addEventListener("mousemove", (e) => {
-      const tokens = highlightEl.querySelectorAll(".hl-token");
-      let overToken = false;
-
-      for (const token of tokens) {
+      const overToken = [...highlightEl.querySelectorAll(".hl-token")].some((token) => {
         const rect = token.getBoundingClientRect();
-        if (
+        return (
           e.clientX >= rect.left &&
           e.clientX <= rect.right &&
           e.clientY >= rect.top &&
           e.clientY <= rect.bottom
-        ) {
-          overToken = true;
-          break;
-        }
-      }
+        );
+      });
 
+      hoverTip.hidden = !overToken;
       if (overToken) {
-        hoverTip.style.display = "block";
         hoverTip.style.left = `${e.clientX + 12}px`;
         hoverTip.style.top = `${e.clientY + 12}px`;
-      } else {
-        hoverTip.style.display = "none";
       }
     });
 
     sourceEl.addEventListener("mouseleave", () => {
-      hoverTip.style.display = "none";
+      hoverTip.hidden = true;
     });
 
     copyBtn.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(sourceEl.value);
-        copyBtn.textContent = "Copied";
-        setTimeout(() => (copyBtn.textContent = "Copy SVG"), 1200);
-      } catch {
-        sourceEl.select();
-        document.execCommand("copy");
-      }
+      await navigator.clipboard.writeText(sourceEl.value);
+      copyBtn.textContent = "Copied";
+      setTimeout(() => {
+        copyBtn.textContent = "Copy SVG";
+      }, 1200);
     });
 
     downloadBtn.addEventListener("click", () => {
-      const item = entries[currentIndex];
+      const item = entries[activeTab];
       if (!item) return;
       const blob = new Blob([sourceEl.value], { type: "image/svg+xml;charset=utf-8" });
       const url = URL.createObjectURL(blob);
@@ -337,42 +366,52 @@
     });
 
     async function init() {
-      const res = await fetch("./badges.json");
-      const manifest = await res.json();
+      const [manifest, db] = await Promise.all([
+        fetchJson("./badges.json"),
+        fetchJson("./watchtower.json")
+      ]);
 
+      watchtowerData = db;
       entries = await Promise.all(
         manifest.map(async (item) => {
-          const svgRes = await fetch(item.file);
-          const svgText = await svgRes.text();
-          return { ...item, svgText };
+          const res = await fetch(item.file);
+          if (!res.ok) throw new Error(`Failed to load ${item.file} (${res.status})`);
+          return { ...item, svgText: await res.text() };
         })
       );
 
-      navEl.innerHTML = "";
+      const navFragment = document.createDocumentFragment();
+
       entries.forEach((item, idx) => {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.textContent = item.label;
+        btn.dataset.tab = String(idx);
         btn.addEventListener("click", () => {
-          currentIndex = idx;
-          renderCurrent();
+          activeTab = idx;
+          renderView();
         });
-        navEl.appendChild(btn);
+        navFragment.append(btn);
       });
 
       const dbBtn = document.createElement("button");
       dbBtn.type = "button";
       dbBtn.textContent = "NODE-01-WATCHTOWER";
+      dbBtn.dataset.tab = WATCHTOWER_TAB;
       dbBtn.addEventListener("click", () => {
-        currentIndex = entries.length;
-        renderCurrent();
+        activeTab = WATCHTOWER_TAB;
+        renderView();
       });
-      navEl.appendChild(dbBtn);
+      navFragment.append(dbBtn);
 
-      renderCurrent();
+      navEl.replaceChildren(navFragment);
+      renderView();
     }
 
-    init();
+    init().catch((err) => {
+      console.error(err);
+      navEl.textContent = err.message;
+    });
   </script>
 </body>
 </html>
